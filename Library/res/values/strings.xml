@@ -5,5 +5,5 @@
     <string name="library_account_bind_account_passwd_text">账号密码</string>
     <string name="library_account_bind_account_hint">请输入账号</string>
     <string name="library_account_bind_account_passwd_hint">请输入密码</string>
-
+	<string name="library_loading">加载中</string>
 </resources>
