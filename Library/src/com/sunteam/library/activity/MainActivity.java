@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,8 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.GetCategoryAsyncTask;
+import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.HttpGetUtils;
 import com.sunteam.library.utils.JsonUtils;
 import com.sunteam.library.utils.LibraryConstant;
@@ -47,6 +50,8 @@ public class MainActivity extends MenuActivity {
 		super.onResume();
 		if (!WifiUtils.checkWifiState(this)) {
 			WifiUtils.openWifi(this);
+		} else {
+			new LoginAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "test1");
 		}
 		acquireWakeLock(this);
 		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
@@ -102,32 +107,28 @@ public class MainActivity extends MenuActivity {
 			cls = SearchActivity.class;
 			break;
 		case 2: // 电子书
-			// list = getResources().getStringArray(R.array.settings_voice_list);
-//			cls = EbookOnlineActivity.class;
-//			break;
-			testEbook();
-			return;
+			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+//			testEbook();
+			break;
 		case 3: // 有声书
-//			 list = getResources().getStringArray(R.array.settings_language_list);
-			cls = AudioOnlineActivity.class;
+			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1);
 			break;
 		case 4: // 口述影像
-//			list = getResources().getStringArray(R.array.settings_power_saving_list);
-//			cls = VideoOnlineActivity.class;
-//			break;
-			testLogin("test1");
-			return;
+			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 2);
+			break;
+//			testLogin("test1");
+//			return;
 		default:
 			break;
 		}
 
-		if (selectItem <= 1) { // 前两项既可在线也可离线
+		/*if (selectItem <= 1) { // 前两项既可在线也可离线
 			startNextActivity(cls, selectItem, menuItem, list);
 		} else if (WifiUtils.checkWifiState(this)) { // 后三项只能在线, 必须先连接Wifi
 			startNextActivity(cls, selectItem, menuItem, list);
 		} else {
 			WifiUtils.startWifi(this, mHandler, LibraryConstant.MSG_CONFIRMDIALOG_RETURN);
-		}
+		}*/
 	}
 
 	private void startNextActivity(Class<?> cls, int selectItem, String title, String[] list) {

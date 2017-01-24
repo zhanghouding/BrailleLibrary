@@ -24,8 +24,8 @@ public class HttpRequest
 {
 	private static final String API_URL = "http://www.blc.org.cn/API/";
 
-	private static final int CONNECTIONTIMEOUT = 8000;
-	private static final int SOTIMEOUT = 8000;
+	private static final int CONNECTIONTIMEOUT = 80000;
+	private static final int SOTIMEOUT = 80000;
 
 	/**
 	 * get方式获取网络数据

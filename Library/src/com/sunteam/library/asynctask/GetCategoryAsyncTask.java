@@ -2,9 +2,16 @@ package com.sunteam.library.asynctask;
 
 import java.util.ArrayList;
 
+import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.activity.EbookOnlineActivity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.net.HttpDao;
+import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 /**
@@ -15,14 +22,23 @@ import android.os.AsyncTask;
  */
 public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<CategoryInfoNodeEntity>>
 {
-	private ArrayList<CategoryInfoNodeEntity> mCategoryInfoNodeEntityList;
+	Context mContext;
+	String mTitle;
+	int type;
+	private static ArrayList<CategoryInfoNodeEntity> mCategoryInfoNodeEntityList = new ArrayList<CategoryInfoNodeEntity>();
 	
+	public GetCategoryAsyncTask(Context context, String title) 
+	{
+		mContext = context;
+		mTitle = title;
+	}
+
 	/**
 	 * 根据父节点得到此节点下所有子节点信息
 	 * @param fatherSeq：父节点在他那一级别中的序号
 	 * @return 此父节点的所有子节点列表
 	*/
-	private ArrayList<CategoryInfoNodeEntity> getChildNodeList( int fatherSeq  )
+	public static ArrayList<CategoryInfoNodeEntity> getChildNodeList( int fatherSeq  )
 	{
 		ArrayList<CategoryInfoNodeEntity> list = new ArrayList<CategoryInfoNodeEntity>();
 		
@@ -37,7 +53,7 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 			for( int i = 0; i < size; i++ )
 			{
 				CategoryInfoNodeEntity node = mCategoryInfoNodeEntityList.get(i);
-				if( 1 == node.level )
+				if( 0 == node.level )
 				{
 					list.add(node);
 				}
@@ -63,7 +79,13 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 	protected ArrayList<CategoryInfoNodeEntity> doInBackground(Integer... params) 
 	{
 		// TODO Auto-generated method stub
-		mCategoryInfoNodeEntityList = HttpDao.getCategoryInfoList(params[0]);
+		type = params[0];
+		ArrayList<CategoryInfoNodeEntity> list = HttpDao.getCategoryInfoList(type);
+		
+		if( ( list != null ) && ( list.size() > 0 ) )
+		{
+			mCategoryInfoNodeEntityList.addAll(list);
+		}
 		
 		return	mCategoryInfoNodeEntityList;
 	}
@@ -72,11 +94,34 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 	protected void onPreExecute() 
 	{	
 		super.onPreExecute();
+		PublicUtils.showProgress(mContext);
+		mCategoryInfoNodeEntityList.clear();
 	}
 	
 	@Override
 	protected void onPostExecute(ArrayList<CategoryInfoNodeEntity> result) 
 	{	
 		super.onPostExecute(result);
+		PublicUtils.cancelProgress();
+	
+		if(null != result && result.size() > 0)
+		{
+			startNextActivity();
+		}
 	}
+	
+	private void startNextActivity() {
+		Intent intent = new Intent();
+		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
+		
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, -1); // 父节点ID
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, type); // 数据类别：电子书、有声书、口述影像
+
+		intent.setClass(mContext, EbookOnlineActivity.class);
+
+		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
+		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
+		((Activity) mContext).startActivity(intent);
+	}
+	
 }

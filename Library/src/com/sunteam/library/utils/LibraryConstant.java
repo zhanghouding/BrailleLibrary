@@ -33,4 +33,13 @@ public class LibraryConstant {
 	public static final String URL_EBOOK_INTERFACE = "EbookInterface.ashx";	//图书相关接口
 	public static final String URL_AUDIO_INTERFACE = "AudioInterface.ashx";		//音频相关接口
 	public static final String URL_VIDEO_INTERFACE = "VideoInterface.ashx";		//视频相关接口
+	
+	// 类别常量
+	public static final int LIBRARY_EBOOK_TYPE = 0;	// 电子书
+	public static final int LIBRARY_AUDIO_TYPE = 1;	// 有声书
+	public static final int LIBRARY_VIDEO_TYPE = 2;	// 口述影像
+	
+	// Intent传递属性
+	public static final String INTENT_KEY_TYPE = "library_type"; // 数据分类
+	public static final String INTENT_KEY_FATHER = "library_father"; // 父节点ID
 }
