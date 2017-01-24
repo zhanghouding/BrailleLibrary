@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
+
+    <string name="library_app_name">数字图书馆</string>
+    <string name="library_main_title">数字图书馆</string>
+    <string name="library_startwifi">无线网络未连接，现在连接</string>
+    <string name="library_wifi_setting">无线网络设置</string>
+    <string name="library_account_bind_account_text">图书馆账号</string>
+    <string name="library_account_bind_account_passwd_text">账号密码</string>
+    <string name="library_account_bind_account_hint">请输入账号</string>
+    <string name="library_account_bind_account_passwd_hint">请输入密码</string>
+    <string name="library_wait_reading_data">正在读取数据，请稍等</string>
+
+    <string-array name="library_main_list">
+        <item>我的图书馆</item>
+        <item>资源检索</item>
+        <item>电子书</item>
+        <item>有声书</item>
+        <item>口述影像</item>
+    </string-array>
+    <string-array name="library_mylibrary_list">
+        <item>收藏夹</item>
+        <item>最近浏览目录</item>
+        <item>下载文件夹</item>
+        <item>图书馆账号绑定</item>
+        <item>图书馆新闻</item>
+    </string-array>
+    <string-array name="library_favorite_list">
+        <item>新闻</item>
+        <item>电子书</item>
+        <item>有声书</item>
+        <item>口述影像</item>
+    </string-array>
+    <string-array name="library_download_list">
+        <item>电子书</item>
+        <item>有声书</item>
+        <item>口述影像</item>
+    </string-array>
+
+</resources>
