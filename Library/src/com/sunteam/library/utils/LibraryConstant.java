@@ -28,5 +28,9 @@ public class LibraryConstant {
 	public static final int MSG_HTTP_VIDEO_QUERY_LIST = 11; // 获取视频资源检索列表
 	public static final int MSG_HTTP_VIDEO_DETAIL = 12; // 获取视频详细信息
 	public static final int MSG_HTTP_FAVROITE_SEARCH = 13; // 查询收藏夹
-
+	
+	public static final String URL_USER_INTERFACE = "UserInterface.ashx";			//用户相关接口
+	public static final String URL_EBOOK_INTERFACE = "EbookInterface.ashx";	//图书相关接口
+	public static final String URL_AUDIO_INTERFACE = "AudioInterface.ashx";		//音频相关接口
+	public static final String URL_VIDEO_INTERFACE = "VideoInterface.ashx";		//视频相关接口
 }
