@@ -9,7 +9,7 @@
     <string name="library_account_bind_account_passwd_text">账号密码</string>
     <string name="library_account_bind_account_hint">请输入账号</string>
     <string name="library_account_bind_account_passwd_hint">请输入密码</string>
-    <string name="library_wait_reading_data">正在读取数据，请稍等</string>
+    <string name="library_wait_reading_data">正在加载数据，请稍等</string>
 
     <string-array name="library_main_list">
         <item>我的图书馆</item>

@@ -4,6 +4,24 @@ public class LibraryConstant {
 	// 数字图书馆登录ID保存位置
 	public static final String ACCESSIBILITY_DEVICEID = "accessibility_deviceid"; // 保存数字图书馆账号设置名
 
+	// 云端访问URL
+	public static final String URL_INTERFACE_USER = "UserInterface.ashx"; // 用户相关接口
+	public static final String URL_INTERFACE_EBOOK = "EbookInterface.ashx"; // 图书相关接口
+	public static final String URL_INTERFACE_AUDIO = "AudioInterface.ashx"; // 音频相关接口
+	public static final String URL_INTERFACE_VIDEO = "VideoInterface.ashx"; // 视频相关接口
+
+	// 类别常量
+	public static final int LIBRARY_DATATYPE_EBOOK = 0; // 电子书
+	public static final int LIBRARY_DATATYPE_AUDIO = 1; // 有声书
+	public static final int LIBRARY_DATATYPE_VIDEO = 2; // 口述影像
+
+	// Intent传递属性
+	public static final String INTENT_KEY_TYPE = "library_type"; // 数据分类
+	public static final String INTENT_KEY_FATHER = "library_father"; // 父节点ID
+
+	// 资源列表常量
+	public static final int LIBRARY_RESOURCE_PAGESIZE = 10; // 资源列表时一页的资源数
+
 	// SharePref文件名，KEY类型，如：登录状态，有些界面需要根据登录状态获取不同的数据源
 	public static final String LIBRARY_CONFIG_FILE = "config";
 	public static final String LIBRARY_LOGIN_STATE = "login_state";
@@ -28,18 +46,7 @@ public class LibraryConstant {
 	public static final int MSG_HTTP_VIDEO_QUERY_LIST = 11; // 获取视频资源检索列表
 	public static final int MSG_HTTP_VIDEO_DETAIL = 12; // 获取视频详细信息
 	public static final int MSG_HTTP_FAVROITE_SEARCH = 13; // 查询收藏夹
-	
-	public static final String URL_USER_INTERFACE = "UserInterface.ashx";			//用户相关接口
-	public static final String URL_EBOOK_INTERFACE = "EbookInterface.ashx";	//图书相关接口
-	public static final String URL_AUDIO_INTERFACE = "AudioInterface.ashx";		//音频相关接口
-	public static final String URL_VIDEO_INTERFACE = "VideoInterface.ashx";		//视频相关接口
-	
-	// 类别常量
-	public static final int LIBRARY_EBOOK_TYPE = 0;	// 电子书
-	public static final int LIBRARY_AUDIO_TYPE = 1;	// 有声书
-	public static final int LIBRARY_VIDEO_TYPE = 2;	// 口述影像
-	
-	// Intent传递属性
-	public static final String INTENT_KEY_TYPE = "library_type"; // 数据分类
-	public static final String INTENT_KEY_FATHER = "library_father"; // 父节点ID
+
+
+
 }

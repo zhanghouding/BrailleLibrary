@@ -55,7 +55,7 @@ public class DownloadDirActivity extends MenuActivity {
 		switch (selectItem) {
 		case 0: // 电子书
 //			list = getResources().getStringArray(R.array.settings_voice_list);
-			cls = EbookOfflineActivity.class;
+//			cls = EbookOfflineActivity.class;
 			break;
 		case 1: // 有声书
 //			list = getResources().getStringArray(R.array.settings_language_list);

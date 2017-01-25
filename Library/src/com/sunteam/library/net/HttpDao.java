@@ -39,7 +39,7 @@ public class HttpDao
 		requestParams.put("userName", username);
 		requestParams.put("EncryptedStr", "6fb7e13bb86e5bddd89f3ef2ba2cb28f");
 		
-		return (Boolean) HttpRequest.get(LibraryConstant.URL_USER_INTERFACE, requestParams, new LoginParseResponse() );
+		return (Boolean) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new LoginParseResponse() );
 	}
 	
 	/**
@@ -56,15 +56,15 @@ public class HttpDao
 		Map<String, String> requestParams = new HashMap<String, String>();
 		switch( categoryType )
 		{
-			case LibraryConstant.LIBRARY_EBOOK_TYPE:	//电子图书
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书
 				requestParams.put("requestType", "GetEbookCategory");
-				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetCategoryParseResponse() );
-			case LibraryConstant.LIBRARY_AUDIO_TYPE:	//有声读物
+				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetCategoryParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//有声读物
 				requestParams.put("requestType", "GetAudioCategory");
-				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_AUDIO_INTERFACE, requestParams, new GetCategoryParseResponse() );
-			case LibraryConstant.LIBRARY_VIDEO_TYPE:	//口述影像
+				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetCategoryParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//口述影像
 				requestParams.put("requestType", "GetVideoCategory");
-				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_VIDEO_INTERFACE, requestParams, new GetCategoryParseResponse() );
+				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetCategoryParseResponse() );
 			default:
 				return	null;
 		}
@@ -91,15 +91,15 @@ public class HttpDao
 		
 		switch( categoryType )
 		{
-			case LibraryConstant.LIBRARY_EBOOK_TYPE:	//电子图书
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书
 				requestParams.put("requestType", "GetEbookDataList");
-				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetEbookParseResponse() );
-			case LibraryConstant.LIBRARY_AUDIO_TYPE:	//有声读物
+				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//有声读物
 				requestParams.put("requestType", "GetAudioDataList");
-				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_AUDIO_INTERFACE, requestParams, new GetEbookParseResponse() );
-			case LibraryConstant.LIBRARY_VIDEO_TYPE:	//口述影像
+				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//口述影像
 				requestParams.put("requestType", "GetVideoDataList");
-				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_VIDEO_INTERFACE, requestParams, new GetEbookParseResponse() );
+				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetEbookParseResponse() );
 			default:
 				return	null;
 		}
@@ -121,6 +121,6 @@ public class HttpDao
 		requestParams.put("dbCode", "Ebook");
 		requestParams.put("Identifier", identifier);
 		
-		return (ArrayList<EbookChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetEbookChapterParseResponse() );
+		return (ArrayList<EbookChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookChapterParseResponse() );
 	}	
 }

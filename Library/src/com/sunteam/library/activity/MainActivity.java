@@ -16,12 +16,9 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.menu.MenuGlobal;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
-import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCategoryAsyncTask;
 import com.sunteam.library.asynctask.LoginAsyncTask;
-import com.sunteam.library.utils.HttpGetUtils;
-import com.sunteam.library.utils.JsonUtils;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.WifiUtils;
 
@@ -94,27 +91,27 @@ public class MainActivity extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		String[] list = null;
-		Class<?> cls = null;
+//		String[] list = null;
+//		Class<?> cls = null;
 
 		switch (selectItem) {
 		case 0: // 我的图书馆
-			list = getResources().getStringArray(R.array.library_mylibrary_list);
-			cls = MylibraryActivity.class;
+//			list = getResources().getStringArray(R.array.library_mylibrary_list);
+//			cls = MylibraryActivity.class;
 			break;
 		case 1: // 资源检索
 			// list = getResources().getStringArray(R.array.settings_bluetooth_list);
-			cls = SearchActivity.class;
+//			cls = SearchActivity.class;
 			break;
 		case 2: // 电子书
-			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
+			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
 //			testEbook();
 			break;
 		case 3: // 有声书
-			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1);
+			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
 			break;
 		case 4: // 口述影像
-			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 2);
+			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_VIDEO);
 			break;
 //			testLogin("test1");
 //			return;
@@ -131,6 +128,7 @@ public class MainActivity extends MenuActivity {
 		}*/
 	}
 
+	@SuppressWarnings("unused")
 	private void startNextActivity(Class<?> cls, int selectItem, String title, String[] list) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
@@ -153,10 +151,10 @@ public class MainActivity extends MenuActivity {
 				}
 				break;
 			case LibraryConstant.MSG_HTTP_USER_AUTH:
-				parseUserInfo((String) msg.obj);
+//				parseUserInfo((String) msg.obj);
 				break;
 			case LibraryConstant.MSG_HTTP_EBOOK_CATEGORY_LIST:
-				parseEbookCategoryList((String) msg.obj);
+//				parseEbookCategoryList((String) msg.obj);
 				break;
 
 			default:
@@ -184,45 +182,45 @@ public class MainActivity extends MenuActivity {
 		}
 	}
 
-	private void testLogin(String userName) {
-		String url = "http://www.blc.org.cn/API/UserInterface.ashx";
-		HttpGetUtils mHttpGetUtils = new HttpGetUtils();
-		mHttpGetUtils.addGetParameter("requestType", "UserAuthentication");
-		mHttpGetUtils.addGetParameter("timeStr", "2016-01-04$10:54:00");
-		mHttpGetUtils.addGetParameter("AuthenticationStr", "MWPlatformAuthentication");
-		mHttpGetUtils.addGetParameter("SystemCode", "MWAPP");
-		mHttpGetUtils.addGetParameter("userName", userName);
-		mHttpGetUtils.addGetParameter("EncryptedStr", "6fb7e13bb86e5bddd89f3ef2ba2cb28f");
-		mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_USER_AUTH);
-	}
+//	private void testLogin(String userName) {
+//		String url = "http://www.blc.org.cn/API/UserInterface.ashx";
+//		HttpGetUtils mHttpGetUtils = new HttpGetUtils();
+//		mHttpGetUtils.addGetParameter("requestType", "UserAuthentication");
+//		mHttpGetUtils.addGetParameter("timeStr", "2016-01-04$10:54:00");
+//		mHttpGetUtils.addGetParameter("AuthenticationStr", "MWPlatformAuthentication");
+//		mHttpGetUtils.addGetParameter("SystemCode", "MWAPP");
+//		mHttpGetUtils.addGetParameter("userName", userName);
+//		mHttpGetUtils.addGetParameter("EncryptedStr", "6fb7e13bb86e5bddd89f3ef2ba2cb28f");
+//		mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_USER_AUTH);
+//	}
 
-	@SuppressWarnings("deprecation")
-	private void parseUserInfo(String mJson) {
-		MenuGlobal.debug("[Library-MainActivity][parseUserInfo] mJson = " + mJson);
-		if (null == mJson || 0 == mJson.length()) {
-			return;
-		}
-
-		int checkState = JsonUtils.getInt(mJson, "CheckState");
-		if (1 == checkState) {
-			SharedPrefUtils.setSharedPrefString(MainActivity.this, LibraryConstant.LIBRARY_CONFIG_FILE, Context.MODE_WORLD_READABLE,
-					LibraryConstant.LIBRARY_LOGIN_STATE, "1");
-		}
-	}
-
-	private void testEbook() {
-		MenuGlobal.debug("[Library-MainActivity][testEbook]");
-		String url = "http://www.blc.org.cn/API/EbookInterface.ashx?requestType=GetEbookCategory";
-		HttpGetUtils mHttpGetUtils = new HttpGetUtils();
-		mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_EBOOK_CATEGORY_LIST);
-	}
-
-	private void parseEbookCategoryList(String mJson) {
-		MenuGlobal.debug("[Library-MainActivity][parseEbookCategoryList] mJson = " + mJson);
-		if (null == mJson || 0 == mJson.length()) {
-			return;
-		}
-
-	}
+//	@SuppressWarnings("deprecation")
+//	private void parseUserInfo(String mJson) {
+//		MenuGlobal.debug("[Library-MainActivity][parseUserInfo] mJson = " + mJson);
+//		if (null == mJson || 0 == mJson.length()) {
+//			return;
+//		}
+//
+//		int checkState = JsonUtils.getInt(mJson, "CheckState");
+//		if (1 == checkState) {
+//			SharedPrefUtils.setSharedPrefString(MainActivity.this, LibraryConstant.LIBRARY_CONFIG_FILE, Context.MODE_WORLD_READABLE,
+//					LibraryConstant.LIBRARY_LOGIN_STATE, "1");
+//		}
+//	}
+//
+//	private void testEbook() {
+//		MenuGlobal.debug("[Library-MainActivity][testEbook]");
+//		String url = "http://www.blc.org.cn/API/EbookInterface.ashx?requestType=GetEbookCategory";
+//		HttpGetUtils mHttpGetUtils = new HttpGetUtils();
+//		mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_EBOOK_CATEGORY_LIST);
+//	}
+//
+//	private void parseEbookCategoryList(String mJson) {
+//		MenuGlobal.debug("[Library-MainActivity][parseEbookCategoryList] mJson = " + mJson);
+//		if (null == mJson || 0 == mJson.length()) {
+//			return;
+//		}
+//
+//	}
 
 }

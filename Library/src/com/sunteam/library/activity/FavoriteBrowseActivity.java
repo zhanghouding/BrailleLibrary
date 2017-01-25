@@ -4,19 +4,16 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.menu.MenuGlobal;
 import com.sunteam.common.utils.CommonUtils;
 import com.sunteam.common.utils.PromptDialog;
-import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.common.utils.SunteamToast;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.HttpGetUtils;
