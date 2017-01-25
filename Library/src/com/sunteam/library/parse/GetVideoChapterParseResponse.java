@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.sunteam.library.entity.AudioChapterInfoEntity;
+import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.utils.LogUtils;
 
-//解析有声书章节列表
-public class GetAudioChapterParseResponse extends AbsParseResponse 
+//解析口述影像章节列表
+public class GetVideoChapterParseResponse extends AbsParseResponse 
 {
-	public static final String TAG = "GetAudioChapterParseResponse";
+	public static final String TAG = "GetVideoChapterParseResponse";
 	
 	/**
-	 * 方法(解析items)
+	 * 方法(解析ChapterList)
 	 * 
 	 * @param jsonArray
 	 * @param list
@@ -22,25 +22,25 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseItems( JSONArray jsonArray, ArrayList<AudioChapterInfoEntity> list )
+	private void parseChapterList( JSONArray jsonArray, ArrayList<VideoChapterInfoEntity> list )
 	{
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
 			JSONObject obj = jsonArray.optJSONObject(i);
 			
-			AudioChapterInfoEntity entity = new AudioChapterInfoEntity();
+			VideoChapterInfoEntity entity = new VideoChapterInfoEntity();
 			
 			entity.title = obj.optString("Title");
-			entity.detailInfo = obj.optString("DetailInfo");
 			entity.abs = obj.optString("Abstract");
-			entity.attachmentList = obj.optString("AttachmentList");
-			entity.audioUrl = obj.optString("AudioUrl");
+			entity.videoUrl = obj.optString("VideoUrl");
+			entity.srtUrl = obj.optString("SrtUrl");
+			entity.srtTextUrl = obj.optString("SrtTextUrl");
 			entity.enterPoint = obj.optInt("EnterPoint");
 			entity.outPoint = obj.optInt("OutPoint");
 			entity.detailUrl = obj.optString("DetailUrl");
 			entity.imageUrl = obj.optString("ImageUrl");
 			entity.databaseCode = obj.optString("DatabaseCode");
-			entity.audioType = obj.optInt("AudioType");
+			entity.videoType = obj.optInt("VideoType");
 			entity.sysId = obj.optString("SysId");
 			entity.chapterIndex = obj.optInt("ChapterIndex");
 			entity.downloadUrl = obj.optString("DownloadUrl");
@@ -52,13 +52,13 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 			entity.downloadCount = obj.optString("DownloadCount");
 			entity.browseCount = obj.optString("BrowseCount");
 			entity.categoryName = obj.optString("CategoryName");
-			entity.responsible = obj.optString("Responsible");
+			entity.speaker = obj.optString("Speaker");
+			entity.speakerUnit = obj.optString("SpeakerUnit");
+			entity.speakerSummary = obj.optString("SpeakerSummary");
 			entity.keyWords = obj.optString("KeyWords");
 			entity.lastChapterIndex = obj.optInt("LastChapterIndex");
 			entity.hasReadHistory = obj.optBoolean("HasReadHistory");
 			entity.isAuthenticated = obj.optBoolean("IsAuthenticated");
-			entity.parentCategroyCode = obj.optString("ParentCategroyCode");
-			entity.parentCategroyName = obj.optString("ParentCategroyName");
 			entity.pageSize = obj.optInt("PageSize");
 			entity.pageIndex = obj.optInt("PageIndex");
 			entity.itemCount = obj.optInt("ItemCount");
@@ -67,6 +67,26 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 			entity.pageCount = obj.optInt("PageCount");
 			
 			list.add(entity);
+		}
+	}
+	
+	/**
+	 * 方法(解析items)
+	 * 
+	 * @param jsonArray
+	 * @param list
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/24
+	 */
+	private void parseItems( JSONArray jsonArray, ArrayList<VideoChapterInfoEntity> list )
+	{
+		for( int i = 0; i < jsonArray.length(); i++ )
+		{
+			JSONObject obj = jsonArray.optJSONObject(i);
+			JSONArray array = obj.optJSONArray("SubItemList");
+			
+			parseChapterList( array, list );
 		}
 	}
 	
@@ -79,13 +99,19 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 		try
 		{
 			JSONObject jsonObject = new JSONObject(responseStr);
-			JSONArray jsonArray = jsonObject.optJSONArray("SubItemList");
+			Boolean result = jsonObject.optBoolean("IsException") ;
+			if( result )
+			{
+				return	null;
+			}
+			
+			JSONArray jsonArray = jsonObject.optJSONArray("Items");
 			if( (  null == jsonArray ) || ( 0 == jsonArray.length() ) )
 			{
 				return	null;
 			}
 			
-			ArrayList<AudioChapterInfoEntity> list = new ArrayList<AudioChapterInfoEntity>();
+			ArrayList<VideoChapterInfoEntity> list = new ArrayList<VideoChapterInfoEntity>();
 			
 			parseItems( jsonArray, list );
 			

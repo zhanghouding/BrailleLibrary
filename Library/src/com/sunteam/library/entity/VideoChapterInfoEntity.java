@@ -3,29 +3,29 @@ package com.sunteam.library.entity;
 import java.io.Serializable;
 
 /**
- * 有声书章节信息类
+ * 口述影像章节信息类
  * 
  * @author wzp
  * 
  */
-public class AudioChapterInfoEntity implements Serializable
+public class VideoChapterInfoEntity implements Serializable
 {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8376565224600070970L;
+	private static final long serialVersionUID = 829480718064944308L;
 	
 	public String title;
-	public String detailInfo;
 	public String abs;
-	public String attachmentList;
-	public String audioUrl;
+	public String videoUrl;
+	public String srtUrl;
+	public String srtTextUrl;
 	public int enterPoint;
 	public int outPoint;
 	public String detailUrl;
 	public String imageUrl;
 	public String databaseCode;
-	public int audioType;
+	public int videoType;
 	public String sysId;
 	public int chapterIndex;
 	public String downloadUrl;
@@ -37,13 +37,13 @@ public class AudioChapterInfoEntity implements Serializable
 	public String downloadCount;
 	public String browseCount;
 	public String categoryName;
-	public String responsible;
+	public String speaker;
+	public String speakerUnit;
+	public String speakerSummary;
 	public String keyWords;
 	public int lastChapterIndex;
 	public boolean hasReadHistory;
 	public boolean isAuthenticated;
-	public String parentCategroyCode;
-	public String parentCategroyName;
 	public int pageSize;
 	public int pageIndex;
 	public int itemCount;

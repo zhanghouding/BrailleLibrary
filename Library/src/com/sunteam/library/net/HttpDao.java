@@ -8,10 +8,12 @@ import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
+import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
 import com.sunteam.library.parse.GetEbookChapterParseResponse;
 import com.sunteam.library.parse.GetEbookParseResponse;
+import com.sunteam.library.parse.GetVideoChapterParseResponse;
 import com.sunteam.library.parse.LoginParseResponse;
 import com.sunteam.library.utils.LibraryConstant;
 
@@ -110,6 +112,7 @@ public class HttpDao
 	/**
 	 * 得到电子书章节列表
 	 * 
+	 * @param dbCode
 	 * @param identifier
 	 * @return
 	 * @author wzp
@@ -129,7 +132,8 @@ public class HttpDao
 	/**
 	 * 得到有声书章节列表
 	 * 
-	 * @param identifier
+	 * @param dbCode
+	 * @param sysId
 	 * @return
 	 * @author wzp
 	 * @Created 2017/01/25
@@ -143,5 +147,25 @@ public class HttpDao
 		requestParams.put("sysid", sysId);
 		
 		return (ArrayList<AudioChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetAudioChapterParseResponse() );
+	}	
+	
+	/**
+	 * 得到口述影像章节列表
+	 * 
+	 * @param dbCode
+	 * @param sysId
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/25
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<VideoChapterInfoEntity> getVideoChapterList( String dbCode, String sysId ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "GetVideoDetail");
+		requestParams.put("dbCode", dbCode);
+		requestParams.put("sysid", sysId);
+		
+		return (ArrayList<VideoChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetVideoChapterParseResponse() );
 	}	
 }
