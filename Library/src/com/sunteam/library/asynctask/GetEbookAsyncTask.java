@@ -29,7 +29,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, ArrayList<EbookIn
 	protected ArrayList<EbookInfoEntity> doInBackground(String... params) 
 	{
 		// TODO Auto-generated method stub
-		ArrayList<EbookInfoEntity> list = HttpDao.getEbookList(params[0], params[1], params[2]);
+		ArrayList<EbookInfoEntity> list = HttpDao.getEbookList(params[0], params[1], params[2], Integer.parseInt(params[3]));
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{

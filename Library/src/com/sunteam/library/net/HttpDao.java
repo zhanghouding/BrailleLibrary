@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
@@ -78,20 +76,33 @@ public class HttpDao
 	 * @param pageIndex
 	 * @param pageSize
 	 * @param categoryCode
+	 * @param categoryType
 	 * @return
 	 * @author wzp
 	 * @Created 2017/01/25
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<EbookInfoEntity> getEbookList( String pageIndex, String pageSize, String categoryCode ) 
+	public static ArrayList<EbookInfoEntity> getEbookList( String pageIndex, String pageSize, String categoryCode, int categoryType ) 
 	{
 		Map<String, String> requestParams = new HashMap<String, String>();
-		requestParams.put("requestType", "GetEbookDataList");
 		requestParams.put("pageIndex", pageIndex);
 		requestParams.put("pageSize", pageSize);
-		requestParams.put("CategoryCode", categoryCode);
+		requestParams.put("categoryCode", categoryCode);
 		
-		return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetEbookParseResponse() );
+		switch( categoryType )
+		{
+			case LibraryConstant.LIBRARY_EBOOK_TYPE:	//电子图书
+				requestParams.put("requestType", "GetEbookDataList");
+				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.LIBRARY_AUDIO_TYPE:	//有声读物
+				requestParams.put("requestType", "GetAudioDataList");
+				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_AUDIO_INTERFACE, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.LIBRARY_VIDEO_TYPE:	//口述影像
+				requestParams.put("requestType", "GetVideoDataList");
+				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_VIDEO_INTERFACE, requestParams, new GetEbookParseResponse() );
+			default:
+				return	null;
+		}
 	}
 	
 	/**
