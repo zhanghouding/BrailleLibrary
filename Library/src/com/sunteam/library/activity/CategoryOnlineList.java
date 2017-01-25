@@ -93,7 +93,7 @@ public class CategoryOnlineList extends MenuActivity {
 	private void startNextActivity(int selectItem, String menuItem) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem); // 菜单名称
-		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, fatherId + 1); // 父节点ID
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, mCategoryInfoNodeEntityList.get(selectItem).seq); // 父节点ID
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 		intent.setClass(this, CategoryOnlineList.class);
 
