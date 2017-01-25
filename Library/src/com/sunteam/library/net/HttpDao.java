@@ -7,8 +7,10 @@ import java.util.Map;
 import org.json.JSONObject;
 
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
+import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.parse.GetCategoryParseResponse;
+import com.sunteam.library.parse.GetEbookChapterParseResponse;
 import com.sunteam.library.parse.GetEbookParseResponse;
 import com.sunteam.library.parse.LoginParseResponse;
 import com.sunteam.library.utils.LibraryConstant;
@@ -91,4 +93,23 @@ public class HttpDao
 		
 		return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetEbookParseResponse() );
 	}
+	
+	/**
+	 * 得到电子书章节列表
+	 * 
+	 * @param identifier
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/25
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<EbookChapterInfoEntity> getEbookChapterList( String identifier ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "GetEbookDetail");
+		requestParams.put("dbCode", "Ebook");
+		requestParams.put("Identifier", identifier);
+		
+		return (ArrayList<EbookChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetEbookChapterParseResponse() );
+	}	
 }
