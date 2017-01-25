@@ -7,7 +7,9 @@ import java.util.Map;
 import org.json.JSONObject;
 
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
+import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.parse.GetCategoryParseResponse;
+import com.sunteam.library.parse.GetEbookParseResponse;
 import com.sunteam.library.parse.LoginParseResponse;
 import com.sunteam.library.utils.LibraryConstant;
 
@@ -43,7 +45,7 @@ public class HttpDao
 	/**
 	 * 得到所有的分类信息
 	 * 
-	 * @param username
+	 * @param categoryType
 	 * @return
 	 * @author wzp
 	 * @Created 2017/01/24
@@ -54,17 +56,39 @@ public class HttpDao
 		Map<String, String> requestParams = new HashMap<String, String>();
 		switch( categoryType )
 		{
-			case 0:	//电子图书
+			case LibraryConstant.LIBRARY_EBOOK_TYPE:	//电子图书
 				requestParams.put("requestType", "GetEbookCategory");
 				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetCategoryParseResponse() );
-			case 1:	//有声读物
+			case LibraryConstant.LIBRARY_AUDIO_TYPE:	//有声读物
 				requestParams.put("requestType", "GetAudioCategory");
 				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_AUDIO_INTERFACE, requestParams, new GetCategoryParseResponse() );
-			case 2:	//口述影像
+			case LibraryConstant.LIBRARY_VIDEO_TYPE:	//口述影像
 				requestParams.put("requestType", "GetVideoCategory");
 				return (ArrayList<CategoryInfoNodeEntity>) HttpRequest.get(LibraryConstant.URL_VIDEO_INTERFACE, requestParams, new GetCategoryParseResponse() );
 			default:
 				return	null;
 		}
+	}
+	
+	/**
+	 * 得到电子书列表
+	 * 
+	 * @param pageIndex
+	 * @param pageSize
+	 * @param categoryCode
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/25
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<EbookInfoEntity> getEbookList( String pageIndex, String pageSize, String categoryCode ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "GetEbookDataList");
+		requestParams.put("pageIndex", pageIndex);
+		requestParams.put("pageSize", pageSize);
+		requestParams.put("CategoryCode", categoryCode);
+		
+		return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_EBOOK_INTERFACE, requestParams, new GetEbookParseResponse() );
 	}
 }
