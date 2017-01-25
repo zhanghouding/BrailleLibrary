@@ -9,7 +9,9 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
 import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
+import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.utils.LibraryConstant;
 
@@ -59,14 +61,23 @@ public class ResourceOnlineList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
+		String dbCode;
+		String sysId;
+
 		switch(dataType){
 		case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
-			String dbCode = mEbookInfoEntityList.get(selectItem).dbCode;
+			dbCode = mEbookInfoEntityList.get(selectItem).dbCode;
 			String identifier = mEbookInfoEntityList.get(selectItem).identifier;
 			new GetEbookChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, identifier);
 		case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
+			dbCode = mEbookInfoEntityList.get(selectItem).dbCode;
+			sysId = mEbookInfoEntityList.get(selectItem).sysId;
+			new GetAudioChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
+			dbCode = mEbookInfoEntityList.get(selectItem).dbCode;
+			sysId = mEbookInfoEntityList.get(selectItem).sysId;
+			new GetVideoChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
 			break;
 		default:
 			break;

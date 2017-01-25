@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
-import com.sunteam.library.activity.EbookOnlineActivity;
+import com.sunteam.library.activity.AudioOnlineChapterList;
 import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
@@ -72,7 +72,7 @@ public class GetAudioChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mAudioChapterInfoEntityList); // 数据列表
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO); // 数据类别：电子书、有声书、口述影像
-		intent.setClass(mContext, EbookOnlineActivity.class);
+		intent.setClass(mContext, AudioOnlineChapterList.class);
 		mContext.startActivity(intent);
 	}
 }

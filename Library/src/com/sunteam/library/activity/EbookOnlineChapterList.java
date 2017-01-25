@@ -8,10 +8,10 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.library.entity.AudioChapterInfoEntity;
+import com.sunteam.library.entity.EbookChapterInfoEntity;
 
-public class AudioOnlineActivity extends MenuActivity {
-	private ArrayList<AudioChapterInfoEntity> mAudioChapterInfoEntityList;
+public class EbookOnlineChapterList extends MenuActivity {
+	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -62,14 +62,14 @@ public class AudioOnlineActivity extends MenuActivity {
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-		mAudioChapterInfoEntityList = (ArrayList<AudioChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
-		mMenuList = getListFromChapterInfoEntity(mAudioChapterInfoEntityList);
+		mEbookChapterInfoEntityList = (ArrayList<EbookChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mMenuList = getListFromChapterInfoEntity(mEbookChapterInfoEntityList);
 	}
 
-	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<AudioChapterInfoEntity> listSrc) {
+	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<EbookChapterInfoEntity> listSrc) {
 		ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < listSrc.size(); i++) {
-			list.add(listSrc.get(i).title);
+			list.add(listSrc.get(i).chapterName);
 		}
 
 		return list;

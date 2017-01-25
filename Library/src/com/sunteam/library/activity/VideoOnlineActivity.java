@@ -1,14 +1,20 @@
 package com.sunteam.library.activity;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.entity.VideoChapterInfoEntity;
 
 public class VideoOnlineActivity extends MenuActivity {
+	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 
 	public void onCreate(Bundle savedInstanceState) {
+		initView();
 		super.onCreate(savedInstanceState);
 	}
 
@@ -31,7 +37,7 @@ public class VideoOnlineActivity extends MenuActivity {
 	protected void onStop() {
 		super.onStop();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -49,8 +55,23 @@ public class VideoOnlineActivity extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		
-		
+
 	}
 
+	@SuppressWarnings("unchecked")
+	private void initView() {
+		Intent intent = getIntent();
+		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		mVideoChapterInfoEntityListt = (ArrayList<VideoChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mMenuList = getListFromChapterInfoEntity(mVideoChapterInfoEntityListt);
+	}
+
+	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<VideoChapterInfoEntity> listSrc) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < listSrc.size(); i++) {
+			list.add(listSrc.get(i).title);
+		}
+
+		return list;
+	}
 }

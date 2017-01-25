@@ -10,7 +10,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.library.entity.AudioChapterInfoEntity;
 
-public class AudioOnlineActivity extends MenuActivity {
+public class AudioOnlineChapterList extends MenuActivity {
 	private ArrayList<AudioChapterInfoEntity> mAudioChapterInfoEntityList;
 
 	public void onCreate(Bundle savedInstanceState) {
