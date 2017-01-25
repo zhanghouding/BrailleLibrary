@@ -61,8 +61,9 @@ public class ResourceOnlineList extends MenuActivity {
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		switch(dataType){
 		case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
+			String dbCode = mEbookInfoEntityList.get(selectItem).dbCode;
 			String identifier = mEbookInfoEntityList.get(selectItem).identifier;
-			new GetEbookChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier);
+			new GetEbookChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, identifier);
 		case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_VIDEO:

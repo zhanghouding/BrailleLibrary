@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
+import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
 import com.sunteam.library.parse.GetEbookChapterParseResponse;
 import com.sunteam.library.parse.GetEbookParseResponse;
@@ -114,13 +116,32 @@ public class HttpDao
 	 * @Created 2017/01/25
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<EbookChapterInfoEntity> getEbookChapterList( String identifier ) 
+	public static ArrayList<EbookChapterInfoEntity> getEbookChapterList( String dbCode, String identifier ) 
 	{
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "GetEbookDetail");
-		requestParams.put("dbCode", "Ebook");
+		requestParams.put("dbCode", dbCode);
 		requestParams.put("Identifier", identifier);
 		
 		return (ArrayList<EbookChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookChapterParseResponse() );
+	}
+	
+	/**
+	 * 得到有声书章节列表
+	 * 
+	 * @param identifier
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/25
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<AudioChapterInfoEntity> getAudioChapterList( String dbCode, String sysId ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "GetAudioDetail");
+		requestParams.put("dbCode", dbCode);
+		requestParams.put("sysid", sysId);
+		
+		return (ArrayList<AudioChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetAudioChapterParseResponse() );
 	}	
 }
