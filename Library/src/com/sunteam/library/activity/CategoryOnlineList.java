@@ -61,7 +61,7 @@ public class CategoryOnlineList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		ArrayList<CategoryInfoNodeEntity> list = GetCategoryAsyncTask.getChildNodeList(fatherId + 1);
+		ArrayList<CategoryInfoNodeEntity> list = GetCategoryAsyncTask.getChildNodeList(mCategoryInfoNodeEntityList.get(selectItem).seq);
 		if(0 == list.size()) {
 			String pageIndex = "1";
 			String pageSize = "" + LibraryConstant.LIBRARY_RESOURCE_PAGESIZE;

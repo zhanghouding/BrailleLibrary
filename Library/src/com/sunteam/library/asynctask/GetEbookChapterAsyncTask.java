@@ -65,6 +65,11 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		{
 			startNextActivity();
 		}
+		else
+		{
+			String s = mContext.getResources().getString(R.string.library_reading_data_error);
+			TtsUtils.getInstance().speak(s);
+		}
 	}
 
 	private void startNextActivity() {

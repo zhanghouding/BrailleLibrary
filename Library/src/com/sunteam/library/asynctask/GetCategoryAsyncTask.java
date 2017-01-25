@@ -111,6 +111,11 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 		{
 			startNextActivity();
 		}
+		else
+		{
+			String s = mContext.getResources().getString(R.string.library_reading_data_error);
+			TtsUtils.getInstance().speak(s);
+		}
 	}
 	
 	private void startNextActivity() {
