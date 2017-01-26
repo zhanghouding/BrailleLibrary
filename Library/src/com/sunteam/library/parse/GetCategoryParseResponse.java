@@ -44,13 +44,20 @@ public class GetCategoryParseResponse extends AbsParseResponse
 			
 			list.add(entity);
 			
-			JSONArray itemsArray = obj.optJSONArray("Items");
-			if( (  null == itemsArray ) || ( 0 == itemsArray.length() ) )
+			try
 			{
-				continue;
+				JSONArray itemsArray = obj.optJSONArray("Items");
+				if( (  null == itemsArray ) || ( 0 == itemsArray.length() ) )
+				{
+					continue;
+				}
+				
+				parseItems( entity.seq, entity.level+1, itemsArray, list );
 			}
-			
-			parseItems( entity.seq, entity.level+1, itemsArray, list );
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	

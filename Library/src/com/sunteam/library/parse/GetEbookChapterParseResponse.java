@@ -22,7 +22,7 @@ public class GetEbookChapterParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseChapterList( JSONArray jsonArray, ArrayList<EbookChapterInfoEntity> list )
+	private void parseChapterList( int father, int level, JSONArray jsonArray, ArrayList<EbookChapterInfoEntity> list )
 	{
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
@@ -30,11 +30,30 @@ public class GetEbookChapterParseResponse extends AbsParseResponse
 			
 			EbookChapterInfoEntity entity = new EbookChapterInfoEntity();
 			
+			entity.father = father;
+			entity.level = level;
+			entity.seq = list.size();
+			
 			entity.chapterName = obj.optString("ChapterName");
 			entity.chapterIndex = obj.optString("ChapterIndex");
 			entity.content = obj.optString("Content");
 			
 			list.add(entity);
+			
+			try
+			{
+				JSONArray array = obj.optJSONArray("ChapterList");
+				if( (  null == array ) || ( 0 == array.length() ) )
+				{
+					continue;
+				}
+				
+				parseChapterList( entity.seq, entity.level+1, array, list );
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -47,14 +66,14 @@ public class GetEbookChapterParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseItems( JSONArray jsonArray, ArrayList<EbookChapterInfoEntity> list )
+	private void parseItems( int father, int level, JSONArray jsonArray, ArrayList<EbookChapterInfoEntity> list )
 	{
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
 			JSONObject obj = jsonArray.optJSONObject(i);
 			JSONArray array = obj.optJSONArray("ChapterList");
 			
-			parseChapterList( array, list );
+			parseChapterList( father, level, array, list );
 		}
 	}
 	
@@ -81,7 +100,7 @@ public class GetEbookChapterParseResponse extends AbsParseResponse
 			
 			ArrayList<EbookChapterInfoEntity> list = new ArrayList<EbookChapterInfoEntity>();
 			
-			parseItems( jsonArray, list );
+			parseItems( -1, 0, jsonArray, list );
 			
 			return	list;
 		}

@@ -22,7 +22,7 @@ public class GetVideoChapterParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseChapterList( JSONArray jsonArray, ArrayList<VideoChapterInfoEntity> list )
+	private void parseChapterList( int father, int level, JSONArray jsonArray, ArrayList<VideoChapterInfoEntity> list )
 	{
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
@@ -46,7 +46,6 @@ public class GetVideoChapterParseResponse extends AbsParseResponse
 			entity.downloadUrl = obj.optString("DownloadUrl");
 			entity.source = obj.optString("Source");
 			entity.columns = obj.optString("Columns");
-			entity.subItemList = obj.optString("SubItemList");
 			entity.uniqueId = obj.optString("UniqueId");
 			entity.updateTime = obj.optString("UpdateTime");
 			entity.downloadCount = obj.optString("DownloadCount");
@@ -67,6 +66,21 @@ public class GetVideoChapterParseResponse extends AbsParseResponse
 			entity.pageCount = obj.optInt("PageCount");
 			
 			list.add(entity);
+			
+			try
+			{
+				JSONArray itemsArray = obj.optJSONArray("SubItemList");
+				if( (  null == itemsArray ) || ( 0 == itemsArray.length() ) )
+				{
+					continue;
+				}
+				
+				parseChapterList( entity.seq, entity.level+1, itemsArray, list );
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -79,14 +93,14 @@ public class GetVideoChapterParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseItems( JSONArray jsonArray, ArrayList<VideoChapterInfoEntity> list )
+	private void parseItems( int father, int level, JSONArray jsonArray, ArrayList<VideoChapterInfoEntity> list )
 	{
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
 			JSONObject obj = jsonArray.optJSONObject(i);
 			JSONArray array = obj.optJSONArray("SubItemList");
 			
-			parseChapterList( array, list );
+			parseChapterList( father, level, array, list );
 		}
 	}
 	
@@ -113,7 +127,7 @@ public class GetVideoChapterParseResponse extends AbsParseResponse
 			
 			ArrayList<VideoChapterInfoEntity> list = new ArrayList<VideoChapterInfoEntity>();
 			
-			parseItems( jsonArray, list );
+			parseItems( -1, 0, jsonArray, list );
 			
 			return	list;
 		}

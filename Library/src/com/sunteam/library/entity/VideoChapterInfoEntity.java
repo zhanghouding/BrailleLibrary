@@ -15,6 +15,10 @@ public class VideoChapterInfoEntity implements Serializable
 	 */
 	private static final long serialVersionUID = 829480718064944308L;
 	
+	public int father;			// 父节点序号
+	public int seq;				// 节点序号
+	public int level;			// 节点等级
+	
 	public String title;
 	public String abs;
 	public String videoUrl;

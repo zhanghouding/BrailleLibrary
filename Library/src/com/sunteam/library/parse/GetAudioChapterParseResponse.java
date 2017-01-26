@@ -22,13 +22,17 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseItems( JSONArray jsonArray, ArrayList<AudioChapterInfoEntity> list )
+	private void parseItems( int father, int level, JSONArray jsonArray, ArrayList<AudioChapterInfoEntity> list )
 	{
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
 			JSONObject obj = jsonArray.optJSONObject(i);
 			
 			AudioChapterInfoEntity entity = new AudioChapterInfoEntity();
+			
+			entity.father = father;
+			entity.level = level;
+			entity.seq = list.size();
 			
 			entity.title = obj.optString("Title");
 			entity.detailInfo = obj.optString("DetailInfo");
@@ -46,7 +50,6 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 			entity.downloadUrl = obj.optString("DownloadUrl");
 			entity.source = obj.optString("Source");
 			entity.columns = obj.optString("Columns");
-			entity.subItemList = obj.optString("SubItemList");
 			entity.uniqueId = obj.optString("UniqueId");
 			entity.updateTime = obj.optString("UpdateTime");
 			entity.downloadCount = obj.optString("DownloadCount");
@@ -67,6 +70,21 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 			entity.pageCount = obj.optInt("PageCount");
 			
 			list.add(entity);
+			
+			try
+			{
+				JSONArray itemsArray = obj.optJSONArray("SubItemList");
+				if( (  null == itemsArray ) || ( 0 == itemsArray.length() ) )
+				{
+					continue;
+				}
+				
+				parseItems( entity.seq, entity.level+1, itemsArray, list );
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -87,7 +105,7 @@ public class GetAudioChapterParseResponse extends AbsParseResponse
 			
 			ArrayList<AudioChapterInfoEntity> list = new ArrayList<AudioChapterInfoEntity>();
 			
-			parseItems( jsonArray, list );
+			parseItems( -1, 0, jsonArray, list );
 			
 			return	list;
 		}

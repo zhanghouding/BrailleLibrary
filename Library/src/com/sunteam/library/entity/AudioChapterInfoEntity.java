@@ -15,6 +15,10 @@ public class AudioChapterInfoEntity implements Serializable
 	 */
 	private static final long serialVersionUID = -8376565224600070970L;
 	
+	public int father;			// 父节点序号
+	public int seq;				// 节点序号
+	public int level;			// 节点等级
+	
 	public String title;
 	public String detailInfo;
 	public String abs;
