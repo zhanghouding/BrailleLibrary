@@ -20,6 +20,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCategoryAsyncTask;
 import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.LibraryOfflineFile;
 import com.sunteam.library.utils.WifiUtils;
 
 /**
@@ -91,13 +92,14 @@ public class MainActivity extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-//		String[] list = null;
+		String[] list = null;
 //		Class<?> cls = null;
 
 		switch (selectItem) {
 		case 0: // 我的图书馆
 //			list = getResources().getStringArray(R.array.library_mylibrary_list);
 //			cls = MylibraryActivity.class;
+//			testCreateFile();
 			break;
 		case 1: // 资源检索
 			// list = getResources().getStringArray(R.array.settings_bluetooth_list);
@@ -115,6 +117,10 @@ public class MainActivity extends MenuActivity {
 			break;
 //			testLogin("test1");
 //			return;
+		case 5: // 图书馆新闻
+			list = getResources().getStringArray(R.array.library_info_list);
+			startNextActivity(LibraryNewsCategoryList.class, selectItem, menuItem, list);
+			break;
 		default:
 			break;
 		}
@@ -181,6 +187,12 @@ public class MainActivity extends MenuActivity {
 			mWakeLock = null;
 		}
 	}
+
+//	private void testCreateFile() {
+//		boolean ret = new LibraryOfflineFile().createLibraryDir(this, 0, "课外读物/少儿");
+//		MenuGlobal.debug("[Library-MainActivity][testCreateFile] ret = " + ret);
+//		
+//	}
 
 //	private void testLogin(String userName) {
 //		String url = "http://www.blc.org.cn/API/UserInterface.ashx";

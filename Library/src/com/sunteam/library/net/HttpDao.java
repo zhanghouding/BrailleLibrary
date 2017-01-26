@@ -182,12 +182,12 @@ public class HttpDao
 	 * @Created 2017/01/25
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<InformationEntity> getInformationList( String pageIndex, String pageSize, int informationType ) 
+	public static ArrayList<InformationEntity> getInformationList( int pageIndex, int pageSize, int informationType ) 
 	{
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "GetDataList");
-		requestParams.put("pageIndex", pageIndex);
-		requestParams.put("pageSize", pageSize);
+		requestParams.put("pageIndex", pageIndex+"");
+		requestParams.put("pageSize", pageSize+"");
 		requestParams.put("orderField", "pubTime");
 		requestParams.put("orderDirection", "desc");
 		

@@ -2,14 +2,8 @@ package com.sunteam.library.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.TextView;
 
-import com.iflytek.cloud.SpeechUtility;
-import com.sunteam.common.utils.PromptDialog;
-import com.sunteam.common.utils.dialog.PromptListener;
-import com.sunteam.dict.utils.DBUtil;
 import com.sunteam.library.R;
 
 /**

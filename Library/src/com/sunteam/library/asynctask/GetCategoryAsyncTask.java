@@ -79,7 +79,6 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 	@Override
 	protected ArrayList<CategoryInfoNodeEntity> doInBackground(Integer... params) 
 	{
-		// TODO Auto-generated method stub
 		type = params[0];
 		ArrayList<CategoryInfoNodeEntity> list = HttpDao.getCategoryInfoList(type);
 		
@@ -121,7 +120,7 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 	private void startNextActivity() {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
-		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, -1); // 父节点ID
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, LibraryConstant.LIBRARY_CATEGORY_ROOT_ID); // 父节点ID
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, type); // 数据类别：电子书、有声书、口述影像
 
 		intent.setClass(mContext, CategoryOnlineList.class);

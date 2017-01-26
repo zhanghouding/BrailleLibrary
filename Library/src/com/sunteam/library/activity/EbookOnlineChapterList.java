@@ -55,7 +55,7 @@ public class EbookOnlineChapterList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-
+		// TODO browser next class
 	}
 
 	@SuppressWarnings("unchecked")

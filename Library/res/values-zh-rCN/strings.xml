@@ -11,6 +11,9 @@
     <string name="library_account_bind_account_passwd_hint">请输入密码</string>
     <string name="library_wait_reading_data">正在加载数据，请稍等</string>
     <string name="library_reading_data_error">加载数据失败</string>
+    <string name="library_category_ebook">电子书</string>
+    <string name="library_category_audio">有声书</string>
+    <string name="library_category_video">口述影像</string>
 
     <string-array name="library_main_list">
         <item>我的图书馆</item>
@@ -18,6 +21,7 @@
         <item>电子书</item>
         <item>有声书</item>
         <item>口述影像</item>
+        <item>图书馆新闻</item>
     </string-array>
     <string-array name="library_mylibrary_list">
         <item>收藏夹</item>
@@ -36,6 +40,11 @@
         <item>电子书</item>
         <item>有声书</item>
         <item>口述影像</item>
+    </string-array>
+    <string-array name="library_info_list">
+        <item>新闻公告</item>
+        <item>服务资讯</item>
+        <item>文化活动</item>
     </string-array>
 
 </resources>

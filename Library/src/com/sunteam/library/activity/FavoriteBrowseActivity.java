@@ -11,15 +11,10 @@ import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.menu.MenuGlobal;
 import com.sunteam.common.utils.CommonUtils;
-import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.SunteamToast;
 import com.sunteam.library.R;
-import com.sunteam.library.utils.HttpGetUtils;
-import com.sunteam.library.utils.JsonUtils;
 import com.sunteam.library.utils.LibraryConstant;
-import com.sunteam.library.utils.WifiUtils;
 
 /**
  * @Destryption 收藏夹中的新闻、电子书、有声书、口述影像共用一个界面处理程序
@@ -122,7 +117,7 @@ public class FavoriteBrowseActivity extends MenuActivity {
 	}
 
 	private void getFavoritNews(String userName) {
-		if (WifiUtils.checkWifiState(this)) {
+		/*if (WifiUtils.checkWifiState(this)) {
 			HttpGetUtils mHttpGetUtils = new HttpGetUtils();
 			String url = "http://www.blc.org.cn/API/CollectInterface.ashx";
 			mHttpGetUtils.addGetParameter("requestType", "SearchCollect");
@@ -131,11 +126,11 @@ public class FavoriteBrowseActivity extends MenuActivity {
 			mHttpGetUtils.addGetParameter("pageSize", "1");
 			mHttpGetUtils.addGetParameter("pageIndex", "3");
 			mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_FAVROITE_SEARCH);
-		}
+		}*/
 	}
 
 	private void parseFavoriteSearchResult(String mJson) {
-		MenuGlobal.debug("[Library-MainActivity][parseUserInfo] mJson = " + mJson);
+		/*MenuGlobal.debug("[Library-MainActivity][parseUserInfo] mJson = " + mJson);
 		if (null == mJson || 0 == mJson.length()) {
 			PromptDialog mPromptDialog = new PromptDialog(this, "");
 			mPromptDialog.setHandler(mHandler, LibraryConstant.MSG_CONFIRMDIALOG_RETURN);
@@ -144,6 +139,6 @@ public class FavoriteBrowseActivity extends MenuActivity {
 
 		int checkState = JsonUtils.getInt(mJson, "CheckState");
 		if (1 == checkState) {
-		}
+		}*/
 	}
 }

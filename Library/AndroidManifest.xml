@@ -4,8 +4,6 @@
     android:versionCode="11"
     android:versionName="1.1.0.170114" >
 
-    <!-- android:sharedUserId="android.uid.system" 修改日期时间，闹钟唤醒机器，必须用到系统权限 -->
-
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="19" />
@@ -93,7 +91,12 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".activity.LibraryNewsActivity"
+            android:name=".activity.LibraryNewsCategoryList"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name=".activity.LibraryNewsList"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>

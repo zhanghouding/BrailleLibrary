@@ -14,10 +14,19 @@ import com.sunteam.library.asynctask.GetEbookAsyncTask;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.utils.LibraryConstant;
 
+/**
+ * @Destryption 浏览所有在线分类；同时在本地创建分类文件夹。
+ * @Author Jerry
+ * @Date 2017-1-26 上午10:43:02
+ * @Note
+ */
 public class CategoryOnlineList extends MenuActivity {
-	private int fatherId = -1;
+	private int fatherId = LibraryConstant.LIBRARY_CATEGORY_ROOT_ID; // 当前分类列表的父节点ID
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private ArrayList<CategoryInfoNodeEntity> mCategoryInfoNodeEntityList;
+	
+	// 当前分类列表父节点路径，如："/s918p/library/" + "有声书/" +"课外读物/少儿/", 其中第二个字段根据属性dataType确定
+	private String fatherPath = "";
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -77,6 +86,9 @@ public class CategoryOnlineList extends MenuActivity {
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		fatherId = intent.getIntExtra(LibraryConstant.INTENT_KEY_FATHER, -1);
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
+		if(LibraryConstant.LIBRARY_CATEGORY_ROOT_ID != fatherId) {
+			fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);			
+		}
 		mCategoryInfoNodeEntityList = GetCategoryAsyncTask.getChildNodeList(fatherId);
 		mMenuList = getListFromCategoryInfoNodeEntity(mCategoryInfoNodeEntityList);
 	}
