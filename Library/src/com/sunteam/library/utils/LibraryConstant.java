@@ -9,12 +9,18 @@ public class LibraryConstant {
 	public static final String URL_INTERFACE_EBOOK = "EbookInterface.ashx"; // 图书相关接口
 	public static final String URL_INTERFACE_AUDIO = "AudioInterface.ashx"; // 音频相关接口
 	public static final String URL_INTERFACE_VIDEO = "VideoInterface.ashx"; // 视频相关接口
+	public static final String URL_INTERFACE_INFO = "InformationInterface.ashx";	//咨询相关接口
 
 	// 类别常量
 	public static final int LIBRARY_DATATYPE_EBOOK = 0; // 电子书
 	public static final int LIBRARY_DATATYPE_AUDIO = 1; // 有声书
 	public static final int LIBRARY_DATATYPE_VIDEO = 2; // 口述影像
 
+	// 咨询类别常量
+	public static final int LIBRARY_INFOTYPE_NOTICE = 0; 		// 新闻公告
+	public static final int LIBRARY_INFOTYPE_SERVICEINFO = 1; 	// 服务资讯
+	public static final int LIBRARY_INFOTYPE_LIBMESSAGE = 2; 	// 文化活动
+	
 	// Intent传递属性
 	public static final String INTENT_KEY_TYPE = "library_type"; // 数据分类
 	public static final String INTENT_KEY_FATHER = "library_father"; // 父节点ID

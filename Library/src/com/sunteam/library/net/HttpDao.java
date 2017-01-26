@@ -8,11 +8,13 @@ import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
+import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
 import com.sunteam.library.parse.GetEbookChapterParseResponse;
 import com.sunteam.library.parse.GetEbookParseResponse;
+import com.sunteam.library.parse.GetInformationParseResponse;
 import com.sunteam.library.parse.GetVideoChapterParseResponse;
 import com.sunteam.library.parse.LoginParseResponse;
 import com.sunteam.library.utils.LibraryConstant;
@@ -168,4 +170,42 @@ public class HttpDao
 		
 		return (ArrayList<VideoChapterInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetVideoChapterParseResponse() );
 	}	
+	
+	/**
+	 * 得到盲人咨询列表
+	 * 
+	 * @param pageIndex
+	 * @param pageSize
+	 * @param informationType
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/25
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<InformationEntity> getInformationList( String pageIndex, String pageSize, int informationType ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "GetDataList");
+		requestParams.put("pageIndex", pageIndex);
+		requestParams.put("pageSize", pageSize);
+		requestParams.put("orderField", "pubTime");
+		requestParams.put("orderDirection", "desc");
+		
+		switch( informationType )
+		{
+			case LibraryConstant.LIBRARY_INFOTYPE_NOTICE:		//新闻公告
+				requestParams.put("dbCode", "NOTICE");
+				break;
+			case LibraryConstant.LIBRARY_INFOTYPE_SERVICEINFO: 	// 服务资讯
+				requestParams.put("dbCode", "SERVICEINFO");
+				break;
+			case LibraryConstant.LIBRARY_INFOTYPE_LIBMESSAGE:	//文化活动
+				requestParams.put("dbCode", "LIBMESSAGE");
+				break;
+			default:
+				return	null;
+		}
+		
+		return (ArrayList<InformationEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_INFO, requestParams, new GetInformationParseResponse() );
+	}
 }
