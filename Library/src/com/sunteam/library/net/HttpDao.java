@@ -86,7 +86,7 @@ public class HttpDao
 	 * @Created 2017/01/25
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<EbookInfoEntity> getEbookList( String pageIndex, String pageSize, String categoryCode, int categoryType ) 
+	public static EbookInfoEntity getEbookList( String pageIndex, String pageSize, String categoryCode, int categoryType ) 
 	{
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("pageIndex", pageIndex);
@@ -97,13 +97,13 @@ public class HttpDao
 		{
 			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书
 				requestParams.put("requestType", "GetEbookDataList");
-				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookParseResponse() );
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookParseResponse() );
 			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//有声读物
 				requestParams.put("requestType", "GetAudioDataList");
-				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetEbookParseResponse() );
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetEbookParseResponse() );
 			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//口述影像
 				requestParams.put("requestType", "GetVideoDataList");
-				return (ArrayList<EbookInfoEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetEbookParseResponse() );
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetEbookParseResponse() );
 			default:
 				return	null;
 		}

@@ -11,6 +11,7 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.ResourceOnlineList;
 import com.sunteam.library.entity.EbookInfoEntity;
+import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -21,12 +22,13 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/01/25
  */
-public class GetEbookAsyncTask extends AsyncTask<String, Void, ArrayList<EbookInfoEntity>>
+public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 {
 	private Context mContext;
 	private String mTitle;
 	private int dataType;
-	private ArrayList<EbookInfoEntity> mEbookInfoEntityList = new ArrayList<EbookInfoEntity>();
+	private int bookCount = 0;
+	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
 	
 	public GetEbookAsyncTask(Context context, String title) 
 	{
@@ -35,17 +37,24 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, ArrayList<EbookIn
 	}
 
 	@Override
-	protected ArrayList<EbookInfoEntity> doInBackground(String... params) 
+	protected Boolean doInBackground(String... params) 
 	{
 		dataType = Integer.parseInt(params[3]);
-		ArrayList<EbookInfoEntity> list = HttpDao.getEbookList(params[0], params[1], params[2], dataType);
-		
-		if( ( list != null ) && ( list.size() > 0 ) )
+		EbookInfoEntity entity = HttpDao.getEbookList(params[0], params[1], params[2], dataType);
+	
+		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
 		{
-			mEbookInfoEntityList.addAll(list);
+			return	false;
 		}
 		
-		return	mEbookInfoEntityList;
+		bookCount = entity.itemCount;
+		
+		if( ( entity.list != null ) && ( entity.list.size() > 0 ) )
+		{
+			mEbookNodeEntityList.addAll(entity.list);
+		}
+		
+		return	true;
 	}
 	
 	@Override
@@ -58,12 +67,12 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, ArrayList<EbookIn
 	}
 	
 	@Override
-	protected void onPostExecute(ArrayList<EbookInfoEntity> result) 
+	protected void onPostExecute(Boolean result) 
 	{	
 		super.onPostExecute(result);
 		PublicUtils.cancelProgress();
 		
-		if(null != result && result.size() > 0)
+		if(null != mEbookNodeEntityList && mEbookNodeEntityList.size() > 0)
 		{
 			startNextActivity();
 		}
@@ -77,7 +86,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, ArrayList<EbookIn
 	private void startNextActivity() {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookInfoEntityList); // 菜单名称
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookNodeEntityList); // 菜单名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 
 		intent.setClass(mContext, ResourceOnlineList.class);

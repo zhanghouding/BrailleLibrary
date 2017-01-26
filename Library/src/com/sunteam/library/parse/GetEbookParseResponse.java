@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.sunteam.library.entity.EbookInfoEntity;
+import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.utils.LogUtils;
 
 //解析电子图书列表
@@ -22,13 +23,13 @@ public class GetEbookParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseItems( JSONArray jsonArray, ArrayList<EbookInfoEntity> list )
+	private void parseItems( JSONArray jsonArray, ArrayList<EbookNodeEntity> list )
 	{
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
 			JSONObject obj = jsonArray.optJSONObject(i);
 			
-			EbookInfoEntity entity = new EbookInfoEntity();
+			EbookNodeEntity entity = new EbookNodeEntity();
 			
 			entity.uniqueId = obj.optString("UniqueId");
 			entity.dbCode = obj.optString("DbCode");
@@ -86,17 +87,27 @@ public class GetEbookParseResponse extends AbsParseResponse
 				return	null;
 			}
 			
+			EbookInfoEntity entity = new EbookInfoEntity();
+			entity.moreUrl = jsonObject.optString("MoreUrl");
+			entity.dbName = jsonObject.optString("dbName");
+			entity.pageSize = jsonObject.optInt("PageSize");			//总共页码
+			entity.pageIndex = jsonObject.optInt("PageIndex");			//当前页码，从1开始
+			entity.itemCount = jsonObject.optInt("ItemCount");			//总共有多少本书
+			entity.isFirstPage = jsonObject.optBoolean("IsFirstPage");	//是否第一页
+			entity.isLastPage = jsonObject.optBoolean("IsLastPage");	//是否最后一页
+		    entity.pageCount = jsonObject.optInt("PageCount");			//总共的页数
+			
 			JSONArray jsonArray = jsonObject.optJSONArray("Items");
 			if( (  null == jsonArray ) || ( 0 == jsonArray.length() ) )
 			{
 				return	null;
 			}
 			
-			ArrayList<EbookInfoEntity> list = new ArrayList<EbookInfoEntity>();
+			entity.list = new ArrayList<EbookNodeEntity>();
 			
-			parseItems( jsonArray, list );
+			parseItems( jsonArray, entity.list );
 			
-			return	list;
+			return	entity;
 		}
 		catch( Exception e )
 		{
