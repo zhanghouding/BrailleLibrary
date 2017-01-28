@@ -144,6 +144,17 @@
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".activity.ReadTxtActivity"
+            android:screenOrientation="landscape" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name=".activity.WordSearchResultActivity"
+            android:screenOrientation="landscape" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
     </application>
 
 </manifest>

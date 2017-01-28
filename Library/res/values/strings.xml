@@ -6,4 +6,52 @@
     <string name="library_account_bind_account_hint">请输入账号</string>
     <string name="library_account_bind_account_passwd_hint">请输入密码</string>
 	<string name="library_loading">加载中</string>
+	
+	<string name="library_main_title">数字图书馆</string>
+	<string name="library_search_fail">无搜索结果</string>
+	<string name="library_dict_search_success">词典查询</string>
+	<string name="library_checksum_error">文件已损坏！</string>
+	<string name="library_select_start">选定起点</string>
+	<string name="library_select_end">选定终点</string>
+	<string name="library_file_already_exist">文件已存在</string>
+	<string name="library_save_newword_success">成功保存到生词本</string>
+	<string name="library_save_newword_fail">保存到生词本失败</string>
+	<string name="library_open_file_fail">文件已损坏！</string>
+	<string name="library_no_explain">无例词</string>
+	<string name="library_page_read_tips2">第%1$s页</string>
+	<string name="library_page_read_tips">第%1$s页 总共%2$s页</string>
+    <string name="library_en_explain_tips">字母表中的第 %1$s个字母</string>
+    <string name="library_cn_explain_tips">的</string>
+    <string name="library_to_top">已经到开头</string>
+    <string name="library_to_bottom">已经到结尾</string>
+    <string name="library_to_top1">已经到开头。</string>
+    <string name="library_to_bottom1">已经到结尾。</string>
+    <string name="library_setting_success">设定成功</string>
+    <string name="library_has_finished_reading_the_last_book">已经读完最后一本书</string>
+    <string-array name="library_array_menu_voice_china">
+        <item>国语男声</item>
+        <item>国语女声</item>
+        <item>粤语女声</item>
+        <item>童声</item>
+    </string-array>
+    <string-array name="library_array_menu_voice_china">
+        <item>国语男声</item>
+        <item>国语女声</item>
+        <item>粤语女声</item>
+        <item>童声</item>
+    </string-array>
+    <string-array name="library_array_menu_voice_english">
+        <item>英语男声</item>
+        <item>英语女声</item>
+    </string-array>
+    <string-array name="library_array_menu_voice_style">
+        <item>一字一顿</item>
+        <item>平铺直叙</item>
+    </string-array>
+     <string-array name="library_array_menu_voice_effect">
+        <item>原声</item>
+        <item>回声</item>
+         <item>机器人</item>
+        <item>阴阳怪气</item>
+    </string-array>
 </resources>

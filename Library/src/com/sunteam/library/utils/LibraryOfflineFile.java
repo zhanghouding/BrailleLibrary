@@ -56,7 +56,7 @@ public class LibraryOfflineFile {
 			return false;
 		}
 
-		pathStr = Environment.getExternalStorageDirectory() + "/" + LibraryConstant.LIBRARY_ROOT_PATH + pathStr + "/" + path;
+		pathStr = LibraryConstant.LIBRARY_ROOT_PATH + pathStr + "/" + path;
 		return createDir(pathStr);
 	}
 

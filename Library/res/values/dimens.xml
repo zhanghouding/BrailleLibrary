@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ 	<!-- text font -->
+    <dimen name="library_title_text_size">22dip</dimen>
+    <dimen name="library_item_text_size">16dip</dimen> 	
+    <dimen name="library_file_text_size">18dip</dimen>
+    <dimen name="library_number_text_size">12dip</dimen>
+    <dimen name="library_pub_text_size">18sp</dimen>
+    <dimen name="library_main_text_size">16sp</dimen>
+    <dimen name="library_big_text_size">24sp</dimen>
+    
+    <!-- space -->
+    <dimen name="library_title_height">31dip</dimen>
+    <dimen name="library_item_left_padding">4dip</dimen>
+    <dimen name="library_item_right_padding">4dip</dimen>
+    <dimen name="library_item_top_padding">4dip</dimen>
+    <dimen name="library_item_bottom_padding">4dip</dimen>    
+    <dimen name="library_frame_space">14dp</dimen>
+    <dimen name="library_line_space">1dp</dimen>
+    <dimen name="library_item_space">10dp</dimen>
+</resources>

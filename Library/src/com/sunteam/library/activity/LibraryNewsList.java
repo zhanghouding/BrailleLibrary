@@ -4,18 +4,14 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
-import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
-import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
-import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.TextFileReaderUtils;
 
 public class LibraryNewsList extends MenuActivity {
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
@@ -65,6 +61,21 @@ public class LibraryNewsList extends MenuActivity {
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		// TODO 进入对应的新闻资讯播放界面
+		
+		try 
+		{
+			String fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+menuItem+".inf";
+			TextFileReaderUtils.getInstance().init(fullpath);
+			
+			Intent intent = new Intent( this, ReadTxtActivity.class );
+			intent.putExtra("filename", menuItem);
+			this.startActivity(intent);
+		} 
+		catch (Exception e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
