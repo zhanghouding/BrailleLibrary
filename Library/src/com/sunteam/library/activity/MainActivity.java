@@ -21,6 +21,7 @@ import com.sunteam.library.asynctask.GetCategoryAsyncTask;
 import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.LibraryOfflineFile;
+import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.WifiUtils;
 
 /**
@@ -36,6 +37,8 @@ public class MainActivity extends MenuActivity {
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_main_list));
 		super.onCreate(savedInstanceState);
 		MenuGlobal.debug("[Library-MainActivity][onCreate], this = " + this);
+		
+		TTSUtils.getInstance().init(this);	//初始化TTS
 	}
 
 	@Override
@@ -70,6 +73,8 @@ public class MainActivity extends MenuActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		
+		TTSUtils.getInstance().destroy();
 		if (null != TtsUtils.getInstance()) {
 			TtsUtils.getInstance().destroy();
 		}

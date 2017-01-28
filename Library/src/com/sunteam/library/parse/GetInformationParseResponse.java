@@ -53,6 +53,28 @@ public class GetInformationParseResponse extends AbsParseResponse
 	}
 	
 	/**
+	 * 方法(解析Html)
+	 * 
+	 * @param html
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/24
+	 */
+	private String parseHtml( String html )
+	{
+		if( TextUtils.isEmpty(html) )
+		{
+			return	"";
+		}
+		
+		String txtcontent = html.replaceAll("</?[^>]+>", ""); 			//剔出<html>的标签  
+		txtcontent = txtcontent.replaceAll("&nbsp;", "");				//替换空格
+        txtcontent = txtcontent.replaceAll("<a>\\s*|\t|\r|\n</a>", "");	//去除字符串中的空格,回车,换行符,制表符  
+        
+        return txtcontent;
+	}
+	
+	/**
 	 * 方法(解析items)
 	 * 
 	 * @param jsonArray
@@ -72,7 +94,9 @@ public class GetInformationParseResponse extends AbsParseResponse
 			entity.title = obj.optString("Title");
 			entity.date = obj.optString("PubTime");
 			entity.fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+entity.title+".inf";
-			saveContent( entity.fullpath, obj.optString("Content") );
+			
+			String content = obj.optString("Content");
+			saveContent( entity.fullpath, parseHtml(content) );
 			
 			list.add(entity);
 		}
