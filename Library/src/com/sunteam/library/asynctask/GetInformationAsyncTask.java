@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.LibraryNewsList;
-import com.sunteam.library.activity.ResourceOnlineList;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
@@ -41,12 +41,31 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 	protected Boolean doInBackground(Integer... params) 
 	{
 		infoType = params[2];
-		mInformationEntityList = HttpDao.getInformationList(params[0], params[1], infoType, menuList[infoType]);
+		mInformationEntityList = HttpDao.getInformationList(params[0], params[1], infoType);
 	
 		if( ( null == mInformationEntityList ) || ( 0 == mInformationEntityList.size() ) )
 		{
 			return	false;
 		}
+		
+		String filepath = LibraryConstant.LIBRARY_ROOT_PATH+mContext.getResources().getStringArray(R.array.library_main_list)[5]+"/"+menuList[infoType]+"/";
+		
+		for( int i = 0; i < mInformationEntityList.size(); i++ )
+		{
+			InformationEntity entity = mInformationEntityList.get(i);
+			
+			String content = entity.content;
+			if( TextUtils.isEmpty(content) )
+			{
+				PublicUtils.saveContent( filepath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, entity.title );
+			}
+			else
+			{
+				PublicUtils.saveContent( filepath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, content );
+			}
+			
+			entity.content = "";
+		}	//缓存盲人咨询文件。
 		
 		return	true;
 	}

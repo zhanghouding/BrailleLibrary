@@ -8,7 +8,6 @@ public class LibraryConstant {
 	
 	// 数字图书馆本地数据路径名
 	public static final String LIBRARY_ROOT_PATH = Environment.getExternalStorageDirectory()+"/s918p/library/"; // 数字图书馆要保存的数据Home目录
-	public static final String LIBRARY_INFORMATION_PATH = LIBRARY_ROOT_PATH+"information/";	//盲人咨询缓存目录
 
 	// 云端访问URL
 	public static final String URL_INTERFACE_USER = "UserInterface.ashx"; // 用户相关接口

@@ -66,7 +66,7 @@ public class LibraryNewsList extends MenuActivity {
 		
 		try 
 		{
-			String fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+this.getResources().getStringArray(R.array.library_info_list)[dataType]+"/"+PublicUtils.format(menuItem)+LibraryConstant.CACHE_FILE_SUFFIX;
+			String fullpath = LibraryConstant.LIBRARY_ROOT_PATH+this.getResources().getStringArray(R.array.library_main_list)[5]+"/"+this.getResources().getStringArray(R.array.library_info_list)[dataType]+"/"+PublicUtils.format(menuItem)+LibraryConstant.CACHE_FILE_SUFFIX;
 			TextFileReaderUtils.getInstance().init(fullpath);
 			
 			Intent intent = new Intent( this, ReadTxtActivity.class );
