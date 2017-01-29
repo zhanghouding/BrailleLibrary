@@ -37,7 +37,7 @@ public class GetEbookParseResponse extends AbsParseResponse
 			entity.url = obj.optString("Url");
 			entity.downloadUrl = obj.optString("DownloadUrl");
 			entity.imageUrl = obj.optString("ImageUrl");
-			entity.title = obj.optString("Title");
+			entity.title = obj.optString("Title").replaceAll(" ", "");	//去掉空格
 			entity.author = obj.optString("Author");
 			entity.studio = obj.optString("Studio");
 			entity.keyWords = obj.optString("KeyWords");

@@ -19,6 +19,7 @@ import com.sunteam.library.utils.LibraryConstant;
 public class ResourceOnlineList extends MenuActivity {
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private int bookCount = 0; // 当前类资源总数，在分页加载时，需要使用该值
+	private String fatherPath;	//父目录路径
 	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,16 +71,16 @@ public class ResourceOnlineList extends MenuActivity {
 		case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
 			dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
 			String identifier = mEbookNodeEntityList.get(selectItem).identifier;
-			new GetEbookChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, identifier);
+			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, identifier);
 		case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
 			dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
 			sysId = mEbookNodeEntityList.get(selectItem).sysId;
-			new GetAudioChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
+			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
 			dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
 			sysId = mEbookNodeEntityList.get(selectItem).sysId;
-			new GetVideoChapterAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
+			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
 			break;
 		default:
 			break;
@@ -105,6 +106,7 @@ public class ResourceOnlineList extends MenuActivity {
 		mMenuList = getListFromEbookNodeEntity(mEbookNodeEntityList);
 		bookCount = mMenuList.size();
 		bookCount = intent.getIntExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount);
+		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 	}
 
 	private ArrayList<String> getListFromEbookNodeEntity(ArrayList<EbookNodeEntity> listSrc) {

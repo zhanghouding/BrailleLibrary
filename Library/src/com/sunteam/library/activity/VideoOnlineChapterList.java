@@ -9,8 +9,10 @@ import android.os.Bundle;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
+import com.sunteam.library.utils.LibraryConstant;
 
 public class VideoOnlineChapterList extends MenuActivity {
+	private String fatherPath;	//父目录路径
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class VideoOnlineChapterList extends MenuActivity {
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		mVideoChapterInfoEntityListt = (ArrayList<VideoChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromChapterInfoEntity(mVideoChapterInfoEntityListt);
+		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<VideoChapterInfoEntity> listSrc) {

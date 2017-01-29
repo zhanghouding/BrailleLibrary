@@ -37,7 +37,7 @@ public class GetCategoryParseResponse extends AbsParseResponse
 			entity.father = father;
 			entity.level = level;
 			entity.seq = list.size();
-			entity.name = obj.optString("CategoryName");
+			entity.name = obj.optString("CategoryName").replaceAll(" ", "");	//去掉空格;
 			entity.code = obj.optString("CategoryCode");
 			entity.type = obj.optString("CategoryType");
 			entity.recordCount = obj.optInt("RecordCount");

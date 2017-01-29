@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.library.R;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;

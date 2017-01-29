@@ -24,12 +24,16 @@ import com.sunteam.library.utils.PublicUtils;
 public class GetAudioChapterAsyncTask extends AsyncTask<String, Void, ArrayList<AudioChapterInfoEntity>>
 {
 	private Context mContext;
-	String mTitle;
+	private String mFatherPath;
+	private String mTitle;
 	private ArrayList<AudioChapterInfoEntity> mAudioChapterInfoEntityList = new ArrayList<AudioChapterInfoEntity>();
 	
-	public GetAudioChapterAsyncTask(Context context, String title) 
+	public GetAudioChapterAsyncTask(Context context, String fatherPath, String title) 
 	{
+		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
+		
 		mContext = context;
+		mFatherPath = fatherPath+title+"/";
 		mTitle = title;
 	}
 
@@ -72,6 +76,7 @@ public class GetAudioChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mAudioChapterInfoEntityList); // 数据列表
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO); // 数据类别：电子书、有声书、口述影像
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
 		intent.setClass(mContext, AudioOnlineChapterList.class);
 		mContext.startActivity(intent);
 	}

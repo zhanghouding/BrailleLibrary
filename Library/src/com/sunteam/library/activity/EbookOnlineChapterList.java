@@ -9,8 +9,10 @@ import android.os.Bundle;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
+import com.sunteam.library.utils.LibraryConstant;
 
 public class EbookOnlineChapterList extends MenuActivity {
+	private String fatherPath;	//父目录路径
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class EbookOnlineChapterList extends MenuActivity {
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		mEbookChapterInfoEntityList = (ArrayList<EbookChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromChapterInfoEntity(mEbookChapterInfoEntityList);
+		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<EbookChapterInfoEntity> listSrc) {

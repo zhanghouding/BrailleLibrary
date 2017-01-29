@@ -126,7 +126,7 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, LibraryConstant.LIBRARY_CATEGORY_ROOT_ID); // 父节点ID
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, type); // 数据类别：电子书、有声书、口述影像
-
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
 		intent.setClass(mContext, CategoryOnlineList.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，

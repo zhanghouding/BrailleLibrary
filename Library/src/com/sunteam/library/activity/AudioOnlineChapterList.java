@@ -9,8 +9,10 @@ import android.os.Bundle;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.library.entity.AudioChapterInfoEntity;
+import com.sunteam.library.utils.LibraryConstant;
 
 public class AudioOnlineChapterList extends MenuActivity {
+	private String fatherPath;	//父目录路径
 	private ArrayList<AudioChapterInfoEntity> mAudioChapterInfoEntityList;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class AudioOnlineChapterList extends MenuActivity {
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		mAudioChapterInfoEntityList = (ArrayList<AudioChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromChapterInfoEntity(mAudioChapterInfoEntityList);
+		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<AudioChapterInfoEntity> listSrc) {

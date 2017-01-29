@@ -75,7 +75,7 @@ public class CategoryOnlineList extends MenuActivity {
 			String pageIndex = "1";
 			String pageSize = "" + LibraryConstant.LIBRARY_RESOURCE_PAGESIZE;
 			String categoryCode = mCategoryInfoNodeEntityList.get(selectItem).code;
-			new GetEbookAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, categoryCode, "" + dataType);
+			new GetEbookAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, categoryCode, "" + dataType);
 		} else {
 			startNextActivity(selectItem, menuItem);
 		}
@@ -86,9 +86,7 @@ public class CategoryOnlineList extends MenuActivity {
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		fatherId = intent.getIntExtra(LibraryConstant.INTENT_KEY_FATHER, -1);
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
-		if(LibraryConstant.LIBRARY_CATEGORY_ROOT_ID != fatherId) {
-			fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);			
-		}
+		fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);			
 		mCategoryInfoNodeEntityList = GetCategoryAsyncTask.getChildNodeList(fatherId);
 		mMenuList = getListFromCategoryInfoNodeEntity(mCategoryInfoNodeEntityList);
 	}
@@ -107,6 +105,7 @@ public class CategoryOnlineList extends MenuActivity {
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem); // 菜单名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, mCategoryInfoNodeEntityList.get(selectItem).seq); // 父节点ID
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");	//父目录
 		intent.setClass(this, CategoryOnlineList.class);
 
 		startActivity(intent);

@@ -25,14 +25,18 @@ import com.sunteam.library.utils.PublicUtils;
 public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 {
 	private Context mContext;
+	private String mFatherPath;
 	private String mTitle;
 	private int dataType;
 	private int bookCount = 0; // 资源总数，即当前分类下的书本总数
 	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
 	
-	public GetEbookAsyncTask(Context context, String title) 
+	public GetEbookAsyncTask(Context context, String fatherPath, String title) 
 	{
+		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
+		
 		mContext = context;
+		mFatherPath = fatherPath+title+"/";
 		mTitle = title;
 	}
 
@@ -89,7 +93,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookNodeEntityList); // 菜单名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount); // 资源总数
-
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
 		intent.setClass(mContext, ResourceOnlineList.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
