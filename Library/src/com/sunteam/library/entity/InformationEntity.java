@@ -17,5 +17,5 @@ public class InformationEntity implements Serializable
 	
 	public String title;	//标题
     public String date;		//日期
-    public String fullpath;	//缓存文件全路径
+    public String content;	//内容
 }

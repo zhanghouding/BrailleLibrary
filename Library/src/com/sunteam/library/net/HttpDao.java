@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.text.TextUtils;
+
 import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
@@ -18,6 +20,7 @@ import com.sunteam.library.parse.GetInformationParseResponse;
 import com.sunteam.library.parse.GetVideoChapterParseResponse;
 import com.sunteam.library.parse.LoginParseResponse;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * 有关网络操作的相关的接口
@@ -87,7 +90,6 @@ public class HttpDao
 	 * @author wzp
 	 * @Created 2017/01/25
 	 */
-	@SuppressWarnings("unchecked")
 	public static EbookInfoEntity getEbookList( String pageIndex, String pageSize, String categoryCode, int categoryType ) 
 	{
 		Map<String, String> requestParams = new HashMap<String, String>();
@@ -182,7 +184,7 @@ public class HttpDao
 	 * @Created 2017/01/25
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<InformationEntity> getInformationList( int pageIndex, int pageSize, int informationType ) 
+	public static ArrayList<InformationEntity> getInformationList( int pageIndex, int pageSize, int informationType, String dirName ) 
 	{
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "GetDataList");
@@ -206,6 +208,28 @@ public class HttpDao
 				return	null;
 		}
 		
-		return (ArrayList<InformationEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_INFO, requestParams, new GetInformationParseResponse() );
+		ArrayList<InformationEntity> list = (ArrayList<InformationEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_INFO, requestParams, new GetInformationParseResponse() );
+		
+		if( ( list != null ) && ( list.size() > 0 ) )
+		{
+			String filepath = LibraryConstant.LIBRARY_INFORMATION_PATH+dirName+"/";
+			
+			for( int i = 0; i < list.size(); i++ )
+			{
+				String content = list.get(i).content;
+				if( TextUtils.isEmpty(content) )
+				{
+					PublicUtils.saveContent( filepath, PublicUtils.format(list.get(i).title)+LibraryConstant.CACHE_FILE_SUFFIX, list.get(i).title );
+				}
+				else
+				{
+					PublicUtils.saveContent( filepath, PublicUtils.format(list.get(i).title)+LibraryConstant.CACHE_FILE_SUFFIX, content );
+				}
+				
+				list.get(i).content = "";
+			}
+		}
+		
+		return	list;
 	}
 }

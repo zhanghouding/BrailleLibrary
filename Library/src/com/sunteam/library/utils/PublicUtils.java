@@ -1,5 +1,8 @@
 package com.sunteam.library.utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -261,6 +264,41 @@ public class PublicUtils
         }
     }
     
+	
+	/**
+	 * 方法(保存Content)
+	 * 
+	 * @param content
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/24
+	 */
+	public static void saveContent( String filepath, String filename, String content )
+	{
+		if( !TextUtils.isEmpty(content) )
+		{
+			try
+			{
+				File f = new File(filepath);
+				if( !f.exists() )
+				{
+					f.mkdirs();
+				}
+				File file = new File(filepath+filename);
+				if( !file.exists() )
+				{
+					FileOutputStream outStream = new FileOutputStream(file);
+					outStream.write(content.getBytes());
+					outStream.close();
+				}
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
     //去掉一个字符串中的标点符号
     public static String format(String s)
     {

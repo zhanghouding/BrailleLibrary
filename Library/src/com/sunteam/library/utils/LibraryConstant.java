@@ -62,4 +62,5 @@ public class LibraryConstant {
 	public static final int MSG_HTTP_VIDEO_DETAIL = 12; // 获取视频详细信息
 	public static final int MSG_HTTP_FAVROITE_SEARCH = 13; // 查询收藏夹
 
+	public static final String CACHE_FILE_SUFFIX = ".lib";	//缓存文件后缀
 }

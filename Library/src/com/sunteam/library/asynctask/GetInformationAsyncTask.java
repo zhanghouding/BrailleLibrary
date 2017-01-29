@@ -27,19 +27,21 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 	private Context mContext;
 	private String mTitle;
 	private int infoType;
+	private String[] menuList;
 	private ArrayList<InformationEntity> mInformationEntityList;
 	
 	public GetInformationAsyncTask(Context context, String title) 
 	{
 		mContext = context;
 		mTitle = title;
+		menuList = mContext.getResources().getStringArray(R.array.library_info_list);
 	}
 
 	@Override
 	protected Boolean doInBackground(Integer... params) 
 	{
 		infoType = params[2];
-		mInformationEntityList = HttpDao.getInformationList(params[0], params[1], infoType);
+		mInformationEntityList = HttpDao.getInformationList(params[0], params[1], infoType, menuList[infoType]);
 	
 		if( ( null == mInformationEntityList ) || ( 0 == mInformationEntityList.size() ) )
 		{

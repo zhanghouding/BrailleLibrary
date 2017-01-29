@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.R;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -65,7 +66,7 @@ public class LibraryNewsList extends MenuActivity {
 		
 		try 
 		{
-			String fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+PublicUtils.format(menuItem)+".inf";
+			String fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+this.getResources().getStringArray(R.array.library_info_list)[dataType]+"/"+PublicUtils.format(menuItem)+LibraryConstant.CACHE_FILE_SUFFIX;
 			TextFileReaderUtils.getInstance().init(fullpath);
 			
 			Intent intent = new Intent( this, ReadTxtActivity.class );
