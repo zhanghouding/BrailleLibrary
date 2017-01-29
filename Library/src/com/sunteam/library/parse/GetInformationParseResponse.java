@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.LogUtils;
+import com.sunteam.library.utils.PublicUtils;
 
 //解析盲人咨询列表
 public class GetInformationParseResponse extends AbsParseResponse 
@@ -73,7 +74,7 @@ public class GetInformationParseResponse extends AbsParseResponse
         
         return txtcontent;
 	}
-	
+		
 	/**
 	 * 方法(解析items)
 	 * 
@@ -93,10 +94,17 @@ public class GetInformationParseResponse extends AbsParseResponse
 			
 			entity.title = obj.optString("Title");
 			entity.date = obj.optString("PubTime");
-			entity.fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+entity.title+".inf";
+			entity.fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+PublicUtils.format(entity.title)+".inf";
 			
-			String content = obj.optString("Content");
-			saveContent( entity.fullpath, parseHtml(content) );
+			String content = parseHtml(obj.optString("Content"));
+			if( TextUtils.isEmpty(content) )
+			{
+				saveContent( entity.fullpath, entity.title );
+			}
+			else
+			{
+				saveContent( entity.fullpath, content );
+			}
 			
 			list.add(entity);
 		}

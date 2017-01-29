@@ -260,4 +260,12 @@ public class PublicUtils
             return	false;
         }
     }
+    
+    //去掉一个字符串中的标点符号
+    public static String format(String s)
+    {
+    	String str = s.replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", ""); 
+    	
+    	return str;
+    }
 }	

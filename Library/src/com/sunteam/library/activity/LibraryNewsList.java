@@ -11,6 +11,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TextFileReaderUtils;
 
 public class LibraryNewsList extends MenuActivity {
@@ -64,7 +65,7 @@ public class LibraryNewsList extends MenuActivity {
 		
 		try 
 		{
-			String fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+menuItem+".inf";
+			String fullpath = LibraryConstant.LIBRARY_INFORMATION_PATH+PublicUtils.format(menuItem)+".inf";
 			TextFileReaderUtils.getInstance().init(fullpath);
 			
 			Intent intent = new Intent( this, ReadTxtActivity.class );
