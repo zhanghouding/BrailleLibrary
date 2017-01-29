@@ -12,6 +12,7 @@ import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
+import com.sunteam.library.parse.GetEbookChapterContentParseResponse;
 import com.sunteam.library.parse.GetEbookChapterParseResponse;
 import com.sunteam.library.parse.GetEbookParseResponse;
 import com.sunteam.library.parse.GetInformationParseResponse;
@@ -207,4 +208,24 @@ public class HttpDao
 		
 		return	(ArrayList<InformationEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_INFO, requestParams, new GetInformationParseResponse() );
 	}
+	
+	/**
+	 * 得到电子书章节内容
+	 * 
+	 * @param dbCode
+	 * @param identifier
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/29
+	 */
+	public static String getEbookChapterContent( String identifier, String chapterIndex ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "GetChapterContent");
+		requestParams.put("Identifier", identifier);
+		requestParams.put("chapterIndex", chapterIndex);
+		
+		return (String) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookChapterContentParseResponse() );
+	}
+	
 }

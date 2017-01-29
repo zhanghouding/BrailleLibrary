@@ -4,14 +4,18 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
+import com.sunteam.library.asynctask.GetEbookChapterContentAsyncTask;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.utils.LibraryConstant;
 
 public class EbookOnlineChapterList extends MenuActivity {
+	private String identifier;	//电子书identifier
 	private String fatherPath;	//父目录路径
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;
 
@@ -58,6 +62,8 @@ public class EbookOnlineChapterList extends MenuActivity {
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		// TODO browser next class
+		String chapterIndex = mEbookChapterInfoEntityList.get(selectItem).chapterIndex;
+		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -67,6 +73,7 @@ public class EbookOnlineChapterList extends MenuActivity {
 		mEbookChapterInfoEntityList = (ArrayList<EbookChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromChapterInfoEntity(mEbookChapterInfoEntityList);
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
+		identifier = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER); 
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<EbookChapterInfoEntity> listSrc) {

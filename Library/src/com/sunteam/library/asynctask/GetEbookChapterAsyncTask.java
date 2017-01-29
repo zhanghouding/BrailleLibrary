@@ -26,6 +26,7 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	private Context mContext;
 	private String mFatherPath;
 	private String mTitle;
+	private String identifier;
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList = new ArrayList<EbookChapterInfoEntity>();
 	
 	public GetEbookChapterAsyncTask(Context context, String fatherPath, String title) 
@@ -40,7 +41,8 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	@Override
 	protected ArrayList<EbookChapterInfoEntity> doInBackground(String... params) 
 	{
-		ArrayList<EbookChapterInfoEntity> list = HttpDao.getEbookChapterList(params[0], params[1]);
+		identifier = params[1];
+		ArrayList<EbookChapterInfoEntity> list = HttpDao.getEbookChapterList(params[0], identifier);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
@@ -80,6 +82,7 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookChapterInfoEntityList); // 数据列表
+		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
 		intent.setClass(mContext, EbookOnlineChapterList.class);

@@ -1,21 +1,38 @@
 package com.sunteam.library.parse;
 
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.text.TextUtils;
-
-import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LogUtils;
 import com.sunteam.library.utils.PublicUtils;
 
-//解析盲人咨询列表
-public class GetInformationParseResponse extends AbsParseResponse 
+//解析电子图书章节内容
+public class GetEbookChapterContentParseResponse extends AbsParseResponse 
 {
-	public static final String TAG = "GetInformationParseResponse";
+	public static final String TAG = "GetEbookChapterContentParseResponse";
+	
+	/**
+	 * 方法(解析ChapterList)
+	 * 
+	 * @param jsonArray
+	 * @param list
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/24
+	 */
+	private String parseChapterList( JSONArray jsonArray )
+	{
+		String content = "";
+		for( int i = 0; i < jsonArray.length(); i++ )
+		{
+			JSONObject obj = jsonArray.optJSONObject(i);
+			
+			content += obj.optString("Content");
+		}
 		
+		return	content;
+	}
+	
 	/**
 	 * 方法(解析items)
 	 * 
@@ -25,20 +42,18 @@ public class GetInformationParseResponse extends AbsParseResponse
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	private void parseItems( JSONArray jsonArray, ArrayList<InformationEntity> list )
+	private String parseItems( JSONArray jsonArray )
 	{
+		String content = "";
 		for( int i = 0; i < jsonArray.length(); i++ )
 		{
 			JSONObject obj = jsonArray.optJSONObject(i);
+			JSONArray array = obj.optJSONArray("ChapterList");
 			
-			InformationEntity entity = new InformationEntity();
-			
-			entity.title = obj.optString("Title");
-			entity.date = obj.optString("PubTime");
-			entity.content = PublicUtils.parseHtml(obj.optString("Content"));
-			
-			list.add(entity);
+			content += parseChapterList( array );
 		}
+		
+		return	content;
 	}
 	
 	@Override
@@ -62,11 +77,7 @@ public class GetInformationParseResponse extends AbsParseResponse
 				return	null;
 			}
 			
-			ArrayList<InformationEntity> list = new ArrayList<InformationEntity>();
-			
-			parseItems( jsonArray, list );
-			
-			return	list;
+			return	PublicUtils.parseHtml(parseItems( jsonArray ));
 		}
 		catch( Exception e )
 		{
