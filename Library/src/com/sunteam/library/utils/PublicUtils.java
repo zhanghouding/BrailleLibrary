@@ -264,14 +264,48 @@ public class PublicUtils
         }
     }
     
-	
+	/**
+	 * 方法(创建缓存目录)
+	 * 
+	 * @param parentPath
+	 * 			父路径
+	 * @param dirName
+	 * 			目录名
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/29
+	 */
+	public static String createCacheDir( String parentPath, String dirName )
+	{
+		String dirPath = parentPath+dirName+"/";
+		try
+		{
+			File f = new File(dirPath);
+			if( !f.exists() )
+			{
+				f.mkdirs();
+			}
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+		
+		return	dirPath;
+	}
+    
 	/**
 	 * 方法(保存Content)
 	 * 
+	 * @param filepath
+	 * 			文件路径
+	 * @param filaname
+	 * 			文件名
 	 * @param content
+	 * 			文件内容
 	 * @return
 	 * @author wzp
-	 * @Created 2017/01/24
+	 * @Created 2017/01/29
 	 */
 	public static void saveContent( String filepath, String filename, String content )
 	{

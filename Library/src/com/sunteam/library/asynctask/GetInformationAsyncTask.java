@@ -25,16 +25,18 @@ import com.sunteam.library.utils.PublicUtils;
 public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 {
 	private Context mContext;
+	private String mFatherPath;
 	private String mTitle;
 	private int infoType;
-	private String[] menuList;
 	private ArrayList<InformationEntity> mInformationEntityList;
 	
-	public GetInformationAsyncTask(Context context, String title) 
+	public GetInformationAsyncTask(Context context, String fatherPath, String title) 
 	{
+		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
+		
 		mContext = context;
+		mFatherPath = fatherPath+title+"/";
 		mTitle = title;
-		menuList = mContext.getResources().getStringArray(R.array.library_info_list);
 	}
 
 	@Override
@@ -48,8 +50,6 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 			return	false;
 		}
 		
-		String filepath = LibraryConstant.LIBRARY_ROOT_PATH+mContext.getResources().getStringArray(R.array.library_main_list)[5]+"/"+menuList[infoType]+"/";
-		
 		for( int i = 0; i < mInformationEntityList.size(); i++ )
 		{
 			InformationEntity entity = mInformationEntityList.get(i);
@@ -57,11 +57,11 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 			String content = entity.content;
 			if( TextUtils.isEmpty(content) )
 			{
-				PublicUtils.saveContent( filepath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, entity.title );
+				PublicUtils.saveContent( mFatherPath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, entity.title );
 			}
 			else
 			{
-				PublicUtils.saveContent( filepath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, content );
+				PublicUtils.saveContent( mFatherPath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, content );
 			}
 			
 			entity.content = "";
@@ -101,6 +101,7 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mInformationEntityList); // 数据列表
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, infoType); // 盲人资讯数据类别：新闻公告、服务资讯、文化活动
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
 		intent.setClass(mContext, LibraryNewsList.class);
 
 		mContext.startActivity(intent);

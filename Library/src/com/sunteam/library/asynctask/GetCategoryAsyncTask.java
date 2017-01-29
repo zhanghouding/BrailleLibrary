@@ -23,14 +23,18 @@ import com.sunteam.library.utils.PublicUtils;
  */
 public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<CategoryInfoNodeEntity>>
 {
-	Context mContext;
-	String mTitle;
-	int type;
+	private Context mContext;
+	private String mFatherPath;
+	private String mTitle;
+	private int type;
 	private static ArrayList<CategoryInfoNodeEntity> mCategoryInfoNodeEntityList = new ArrayList<CategoryInfoNodeEntity>();
 	
-	public GetCategoryAsyncTask(Context context, String title) 
+	public GetCategoryAsyncTask(Context context, String fatherPath, String title) 
 	{
+		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
+		
 		mContext = context;
+		mFatherPath = fatherPath+title+"/";
 		mTitle = title;
 	}
 

@@ -31,7 +31,7 @@ public class LibraryConstant {
 	public static final String INTENT_KEY_TYPE = "library_type"; // 数据分类
 	public static final String INTENT_KEY_BOOKCOUNT = "library_resource_count"; // 资源总数
 	public static final String INTENT_KEY_FATHER = "library_father_id"; // 父节点ID
-	public static final String INTENT_KEY_FATHER_PATH = "library_father_path"; // 父节点ID
+	public static final String INTENT_KEY_FATHER_PATH = "library_father_path"; // 父节点路径
 
 	// 资源列表常量
 	public static final int LIBRARY_RESOURCE_PAGESIZE = 10; // 资源列表时一页的资源数

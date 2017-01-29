@@ -18,6 +18,7 @@ import com.sunteam.library.utils.TextFileReaderUtils;
 public class LibraryNewsList extends MenuActivity {
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private int bookCount = 0; // 当前类资源总数，在分页加载时，需要使用该值
+	private String fatherPath;	//父目录路径
 	private ArrayList<InformationEntity> mInformationEntityList;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class LibraryNewsList extends MenuActivity {
 		
 		try 
 		{
-			String fullpath = LibraryConstant.LIBRARY_ROOT_PATH+this.getResources().getStringArray(R.array.library_main_list)[5]+"/"+this.getResources().getStringArray(R.array.library_info_list)[dataType]+"/"+PublicUtils.format(menuItem)+LibraryConstant.CACHE_FILE_SUFFIX;
+			String fullpath = fatherPath+PublicUtils.format(menuItem)+LibraryConstant.CACHE_FILE_SUFFIX;
 			TextFileReaderUtils.getInstance().init(fullpath);
 			
 			Intent intent = new Intent( this, ReadTxtActivity.class );
@@ -99,6 +100,7 @@ public class LibraryNewsList extends MenuActivity {
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, dataType);
 		bookCount = mMenuList.size();
 		bookCount = intent.getIntExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount);
+		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 	}
 
 	private ArrayList<String> getListFromInformationEntity(ArrayList<InformationEntity> listSrc) {

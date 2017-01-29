@@ -1,7 +1,5 @@
 package com.sunteam.library.activity;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,20 +7,12 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
-import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
-import com.sunteam.library.asynctask.GetCategoryAsyncTask;
-import com.sunteam.library.asynctask.GetEbookAsyncTask;
-import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
 import com.sunteam.library.asynctask.GetInformationAsyncTask;
-import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
-import com.sunteam.library.entity.CategoryInfoNodeEntity;
-import com.sunteam.library.entity.EbookNodeEntity;
-import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LibraryConstant;
 
 public class LibraryNewsCategoryList extends MenuActivity {
-
+	private String fatherPath;	//父目录路径
+	
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
 		super.onCreate(savedInstanceState);
@@ -65,7 +55,7 @@ public class LibraryNewsCategoryList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		new GetInformationAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_RESOURCE_PAGESIZE, selectItem);
+		new GetInformationAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_RESOURCE_PAGESIZE, selectItem);
 	}
 
 	@Override
@@ -80,6 +70,7 @@ public class LibraryNewsCategoryList extends MenuActivity {
 
 	@SuppressWarnings("unchecked")
 	private void initView() {
+		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		/*Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		mEbookNodeEntityList = (ArrayList<EbookNodeEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);

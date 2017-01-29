@@ -20,7 +20,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCategoryAsyncTask;
 import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
-import com.sunteam.library.utils.LibraryOfflineFile;
+import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.WifiUtils;
 
@@ -111,18 +111,19 @@ public class MainActivity extends MenuActivity {
 //			cls = SearchActivity.class;
 			break;
 		case 2: // 电子书
-			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
+			new GetCategoryAsyncTask(this, LibraryConstant.LIBRARY_ROOT_PATH, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
 //			testEbook();
 			break;
 		case 3: // 有声书
-			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
+			new GetCategoryAsyncTask(this, LibraryConstant.LIBRARY_ROOT_PATH, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
 			break;
 		case 4: // 口述影像
-			new GetCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_VIDEO);
+			new GetCategoryAsyncTask(this, LibraryConstant.LIBRARY_ROOT_PATH, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_VIDEO);
 			break;
 //			testLogin("test1");
 //			return;
 		case 5: // 图书馆新闻
+			PublicUtils.createCacheDir(LibraryConstant.LIBRARY_ROOT_PATH, menuItem);	//创建缓存目录
 			list = getResources().getStringArray(R.array.library_info_list);
 			startNextActivity(LibraryNewsCategoryList.class, selectItem, menuItem, list);
 			break;
@@ -144,6 +145,7 @@ public class MainActivity extends MenuActivity {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, LibraryConstant.LIBRARY_ROOT_PATH+title+"/");	//父目录
 
 		intent.setClass(this, cls);
 
