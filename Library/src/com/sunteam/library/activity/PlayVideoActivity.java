@@ -1,5 +1,9 @@
 package com.sunteam.library.activity;
 
+import org.wlf.filedownloader.FileDownloader;
+import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
+import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener.DetectBigUrlFileFailReason;
+
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,6 +17,8 @@ import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.TTSUtils;
 
 /**
@@ -26,6 +32,8 @@ public class PlayVideoActivity extends Activity
 	private TextView mTvTitle = null;
 	private View mLine = null;
 	private String filename;
+	private String fatherPath;
+	private String videoUrl;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +45,8 @@ public class PlayVideoActivity extends Activity
 		setContentView(R.layout.library_activity_play_video);
 		
 		filename = this.getIntent().getStringExtra("filename");
+		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
+		videoUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
@@ -51,6 +61,29 @@ public class PlayVideoActivity extends Activity
     	mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
     	mTvTitle.setText(filename);
+    	
+    	FileDownloader.detect(videoUrl, new OnDetectBigUrlFileListener() {
+    		@Override
+    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
+    		{
+    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
+    			FileDownloader.createAndStart(url, fatherPath, fileName);
+    		}
+    		
+    		@Override
+    		public void onDetectUrlFileExist(String url) 
+    		{
+    			FileDownloader.start(url);	
+    			//如果文件没被下载过，将创建并开启下载，否则继续下载，自动会断点续传（如果服务器无法支持断点续传将从头开始下载）
+    		}
+    		
+    		@Override
+    		public void onDetectUrlFileFailed(String url, DetectBigUrlFileFailReason failReason) 
+    		{
+    			// 探测一个网络文件失败了，具体查看failReason
+    		}
+    	});
+    	MediaPlayerUtils.getInstance().play(videoUrl);	//播放视频
 	}
 	
 	@Override
@@ -126,8 +159,7 @@ public class PlayVideoActivity extends Activity
 	//退出此界面
 	private void back( boolean isSetResult )
 	{
-		TTSUtils.getInstance().stop();
-		TTSUtils.getInstance().OnTTSListener(null);
+		MediaPlayerUtils.getInstance().stop();
 		if( isSetResult )
 		{
 			setResult(RESULT_OK);

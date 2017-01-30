@@ -1,5 +1,8 @@
 package com.sunteam.library.activity;
 
+import org.wlf.filedownloader.FileDownloader;
+import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
+
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -58,7 +61,28 @@ public class PlayAudioActivity extends Activity
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
     	mTvTitle.setText(filename);
     	
-    	MediaPlayerUtils.getInstance().play(audioUrl);
+    	FileDownloader.detect(audioUrl, new OnDetectBigUrlFileListener() {
+    		@Override
+    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
+    		{
+    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
+    			FileDownloader.createAndStart(url, fatherPath, fileName);
+    		}
+    		
+    		@Override
+    		public void onDetectUrlFileExist(String url) 
+    		{
+    			FileDownloader.start(url);	
+    			//如果文件没被下载过，将创建并开启下载，否则继续下载，自动会断点续传（如果服务器无法支持断点续传将从头开始下载）
+    		}
+    		
+    		@Override
+    		public void onDetectUrlFileFailed(String url, DetectBigUrlFileFailReason failReason) 
+    		{
+    			// 探测一个网络文件失败了，具体查看failReason
+    		}
+    	});
+    	MediaPlayerUtils.getInstance().play(audioUrl);	//播放音频
 	}
 	
 	@Override
@@ -129,14 +153,12 @@ public class PlayAudioActivity extends Activity
 	public void onDestroy()
 	{
 		super.onDestroy();
-		MediaPlayerUtils.getInstance().stop();
 	}
 
 	//退出此界面
 	private void back( boolean isSetResult )
 	{
-		TTSUtils.getInstance().stop();
-		TTSUtils.getInstance().OnTTSListener(null);
+		MediaPlayerUtils.getInstance().stop();
 		if( isSetResult )
 		{
 			setResult(RESULT_OK);

@@ -27,6 +27,7 @@
         android:smallScreens="true" />
 
     <application
+        android:name=".InitApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/library_app_name" >
