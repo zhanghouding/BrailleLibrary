@@ -155,6 +155,16 @@
             android:screenOrientation="landscape" 
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
+        <activity
+            android:name=".activity.PlayAudioActivity"
+            android:screenOrientation="landscape" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name=".activity.PlayVideoActivity"
+            android:screenOrientation="landscape" 
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
     </application>
 
 </manifest>

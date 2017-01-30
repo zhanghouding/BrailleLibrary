@@ -20,6 +20,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCategoryAsyncTask;
 import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.WifiUtils;
@@ -39,6 +40,7 @@ public class MainActivity extends MenuActivity {
 		MenuGlobal.debug("[Library-MainActivity][onCreate], this = " + this);
 		
 		TTSUtils.getInstance().init(this);	//初始化TTS
+		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
 	}
 
 	@Override
@@ -75,6 +77,7 @@ public class MainActivity extends MenuActivity {
 		super.onDestroy();
 		
 		TTSUtils.getInstance().destroy();
+		MediaPlayerUtils.getInstance().destroy();
 		if (null != TtsUtils.getInstance()) {
 			TtsUtils.getInstance().destroy();
 		}
