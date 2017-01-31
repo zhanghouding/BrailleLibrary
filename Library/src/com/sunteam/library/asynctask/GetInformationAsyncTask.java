@@ -64,11 +64,11 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 			String content = entity.content;
 			if( TextUtils.isEmpty(content) )
 			{
-				PublicUtils.saveContent( mFatherPath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, entity.title );
+				PublicUtils.saveContent( mFatherPath, PublicUtils.format(entity.title+entity.date)+LibraryConstant.CACHE_FILE_SUFFIX, entity.title );
 			}
 			else
 			{
-				PublicUtils.saveContent( mFatherPath, PublicUtils.format(entity.title)+LibraryConstant.CACHE_FILE_SUFFIX, content );
+				PublicUtils.saveContent( mFatherPath, PublicUtils.format(entity.title+entity.date)+LibraryConstant.CACHE_FILE_SUFFIX, content );
 			}
 			
 			entity.content = "";
