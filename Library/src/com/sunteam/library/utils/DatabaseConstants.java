@@ -12,6 +12,7 @@ public class DatabaseConstants
 	public static final String CATEGORY_TABLE_NAME = "categorys";	//分类表名称
 	public static final String RESOURCE_TABLE_NAME = "resources";	//资源表名称
 	public static final String CHAPTER_TABLE_NAME = "chapters";		//章节表名称
+	public static final String INFO_TABLE_NAME = "infos";			//资讯表名称
 	
 	public static final String RESOURCE_TYPE = "resource_type";		//资源类型
 	//分类表字段
@@ -39,4 +40,8 @@ public class DatabaseConstants
 	public static final String CHAPTER_INDEX = "idx";				//章节索引
 	public static final String CHAPTER_NAME = "name";				//章节名称
 	public static final String CHAPTER_URL = "url";					//章节URL
+	
+	//资讯表字段
+	public static final String INFO_TITLE = "title";				//资讯标题
+	public static final String INFO_DATE = "date";					//日期
 }

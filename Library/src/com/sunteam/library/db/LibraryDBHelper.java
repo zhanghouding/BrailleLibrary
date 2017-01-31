@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 //创建数据库
 public class LibraryDBHelper extends SQLiteOpenHelper 
 {	
-	public static final String CREATE_CATEGORY_TABLE = 
+	public static final String CREATE_CATEGORY_TABLE =	//创建分类表
 			"create table if not exists " + DatabaseConstants.CATEGORY_TABLE_NAME +
 			" (_id integer PRIMARY KEY AUTOINCREMENT," +
 			DatabaseConstants.RESOURCE_TYPE + " integer," +
@@ -21,7 +21,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.CATEGORY_CODE + " varchar(128)," +
 			DatabaseConstants.CATEGORY_TYPE + " varchar(128))";
 	
-	public static final String CREATE_RESOURCE_TABLE = 
+	public static final String CREATE_RESOURCE_TABLE =	//创建资源表 
 			"create table if not exists " + DatabaseConstants.RESOURCE_TABLE_NAME +
 			" (_id integer PRIMARY KEY AUTOINCREMENT," +
 			DatabaseConstants.RESOURCE_TYPE + " integer," +
@@ -34,7 +34,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.RESOURCE_PUBLISH + " varchar(128)," +
 			DatabaseConstants.RESOURCE_IDENTIFIER + " varchar(128))";
 	
-	public static final String CREATE_CHAPTER_TABLE = 
+	public static final String CREATE_CHAPTER_TABLE =	//创建章节表
 			"create table if not exists " + DatabaseConstants.CHAPTER_TABLE_NAME +
 			" (_id integer PRIMARY KEY AUTOINCREMENT," +
 			DatabaseConstants.RESOURCE_TYPE + " integer," +
@@ -44,6 +44,13 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.CHAPTER_INDEX + " varchar(128)," +
 			DatabaseConstants.CHAPTER_NAME + " varchar(128)," +
 			DatabaseConstants.CHAPTER_URL + " varchar(1024))";
+	
+	public static final String CREATE_INFO_TABLE =	//创建资源表
+			"create table if not exists " + DatabaseConstants.INFO_TABLE_NAME +
+			" (_id integer PRIMARY KEY AUTOINCREMENT," +
+			DatabaseConstants.RESOURCE_TYPE + " integer," +
+			DatabaseConstants.INFO_TITLE + " varchar(512)," +
+			DatabaseConstants.INFO_DATE + " varchar(32))";
 	
 	public LibraryDBHelper( Context context, String name, CursorFactory factory, int version ) 
 	{
@@ -57,6 +64,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 		db.execSQL(CREATE_CATEGORY_TABLE);	//创建分类表
 		db.execSQL(CREATE_RESOURCE_TABLE);	//创建资源表
 		db.execSQL(CREATE_CHAPTER_TABLE);	//创建章节表
+		db.execSQL(CREATE_INFO_TABLE);		//创建资讯表
 	}
 
 	@Override
