@@ -10,6 +10,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.ResourceOnlineList;
+import com.sunteam.library.db.ResourceDBDao;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.net.HttpDao;
@@ -56,6 +57,11 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		if( ( entity.list != null ) && ( entity.list.size() > 0 ) )
 		{
 			mEbookNodeEntityList.addAll(entity.list);
+			
+			ResourceDBDao dao = new ResourceDBDao( mContext );
+			dao.deleteAll(dataType);			//先删除缓存的此类型所有数据
+			dao.insert(entity.list, dataType);	//再缓存新的数据
+			dao.closeDb();			//关闭数据库
 		}
 		
 		return	true;

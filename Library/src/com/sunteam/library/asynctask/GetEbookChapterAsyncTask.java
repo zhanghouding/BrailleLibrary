@@ -10,6 +10,8 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.EbookOnlineChapterList;
+import com.sunteam.library.db.ChapterDBDao;
+import com.sunteam.library.db.ResourceDBDao;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
@@ -47,6 +49,11 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
 			mEbookChapterInfoEntityList.addAll(list);
+			
+			ChapterDBDao dao = new ChapterDBDao( mContext );
+			dao.deleteAll(LibraryConstant.LIBRARY_DATATYPE_EBOOK);			//先删除缓存的此类型所有数据
+			dao.insert(list, LibraryConstant.LIBRARY_DATATYPE_EBOOK);		//再缓存新的数据
+			dao.closeDb();			//关闭数据库
 		}
 		
 		return	mEbookChapterInfoEntityList;

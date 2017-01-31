@@ -26,7 +26,7 @@ public class ChapterDBHelper extends SQLiteOpenHelper
 				DatabaseConstants.CHAPTER_FATHER + " integer," +
 				DatabaseConstants.CHAPTER_SEQ + " integer," +
 				DatabaseConstants.CHAPTER_LEVEL + " integer," +
-				DatabaseConstants.CHAPTER_INDEX + " integer," +
+				DatabaseConstants.CHAPTER_INDEX + " varchar(128)," +
 				DatabaseConstants.CHAPTER_NAME + " varchar(128)," +
 				DatabaseConstants.CHAPTER_URL + " varchar(512))";
 		db.execSQL(sql);
