@@ -10,6 +10,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.CategoryOnlineList;
+import com.sunteam.library.db.CategoryDBDao;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
@@ -89,6 +90,11 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
 			mCategoryInfoNodeEntityList.addAll(list);
+			
+			CategoryDBDao dao = new CategoryDBDao( mContext );
+			dao.deleteAll(type);	//先删除缓存的此类型所有数据
+			dao.insert(list, type);	//再缓存新的数据
+			dao.closeDb();			//关闭数据库
 		}
 		
 		return	mCategoryInfoNodeEntityList;
