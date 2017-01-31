@@ -52,6 +52,17 @@ public class GetAudioChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 			dao.insertAudioChapterInfo(list);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
+		else
+		{
+			ChapterDBDao dao = new ChapterDBDao( mContext );
+			list = dao.findAllAudioChapter();
+			dao.closeDb();			//关闭数据库
+			
+			if( ( list != null ) && ( list.size() > 0 ) )
+			{
+				mAudioChapterInfoEntityList.addAll(list);
+			}
+		}
 		
 		return	mAudioChapterInfoEntityList;
 	}

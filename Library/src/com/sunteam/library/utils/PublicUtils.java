@@ -1,6 +1,7 @@
 package com.sunteam.library.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import android.app.Activity;
@@ -292,6 +293,41 @@ public class PublicUtils
 		}
 		
 		return	dirPath;
+	}
+    
+	/**
+	 * 方法(加载Content)
+	 * 
+	 * @param filepath
+	 * 			文件路径
+	 * @param filaname
+	 * 			文件名
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/31
+	 */
+	public static String readContent( String filepath, String filename )
+	{
+		try
+		{
+			File file = new File(filepath+filename);
+			if( file.exists() )
+			{
+				int len = (int) file.length();
+				byte[] buffer = new byte[len];
+				FileInputStream inStream = new FileInputStream(file);
+				inStream.read(buffer);
+				inStream.close();
+				
+				return	new String(buffer);
+			}
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+		
+		return	"";
 	}
     
 	/**

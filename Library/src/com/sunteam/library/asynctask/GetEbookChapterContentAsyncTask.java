@@ -39,7 +39,11 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Str
 	protected String doInBackground(String... params) 
 	{
 		mContent = HttpDao.getEbookChapterContent(params[0], params[1]);
-		if( TextUtils.isEmpty(mContent) )
+		if( null == mContent )
+		{
+			mContent = PublicUtils.readContent( mFatherPath, mTitle+LibraryConstant.CACHE_FILE_SUFFIX );
+		}
+		else if( TextUtils.isEmpty(mContent) )
 		{
 			PublicUtils.saveContent( mFatherPath, mTitle+LibraryConstant.CACHE_FILE_SUFFIX, "" );
 		}

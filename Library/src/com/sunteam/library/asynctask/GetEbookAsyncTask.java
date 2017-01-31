@@ -49,6 +49,18 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	
 		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
 		{
+			ResourceDBDao dao = new ResourceDBDao( mContext );
+			ArrayList<EbookNodeEntity> list = dao.findAll(dataType);
+			dao.closeDb();			//关闭数据库
+			
+			if( ( list != null ) && ( list.size() > 0 ) )
+			{
+				bookCount = list.size();
+				mEbookNodeEntityList.addAll(list);
+				
+				return	true;
+			}
+			
 			return	false;
 		}
 		

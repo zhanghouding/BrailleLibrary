@@ -55,6 +55,17 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 			dao.insertEbookChapterInfo(list);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
+		else
+		{
+			ChapterDBDao dao = new ChapterDBDao( mContext );
+			list = dao.findAllEbookChapter();
+			dao.closeDb();			//关闭数据库
+			
+			if( ( list != null ) && ( list.size() > 0 ) )
+			{
+				mEbookChapterInfoEntityList.addAll(list);
+			}
+		}
 		
 		return	mEbookChapterInfoEntityList;
 	}

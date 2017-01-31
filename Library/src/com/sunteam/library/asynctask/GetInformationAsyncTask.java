@@ -49,7 +49,16 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 	
 		if( ( null == mInformationEntityList ) || ( 0 == mInformationEntityList.size() ) )
 		{
-			return	false;
+			InfoDBDao dao = new InfoDBDao( mContext );
+			mInformationEntityList = dao.findAll(infoType);
+			dao.closeDb();			//关闭数据库
+			
+			if( ( null == mInformationEntityList ) || ( 0 == mInformationEntityList.size() ) )
+			{
+				return	false;
+			}
+			
+			return	true;
 		}
 		
 		InfoDBDao dao = new InfoDBDao( mContext );

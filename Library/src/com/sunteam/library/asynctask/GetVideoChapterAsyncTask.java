@@ -52,6 +52,17 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 			dao.insertVideoChapterInfo(list);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
+		else
+		{
+			ChapterDBDao dao = new ChapterDBDao( mContext );
+			list = dao.findAllVideoChapter();
+			dao.closeDb();			//关闭数据库
+			
+			if( ( list != null ) && ( list.size() > 0 ) )
+			{
+				mVideoChapterInfoEntityList.addAll(list);
+			}
+		}
 		
 		return	mVideoChapterInfoEntityList;
 	}
