@@ -12,21 +12,21 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 public class ResourceDBDao 
 {
-	private ResourceDBHelper ResourceDBHelper = null;
+	private LibraryDBHelper mLibraryDBHelper = null;
 
 	public ResourceDBDao( Context context, String name, CursorFactory factory, int version ) 
 	{
-		ResourceDBHelper = new ResourceDBHelper( context, name, factory, version );
+		mLibraryDBHelper = new LibraryDBHelper( context, name, factory, version );
 	}
 	
 	public ResourceDBDao( Context context, String name ) 
 	{
-		ResourceDBHelper = new ResourceDBHelper( context, name, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, name, null, DatabaseConstants.DATABASE_VERSION );
 	}
 	
 	public ResourceDBDao( Context context ) 
 	{
-		ResourceDBHelper = new ResourceDBHelper( context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
 	}
 	
 	public void insert( EbookNodeEntity entity, int resourceType ) 
@@ -36,7 +36,7 @@ public class ResourceDBDao
 			return;
 		}
 		
-		SQLiteDatabase db = ResourceDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		String sql = 
 				"insert into " + DatabaseConstants.RESOURCE_TABLE_NAME +
 				" (" +
@@ -61,7 +61,7 @@ public class ResourceDBDao
 			return;
 		}
 		
-		SQLiteDatabase db = ResourceDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		
 		int size = list.size();
 		for( int i = 0; i < size; i++ )
@@ -92,7 +92,7 @@ public class ResourceDBDao
 			return;
 		}
 		
-		SQLiteDatabase db = ResourceDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		
 		int size = list.size();
 		for( int i = size-1; i >= 0; i-- )
@@ -120,7 +120,7 @@ public class ResourceDBDao
 	{
 		String sql1 = "DELETE FROM " + DatabaseConstants.RESOURCE_TABLE_NAME +";";
 		String sql2= "update sqlite_sequence set seq=0 where name='" + DatabaseConstants.RESOURCE_TABLE_NAME + "'";
-		SQLiteDatabase db = ResourceDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		db.execSQL(sql1);
 		db.execSQL(sql2);
 		db.close();
@@ -129,7 +129,7 @@ public class ResourceDBDao
 	//查找所有资源类型为resourceType的数据条数
 	public long getCount( int resourceType ) 
 	{
-		SQLiteDatabase db = ResourceDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		if( null == db )
 		{
 			return	0;
@@ -156,7 +156,7 @@ public class ResourceDBDao
 	//查找所有资源类型为resourceType的数据
 	public ArrayList<EbookNodeEntity> findAll( int resourceType ) 
 	{
-		SQLiteDatabase db = ResourceDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{resourceType+""});
 		if( null == cursor )
 		{
@@ -192,7 +192,7 @@ public class ResourceDBDao
 	//删除所有资源类型为resourceType的数据
 	public void deleteAll( int resourceType ) 
 	{
-		SQLiteDatabase db = ResourceDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		db.execSQL("delete from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{resourceType+""});
 		db.close();
 	}
@@ -200,9 +200,9 @@ public class ResourceDBDao
 	//关闭数据库
     public void closeDb() 
     {
-    	if (ResourceDBHelper != null)
+    	if (mLibraryDBHelper != null)
     	{
-    		ResourceDBHelper.close();
+    		mLibraryDBHelper.close();
     	}
    }
 }

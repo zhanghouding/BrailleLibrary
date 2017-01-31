@@ -49,7 +49,7 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 			
 			ChapterDBDao dao = new ChapterDBDao( mContext );
 			dao.deleteAll(LibraryConstant.LIBRARY_DATATYPE_VIDEO);			//先删除缓存的此类型所有数据
-			dao.insert(list, LibraryConstant.LIBRARY_DATATYPE_VIDEO);		//再缓存新的数据
+			dao.insertVideoChapterInfo(list);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		

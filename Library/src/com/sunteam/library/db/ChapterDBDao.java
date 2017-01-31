@@ -7,6 +7,7 @@ import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.utils.DatabaseConstants;
+import com.sunteam.library.utils.LibraryConstant;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,132 +16,44 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 public class ChapterDBDao 
 {
-	private ChapterDBHelper ChapterDBHelper = null;
+	private LibraryDBHelper mLibraryDBHelper = null;
 
 	public ChapterDBDao( Context context, String name, CursorFactory factory, int version ) 
 	{
-		ChapterDBHelper = new ChapterDBHelper( context, name, factory, version );
+		mLibraryDBHelper = new LibraryDBHelper( context, name, factory, version );
 	}
 	
 	public ChapterDBDao( Context context, String name ) 
 	{
-		ChapterDBHelper = new ChapterDBHelper( context, name, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, name, null, DatabaseConstants.DATABASE_VERSION );
 	}
 	
 	public ChapterDBDao( Context context ) 
 	{
-		ChapterDBHelper = new ChapterDBHelper( context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
 	}
-	
-	public void insert( Object obj, int resourceType ) 
-	{
-		if( null == obj )
-		{
-			return;
-		}
 		
-		Chapter chapter = new Chapter();
-		switch( resourceType )
-		{
-			case 0:
-				{
-					EbookChapterInfoEntity entity = (EbookChapterInfoEntity)obj;
-					chapter.father = entity.father;
-					chapter.seq = entity.seq;
-					chapter.level = entity.level;
-					chapter.index = entity.chapterIndex;
-					chapter.name = entity.chapterName;
-				}
-				break;
-			case 1:
-				{
-					AudioChapterInfoEntity entity = (AudioChapterInfoEntity)obj;
-					chapter.father = entity.father;
-					chapter.seq = entity.seq;
-					chapter.level = entity.level;
-					chapter.name = entity.title;
-					chapter.url = entity.audioUrl;
-				}
-				break;
-			case 2:
-				{
-					VideoChapterInfoEntity entity = (VideoChapterInfoEntity)obj;
-					chapter.father = entity.father;
-					chapter.seq = entity.seq;
-					chapter.level = entity.level;
-					chapter.name = entity.title;
-					chapter.url = entity.videoUrl;
-				}
-				break;
-			default:
-				return;
-		}
-		
-		SQLiteDatabase db = ChapterDBHelper.getWritableDatabase();
-		String sql = 
-				"insert into " + DatabaseConstants.CHAPTER_TABLE_NAME +
-				" (" +
-				DatabaseConstants.RESOURCE_TYPE + "," +
-				DatabaseConstants.CHAPTER_FATHER + "," +
-				DatabaseConstants.CHAPTER_SEQ + "," +
-				DatabaseConstants.CHAPTER_LEVEL + "," +
-				DatabaseConstants.CHAPTER_INDEX + "," +
-				DatabaseConstants.CHAPTER_NAME + "," +
-				DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?)";
-		db.execSQL( sql, new Object[]{resourceType,chapter.father,chapter.seq,chapter.level,chapter.index,chapter.name,chapter.url});
-		db.close();
-	}
-
-	//顺序插入
-	public void insert( ArrayList<Object> list, int resourceType ) 
+	//顺序插入电子书章节
+	public void insertEbookChapterInfo( ArrayList<EbookChapterInfoEntity> list ) 
 	{
 		if( ( null == list ) || ( list.size() == 0 ) )
 		{
 			return;
 		}
 		
-		SQLiteDatabase db = ChapterDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		
 		int size = list.size();
 		for( int i = 0; i < size; i++ )
 		{
-			Object obj = list.get(i);
+			EbookChapterInfoEntity entity = list.get(i);
 			Chapter chapter = new Chapter();
-			switch( resourceType )
-			{
-				case 0:
-					{
-						EbookChapterInfoEntity entity = (EbookChapterInfoEntity)obj;
-						chapter.father = entity.father;
-						chapter.seq = entity.seq;
-						chapter.level = entity.level;
-						chapter.index = entity.chapterIndex;
-						chapter.name = entity.chapterName;
-					}
-					break;
-				case 1:
-					{
-						AudioChapterInfoEntity entity = (AudioChapterInfoEntity)obj;
-						chapter.father = entity.father;
-						chapter.seq = entity.seq;
-						chapter.level = entity.level;
-						chapter.name = entity.title;
-						chapter.url = entity.audioUrl;
-					}
-					break;
-				case 2:
-					{
-						VideoChapterInfoEntity entity = (VideoChapterInfoEntity)obj;
-						chapter.father = entity.father;
-						chapter.seq = entity.seq;
-						chapter.level = entity.level;
-						chapter.name = entity.title;
-						chapter.url = entity.videoUrl;
-					}
-					break;
-				default:
-					continue;
-			}
+			chapter.father = entity.father;
+			chapter.seq = entity.seq;
+			chapter.level = entity.level;
+			chapter.index = entity.chapterIndex;
+			chapter.name = entity.chapterName;
+			
 			String sql = 
 					"insert into " + DatabaseConstants.CHAPTER_TABLE_NAME +
 					" (" +
@@ -151,61 +64,32 @@ public class ChapterDBDao
 					DatabaseConstants.CHAPTER_INDEX + "," +
 					DatabaseConstants.CHAPTER_NAME + "," +
 					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{resourceType,chapter.father,chapter.seq,chapter.level,chapter.index,chapter.name,chapter.url});
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_EBOOK,chapter.father,chapter.seq,chapter.level,chapter.index,chapter.name,chapter.url});
 		}
 		db.close();
 	}
 	
-	//倒序插入
-	public void insertDescending( ArrayList<Object> list, int resourceType ) 
+	//顺序插入有声书章节
+	public void insertAudioChapterInfo( ArrayList<AudioChapterInfoEntity> list ) 
 	{
 		if( ( null == list ) || ( list.size() == 0 ) )
 		{
 			return;
 		}
 		
-		SQLiteDatabase db = ChapterDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		
 		int size = list.size();
-		for( int i = size-1; i >= 0; i-- )
+		for( int i = 0; i < size; i++ )
 		{
-			Object obj = list.get(i);
+			AudioChapterInfoEntity entity = list.get(i);
 			Chapter chapter = new Chapter();
-			switch( resourceType )
-			{
-				case 0:
-					{
-						EbookChapterInfoEntity entity = (EbookChapterInfoEntity)obj;
-						chapter.father = entity.father;
-						chapter.seq = entity.seq;
-						chapter.level = entity.level;
-						chapter.index = entity.chapterIndex;
-						chapter.name = entity.chapterName;
-					}
-					break;
-				case 1:
-					{
-						AudioChapterInfoEntity entity = (AudioChapterInfoEntity)obj;
-						chapter.father = entity.father;
-						chapter.seq = entity.seq;
-						chapter.level = entity.level;
-						chapter.name = entity.title;
-						chapter.url = entity.audioUrl;
-					}
-					break;
-				case 2:
-					{
-						VideoChapterInfoEntity entity = (VideoChapterInfoEntity)obj;
-						chapter.father = entity.father;
-						chapter.seq = entity.seq;
-						chapter.level = entity.level;
-						chapter.name = entity.title;
-						chapter.url = entity.videoUrl;
-					}
-					break;
-				default:
-					continue;
-			}
+			chapter.father = entity.father;
+			chapter.seq = entity.seq;
+			chapter.level = entity.level;
+			chapter.name = entity.title;
+			chapter.url = entity.audioUrl;
+			
 			String sql = 
 					"insert into " + DatabaseConstants.CHAPTER_TABLE_NAME +
 					" (" +
@@ -216,17 +100,53 @@ public class ChapterDBDao
 					DatabaseConstants.CHAPTER_INDEX + "," +
 					DatabaseConstants.CHAPTER_NAME + "," +
 					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{resourceType,chapter.father,chapter.seq,chapter.level,chapter.index,chapter.name,chapter.url});
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_AUDIO,chapter.father,chapter.seq,chapter.level,chapter.index,chapter.name,chapter.url});
 		}
 		db.close();
 	}
 	
+	//熟悉插入口述影像章节
+	public void insertVideoChapterInfo( ArrayList<VideoChapterInfoEntity> list ) 
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return;
+		}
+		
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			VideoChapterInfoEntity entity = list.get(i);
+			Chapter chapter = new Chapter();
+			chapter.father = entity.father;
+			chapter.seq = entity.seq;
+			chapter.level = entity.level;
+			chapter.name = entity.title;
+			chapter.url = entity.videoUrl;
+			
+			String sql = 
+					"insert into " + DatabaseConstants.CHAPTER_TABLE_NAME +
+					" (" +
+					DatabaseConstants.RESOURCE_TYPE + "," +
+					DatabaseConstants.CHAPTER_FATHER + "," +
+					DatabaseConstants.CHAPTER_SEQ + "," +
+					DatabaseConstants.CHAPTER_LEVEL + "," +
+					DatabaseConstants.CHAPTER_INDEX + "," +
+					DatabaseConstants.CHAPTER_NAME + "," +
+					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_VIDEO,chapter.father,chapter.seq,chapter.level,chapter.index,chapter.name,chapter.url});
+		}
+		db.close();
+	}
+
 	//清除整个表数据
 	public void clearTable()
 	{
 		String sql1 = "DELETE FROM " + DatabaseConstants.CHAPTER_TABLE_NAME +";";
 		String sql2= "update sqlite_sequence set seq=0 where name='" + DatabaseConstants.CHAPTER_TABLE_NAME + "'";
-		SQLiteDatabase db = ChapterDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		db.execSQL(sql1);
 		db.execSQL(sql2);
 		db.close();
@@ -235,7 +155,7 @@ public class ChapterDBDao
 	//查找所有资源类型为resourceType的数据条数
 	public long getCount( int resourceType ) 
 	{
-		SQLiteDatabase db = ChapterDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		if( null == db )
 		{
 			return	0;
@@ -262,7 +182,7 @@ public class ChapterDBDao
 	//查找所有资源类型为电子书的数据
 	public ArrayList<EbookChapterInfoEntity> findAllEbookChapter() 
 	{
-		SQLiteDatabase db = ChapterDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{"0"});
 		if( null == cursor )
 		{
@@ -295,7 +215,7 @@ public class ChapterDBDao
 	//查找所有资源类型为有声书的数据
 	public ArrayList<AudioChapterInfoEntity> findAllAudioChapter() 
 	{
-		SQLiteDatabase db = ChapterDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{"1"});
 		if( null == cursor )
 		{
@@ -328,7 +248,7 @@ public class ChapterDBDao
 	//查找所有资源类型为口述影像的数据
 	public ArrayList<VideoChapterInfoEntity> findAllVideoChapter() 
 	{
-		SQLiteDatabase db = ChapterDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{"2"});
 		if( null == cursor )
 		{
@@ -361,7 +281,7 @@ public class ChapterDBDao
 	//删除所有资源类型为resourceType的数据
 	public void deleteAll( int resourceType ) 
 	{
-		SQLiteDatabase db = ChapterDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		db.execSQL("delete from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{resourceType+""});
 		db.close();
 	}
@@ -369,9 +289,9 @@ public class ChapterDBDao
 	//关闭数据库
     public void closeDb() 
     {
-    	if (ChapterDBHelper != null)
+    	if (mLibraryDBHelper != null)
     	{
-    		ChapterDBHelper.close();
+    		mLibraryDBHelper.close();
     	}
     }
     

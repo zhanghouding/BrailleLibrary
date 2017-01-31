@@ -49,7 +49,7 @@ public class GetAudioChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 			
 			ChapterDBDao dao = new ChapterDBDao( mContext );
 			dao.deleteAll(LibraryConstant.LIBRARY_DATATYPE_AUDIO);			//先删除缓存的此类型所有数据
-			dao.insert(list, LibraryConstant.LIBRARY_DATATYPE_AUDIO);		//再缓存新的数据
+			dao.insertAudioChapterInfo(list);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		

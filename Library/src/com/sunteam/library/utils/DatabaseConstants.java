@@ -36,7 +36,7 @@ public class DatabaseConstants
 	public static final String CHAPTER_FATHER = "father";			//父节点序号
 	public static final String CHAPTER_SEQ = "seq";					//节点序号
 	public static final String CHAPTER_LEVEL = "level";				//节点等级
-	public static final String CHAPTER_INDEX = "index";				//章节索引
+	public static final String CHAPTER_INDEX = "idx";				//章节索引
 	public static final String CHAPTER_NAME = "name";				//章节名称
 	public static final String CHAPTER_URL = "url";					//章节URL
 }
