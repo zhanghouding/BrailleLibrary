@@ -55,7 +55,7 @@ public class ResourceDBDao
 	}
 
 	//顺序插入
-	public void insert( ArrayList<EbookNodeEntity> list, int resourceType ) 
+	public void insert( ArrayList<EbookNodeEntity> list, String categoryCode, int resourceType ) 
 	{
 		if( ( null == list ) || ( list.size() == 0 ) )
 		{
@@ -81,7 +81,7 @@ public class ResourceDBDao
 					DatabaseConstants.RESOURCE_ABS + "," +
 					DatabaseConstants.RESOURCE_PUBLISH + "," +
 					DatabaseConstants.RESOURCE_IDENTIFIER + ") values (?,?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{resourceType,entity.categoryCode,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
+			db.execSQL( sql, new Object[]{resourceType,categoryCode,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
 		}
 		db.close();
 	}

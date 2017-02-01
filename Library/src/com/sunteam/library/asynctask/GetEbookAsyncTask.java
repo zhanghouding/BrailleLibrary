@@ -72,7 +72,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 			
 			ResourceDBDao dao = new ResourceDBDao( mContext );
 			dao.deleteAll(params[2], dataType);			//先删除缓存的此类型所有数据
-			dao.insert(entity.list, dataType);	//再缓存新的数据
+			dao.insert(entity.list, params[2], dataType);	//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		
