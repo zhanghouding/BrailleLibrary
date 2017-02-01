@@ -11,7 +11,6 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.LibraryNewsList;
-import com.sunteam.library.db.CategoryDBDao;
 import com.sunteam.library.db.InfoDBDao;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.net.HttpDao;

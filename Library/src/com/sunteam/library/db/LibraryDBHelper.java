@@ -25,6 +25,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			"create table if not exists " + DatabaseConstants.RESOURCE_TABLE_NAME +
 			" (_id integer PRIMARY KEY AUTOINCREMENT," +
 			DatabaseConstants.RESOURCE_TYPE + " integer," +
+			DatabaseConstants.RESOURCE_CATEGORYCODE + " varchar(128)," +
 			DatabaseConstants.RESOURCE_DBCODE + " varchar(128)," +
 			DatabaseConstants.RESOURCE_SYSID + " varchar(128)," +
 			DatabaseConstants.RESOURCE_TITLE + " varchar(128)," +
@@ -41,6 +42,9 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.CHAPTER_FATHER + " integer," +
 			DatabaseConstants.CHAPTER_SEQ + " integer," +
 			DatabaseConstants.CHAPTER_LEVEL + " integer," +
+			DatabaseConstants.CHAPTER_DBCODE + " varchar(128)," +
+			DatabaseConstants.CHAPTER_SYSID + " varchar(128)," +
+			DatabaseConstants.CHAPTER_IDENTIFIER + " varchar(128)," +
 			DatabaseConstants.CHAPTER_INDEX + " varchar(128)," +
 			DatabaseConstants.CHAPTER_NAME + " varchar(128)," +
 			DatabaseConstants.CHAPTER_URL + " varchar(1024))";

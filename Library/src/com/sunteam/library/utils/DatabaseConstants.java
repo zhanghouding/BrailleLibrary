@@ -24,6 +24,7 @@ public class DatabaseConstants
 	public static final String CATEGORY_TYPE = "type";				//分类类型
 
 	//资源表字段
+	public static final String RESOURCE_CATEGORYCODE = "categoryCode";	//分类编码
 	public static final String RESOURCE_DBCODE = "dbCode";			//数据编码
 	public static final String RESOURCE_SYSID = "sysId";			//系统ID
 	public static final String RESOURCE_TITLE = "title";			//书名
@@ -37,6 +38,9 @@ public class DatabaseConstants
 	public static final String CHAPTER_FATHER = "father";			//父节点序号
 	public static final String CHAPTER_SEQ = "seq";					//节点序号
 	public static final String CHAPTER_LEVEL = "level";				//节点等级
+	public static final String CHAPTER_DBCODE = "dbCode";			//数据编码
+	public static final String CHAPTER_IDENTIFIER = "identifier";	//电子书ID
+	public static final String CHAPTER_SYSID = "sysId";				//系统ID
 	public static final String CHAPTER_INDEX = "idx";				//章节索引
 	public static final String CHAPTER_NAME = "name";				//章节名称
 	public static final String CHAPTER_URL = "url";					//章节URL

@@ -41,6 +41,7 @@ public class ResourceDBDao
 				"insert into " + DatabaseConstants.RESOURCE_TABLE_NAME +
 				" (" +
 				DatabaseConstants.RESOURCE_TYPE + "," +
+				DatabaseConstants.RESOURCE_CATEGORYCODE + "," +
 				DatabaseConstants.RESOURCE_DBCODE + "," +
 				DatabaseConstants.RESOURCE_SYSID + "," +
 				DatabaseConstants.RESOURCE_TITLE + "," +
@@ -48,8 +49,8 @@ public class ResourceDBDao
 				DatabaseConstants.RESOURCE_KEYWORDS + "," +
 				DatabaseConstants.RESOURCE_ABS + "," +
 				DatabaseConstants.RESOURCE_PUBLISH + "," +
-				DatabaseConstants.RESOURCE_IDENTIFIER + ") values (?,?,?,?,?,?,?,?,?)";
-		db.execSQL( sql, new Object[]{resourceType,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
+				DatabaseConstants.RESOURCE_IDENTIFIER + ") values (?,?,?,?,?,?,?,?,?,?)";
+		db.execSQL( sql, new Object[]{resourceType,entity.categoryCode,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
 		db.close();
 	}
 
@@ -71,6 +72,7 @@ public class ResourceDBDao
 					"insert into " + DatabaseConstants.RESOURCE_TABLE_NAME +
 					" (" +
 					DatabaseConstants.RESOURCE_TYPE + "," +
+					DatabaseConstants.RESOURCE_CATEGORYCODE + "," +
 					DatabaseConstants.RESOURCE_DBCODE + "," +
 					DatabaseConstants.RESOURCE_SYSID + "," +
 					DatabaseConstants.RESOURCE_TITLE + "," +
@@ -78,8 +80,8 @@ public class ResourceDBDao
 					DatabaseConstants.RESOURCE_KEYWORDS + "," +
 					DatabaseConstants.RESOURCE_ABS + "," +
 					DatabaseConstants.RESOURCE_PUBLISH + "," +
-					DatabaseConstants.RESOURCE_IDENTIFIER + ") values (?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{resourceType,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
+					DatabaseConstants.RESOURCE_IDENTIFIER + ") values (?,?,?,?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{resourceType,entity.categoryCode,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
 		}
 		db.close();
 	}
@@ -102,6 +104,7 @@ public class ResourceDBDao
 					"insert into " + DatabaseConstants.RESOURCE_TABLE_NAME +
 					" (" +
 					DatabaseConstants.RESOURCE_TYPE + "," +
+					DatabaseConstants.RESOURCE_CATEGORYCODE + "," +
 					DatabaseConstants.RESOURCE_DBCODE + "," +
 					DatabaseConstants.RESOURCE_SYSID + "," +
 					DatabaseConstants.RESOURCE_TITLE + "," +
@@ -109,8 +112,8 @@ public class ResourceDBDao
 					DatabaseConstants.RESOURCE_KEYWORDS + "," +
 					DatabaseConstants.RESOURCE_ABS + "," +
 					DatabaseConstants.RESOURCE_PUBLISH + "," +
-					DatabaseConstants.RESOURCE_IDENTIFIER + ") values (?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{resourceType,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
+					DatabaseConstants.RESOURCE_IDENTIFIER + ") values (?,?,?,?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{resourceType,entity.categoryCode,entity.dbCode,entity.sysId,entity.title,entity.author,entity.keyWords,entity.abs,entity.publish,entity.identifier});
 		}
 		db.close();
 	}
@@ -127,7 +130,7 @@ public class ResourceDBDao
 	}
 
 	//查找所有资源类型为resourceType的数据条数
-	public long getCount( int resourceType ) 
+	public long getCount( String categoryCode, int resourceType ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		if( null == db )
@@ -135,7 +138,7 @@ public class ResourceDBDao
 			return	0;
 		}
 		
-		Cursor cursor = db.rawQuery("select count(*) from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{resourceType+""});
+		Cursor cursor = db.rawQuery("select count(*) from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.RESOURCE_CATEGORYCODE + " = ?", new String[]{resourceType+"", categoryCode});
 		if( null == cursor )
 		{
 			return	0;
@@ -154,10 +157,10 @@ public class ResourceDBDao
 	}
 
 	//查找所有资源类型为resourceType的数据
-	public ArrayList<EbookNodeEntity> findAll( int resourceType ) 
+	public ArrayList<EbookNodeEntity> findAll( String categoryCode, int resourceType ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{resourceType+""});
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.RESOURCE_CATEGORYCODE + " = ?", new String[]{resourceType+"", categoryCode});
 		if( null == cursor )
 		{
 			db.close();
@@ -168,6 +171,7 @@ public class ResourceDBDao
 		while(cursor.moveToNext())
 		{
 			EbookNodeEntity entity = new EbookNodeEntity();
+			entity.categoryCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.RESOURCE_CATEGORYCODE));
 			entity.dbCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.RESOURCE_DBCODE));
 			entity.sysId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.RESOURCE_SYSID));
 			entity.title = cursor.getString(cursor.getColumnIndex(DatabaseConstants.RESOURCE_TITLE));
@@ -190,10 +194,10 @@ public class ResourceDBDao
 	}
 
 	//删除所有资源类型为resourceType的数据
-	public void deleteAll( int resourceType ) 
+	public void deleteAll( String categoryCode, int resourceType ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
-		db.execSQL("delete from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ?", new String[]{resourceType+""});
+		db.execSQL("delete from " + DatabaseConstants.RESOURCE_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.RESOURCE_CATEGORYCODE + " = ?", new String[]{resourceType+"", categoryCode});
 		db.close();
 	}
 

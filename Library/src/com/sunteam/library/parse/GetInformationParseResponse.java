@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.text.TextUtils;
-
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.utils.LogUtils;
 import com.sunteam.library.utils.PublicUtils;

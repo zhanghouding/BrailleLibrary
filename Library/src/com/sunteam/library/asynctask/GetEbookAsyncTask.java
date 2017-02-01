@@ -50,7 +50,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
 		{
 			ResourceDBDao dao = new ResourceDBDao( mContext );
-			ArrayList<EbookNodeEntity> list = dao.findAll(dataType);
+			ArrayList<EbookNodeEntity> list = dao.findAll(params[2], dataType);
 			dao.closeDb();			//关闭数据库
 			
 			if( ( list != null ) && ( list.size() > 0 ) )
@@ -71,7 +71,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 			mEbookNodeEntityList.addAll(entity.list);
 			
 			ResourceDBDao dao = new ResourceDBDao( mContext );
-			dao.deleteAll(dataType);			//先删除缓存的此类型所有数据
+			dao.deleteAll(params[2], dataType);			//先删除缓存的此类型所有数据
 			dao.insert(entity.list, dataType);	//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
