@@ -20,6 +20,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
+import com.sunteam.library.utils.MediaPlayerUtils.PlayStatus;
 
 /**
  * 视频播放界面
@@ -128,6 +129,14 @@ public class PlayVideoActivity extends Activity
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_CENTER:	//确定
 			case KeyEvent.KEYCODE_ENTER:
+				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
+				{
+					MediaPlayerUtils.getInstance().pause();
+				}
+				else if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PAUSE )
+				{
+					MediaPlayerUtils.getInstance().resume();
+				}
 				return	true;
 			case KeyEvent.KEYCODE_5:
 			case KeyEvent.KEYCODE_NUMPAD_5:		//精读
