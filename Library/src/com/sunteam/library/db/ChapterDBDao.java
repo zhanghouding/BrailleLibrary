@@ -110,7 +110,7 @@ public class ChapterDBDao
 					DatabaseConstants.CHAPTER_INDEX + "," +
 					DatabaseConstants.CHAPTER_NAME + "," +
 					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_EBOOK,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_AUDIO,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
 		}
 		db.close();
 	}
@@ -151,7 +151,7 @@ public class ChapterDBDao
 					DatabaseConstants.CHAPTER_INDEX + "," +
 					DatabaseConstants.CHAPTER_NAME + "," +
 					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_EBOOK,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_VIDEO,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
 		}
 		db.close();
 	}

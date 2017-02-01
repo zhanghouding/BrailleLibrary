@@ -1,8 +1,9 @@
 package com.sunteam.library.activity;
 
+import java.io.File;
+
 import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
-import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener.DetectBigUrlFileFailReason;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
@@ -19,7 +20,6 @@ import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
-import com.sunteam.library.utils.TTSUtils;
 
 /**
  * 视频播放界面
@@ -62,28 +62,49 @@ public class PlayVideoActivity extends Activity
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
     	mTvTitle.setText(filename);
     	
-    	FileDownloader.detect(videoUrl, new OnDetectBigUrlFileListener() {
-    		@Override
-    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
-    		{
-    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
-    			FileDownloader.createAndStart(url, fatherPath, fileName);
-    		}
-    		
-    		@Override
-    		public void onDetectUrlFileExist(String url) 
-    		{
-    			FileDownloader.start(url);	
-    			//如果文件没被下载过，将创建并开启下载，否则继续下载，自动会断点续传（如果服务器无法支持断点续传将从头开始下载）
-    		}
-    		
-    		@Override
-    		public void onDetectUrlFileFailed(String url, DetectBigUrlFileFailReason failReason) 
-    		{
-    			// 探测一个网络文件失败了，具体查看failReason
-    		}
-    	});
-    	MediaPlayerUtils.getInstance().play(videoUrl);	//播放视频
+    	final String fullpath = fatherPath + getFilename(videoUrl);
+    	File file = new File(fullpath);
+    	if( file.exists() )
+    	{
+    		MediaPlayerUtils.getInstance().play(fullpath);	//播放音频
+    	}
+    	else
+    	{
+	    	FileDownloader.detect(videoUrl, new OnDetectBigUrlFileListener() {
+	    		@Override
+	    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
+	    		{
+	    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
+	    			FileDownloader.createAndStart(url, fatherPath, fileName);
+	    		}
+	    		
+	    		@Override
+	    		public void onDetectUrlFileExist(String url) 
+	    		{
+	    			FileDownloader.start(url);	
+	    			//如果文件没被下载过，将创建并开启下载，否则继续下载，自动会断点续传（如果服务器无法支持断点续传将从头开始下载）
+	    		}
+	    		
+	    		@Override
+	    		public void onDetectUrlFileFailed(String url, DetectBigUrlFileFailReason failReason) 
+	    		{
+	    			// 探测一个网络文件失败了，具体查看failReason
+	    		}
+	    	});
+	    	MediaPlayerUtils.getInstance().play(videoUrl);	//播放视频
+    	}
+	}
+	
+	//得到文件名
+	private String getFilename( String url )
+	{
+		int seq = url.lastIndexOf("/");
+		if( -1 == seq )
+		{
+			return	url;
+		}
+		
+		return	url.substring(seq+1);
 	}
 	
 	@Override
