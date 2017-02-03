@@ -6,6 +6,7 @@ import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,13 +19,16 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.MediaPlayerUtils.PlayStatus;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * 音视频播放界面
@@ -41,15 +45,18 @@ public class PlayAudioVedioActivity extends Activity
 	private TextView mTvStartTime = null;
 	private TextView mTvEndTime = null;
 	private SeekBar mSeekBar = null;
-	private String filename;
-	private String fatherPath;
-	private String resourceUrl;
-	private int totalTime;
+	private String filename;		//章节名称
+	private String fatherPath;		//父目录
+	private String resourceUrl;		//资源url
+	private int totalTime;			//总时间
+	private int curChapter;			//当前章节序号，从0开始
+	private int totalChapter;		//总章节数目。
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		TtsUtils.getInstance().stop();	//先暂停TTS播放。
 		RefreshScreenUtils.enableRefreshScreen();
 		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
@@ -58,7 +65,9 @@ public class PlayAudioVedioActivity extends Activity
 		filename = this.getIntent().getStringExtra("filename");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		resourceUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
-		String num = this.getIntent().getStringExtra("num");
+		curChapter = this.getIntent().getIntExtra("curChapter", 0);
+		totalChapter = this.getIntent().getIntExtra("totalChapter", 0);
+		String num = (curChapter+1)+"/"+totalChapter;
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
@@ -176,15 +185,61 @@ public class PlayAudioVedioActivity extends Activity
 	{
 		switch( keyCode )
 		{
-			case KeyEvent.KEYCODE_DPAD_UP:		//上
+			case KeyEvent.KEYCODE_DPAD_UP:		//上(到上一个章节)
+				MediaPlayerUtils.getInstance().pause();
+				if( 0 == curChapter )
+				{
+					String tips = this.getString(R.string.library_first_chapter);
+					PublicUtils.showToast(this, tips, new PromptListener() {
+
+						@Override
+						public void onComplete() {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+				}
+				else
+				{
+					Intent intent = new Intent();
+					intent.putExtra("action", EbookConstants.TO_PRE_PART);
+					setResult(RESULT_OK, intent);
+					finish();
+				}
 				return	true;
-			case KeyEvent.KEYCODE_DPAD_DOWN:	//下
+			case KeyEvent.KEYCODE_DPAD_DOWN:	//下(到下一个章节)
+				MediaPlayerUtils.getInstance().pause();
+				if( totalChapter-1 == curChapter )
+				{
+					String tips = this.getString(R.string.library_last_chapter);
+					PublicUtils.showToast(this, tips, new PromptListener() {
+
+						@Override
+						public void onComplete() {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+				}
+				else
+				{
+					Intent intent = new Intent();
+					intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+					setResult(RESULT_OK, intent);
+					finish();
+				}
 				return	true;
-			case KeyEvent.KEYCODE_DPAD_LEFT:	//左
+			case KeyEvent.KEYCODE_DPAD_LEFT:	//左(快退)
+				MediaPlayerUtils.getInstance().fastBackward();
+				mHandler.removeMessages(0);
+				mHandler.sendEmptyMessage(0);
 				return	true;
-			case KeyEvent.KEYCODE_DPAD_RIGHT:	//右
+			case KeyEvent.KEYCODE_DPAD_RIGHT:	//右(快进)
+				MediaPlayerUtils.getInstance().fastForward();
+				mHandler.removeMessages(0);
+				mHandler.sendEmptyMessage(0);
 				return	true;
-			case KeyEvent.KEYCODE_DPAD_CENTER:	//确定
+			case KeyEvent.KEYCODE_DPAD_CENTER:	//确定(暂停、恢复)
 			case KeyEvent.KEYCODE_ENTER:
 				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
 				{

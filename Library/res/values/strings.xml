@@ -28,6 +28,8 @@
     <string name="library_to_bottom1">已经到结尾。</string>
     <string name="library_setting_success">设定成功</string>
     <string name="library_has_finished_reading_the_last_book">已经读完最后一本书</string>
+    <string name="library_first_chapter">已经到第一章</string> 
+  	<string name="library_last_chapter">已经到最后一章</string> 
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>
         <item>国语女声</item>

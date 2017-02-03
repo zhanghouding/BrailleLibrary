@@ -102,6 +102,50 @@ public class MediaPlayerUtils
 		return	0;
 	}
 	
+	//快进
+	public boolean fastForward()
+	{
+		if( mMediaPlayer != null )
+		{
+			try
+			{
+				int pos = mMediaPlayer.getCurrentPosition();
+				pos += 3000;
+				mMediaPlayer.seekTo(pos);
+				
+				return	true;
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return	false;
+	}
+
+	//快退
+	public boolean fastBackward()
+	{
+		if( mMediaPlayer != null )
+		{
+			try
+			{
+				int pos = mMediaPlayer.getCurrentPosition();
+				pos -= 3000;
+				mMediaPlayer.seekTo(pos);
+				
+				return	true;
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return	false;
+	}
+	
 	//暂停
 	public void pause()
 	{
