@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
+import com.sunteam.library.asynctask.GetEbookAsyncTask;
 import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
 import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.entity.EbookNodeEntity;
@@ -101,7 +102,8 @@ public class ResourceOnlineList extends MenuActivity {
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-		mEbookNodeEntityList = (ArrayList<EbookNodeEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		//mEbookNodeEntityList = (ArrayList<EbookNodeEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mEbookNodeEntityList = GetEbookAsyncTask.mEbookNodeEntityList;
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
 		mMenuList = getListFromEbookNodeEntity(mEbookNodeEntityList);
 		bookCount = mMenuList.size();

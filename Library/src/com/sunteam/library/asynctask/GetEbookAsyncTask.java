@@ -30,7 +30,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	private String mTitle;
 	private int dataType;
 	private int bookCount = 0; // 资源总数，即当前分类下的书本总数
-	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
+	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
 	
 	public GetEbookAsyncTask(Context context, String fatherPath, String title) 
 	{
@@ -86,6 +86,8 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		PublicUtils.showProgress(mContext);
 		String s = mContext.getResources().getString(R.string.library_wait_reading_data);
 		TtsUtils.getInstance().speak(s);
+		
+		mEbookNodeEntityList.clear();
 	}
 	
 	@Override
@@ -108,7 +110,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	private void startNextActivity() {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookNodeEntityList); // 菜单名称
+		//intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookNodeEntityList); // 菜单名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount); // 资源总数
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
