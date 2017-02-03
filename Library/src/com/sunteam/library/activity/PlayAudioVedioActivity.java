@@ -34,6 +34,7 @@ public class PlayAudioVedioActivity extends Activity
 	private TextView mTvTitle = null;
 	private View mLine = null;
 	private ImageButton mIbStatus = null;
+	private TextView mTvNum = null;
 	private String filename;
 	private String fatherPath;
 	private String resourceUrl;
@@ -50,14 +51,17 @@ public class PlayAudioVedioActivity extends Activity
 		filename = this.getIntent().getStringExtra("filename");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		resourceUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
+		String num = this.getIntent().getStringExtra("num");
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
     	mTvTitle = (TextView)this.findViewById(R.id.library_main_title);
     	mLine = (View)this.findViewById(R.id.library_line);
-    	mIbStatus = (ImageButton)this.findViewById(R.id.ib_status);
+    	mIbStatus = (ImageButton)this.findViewById(R.id.library_ib_status);
+    	mTvNum = (TextView)this.findViewById(R.id.library_num);
     	
     	mTvTitle.setTextColor(tools.getFontColor());
+    	mTvNum.setTextColor(tools.getFontColor());
     	mLine.setBackgroundColor(tools.getFontColor()); // 设置分割线的背景色
     	
     	final float scale = this.getResources().getDisplayMetrics().density/0.75f;	//计算相对于ldpi的倍数;
@@ -65,6 +69,10 @@ public class PlayAudioVedioActivity extends Activity
     	mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
     	mTvTitle.setText(filename);
+    	
+    	mTvNum.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
+    	mTvNum.setHeight((int)fontSize); // 设置控件高度
+    	mTvNum.setText(num);
     	
     	final String fullpath = fatherPath + getFilename(resourceUrl);
     	File file = new File(fullpath);

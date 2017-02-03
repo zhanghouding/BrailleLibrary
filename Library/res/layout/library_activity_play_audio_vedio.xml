@@ -36,11 +36,22 @@
             android:background="@android:color/black" />
     </FrameLayout> 
 	<ImageButton
-	    android:id="@+id/ib_status"
+	    android:id="@+id/library_ib_status"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_centerInParent="true"
 	    android:background="@drawable/play" 
 	    android:clickable="false"
 	    />
+	<TextView
+		android:id="@+id/library_num"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/library_rl_title"
+		android:text="" 
+		android:textSize="@dimen/library_file_text_size"
+		android:background="@color/transparent"
+		android:includeFontPadding="false"
+		android:singleLine="true"
+		/> 
 </RelativeLayout>

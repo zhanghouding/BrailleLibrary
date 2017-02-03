@@ -83,6 +83,8 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
     	mTextReaderView.setBackgroundColor(tools.getBackgroundColor());
     	//mTextReaderView.setTextSize(tools.getFontSize());
     	   	
+    	TTSUtils.getInstance().init(this);	//初始化TTS
+    	
     	if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), 0, 0, 0, 0, isAuto, filename) == false )
     	{
     		

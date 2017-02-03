@@ -39,7 +39,6 @@ public class MainActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		MenuGlobal.debug("[Library-MainActivity][onCreate], this = " + this);
 		
-		TTSUtils.getInstance().init(this);	//初始化TTS
 		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
 	}
 
