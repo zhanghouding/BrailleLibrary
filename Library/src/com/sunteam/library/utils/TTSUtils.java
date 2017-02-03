@@ -33,7 +33,7 @@ public class TTSUtils
 	private Context mContext;
 	private TtsUtils mTtsUtils;
     private SharedPreferences mSharedPreferences;
-	private boolean isSuccess = false;
+	private boolean isSuccess = true;	//TTS已经初始化完毕了，这个地方直接设置为true即可。
 	private OnTTSListener mOnTTSListener = null;
 	private OnTTSListener mOnTTSListenerMenu = null;
 	private SpeakStatus mSpeakStatus = SpeakStatus.STOP;

@@ -30,7 +30,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	private String mTitle;
 	private int dataType;
 	private int bookCount = 0; // 资源总数，即当前分类下的书本总数
-	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
+	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = null;
 	
 	public GetEbookAsyncTask(Context context, String fatherPath, String title) 
 	{
@@ -56,7 +56,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 			if( ( list != null ) && ( list.size() > 0 ) )
 			{
 				bookCount = list.size();
-				mEbookNodeEntityList.addAll(list);
+				mEbookNodeEntityList = list;
 				
 				return	true;
 			}
@@ -68,7 +68,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		
 		if( ( entity.list != null ) && ( entity.list.size() > 0 ) )
 		{
-			mEbookNodeEntityList.addAll(entity.list);
+			mEbookNodeEntityList = entity.list;
 			
 			ResourceDBDao dao = new ResourceDBDao( mContext );
 			dao.deleteAll(params[2], dataType);			//先删除缓存的此类型所有数据
@@ -86,6 +86,12 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		PublicUtils.showProgress(mContext);
 		String s = mContext.getResources().getString(R.string.library_wait_reading_data);
 		TtsUtils.getInstance().speak(s);
+		
+		if( mEbookNodeEntityList != null )
+		{
+			mEbookNodeEntityList.clear();
+			mEbookNodeEntityList = null;
+		}
 	}
 	
 	@Override
@@ -108,7 +114,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	private void startNextActivity() {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookNodeEntityList); // 菜单名称
+		//intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookNodeEntityList); // 菜单名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount); // 资源总数
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录

@@ -36,7 +36,7 @@ public class LibraryConstant {
 	public static final String INTENT_KEY_URL = "library_resource_url";	//资源路径
 
 	// 资源列表常量
-	public static final int LIBRARY_RESOURCE_PAGESIZE = 10; // 资源列表时一页的资源数
+	public static final int LIBRARY_RESOURCE_PAGESIZE = 100000; // 资源列表时一页的资源数
 	
 	// SharePref文件名，KEY类型，如：登录状态，有些界面需要根据登录状态获取不同的数据源
 	public static final String LIBRARY_CONFIG_FILE = "config";

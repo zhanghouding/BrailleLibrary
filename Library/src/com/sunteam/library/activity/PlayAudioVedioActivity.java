@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sunteam.common.utils.RefreshScreenUtils;
@@ -23,18 +24,20 @@ import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.MediaPlayerUtils.PlayStatus;
 
 /**
- * 视频播放界面
+ * 音视频播放界面
  * 
  * @author wzp
  */
-public class PlayVideoActivity extends Activity
+public class PlayAudioVedioActivity extends Activity
 {
-	private static final String TAG = "PlayVideoActivity";
+	private static final String TAG = "PlayAudioVedioActivity";
 	private TextView mTvTitle = null;
 	private View mLine = null;
+	private ImageButton mIbStatus = null;
+	private TextView mTvNum = null;
 	private String filename;
 	private String fatherPath;
-	private String videoUrl;
+	private String resourceUrl;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +46,22 @@ public class PlayVideoActivity extends Activity
 		RefreshScreenUtils.enableRefreshScreen();
 		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
-		setContentView(R.layout.library_activity_play_video);
+		setContentView(R.layout.library_activity_play_audio_vedio);
 		
 		filename = this.getIntent().getStringExtra("filename");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
-		videoUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
+		resourceUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
+		String num = this.getIntent().getStringExtra("num");
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
     	mTvTitle = (TextView)this.findViewById(R.id.library_main_title);
     	mLine = (View)this.findViewById(R.id.library_line);
+    	mIbStatus = (ImageButton)this.findViewById(R.id.library_ib_status);
+    	mTvNum = (TextView)this.findViewById(R.id.library_num);
     	
     	mTvTitle.setTextColor(tools.getFontColor());
+    	mTvNum.setTextColor(tools.getFontColor());
     	mLine.setBackgroundColor(tools.getFontColor()); // 设置分割线的背景色
     	
     	final float scale = this.getResources().getDisplayMetrics().density/0.75f;	//计算相对于ldpi的倍数;
@@ -63,7 +70,11 @@ public class PlayVideoActivity extends Activity
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
     	mTvTitle.setText(filename);
     	
-    	final String fullpath = fatherPath + getFilename(videoUrl);
+    	mTvNum.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
+    	mTvNum.setHeight((int)fontSize); // 设置控件高度
+    	mTvNum.setText(num);
+    	
+    	final String fullpath = fatherPath + getFilename(resourceUrl);
     	File file = new File(fullpath);
     	if( file.exists() )
     	{
@@ -71,7 +82,7 @@ public class PlayVideoActivity extends Activity
     	}
     	else
     	{
-	    	FileDownloader.detect(videoUrl, new OnDetectBigUrlFileListener() {
+	    	FileDownloader.detect(resourceUrl, new OnDetectBigUrlFileListener() {
 	    		@Override
 	    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
 	    		{
@@ -92,7 +103,7 @@ public class PlayVideoActivity extends Activity
 	    			// 探测一个网络文件失败了，具体查看failReason
 	    		}
 	    	});
-	    	MediaPlayerUtils.getInstance().play(videoUrl);	//播放视频
+	    	MediaPlayerUtils.getInstance().play(resourceUrl);	//播放音视频
     	}
 	}
 	
@@ -132,10 +143,12 @@ public class PlayVideoActivity extends Activity
 				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
 				{
 					MediaPlayerUtils.getInstance().pause();
+					mIbStatus.setBackgroundResource(R.drawable.pause);
 				}
 				else if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PAUSE )
 				{
 					MediaPlayerUtils.getInstance().resume();
+					mIbStatus.setBackgroundResource(R.drawable.play);
 				}
 				return	true;
 			case KeyEvent.KEYCODE_5:

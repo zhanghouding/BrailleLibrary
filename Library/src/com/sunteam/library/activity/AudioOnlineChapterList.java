@@ -60,8 +60,9 @@ public class AudioOnlineChapterList extends MenuActivity {
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		PublicUtils.createCacheDir(fatherPath, menuItem);	//创建缓存目录
 		
-		Intent intent = new Intent( this, PlayAudioActivity.class );
+		Intent intent = new Intent( this, PlayAudioVedioActivity.class );
 		intent.putExtra("filename", menuItem);
+		intent.putExtra("num", (selectItem+1)+"/"+mAudioChapterInfoEntityList.size());
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");		//父目录
 		intent.putExtra(LibraryConstant.INTENT_KEY_URL, mAudioChapterInfoEntityList.get(selectItem).audioUrl);	//资源路径
 		this.startActivity(intent);

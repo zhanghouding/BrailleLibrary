@@ -39,7 +39,6 @@ public class MainActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		MenuGlobal.debug("[Library-MainActivity][onCreate], this = " + this);
 		
-		TTSUtils.getInstance().init(this);	//初始化TTS
 		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
 	}
 
@@ -83,8 +82,10 @@ public class MainActivity extends MenuActivity {
 		}
 		WifiUtils.closeWifi(this);
 		releaseWakeLock();
+		/*
 		android.os.Process.killProcess(android.os.Process.myPid());
 		System.exit(1);
+		*/
 		MenuGlobal.debug("[Library-MainActivity][onDestroy], this = " + this);
 	}
 
