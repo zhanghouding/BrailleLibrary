@@ -83,8 +83,10 @@ public class MainActivity extends MenuActivity {
 		}
 		WifiUtils.closeWifi(this);
 		releaseWakeLock();
+		/*
 		android.os.Process.killProcess(android.os.Process.myPid());
 		System.exit(1);
+		*/
 		MenuGlobal.debug("[Library-MainActivity][onDestroy], this = " + this);
 	}
 

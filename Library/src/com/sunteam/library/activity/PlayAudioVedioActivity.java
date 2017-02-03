@@ -23,18 +23,18 @@ import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.MediaPlayerUtils.PlayStatus;
 
 /**
- * 视频播放界面
+ * 音视频播放界面
  * 
  * @author wzp
  */
-public class PlayVideoActivity extends Activity
+public class PlayAudioVedioActivity extends Activity
 {
-	private static final String TAG = "PlayVideoActivity";
+	private static final String TAG = "PlayAudioVedioActivity";
 	private TextView mTvTitle = null;
 	private View mLine = null;
 	private String filename;
 	private String fatherPath;
-	private String videoUrl;
+	private String resourceUrl;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +43,11 @@ public class PlayVideoActivity extends Activity
 		RefreshScreenUtils.enableRefreshScreen();
 		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
-		setContentView(R.layout.library_activity_play_video);
+		setContentView(R.layout.library_activity_play_audio_vedio);
 		
 		filename = this.getIntent().getStringExtra("filename");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
-		videoUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
+		resourceUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
@@ -63,7 +63,7 @@ public class PlayVideoActivity extends Activity
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
     	mTvTitle.setText(filename);
     	
-    	final String fullpath = fatherPath + getFilename(videoUrl);
+    	final String fullpath = fatherPath + getFilename(resourceUrl);
     	File file = new File(fullpath);
     	if( file.exists() )
     	{
@@ -71,7 +71,7 @@ public class PlayVideoActivity extends Activity
     	}
     	else
     	{
-	    	FileDownloader.detect(videoUrl, new OnDetectBigUrlFileListener() {
+	    	FileDownloader.detect(resourceUrl, new OnDetectBigUrlFileListener() {
 	    		@Override
 	    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
 	    		{
@@ -92,7 +92,7 @@ public class PlayVideoActivity extends Activity
 	    			// 探测一个网络文件失败了，具体查看failReason
 	    		}
 	    	});
-	    	MediaPlayerUtils.getInstance().play(videoUrl);	//播放视频
+	    	MediaPlayerUtils.getInstance().play(resourceUrl);	//播放音视频
     	}
 	}
 	
