@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
+import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
@@ -54,6 +55,22 @@ public class VideoOnlineChapterList extends MenuActivity {
 			return;
 		}
 
+		int action = data.getIntExtra("action", EbookConstants.TO_NEXT_PART);
+		switch (action) {
+		case EbookConstants.TO_NEXT_PART:
+			mMenuView.down();
+			mMenuView.enter();
+			break;
+		case EbookConstants.TO_PRE_PART:
+			mMenuView.up();
+			mMenuView.enter();
+			break;
+		case EbookConstants.TO_BOOK_START:
+			break;
+		default:
+			break;
+		}
+
 	}
 
 	@Override
@@ -65,7 +82,7 @@ public class VideoOnlineChapterList extends MenuActivity {
 		intent.putExtra("totalChapter", mVideoChapterInfoEntityListt.size());
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");		//父目录
 		intent.putExtra(LibraryConstant.INTENT_KEY_URL, mVideoChapterInfoEntityListt.get(selectItem).videoUrl);	//资源路径
-		this.startActivity(intent);
+		this.startActivityForResult(intent, selectItem);
 	}
 
 	@SuppressWarnings("unchecked")
