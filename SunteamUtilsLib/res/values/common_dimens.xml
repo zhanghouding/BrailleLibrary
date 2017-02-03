@@ -6,6 +6,7 @@
     <dimen name="textsize">24sp</dimen>
 
     <!-- text font -->
+    <dimen name="text_huge_size_px">80px</dimen>
     <dimen name="text_super_size_px">60px</dimen>
     <dimen name="text_big_size_px">54px</dimen>
     <dimen name="text_middle_size_px">48px</dimen>
