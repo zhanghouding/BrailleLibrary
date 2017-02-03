@@ -8,11 +8,14 @@ import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.sunteam.common.utils.RefreshScreenUtils;
@@ -35,9 +38,13 @@ public class PlayAudioVedioActivity extends Activity
 	private View mLine = null;
 	private ImageButton mIbStatus = null;
 	private TextView mTvNum = null;
+	private TextView mTvStartTime = null;
+	private TextView mTvEndTime = null;
+	private SeekBar mSeekBar = null;
 	private String filename;
 	private String fatherPath;
 	private String resourceUrl;
+	private int totalTime;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +66,14 @@ public class PlayAudioVedioActivity extends Activity
     	mLine = (View)this.findViewById(R.id.library_line);
     	mIbStatus = (ImageButton)this.findViewById(R.id.library_ib_status);
     	mTvNum = (TextView)this.findViewById(R.id.library_num);
+    	mTvStartTime = (TextView)this.findViewById(R.id.library_starttime);
+    	mTvEndTime = (TextView)this.findViewById(R.id.library_totaltime);
+    	mSeekBar = (SeekBar)this.findViewById(R.id.library_seek_bar);
     	
     	mTvTitle.setTextColor(tools.getFontColor());
     	mTvNum.setTextColor(tools.getFontColor());
+    	mTvStartTime.setTextColor(tools.getFontColor());
+    	mTvEndTime.setTextColor(tools.getFontColor());
     	mLine.setBackgroundColor(tools.getFontColor()); // 设置分割线的背景色
     	
     	final float scale = this.getResources().getDisplayMetrics().density/0.75f;	//计算相对于ldpi的倍数;
@@ -74,11 +86,22 @@ public class PlayAudioVedioActivity extends Activity
     	mTvNum.setHeight((int)fontSize); // 设置控件高度
     	mTvNum.setText(num);
     	
+    	mTvStartTime.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
+    	mTvStartTime.setHeight((int)fontSize); // 设置控件高度
+    	//mTvStartTime.setText(num);
+    	
+    	mTvEndTime.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
+    	mTvEndTime.setHeight((int)fontSize); // 设置控件高度
+    	//mTvEndTime.setText(num);
+    	
     	final String fullpath = fatherPath + getFilename(resourceUrl);
     	File file = new File(fullpath);
     	if( file.exists() )
     	{
     		MediaPlayerUtils.getInstance().play(fullpath);	//播放音频
+    		totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
+    		showTime(mTvEndTime, totalTime);	//显示总时间
+    		mHandler.sendEmptyMessageDelayed(0, 500);
     	}
     	else
     	{
@@ -104,6 +127,9 @@ public class PlayAudioVedioActivity extends Activity
 	    		}
 	    	});
 	    	MediaPlayerUtils.getInstance().play(resourceUrl);	//播放音视频
+	    	totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
+    		showTime(mTvEndTime, totalTime);	//显示总时间
+	    	mHandler.sendEmptyMessageDelayed(0, 500);
     	}
 	}
 	
@@ -117,6 +143,26 @@ public class PlayAudioVedioActivity extends Activity
 		}
 		
 		return	url.substring(seq+1);
+	}
+	
+	//显示时间
+	private void showTime( TextView tv, int time )
+	{
+		if( time >= 0 )
+		{
+			int h = time / 3600;
+			int m = (time % 3600) / 60;
+			int s = (time % 3600) % 60;
+			
+			if( 0 == h )
+			{
+				tv.setText(String.format("%02d:%02d", m, s));
+			}
+			else
+			{
+				tv.setText(String.format("%02d:%02d:%02d", h, m, s));
+			}
+		}
 	}
 	
 	@Override
@@ -151,42 +197,6 @@ public class PlayAudioVedioActivity extends Activity
 					mIbStatus.setBackgroundResource(R.drawable.play);
 				}
 				return	true;
-			case KeyEvent.KEYCODE_5:
-			case KeyEvent.KEYCODE_NUMPAD_5:		//精读
-				return	true;
-			case KeyEvent.KEYCODE_7:
-			case KeyEvent.KEYCODE_NUMPAD_7:		//朗读上一个字
-				return	true;
-			case KeyEvent.KEYCODE_9:
-			case KeyEvent.KEYCODE_NUMPAD_9:		//朗读下一个字
-				return	true;
-			case KeyEvent.KEYCODE_4:
-			case KeyEvent.KEYCODE_NUMPAD_4:		//朗读上一个词
-				return	true;
-			case KeyEvent.KEYCODE_6:
-			case KeyEvent.KEYCODE_NUMPAD_6:		//朗读下一个词
-				return	true;
-			case KeyEvent.KEYCODE_2:
-			case KeyEvent.KEYCODE_NUMPAD_2:		//朗读上一个段落
-				return	true;
-			case KeyEvent.KEYCODE_8:
-			case KeyEvent.KEYCODE_NUMPAD_8:		//朗读下一个段落
-				return	true;
-			case KeyEvent.KEYCODE_1:
-			case KeyEvent.KEYCODE_NUMPAD_1:		//开始选词
-				return	true;
-			case KeyEvent.KEYCODE_3:
-			case KeyEvent.KEYCODE_NUMPAD_3:		//结束选词
-				return	true;
-			case KeyEvent.KEYCODE_0:
-			case KeyEvent.KEYCODE_NUMPAD_0:		//百科查询
-				return	true;
-			case KeyEvent.KEYCODE_MENU:
-				break;
-			case KeyEvent.KEYCODE_STAR:			//反查
-				break;
-			case KeyEvent.KEYCODE_POUND:		//#号键
-				break;
 			default:
 				break;
 		}
@@ -221,4 +231,21 @@ public class PlayAudioVedioActivity extends Activity
 	     
 		return super.dispatchKeyEvent(event);
 	}
+	
+	private Handler mHandler = new Handler() {
+		public void handleMessage(Message msg)
+		{
+			switch( msg.what )
+			{
+				case 0:	//显示播放时间，设置进度。
+					int curTime = MediaPlayerUtils.getInstance().getCurTime()/1000;
+		    		showTime(mTvStartTime, curTime);	//显示当前时间
+		    		mSeekBar.setProgress(curTime*10000/totalTime);
+		    		mHandler.sendEmptyMessageDelayed(0, 500);
+					break;
+				default:
+					break;
+			}
+		};
+	};
 }

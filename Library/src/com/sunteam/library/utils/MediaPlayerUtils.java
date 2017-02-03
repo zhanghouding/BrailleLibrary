@@ -80,6 +80,28 @@ public class MediaPlayerUtils
 		}
 	}
 
+	//得到总时间
+	public int getTotalTime()
+	{
+		if( mMediaPlayer != null )
+		{
+			return	mMediaPlayer.getDuration();
+		}
+		
+		return	0;
+	}
+	
+	//得到当前播放的时间
+	public int getCurTime()
+	{
+		if( mMediaPlayer != null )
+		{
+			return	mMediaPlayer.getCurrentPosition();
+		}
+		
+		return	0;
+	}
+	
 	//暂停
 	public void pause()
 	{
