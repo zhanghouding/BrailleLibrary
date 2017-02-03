@@ -80,6 +80,72 @@ public class MediaPlayerUtils
 		}
 	}
 
+	//得到总时间
+	public int getTotalTime()
+	{
+		if( mMediaPlayer != null )
+		{
+			return	mMediaPlayer.getDuration();
+		}
+		
+		return	0;
+	}
+	
+	//得到当前播放的时间
+	public int getCurTime()
+	{
+		if( mMediaPlayer != null )
+		{
+			return	mMediaPlayer.getCurrentPosition();
+		}
+		
+		return	0;
+	}
+	
+	//快进
+	public boolean fastForward()
+	{
+		if( mMediaPlayer != null )
+		{
+			try
+			{
+				int pos = mMediaPlayer.getCurrentPosition();
+				pos += 3000;
+				mMediaPlayer.seekTo(pos);
+				
+				return	true;
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return	false;
+	}
+
+	//快退
+	public boolean fastBackward()
+	{
+		if( mMediaPlayer != null )
+		{
+			try
+			{
+				int pos = mMediaPlayer.getCurrentPosition();
+				pos -= 3000;
+				mMediaPlayer.seekTo(pos);
+				
+				return	true;
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return	false;
+	}
+	
 	//暂停
 	public void pause()
 	{
