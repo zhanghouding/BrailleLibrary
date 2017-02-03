@@ -30,7 +30,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	private String mTitle;
 	private int dataType;
 	private int bookCount = 0; // 资源总数，即当前分类下的书本总数
-	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = null;
+	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
 	
 	public GetEbookAsyncTask(Context context, String fatherPath, String title) 
 	{
@@ -56,7 +56,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 			if( ( list != null ) && ( list.size() > 0 ) )
 			{
 				bookCount = list.size();
-				mEbookNodeEntityList = list;
+				mEbookNodeEntityList.addAll(list);
 				
 				return	true;
 			}
@@ -68,7 +68,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		
 		if( ( entity.list != null ) && ( entity.list.size() > 0 ) )
 		{
-			mEbookNodeEntityList = entity.list;
+			mEbookNodeEntityList.addAll(entity.list);
 			
 			ResourceDBDao dao = new ResourceDBDao( mContext );
 			dao.deleteAll(params[2], dataType);			//先删除缓存的此类型所有数据
@@ -87,11 +87,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		String s = mContext.getResources().getString(R.string.library_wait_reading_data);
 		TtsUtils.getInstance().speak(s);
 		
-		if( mEbookNodeEntityList != null )
-		{
-			mEbookNodeEntityList.clear();
-			mEbookNodeEntityList = null;
-		}
+		mEbookNodeEntityList.clear();
 	}
 	
 	@Override

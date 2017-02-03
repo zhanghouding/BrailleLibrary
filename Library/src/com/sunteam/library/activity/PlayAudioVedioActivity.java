@@ -2,9 +2,6 @@ package com.sunteam.library.activity;
 
 import java.io.File;
 
-import org.wlf.filedownloader.FileDownloader;
-import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -114,6 +111,7 @@ public class PlayAudioVedioActivity extends Activity
     	}
     	else
     	{
+    		/*
 	    	FileDownloader.detect(resourceUrl, new OnDetectBigUrlFileListener() {
 	    		@Override
 	    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
@@ -135,6 +133,7 @@ public class PlayAudioVedioActivity extends Activity
 	    			// 探测一个网络文件失败了，具体查看failReason
 	    		}
 	    	});
+	    	*/	//暂时不缓存了。
 	    	MediaPlayerUtils.getInstance().play(resourceUrl);	//播放音视频
 	    	totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
     		showTime(mTvEndTime, totalTime);	//显示总时间
@@ -205,6 +204,8 @@ public class PlayAudioVedioActivity extends Activity
 				}
 				else
 				{
+					RefreshScreenUtils.disableRefreshScreen();
+					MediaPlayerUtils.getInstance().stop();
 					Intent intent = new Intent();
 					intent.putExtra("action", EbookConstants.TO_PRE_PART);
 					setResult(RESULT_OK, intent);
@@ -231,6 +232,8 @@ public class PlayAudioVedioActivity extends Activity
 				}
 				else
 				{
+					RefreshScreenUtils.disableRefreshScreen();
+					MediaPlayerUtils.getInstance().stop();
 					Intent intent = new Intent();
 					intent.putExtra("action", EbookConstants.TO_NEXT_PART);
 					setResult(RESULT_OK, intent);

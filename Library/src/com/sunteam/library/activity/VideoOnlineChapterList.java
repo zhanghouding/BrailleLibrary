@@ -78,6 +78,7 @@ public class VideoOnlineChapterList extends MenuActivity {
 		PublicUtils.createCacheDir(fatherPath, menuItem);	//创建缓存目录
 		
 		Intent intent = new Intent( this, PlayAudioVedioActivity.class );
+		intent.putExtra("filename", menuItem);
 		intent.putExtra("curChapter", selectItem);
 		intent.putExtra("totalChapter", mVideoChapterInfoEntityListt.size());
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");		//父目录
