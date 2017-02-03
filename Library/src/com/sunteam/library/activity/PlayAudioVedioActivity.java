@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sunteam.common.utils.RefreshScreenUtils;
@@ -32,6 +33,7 @@ public class PlayAudioVedioActivity extends Activity
 	private static final String TAG = "PlayAudioVedioActivity";
 	private TextView mTvTitle = null;
 	private View mLine = null;
+	private ImageButton mIbStatus = null;
 	private String filename;
 	private String fatherPath;
 	private String resourceUrl;
@@ -53,6 +55,7 @@ public class PlayAudioVedioActivity extends Activity
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
     	mTvTitle = (TextView)this.findViewById(R.id.library_main_title);
     	mLine = (View)this.findViewById(R.id.library_line);
+    	mIbStatus = (ImageButton)this.findViewById(R.id.ib_status);
     	
     	mTvTitle.setTextColor(tools.getFontColor());
     	mLine.setBackgroundColor(tools.getFontColor()); // 设置分割线的背景色
@@ -132,10 +135,12 @@ public class PlayAudioVedioActivity extends Activity
 				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
 				{
 					MediaPlayerUtils.getInstance().pause();
+					mIbStatus.setBackgroundResource(R.drawable.pause);
 				}
 				else if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PAUSE )
 				{
 					MediaPlayerUtils.getInstance().resume();
+					mIbStatus.setBackgroundResource(R.drawable.play);
 				}
 				return	true;
 			case KeyEvent.KEYCODE_5:
