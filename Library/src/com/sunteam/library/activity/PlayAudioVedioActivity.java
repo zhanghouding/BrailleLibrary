@@ -186,7 +186,11 @@ public class PlayAudioVedioActivity extends Activity
 		switch( keyCode )
 		{
 			case KeyEvent.KEYCODE_DPAD_UP:		//上(到上一个章节)
-				MediaPlayerUtils.getInstance().pause();
+				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
+				{
+					MediaPlayerUtils.getInstance().pause();
+					mIbStatus.setBackgroundResource(R.drawable.pause);
+				}
 				if( 0 == curChapter )
 				{
 					String tips = this.getString(R.string.library_first_chapter);
@@ -208,7 +212,11 @@ public class PlayAudioVedioActivity extends Activity
 				}
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_DOWN:	//下(到下一个章节)
-				MediaPlayerUtils.getInstance().pause();
+				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
+				{
+					MediaPlayerUtils.getInstance().pause();
+					mIbStatus.setBackgroundResource(R.drawable.pause);
+				}
 				if( totalChapter-1 == curChapter )
 				{
 					String tips = this.getString(R.string.library_last_chapter);
