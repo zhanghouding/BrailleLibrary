@@ -12,6 +12,12 @@ import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.WifiUtils;
 
+/**
+ * @Destryption 我的图书馆浏览界面，是固定的菜单列表
+ * @Author Jerry
+ * @Date 2017-2-4 下午3:37:32
+ * @Note
+ */
 public class MylibraryActivity extends MenuActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,22 +65,22 @@ public class MylibraryActivity extends MenuActivity {
 		Class<?> cls = null;
 		
 		switch (selectItem) {
-		case 0: // 收藏夹
+		case 0: // 收藏分类
 			list = getResources().getStringArray(R.array.library_favorite_list);
-			cls = FavoriteActivity.class;
+			cls = FavoriteCategoryList.class;
 			break;
-		case 1: // 最近阅读历史
-			cls = RecentBrowseActivity.class;
+		case 1: // 收藏资源
+			list = getResources().getStringArray(R.array.library_favorite_list);
+			cls = FavoriteResourceList.class;
 			break;
-		case 2: //下载文件夹
-			list = getResources().getStringArray(R.array.library_download_list);
-			cls = DownloadDirActivity.class;
+		case 2: // 最近阅读历史
+			cls = ReadingHistoryList.class;
 			break;
-		case 3: // 图书馆账号绑定
+		case 3: // 下载管理
+//			cls = AccountBindActivity.class;
+			break;
+		case 4: // 图书馆账号绑定
 			cls = AccountBindActivity.class;
-			break;
-		case 4: // 图书馆新闻
-			cls = LibraryNewsActivity.class;
 			break;
 		default:
 			break;

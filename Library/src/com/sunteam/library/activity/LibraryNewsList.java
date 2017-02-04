@@ -14,6 +14,12 @@ import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TextFileReaderUtils;
 
+/**
+ * @Destryption 图书馆新闻列表，新闻公告、服务资讯、文化活动三类资讯共用一个界面
+ * @Author Jerry
+ * @Date 2017-2-4 下午3:40:02
+ * @Note
+ */
 public class LibraryNewsList extends MenuActivity {
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private int bookCount = 0; // 当前类资源总数，在分页加载时，需要使用该值

@@ -144,7 +144,6 @@ public class MainActivity extends MenuActivity {
 		}*/
 	}
 
-	@SuppressWarnings("unused")
 	private void startNextActivity(Class<?> cls, int selectItem, String title, String[] list) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称

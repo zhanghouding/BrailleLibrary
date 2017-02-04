@@ -50,7 +50,18 @@
         <item>服务资讯</item>
         <item>文化活动</item>
     </string-array>
-    <string-array name="library_function_menu_list">
+    <string-array name="library_resource_function_menu_list">
+        <item>收藏分类</item>
+        <item>收藏当前资源</item>
+        <item>删除本地当前资源</item>
+        <item>清空本地分类资源</item>
+    </string-array>
+    <string-array name="library_chapter_function_menu_list">
+        <item>收藏当前资源</item>
+        <item>下载当前资源</item>
+        <item>删除本地当前资源</item>
+    </string-array>
+    <string-array name="library_favorite_function_menu_list">
         <item>删除</item>
         <item>清空</item>
     </string-array>

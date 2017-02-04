@@ -10,6 +10,12 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.library.asynctask.GetInformationAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
 
+/**
+ * @Destryption 图书馆新闻分类列表，是固定菜单
+ * @Author Jerry
+ * @Date 2017-2-4 下午3:38:19
+ * @Note
+ */
 public class LibraryNewsCategoryList extends MenuActivity {
 	private String fatherPath;	//父目录路径
 	
