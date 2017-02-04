@@ -106,8 +106,8 @@ public class MainActivity extends MenuActivity {
 
 		switch (selectItem) {
 		case 0: // 我的图书馆
-//			list = getResources().getStringArray(R.array.library_mylibrary_list);
-//			cls = MylibraryActivity.class;
+			list = getResources().getStringArray(R.array.library_mylibrary_list);
+			startNextActivity(MylibraryActivity.class, selectItem, menuItem, list);
 //			testCreateFile();
 			break;
 		case 1: // 资源检索

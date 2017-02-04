@@ -10,14 +10,16 @@ import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.menu.menuview.OnMenuKeyListener;
 import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
 import com.sunteam.library.asynctask.GetEbookAsyncTask;
 import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
 import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.sunteamutilslib.R;
 
-public class ResourceOnlineList extends MenuActivity {
+public class ResourceOnlineList extends MenuActivity implements OnMenuKeyListener {
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private int bookCount = 0; // 当前类资源总数，在分页加载时，需要使用该值
 	private String fatherPath;	//父目录路径
@@ -98,7 +100,6 @@ public class ResourceOnlineList extends MenuActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
@@ -118,6 +119,21 @@ public class ResourceOnlineList extends MenuActivity {
 		}
 
 		return list;
+	}
+
+	@Override
+	public void onMenuKeyCompleted(int selectItem, String menuItem) {
+		/*Intent intent = new Intent();
+		String title = getResources().getString(R.string.common_functionmenu); // 功能菜单
+		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, LibraryConstant.LIBRARY_ROOT_PATH+title+"/");	//父目录
+
+		intent.setClass(this, cls);
+
+		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
+		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
+		startActivityForResult(intent, selectItem);*/
 	}
 
 }

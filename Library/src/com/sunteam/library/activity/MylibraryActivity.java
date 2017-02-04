@@ -80,11 +80,11 @@ public class MylibraryActivity extends MenuActivity {
 			break;
 		}
 
-		if (WifiUtils.checkWifiState(this)) {
+		/*if (WifiUtils.checkWifiState(this)) {
 			startNextActivity(cls, selectItem, menuItem, list);
 		} else {
 			startWifi();
-		}
+		}*/
 	}
 
 	private void startNextActivity(Class<?> cls, int selectItem, String title, String[] list){

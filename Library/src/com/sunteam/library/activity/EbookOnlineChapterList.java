@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
 import com.sunteam.library.asynctask.GetEbookChapterContentAsyncTask;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.utils.LibraryConstant;

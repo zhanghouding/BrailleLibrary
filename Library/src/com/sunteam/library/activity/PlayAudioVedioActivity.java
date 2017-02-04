@@ -57,6 +57,7 @@ public class PlayAudioVedioActivity extends Activity
 		super.onCreate(savedInstanceState);
 		
 		TtsUtils.getInstance().stop();	//先暂停TTS播放。
+		TtsUtils.getInstance().setMuteFlag(false);
 		RefreshScreenUtils.enableRefreshScreen();
 		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
@@ -235,6 +236,7 @@ public class PlayAudioVedioActivity extends Activity
 				{
 					RefreshScreenUtils.disableRefreshScreen();
 					MediaPlayerUtils.getInstance().stop();
+					TtsUtils.getInstance().setMuteFlag(true);
 					Intent intent = new Intent();
 					intent.putExtra("action", EbookConstants.TO_NEXT_PART);
 					setResult(RESULT_OK, intent);

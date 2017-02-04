@@ -24,11 +24,15 @@
         <item>图书馆新闻</item>
     </string-array>
     <string-array name="library_mylibrary_list">
-        <item>收藏夹</item>
-        <item>最近浏览目录</item>
-        <item>下载文件夹</item>
+        <item>我收藏的资源</item>
+        <item>我收藏的分类</item>
+        <item>我的阅读历史</item>
+        <item>下载管理</item>
         <item>图书馆账号绑定</item>
-        <item>图书馆新闻</item>
+    </string-array>
+    <string-array name="library_download_manager_list">
+        <item>下载中</item>
+        <item>已下载</item>
     </string-array>
     <string-array name="library_favorite_list">
         <item>新闻</item>
@@ -45,6 +49,10 @@
         <item>新闻公告</item>
         <item>服务资讯</item>
         <item>文化活动</item>
+    </string-array>
+    <string-array name="library_function_menu_list">
+        <item>删除</item>
+        <item>清空</item>
     </string-array>
 
 </resources>
