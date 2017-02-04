@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
-//创建数据库
+//创建图书馆数据库
 public class LibraryDBHelper extends SQLiteOpenHelper 
 {	
 	public static final String CREATE_CATEGORY_TABLE =	//创建分类表

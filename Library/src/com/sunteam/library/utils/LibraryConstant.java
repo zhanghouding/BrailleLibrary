@@ -15,6 +15,7 @@ public class LibraryConstant {
 	public static final String URL_INTERFACE_AUDIO = "AudioInterface.ashx"; // 音频相关接口
 	public static final String URL_INTERFACE_VIDEO = "VideoInterface.ashx"; // 视频相关接口
 	public static final String URL_INTERFACE_INFO = "InformationInterface.ashx";	//咨询相关接口
+	public static final String URL_INTERFACE_HISTORY = "ReadHistoryInterface.ashx";	// 阅读历史相关接口
 
 	// 类别常量
 	public static final int LIBRARY_CATEGORY_ROOT_ID = -1; // 类别树形结构中的根节点ID
@@ -36,7 +37,7 @@ public class LibraryConstant {
 	public static final String INTENT_KEY_URL = "library_resource_url";	//资源路径
 
 	// 资源列表常量
-	public static final int LIBRARY_RESOURCE_PAGESIZE = 100000; // 资源列表时一页的资源数
+	public static final int LIBRARY_RESOURCE_PAGESIZE = 10; // 资源列表时一页的资源数
 	
 	// SharePref文件名，KEY类型，如：登录状态，有些界面需要根据登录状态获取不同的数据源
 	public static final String LIBRARY_CONFIG_FILE = "config";

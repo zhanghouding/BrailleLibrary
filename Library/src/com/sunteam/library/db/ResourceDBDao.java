@@ -26,7 +26,7 @@ public class ResourceDBDao
 	
 	public ResourceDBDao( Context context ) 
 	{
-		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.LIBRARY_DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
 	}
 	
 	public void insert( EbookNodeEntity entity, int resourceType ) 

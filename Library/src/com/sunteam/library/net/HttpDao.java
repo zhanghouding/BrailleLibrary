@@ -8,6 +8,7 @@ import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
+import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
@@ -15,6 +16,7 @@ import com.sunteam.library.parse.GetCategoryParseResponse;
 import com.sunteam.library.parse.GetEbookChapterContentParseResponse;
 import com.sunteam.library.parse.GetEbookChapterParseResponse;
 import com.sunteam.library.parse.GetEbookParseResponse;
+import com.sunteam.library.parse.GetHistoryParseResponse;
 import com.sunteam.library.parse.GetInformationParseResponse;
 import com.sunteam.library.parse.GetVideoChapterParseResponse;
 import com.sunteam.library.parse.LoginParseResponse;
@@ -228,4 +230,22 @@ public class HttpDao
 		return (String) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookChapterContentParseResponse() );
 	}
 	
+	/**
+	 * 得到阅读历史列表
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/4
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<HistoryEntity> getHistoryList( String username ) 
+	{
+		String json = "{UserName:\""+username+"\"}";
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "SearchHistory");
+		requestParams.put("jsonObj", json);
+		
+		return (ArrayList<HistoryEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new GetHistoryParseResponse() );
+	}
 }

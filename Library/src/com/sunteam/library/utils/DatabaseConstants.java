@@ -8,11 +8,16 @@ package com.sunteam.library.utils;
 public class DatabaseConstants 
 {
 	public static final int DATABASE_VERSION = 1;					//数据库版本
-	public static final String DATABASE_NAME = "library.db";		//数据库名称
+	public static final String LIBRARY_DATABASE_NAME = "library.db";//图书馆数据库名称
+	public static final String HISTORY_DATABASE_NAME = "history.db";//历史数据库名称
+	
 	public static final String CATEGORY_TABLE_NAME = "categorys";	//分类表名称
 	public static final String RESOURCE_TABLE_NAME = "resources";	//资源表名称
 	public static final String CHAPTER_TABLE_NAME = "chapters";		//章节表名称
 	public static final String INFO_TABLE_NAME = "infos";			//资讯表名称
+	
+	public static final String HISTORY_TABLE_NAME = "historys";		//历史表名称
+	public static final String BOOKMARK_TABLE_NAME = "bookmarks";	//书签表名称
 	
 	public static final String RESOURCE_TYPE = "resource_type";		//资源类型
 	//分类表字段
@@ -48,4 +53,23 @@ public class DatabaseConstants
 	//资讯表字段
 	public static final String INFO_TITLE = "title";				//资讯标题
 	public static final String INFO_DATE = "date";					//日期
+	
+	//历史表字段
+	public static final String HISTORY_ID = "id";						//记录id
+	public static final String HISTORY_USERNAME = "userName";			//用户名
+    public static final String HISTORY_TITLE = "title";					//标题
+    public static final String HISTORY_DBCODE = "dbCode";				//数据编码
+    public static final String HISTORY_SYSID = "sysId";					//系统id
+    public static final String HISTORY_RESTYPE = "resType";				//资源类型 0:电子图书 1:有声读物 3:视频影像
+    public static final String HISTORY_LCINDEX = "lastChapterIndex";	//最后阅读的章节序号
+    public static final String HISTORY_ENTERPOINT = "enterPoint";		//最后阅读的音视频时间点，格式"00:00:00"
+    public static final String HISTORY_URL = "url";
+    public static final String HISTORY_CTIME = "createTime";			//创建时间，格式"2017-02-03T19:42:14"
+    public static final String HISTORY_UTIME = "updateTime";			//更新时间，格式"2017-02-03T19:42:14",
+    public static final String HISTORY_BOOKTITLE = "bookTitle";			//标题
+    public static final String HISTORY_COVERURL = "coverUrl";			//封面图片url
+    public static final String HISTORY_PERCENT = "percent";				//电子书阅读进度，格式"0.00%"
+    public static final String HISTORY_CFULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
+    public static final String HISTORY_CATEGORYCODE = "categoryCode";	//分类编码
+    public static final String HISTORY_SYNC ="sync";					//数据同步标志，0：未同步 1：已同步
 }

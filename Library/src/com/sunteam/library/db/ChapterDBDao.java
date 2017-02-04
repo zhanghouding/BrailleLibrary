@@ -30,7 +30,7 @@ public class ChapterDBDao
 	
 	public ChapterDBDao( Context context ) 
 	{
-		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.LIBRARY_DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
 	}
 		
 	//顺序插入电子书章节
