@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
-import com.sunteam.library.activity.EbookOnlineChapterList;
+import com.sunteam.library.activity.EbookChapterList;
 import com.sunteam.library.db.ChapterDBDao;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.net.HttpDao;
@@ -102,7 +102,7 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
-		intent.setClass(mContext, EbookOnlineChapterList.class);
+		intent.setClass(mContext, EbookChapterList.class);
 		mContext.startActivity(intent);
 	}
 }

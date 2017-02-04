@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
-import com.sunteam.library.activity.CategoryOnlineList;
+import com.sunteam.library.activity.CategoryList;
 import com.sunteam.library.db.CategoryDBDao;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.net.HttpDao;
@@ -144,7 +144,7 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER, LibraryConstant.LIBRARY_CATEGORY_ROOT_ID); // 父节点ID
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, type); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
-		intent.setClass(mContext, CategoryOnlineList.class);
+		intent.setClass(mContext, CategoryList.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
 		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity

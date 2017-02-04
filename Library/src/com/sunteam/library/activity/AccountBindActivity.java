@@ -18,6 +18,12 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
 
+/**
+ * @Destryption 图书馆账号绑定；需要服务器端提供接口
+ * @Author Jerry
+ * @Date 2017-2-4 下午3:22:05
+ * @Note
+ */
 @SuppressWarnings("unused")
 public class AccountBindActivity extends BaseActivity {
 	private TextView tvTitle; // 标题
