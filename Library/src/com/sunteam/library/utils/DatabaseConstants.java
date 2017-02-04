@@ -60,7 +60,7 @@ public class DatabaseConstants
     public static final String HISTORY_TITLE = "title";					//标题
     public static final String HISTORY_DBCODE = "dbCode";				//数据编码
     public static final String HISTORY_SYSID = "sysId";					//系统id
-    public static final String HISTORY_RESTYPE = "resType";				//资源类型 0:电子图书 1:有声读物 3:视频影像
+    public static final String HISTORY_RESTYPE = "resType";				//资源类型 1:有声读物 2:电子图书  3:视频影像
     public static final String HISTORY_LCINDEX = "lastChapterIndex";	//最后阅读的章节序号
     public static final String HISTORY_ENTERPOINT = "enterPoint";		//最后阅读的音视频时间点，格式"00:00:00"
     public static final String HISTORY_URL = "url";

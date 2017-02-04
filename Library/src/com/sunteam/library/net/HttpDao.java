@@ -11,6 +11,7 @@ import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
+import com.sunteam.library.parse.AddHistoryParseResponse;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
 import com.sunteam.library.parse.GetEbookChapterContentParseResponse;
@@ -236,7 +237,7 @@ public class HttpDao
 	 * @param username
 	 * @return
 	 * @author wzp
-	 * @Created 2017/02/4
+	 * @Created 2017/02/04
 	 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<HistoryEntity> getHistoryList( String username ) 
@@ -248,4 +249,36 @@ public class HttpDao
 		
 		return (ArrayList<HistoryEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new GetHistoryParseResponse() );
 	}
+	
+	/**
+	 * 添加阅读历史
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/04
+	 */
+	public static boolean addHistory( HistoryEntity entity ) 
+	{
+		String json = 
+				"{"
+				+ "UserName:\""+entity.userName+"\""
+				+ "Title:\""+entity.title+"\""
+				+ "DbCode:\""+entity.dbCode+"\""
+				+ "SysId:\""+entity.sysId+"\""
+				+ "ResType:\""+entity.resType+"\""
+				+ "CategoryCode:\""+entity.categoryCode+"\""
+				+ "LastChapterIndex:\""+entity.lastChapterIndex+"\""
+				+ "EnterPoint:\""+entity.enterPoint+"\""
+				+ "BookTitle:\""+entity.bookTitle+"\""
+				+ "CoverUrl:\""+entity.coverUrl+"\""
+				+ "Percent:\""+entity.percent+"\""
+				+ "CategoryFullName:\""+entity.categoryFullName+"\"" +
+				"}";
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "AddHistory");
+		requestParams.put("jsonObj", json);
+		
+		return (Boolean) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new AddHistoryParseResponse() );
+	}	
 }
