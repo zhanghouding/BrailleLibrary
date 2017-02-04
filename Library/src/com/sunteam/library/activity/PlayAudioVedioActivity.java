@@ -296,13 +296,9 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	}
 
 	//退出此界面
-	private void back( boolean isSetResult )
+	private void back()
 	{
 		MediaPlayerUtils.getInstance().stop();
-		if( isSetResult )
-		{
-			setResult(RESULT_OK);
-		}
 		finish();
 	}
 	
@@ -311,7 +307,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	{  
 		if( event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN )
 		{
-			back(true);
+			back();
 			return true;   
 		}     
 	     
