@@ -334,7 +334,7 @@ public class MediaPlayerUtils
 				mMediaPlayer.reset();
 				mMediaPlayer.setDataSource(audioPath);
 				mMediaPlayer.prepare();
-				mMediaPlayer.setLooping(true);
+				mMediaPlayer.setLooping(false);
 				mMediaPlayer.start();
 				mPlayStatus = PlayStatus.PLAY;
 				

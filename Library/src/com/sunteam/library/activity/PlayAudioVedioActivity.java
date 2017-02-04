@@ -27,6 +27,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
+import com.sunteam.library.utils.MediaPlayerUtils.OnMediaPlayerListener;
 import com.sunteam.library.utils.MediaPlayerUtils.PlayStatus;
 import com.sunteam.library.utils.PublicUtils;
 
@@ -35,7 +36,7 @@ import com.sunteam.library.utils.PublicUtils;
  * 
  * @author wzp
  */
-public class PlayAudioVedioActivity extends Activity
+public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerListener
 {
 	private static final String TAG = "PlayAudioVedioActivity";
 	private TextView mTvTitle = null;
@@ -103,6 +104,8 @@ public class PlayAudioVedioActivity extends Activity
     	mTvEndTime.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
     	mTvEndTime.setHeight((int)fontSize); // 设置控件高度
     	//mTvEndTime.setText(num);
+    	
+    	MediaPlayerUtils.getInstance().OnMediaPlayerListener(this);
     	
     	final String fullpath = fatherPath + getFilename(resourceUrl);
     	File file = new File(fullpath);
@@ -181,67 +184,80 @@ public class PlayAudioVedioActivity extends Activity
 		super.onResume();
 	}
 	
+	//到上一个章节
+	private void toPreChapter()
+	{
+		if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
+		{
+			MediaPlayerUtils.getInstance().pause();
+			mIbStatus.setBackgroundResource(R.drawable.pause);
+		}
+		if( 0 == curChapter )
+		{
+			String tips = this.getString(R.string.library_first_chapter);
+			PublicUtils.showToast(this, tips, new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
+		else
+		{
+			RefreshScreenUtils.disableRefreshScreen();
+			MediaPlayerUtils.getInstance().stop();
+			Intent intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_PRE_PART);
+			setResult(RESULT_OK, intent);
+			finish();
+		}
+	}
+	
+	//到下一个章节
+	private void toNextChapter()
+	{
+		if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
+		{
+			MediaPlayerUtils.getInstance().pause();
+			mIbStatus.setBackgroundResource(R.drawable.pause);
+		}
+		if( totalChapter-1 == curChapter )
+		{
+			String tips = this.getString(R.string.library_last_chapter);
+			PublicUtils.showToast(this, tips, new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					// TODO Auto-generated method stub
+					MediaPlayerUtils.getInstance().stop();
+					finish();
+				}	//如果到最后一个章节，退出到章节列表界面。
+			});
+		}
+		else
+		{
+			RefreshScreenUtils.disableRefreshScreen();
+			MediaPlayerUtils.getInstance().stop();
+			TtsUtils.getInstance().setMuteFlag(true);
+			Intent intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+			setResult(RESULT_OK, intent);
+			finish();
+		}
+	}
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) 
 	{
 		switch( keyCode )
 		{
 			case KeyEvent.KEYCODE_DPAD_UP:		//上(到上一个章节)
-				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
-				{
-					MediaPlayerUtils.getInstance().pause();
-					mIbStatus.setBackgroundResource(R.drawable.pause);
-				}
-				if( 0 == curChapter )
-				{
-					String tips = this.getString(R.string.library_first_chapter);
-					PublicUtils.showToast(this, tips, new PromptListener() {
-
-						@Override
-						public void onComplete() {
-							// TODO Auto-generated method stub
-							
-						}
-					});
-				}
-				else
-				{
-					RefreshScreenUtils.disableRefreshScreen();
-					MediaPlayerUtils.getInstance().stop();
-					Intent intent = new Intent();
-					intent.putExtra("action", EbookConstants.TO_PRE_PART);
-					setResult(RESULT_OK, intent);
-					finish();
-				}
+				toPreChapter();
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_DOWN:	//下(到下一个章节)
-				if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
-				{
-					MediaPlayerUtils.getInstance().pause();
-					mIbStatus.setBackgroundResource(R.drawable.pause);
-				}
-				if( totalChapter-1 == curChapter )
-				{
-					String tips = this.getString(R.string.library_last_chapter);
-					PublicUtils.showToast(this, tips, new PromptListener() {
-
-						@Override
-						public void onComplete() {
-							// TODO Auto-generated method stub
-							
-						}
-					});
-				}
-				else
-				{
-					RefreshScreenUtils.disableRefreshScreen();
-					MediaPlayerUtils.getInstance().stop();
-					TtsUtils.getInstance().setMuteFlag(true);
-					Intent intent = new Intent();
-					intent.putExtra("action", EbookConstants.TO_NEXT_PART);
-					setResult(RESULT_OK, intent);
-					finish();
-				}
+				toNextChapter();
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_LEFT:	//左(快退)
 				MediaPlayerUtils.getInstance().fastBackward();
@@ -276,6 +292,7 @@ public class PlayAudioVedioActivity extends Activity
 	public void onDestroy()
 	{
 		super.onDestroy();
+		MediaPlayerUtils.getInstance().OnMediaPlayerListener(null);
 	}
 
 	//退出此界面
@@ -317,4 +334,32 @@ public class PlayAudioVedioActivity extends Activity
 			}
 		};
 	};
+
+	@Override
+	public void onPlayCompleted() 
+	{
+		// TODO 自动生成的方法存根
+		toNextChapter();
+	}
+
+	@Override
+	public void onPlayError() {
+		// TODO 自动生成的方法存根
+		mHandler.removeMessages(0);
+		String tips = this.getString(R.string.library_speak_error);
+		PublicUtils.showToast(this, tips, new PromptListener() {
+
+			@Override
+			public void onComplete() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+
+	@Override
+	public void onPlayProgress(int percent) {
+		// TODO 自动生成的方法存根
+		
+	}
 }
