@@ -20,7 +20,7 @@ public class HistoryEntity implements Serializable
     public String title;			//标题
     public String dbCode;			//数据编码
     public String sysId;			//系统id
-    public int resType;				//资源类型 0:电子图书 1:有声读物 3:视频影像
+    public int resType;				//资源类型 0:电子图书 1:有声读物 2:视频影像
     public int lastChapterIndex;	//最后阅读的章节序号
     public String enterPoint;		//最后阅读的音视频时间点，格式"00:00:00"
     public String url;
