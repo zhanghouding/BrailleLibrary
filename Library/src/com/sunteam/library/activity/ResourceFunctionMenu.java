@@ -12,12 +12,15 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.AddCollectCategoryAsyncTask;
-import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
+import com.sunteam.library.asynctask.AddCollectResourceAsyncTask;
 import com.sunteam.library.entity.CollectCategoryEntity;
+import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
 public class ResourceFunctionMenu extends MenuActivity {
+	private String dbCode;			//数据库编码
+	private String sysId;			//系统id
 	private String categoryName;	//分类名称
 	private String categoryCode;	//分类编码
 	private String resourceName;	//资源名称
@@ -81,6 +84,18 @@ public class ResourceFunctionMenu extends MenuActivity {
 			}
 			break;
 		case 1: // 收藏当前资源
+			{
+				CollectResourceEntity entity = new CollectResourceEntity();
+
+				entity.title = resourceName;
+				entity.dbCode = dbCode;
+				entity.sysId = sysId;
+				entity.userName = PublicUtils.getUserName();
+				entity.resType = dataType;
+				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName + "-" + resourceName;
+				
+				new AddCollectResourceAsyncTask(this, entity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			}
 			break;
 		case 2: // 删除当前资源
 			{
@@ -112,6 +127,8 @@ public class ResourceFunctionMenu extends MenuActivity {
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
 		fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		categoryCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE);
+		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
+		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_resource_function_menu_list));
 	}

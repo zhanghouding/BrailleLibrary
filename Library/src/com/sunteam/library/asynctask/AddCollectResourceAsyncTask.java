@@ -4,32 +4,32 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.sunteam.library.R;
-import com.sunteam.library.entity.CollectCategoryEntity;
+import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
 /**
- * 添加收藏分类异步加载类
+ * 添加收藏资源异步加载类
  * 
  * @author wzp
  * @Created 2017/02/05
  */
-public class AddCollectCategoryAsyncTask extends AsyncTask<String, Void, Integer>
+public class AddCollectResourceAsyncTask extends AsyncTask<String, Void, Integer>
 {
 	private Context mContext;
-	private CollectCategoryEntity mCollectCategoryEntity;
+	private CollectResourceEntity mCollectResourceEntity;
 	
-	public AddCollectCategoryAsyncTask(Context context, CollectCategoryEntity entity) 
+	public AddCollectResourceAsyncTask(Context context, CollectResourceEntity entity) 
 	{
 		mContext = context;
-		mCollectCategoryEntity = entity;
+		mCollectResourceEntity = entity;
 	}
 
 	@Override
 	protected Integer doInBackground(String... params) 
 	{
-		Integer result = HttpDao.addCollectCategory(mCollectCategoryEntity);
+		Integer result = HttpDao.addCollectResource(mCollectResourceEntity);
 		
 		if( null == result )
 		{
@@ -44,7 +44,7 @@ public class AddCollectCategoryAsyncTask extends AsyncTask<String, Void, Integer
 	{	
 		super.onPreExecute();
 		
-		String s = mContext.getResources().getString(R.string.library_add_collect_category);
+		String s = mContext.getResources().getString(R.string.library_add_collect_resource);
 		PublicUtils.showProgress(mContext, s);
 		//TtsUtils.getInstance().speak(s);
 	}

@@ -33,6 +33,7 @@
   	<string name="library_speak_error">朗读失败</string>
   	<string name="library_success">成功</string>
   	<string name="library_add_collect_category">正在添加收藏分类</string>
+  	<string name="library_add_collect_resource">正在添加收藏资源</string>
   	<string name="library_add_collect_success">收藏成功！</string>
   	<string name="library_add_collect_fail">该收藏已存在！</string>
   	

@@ -8,12 +8,14 @@ import java.util.Map;
 import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.CollectCategoryEntity;
+import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.parse.AddCollectCategoryParseResponse;
+import com.sunteam.library.parse.AddCollectResourceParseResponse;
 import com.sunteam.library.parse.AddHistoryParseResponse;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
@@ -330,5 +332,42 @@ public class HttpDao
 		requestParams.put("jsonObj", encodeJson);
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectCategoryParseResponse() );
-	}	
+	}
+	
+	/**
+	 * 添加收藏资源
+	 * 
+	 * @param entity
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/05
+	 */
+	public static Integer addCollectResource( CollectResourceEntity entity ) 
+	{
+		String json = 
+				"{"
+				+ "\"UserName\":\""+entity.userName+"\","
+				+ "\"Title\":\""+entity.title+"\","
+				+ "\"DbCode\":\""+entity.dbCode+"\","
+				+ "\"SysId\":\""+entity.sysId+"\","
+				+ "\"CategoryFullName\":\""+entity.categoryFullName+"\","
+				+ "\"ResType\":\""+entity.resType+"\""
+				+ "}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "AddCollect");
+		requestParams.put("jsonObj", encodeJson);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectResourceParseResponse() );
+	}
 }
