@@ -112,11 +112,6 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".activity.VideoOfflineActivity"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
-        </activity>
-        <activity
             android:name=".activity.VideoChapterList"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >

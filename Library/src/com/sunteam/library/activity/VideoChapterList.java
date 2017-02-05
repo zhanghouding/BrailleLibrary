@@ -13,7 +13,7 @@ import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
-public class VideoOnlineChapterList extends MenuActivity {
+public class VideoChapterList extends MenuActivity {
 	private String fatherPath;	//父目录路径
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 
