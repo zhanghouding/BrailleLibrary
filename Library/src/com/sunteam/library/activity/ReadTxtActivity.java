@@ -186,6 +186,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			case KeyEvent.KEYCODE_NUMPAD_0:		//百科查询
 				return	true;
 			case KeyEvent.KEYCODE_MENU:
+				startFunctionMenu();
 				break;
 			case KeyEvent.KEYCODE_STAR:			//反查
 				String content = mTextReaderView.getReverseText();	//得到当前反显内容
