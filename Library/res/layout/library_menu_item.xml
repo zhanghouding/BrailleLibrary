@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="left|center_vertical"
@@ -14,13 +15,16 @@
         android:paddingRight="2dip" >
 
         <TextView
-        android:id="@+id/library_menu_item_icon"
+            android:id="@+id/library_menu_item_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/folder"
+            android:includeFontPadding="false"
+            android:singleLine="true"
             android:text="  "
-            android:textSize="@dimen/text_big_size"
-            android:typeface="monospace" />
+            android:textSize="@dimen/text_small_size"
+            android:typeface="monospace"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <!-- 用于显示文件名的文本框 -->
@@ -34,6 +38,7 @@
         android:includeFontPadding="false"
         android:singleLine="true"
         android:text="1234567890"
-        android:textSize="@dimen/text_big_size" />
+        android:textSize="@dimen/text_small_size"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

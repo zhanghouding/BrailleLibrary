@@ -8,12 +8,13 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.menu.menuview.OnMenuKeyListener;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
-public class VideoChapterList extends MenuActivity {
+public class VideoChapterList extends MenuActivity implements OnMenuKeyListener {
 	private String fatherPath;	//父目录路径
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 
@@ -103,4 +104,18 @@ public class VideoChapterList extends MenuActivity {
 
 		return list;
 	}
+
+	@Override
+	public void onMenuKeyCompleted(int selectItem, String menuItem) {
+		Intent intent = new Intent();
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO); // 数据类别：电子书、有声书、口述影像
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
+
+		intent.setClass(this, ChapterFunctionMenu.class);
+
+		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
+		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
+		startActivityForResult(intent, selectItem);
+	}
+
 }

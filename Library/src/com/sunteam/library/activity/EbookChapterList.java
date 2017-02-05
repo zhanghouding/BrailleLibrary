@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.menu.menuview.OnMenuKeyListener;
 import com.sunteam.library.asynctask.GetEbookChapterContentAsyncTask;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.utils.LibraryConstant;
@@ -19,7 +20,7 @@ import com.sunteam.library.utils.LibraryConstant;
  * @Date 2017-2-4 下午3:20:17
  * @Note
  */
-public class EbookChapterList extends MenuActivity {
+public class EbookChapterList extends MenuActivity implements OnMenuKeyListener {
 	private String identifier;	//电子书identifier
 	private String fatherPath;	//父目录路径
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;
@@ -66,7 +67,6 @@ public class EbookChapterList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		// TODO browser next class
 		String chapterIndex = mEbookChapterInfoEntityList.get(selectItem).chapterIndex;
 		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex);
 	}
@@ -78,7 +78,7 @@ public class EbookChapterList extends MenuActivity {
 		mEbookChapterInfoEntityList = (ArrayList<EbookChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromChapterInfoEntity(mEbookChapterInfoEntityList);
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
-		identifier = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER); 
+		identifier = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<EbookChapterInfoEntity> listSrc) {
@@ -89,4 +89,18 @@ public class EbookChapterList extends MenuActivity {
 
 		return list;
 	}
+
+	@Override
+	public void onMenuKeyCompleted(int selectItem, String menuItem) {
+		Intent intent = new Intent();
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO); // 数据类别：电子书、有声书、口述影像
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
+
+		intent.setClass(this, ChapterFunctionMenu.class);
+
+		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
+		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
+		startActivityForResult(intent, selectItem);
+	}
+
 }

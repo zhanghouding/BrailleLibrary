@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -31,7 +30,7 @@ import com.sunteam.library.utils.LibraryConstant;
  * @Date 2017-1-26 上午10:43:02
  * @Note
  */
-public class CategoryList extends MenuActivity implements ShowView, OnClickListener {
+public class CategoryList extends MenuActivity implements ShowView/*, OnClickListener*/ {
 	private int fatherId = LibraryConstant.LIBRARY_CATEGORY_ROOT_ID; // 当前分类列表的父节点ID
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private ArrayList<CategoryInfoNodeEntity> mCategoryInfoNodeEntityList;
@@ -138,7 +137,7 @@ public class CategoryList extends MenuActivity implements ShowView, OnClickListe
 			vh.tvIcon = (TextView) convertView.findViewById(R.id.library_menu_item_icon);
 
 			vh.tvMenu = (TextView) convertView.findViewById(R.id.library_menu_item_childs);
-			vh.tvMenu.setOnClickListener(this);
+//			vh.tvMenu.setOnClickListener(this);
 
 			convertView.setTag(vh);
 		} else {
@@ -149,12 +148,13 @@ public class CategoryList extends MenuActivity implements ShowView, OnClickListe
 
 		int fontSize = mTools.getFontSize();
 		vh.tvIcon.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 图标占用一个汉字宽度，随汉字字体大小而伸缩
-//		vh.tvIcon.setHeight(mTools.convertSpToPixel(fontSize));
+		vh.tvIcon.setHeight(mTools.convertSpToPixel(fontSize));
+		vh.tvIcon.setBackgroundResource(R.drawable.folder);
 
 		vh.tvMenu.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		vh.tvMenu.setHeight(mTools.convertSpToPixel(fontSize));
 
-		if (selectItem == position) {
+		if (getSelectItem() == position) {
 			convertView.setBackgroundColor(mTools.getHighlightColor());
 			vh.tvMenu.setSelected(true);
 		} else {
@@ -170,23 +170,6 @@ public class CategoryList extends MenuActivity implements ShowView, OnClickListe
 		vh.tvMenu.setTextColor(mTools.getFontColor());
 
 		return convertView;
-	}
-
-	@Override
-	public void onClick(View v) {
-		int id = v.getId();
-		int position = 0;
-
-		String tag = (String) v.getTag();
-		position = Integer.parseInt(tag);
-		int menuId = R.id.library_menu_item_childs;
-		if(menuId == id){
-			if (getSelectItem() != position) {
-				mMenuView.setSelectItem(position);
-			} else {
-				setResultCode(Activity.RESULT_OK, position, getSelectItemContent(position));
-			}
-		}
 	}
 
 	private class ViewHolder {
