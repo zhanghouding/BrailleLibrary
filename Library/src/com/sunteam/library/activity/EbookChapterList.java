@@ -93,7 +93,7 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	@Override
 	public void onMenuKeyCompleted(int selectItem, String menuItem) {
 		Intent intent = new Intent();
-		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO); // 数据类别：电子书、有声书、口述影像
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
 
 		intent.setClass(this, ChapterFunctionMenu.class);
