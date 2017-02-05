@@ -19,9 +19,9 @@ public class LibraryConstant {
 
 	// 类别常量
 	public static final int LIBRARY_CATEGORY_ROOT_ID = -1; // 类别树形结构中的根节点ID
-	public static final int LIBRARY_DATATYPE_EBOOK = 0; // 电子书
 	public static final int LIBRARY_DATATYPE_AUDIO = 1; // 有声书
-	public static final int LIBRARY_DATATYPE_VIDEO = 2; // 口述影像
+	public static final int LIBRARY_DATATYPE_EBOOK = 2; // 电子书
+	public static final int LIBRARY_DATATYPE_VIDEO = 3; // 口述影像
 
 	// 咨询类别常量
 	public static final int LIBRARY_INFOTYPE_NOTICE = 0; 		// 新闻公告
