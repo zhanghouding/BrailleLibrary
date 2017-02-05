@@ -38,6 +38,7 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		mMenuView.setMenuKeyListener(this);
 	}
 
 	@Override

@@ -31,6 +31,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		mMenuView.setMenuKeyListener(this);
 	}
 
 	@Override

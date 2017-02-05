@@ -15,9 +15,11 @@ import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.ReadMode;
 import com.sunteam.library.utils.CustomToast;
 import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.TextFileReaderUtils;
@@ -32,6 +34,7 @@ import com.sunteam.library.view.TextReaderView.OnPageFlingListener;
 public class ReadTxtActivity extends Activity implements OnPageFlingListener
 {
 	private static final String TAG = "ReadTxtActivity";
+	private static final int MENU_CODE = 10;
 	private TextView mTvTitle = null;
 	private TextView mTvPageCount = null;
 	private TextView mTvCurPage = null;
@@ -223,7 +226,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			if(null != data){
 				int result = data.getIntExtra("result", 0);
 				switch(result){
-				case 10:
+				case MENU_CODE:
 					isReadPage = false;
 					int curPage = data.getIntExtra("page", 1);
 					mTextReaderView.setCurPage(curPage);
@@ -305,4 +308,19 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	     
 		return super.dispatchKeyEvent(event);
 	}
+
+	public void startFunctionMenu()
+	{
+		Intent intent = getIntent();
+		EbookInfoEntity ebookInfo = new EbookInfoEntity();
+		ebookInfo.pageCount = mTextReaderView.getPageCount();
+		ebookInfo.pageIndex = mTextReaderView.getCurPage();
+		// TODO 添加其它信息
+
+		intent.putExtra("ebook_info", ebookInfo);
+
+		intent.setClass(this, EbookFunctionMenu.class);
+		startActivityForResult(intent, MENU_CODE);
+	}
+	
 }

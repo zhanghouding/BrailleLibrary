@@ -67,6 +67,15 @@
         <item>下载当前资源</item>
         <item>删除本地当前资源</item>
     </string-array>
+    <string-array name="library_ebook_function_menu_list">
+        <item>书签管理</item>
+        <item>上一章</item>
+        <item>下一章</item>
+        <item>跳至本章开头</item>
+        <item>跳至本章页码</item>
+        <item>朗读语音</item>
+        <item>背景音乐</item>
+    </string-array>
     <string-array name="library_favorite_function_menu_list">
         <item>删除</item>
         <item>清空</item>
