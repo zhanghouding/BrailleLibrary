@@ -59,13 +59,14 @@ public class AddCollectCategoryAsyncTask extends AsyncTask<String, Void, Integer
 		switch( result )
 		{
 			case LibraryConstant.RESULT_EXCEPTION:	//异常
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_category_fail), null);
+				PublicUtils.showToast(mContext, "网络未连接！", null);
+				//如果出现网络异常，应该收藏到本地数据库中。
 				break;
 			case LibraryConstant.RESULT_SUCCESS:	//成功
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_category_success), null);
+				PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_success), null);
 				break;
 			case LibraryConstant.RESULT_FAIL:		//失败
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_category_fail), null);
+				PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_fail), null);
 				break;
 			default:
 				break;
