@@ -1,5 +1,6 @@
 package com.sunteam.library.net;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -264,22 +265,33 @@ public class HttpDao
 	{
 		String json = 
 				"{"
-				+ "UserName:\""+entity.userName+"\","
-				+ "Title:\""+entity.title+"\","
-				+ "DbCode:\""+entity.dbCode+"\","
-				+ "SysId:\""+entity.sysId+"\","
-				+ "ResType:\""+entity.resType+"\","
-				+ "CategoryCode:\""+entity.categoryCode+"\","
-				+ "LastChapterIndex:\""+entity.lastChapterIndex+"\","
-				+ "EnterPoint:\""+entity.enterPoint+"\","
-				+ "BookTitle:\""+entity.bookTitle+"\","
-				+ "CoverUrl:\""+entity.coverUrl+"\","
-				+ "Percent:\""+entity.percent+"\","
-				+ "CategoryFullName:\""+entity.categoryFullName+"\","
+				+ "\"UserName\":\""+entity.userName+"\","
+				+ "\"Title\":\""+entity.title+"\","
+				+ "\"DbCode\":\""+entity.dbCode+"\","
+				+ "\"SysId\":\""+entity.sysId+"\","
+				+ "\"ResType\":\""+entity.resType+"\","
+				+ "\"CategoryCode\":\""+entity.categoryCode+"\","
+				+ "\"LastChapterIndex\":\""+entity.lastChapterIndex+"\","
+				+ "\"EnterPoint\":\""+entity.enterPoint+"\","
+				+ "\"BookTitle\":\""+entity.bookTitle+"\","
+				+ "\"CoverUrl\":\""+entity.coverUrl+"\","
+				+ "\"Percent\":\""+entity.percent+"\","
+				+ "\"CategoryFullName\":\""+entity.categoryFullName+"\""
 				+ "}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	false;
+		}
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "AddHistory");
-		requestParams.put("jsonObj", json);
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (Boolean) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new AddHistoryParseResponse() );
 	}
@@ -296,15 +308,26 @@ public class HttpDao
 	{
 		String json = 
 				"{"
-				+ "UserName:\""+entity.userName+"\","
-				+ "CategoryName:\""+entity.categoryName+"\","
-				+ "CategoryCode:\""+entity.categoryCode+"\","
-				+ "CategoryFullName:\""+entity.categoryFullName+"\","
-				+ "ResType:\""+entity.resType+"\","
+				+ "\"UserName\":\""+entity.userName+"\","
+				+ "\"CategoryName\":\""+entity.categoryName+"\","
+				+ "\"CategoryCode\":\""+entity.categoryCode+"\","
+				+ "\"CategoryFullName\":\""+entity.categoryFullName+"\","
+				+ "\"ResType\":\""+entity.resType+"\""
 				+ "}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "AddCategory");
-		requestParams.put("jsonObj", json);
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectCategoryParseResponse() );
 	}	

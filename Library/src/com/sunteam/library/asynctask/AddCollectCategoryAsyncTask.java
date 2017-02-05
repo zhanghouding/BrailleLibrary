@@ -44,9 +44,10 @@ public class AddCollectCategoryAsyncTask extends AsyncTask<String, Void, Integer
 	protected void onPreExecute() 
 	{	
 		super.onPreExecute();
-		PublicUtils.showProgress(mContext);
+		
 		String s = mContext.getResources().getString(R.string.library_add_collect_category);
-		TtsUtils.getInstance().speak(s);
+		PublicUtils.showProgress(mContext, s);
+		//TtsUtils.getInstance().speak(s);
 	}
 	
 	@Override
