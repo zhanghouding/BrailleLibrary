@@ -79,9 +79,13 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		PublicUtils.createCacheDir(fatherPath, menuItem);	//创建缓存目录
 		
 		Intent intent = new Intent( this, PlayAudioVedioActivity.class );
-		intent.putExtra("filename", menuItem);
-		intent.putExtra("curChapter", selectItem);
-		intent.putExtra("totalChapter", mVideoChapterInfoEntityListt.size());
+		intent.putExtra("dbCode", mVideoChapterInfoEntityListt.get(selectItem).databaseCode); // 数据库代码
+		intent.putExtra("sysId", mVideoChapterInfoEntityListt.get(selectItem).sysId); // 记录标识号
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_VIDEO); // 数据类别：电子书、有声书、口述影像
+		intent.putExtra("categoryCode", mVideoChapterInfoEntityListt.get(selectItem).categoryName); // 分类代码
+		intent.putExtra("filename", menuItem); // 书名
+		intent.putExtra("curChapter", selectItem); // 当前章节序号
+		intent.putExtra("totalChapter", mVideoChapterInfoEntityListt.size()); // 总章节数
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");		//父目录
 		intent.putExtra(LibraryConstant.INTENT_KEY_URL, mVideoChapterInfoEntityListt.get(selectItem).videoUrl);	//资源路径
 		this.startActivityForResult(intent, selectItem);

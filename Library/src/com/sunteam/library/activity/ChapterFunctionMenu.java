@@ -61,15 +61,12 @@ public class ChapterFunctionMenu extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-
 		switch(selectItem){
-		case 0: // 收藏分类
+		case 0: // 收藏当前资源
 			break;
-		case 1: // 收藏当前资源
+		case 1: // 下载当前资源
 			break;
 		case 2: // 删除当前资源
-			break;
-		case 3: // 清空分类资源
 			break;
 		default:
 			break;
