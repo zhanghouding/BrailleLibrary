@@ -426,5 +426,19 @@ public class PublicUtils
 			}  
 			file.delete();  
 		}  
-	}  
+	}
+	
+	//得到用户名
+	public static String getUserName()
+	{
+		return	"test1";
+	}
+	
+	//得到分类名称
+	public static String getCategoryName( Context context, int type )
+	{
+		String[] list = context.getResources().getStringArray(R.array.library_category_list);
+		
+		return	list[type];
+	}
 }	

@@ -16,6 +16,7 @@ public class LibraryConstant {
 	public static final String URL_INTERFACE_VIDEO = "VideoInterface.ashx"; // 视频相关接口
 	public static final String URL_INTERFACE_INFO = "InformationInterface.ashx";	//咨询相关接口
 	public static final String URL_INTERFACE_HISTORY = "ReadHistoryInterface.ashx";	// 阅读历史相关接口
+	public static final String URL_INTERFACE_COLLECT = "CollectInterface.ashx";	// 收藏相关接口
 
 	// 类别常量
 	public static final int LIBRARY_CATEGORY_ROOT_ID = -1; // 类别树形结构中的根节点ID
@@ -36,7 +37,8 @@ public class LibraryConstant {
 	public static final String INTENT_KEY_IDENTIFIER = "library_ebook_identifier";	//电子书ID
 	public static final String INTENT_KEY_URL = "library_resource_url";	//资源路径
 	public static final String INTENT_KEY_RESOURCE = "library_resource_name";	//资源名称
-
+	public static final String INTENT_KEY_CATEGORY_CODE = "library_category_code";	//分类编码
+	
 	// 资源列表常量
 	public static final int LIBRARY_RESOURCE_PAGESIZE = 10; // 资源列表时一页的资源数
 	
@@ -66,4 +68,8 @@ public class LibraryConstant {
 	public static final int MSG_HTTP_FAVROITE_SEARCH = 13; // 查询收藏夹
 
 	public static final String CACHE_FILE_SUFFIX = ".lib";	//缓存文件后缀
+	
+	public static final int RESULT_SUCCESS = 0;		//成功
+	public static final int RESULT_FAIL = -1;		//失败
+	public static final int RESULT_EXCEPTION = -2;	//异常
 }

@@ -15,6 +15,12 @@
     <string name="library_category_audio">有声读物</string>
     <string name="library_category_video">视频课程</string>
 
+    <string-array name="library_category_list">
+        <item>盲人资讯</item>
+        <item>有声读物</item>
+        <item>电子图书</item>
+        <item>视频课程</item>        
+    </string-array>
     <string-array name="library_main_list">
         <item>我的图书馆</item>
         <item>资源检索</item>

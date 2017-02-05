@@ -34,6 +34,7 @@ import com.sunteam.library.utils.LibraryConstant;
  * @Note
  */
 public class ResourceList extends MenuActivity implements OnMenuKeyListener, ShowView {
+	private String categoryCode;	//分类编码
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private int bookCount = 0; // 当前类资源总数，在分页加载时，需要使用该值
 	private String fatherPath;	//父目录路径
@@ -119,7 +120,8 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 		bookCount = mMenuList.size();
 		bookCount = intent.getIntExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount);
 		fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
-
+		categoryCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE);
+		
 		mTools = new Tools(this);
 	}
 
@@ -139,10 +141,11 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 //		String[] list = getResources().getStringArray(R.array.library_resource_function_menu_list);
 //		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 //		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 分类名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, menuItem);
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
-
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode);	//分类编码
 		intent.setClass(this, ResourceFunctionMenu.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，

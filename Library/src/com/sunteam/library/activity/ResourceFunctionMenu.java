@@ -4,16 +4,22 @@ import java.io.File;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
-import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.AddCollectCategoryAsyncTask;
+import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
+import com.sunteam.library.entity.CollectCategoryEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
 public class ResourceFunctionMenu extends MenuActivity {
+	private String categoryName;	//分类名称
+	private String categoryCode;	//分类编码
 	private String resourceName;	//资源名称
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private String fatherPath;	//父目录路径
@@ -63,6 +69,16 @@ public class ResourceFunctionMenu extends MenuActivity {
 
 		switch(selectItem){
 		case 0: // 收藏分类
+			{
+				CollectCategoryEntity entity = new CollectCategoryEntity();
+				entity.categoryCode = categoryCode;
+				entity.categoryName = categoryName;
+				entity.userName = PublicUtils.getUserName();
+				entity.resType = dataType;
+				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName;
+				
+				new AddCollectCategoryAsyncTask(this, entity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			}
 			break;
 		case 1: // 收藏当前资源
 			break;
@@ -91,9 +107,11 @@ public class ResourceFunctionMenu extends MenuActivity {
 
 	private void initView() {
 		Intent intent = getIntent();
+		categoryName = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		resourceName = intent.getStringExtra(LibraryConstant.INTENT_KEY_RESOURCE);
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
 		fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
+		categoryCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE);
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_resource_function_menu_list));
 	}

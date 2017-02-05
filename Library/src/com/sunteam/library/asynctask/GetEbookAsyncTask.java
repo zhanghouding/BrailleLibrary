@@ -28,6 +28,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	private Context mContext;
 	private String mFatherPath;
 	private String mTitle;
+	private String categoryCode;
 	private int dataType;
 	private int bookCount = 0; // 资源总数，即当前分类下的书本总数
 	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
@@ -44,13 +45,14 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 	@Override
 	protected Boolean doInBackground(String... params) 
 	{
+		categoryCode = params[2];
 		dataType = Integer.parseInt(params[3]);
-		EbookInfoEntity entity = HttpDao.getEbookList(params[0], params[1], params[2], dataType);
+		EbookInfoEntity entity = HttpDao.getEbookList(params[0], params[1], categoryCode, dataType);
 	
 		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
 		{
 			ResourceDBDao dao = new ResourceDBDao( mContext );
-			ArrayList<EbookNodeEntity> list = dao.findAll(params[2], dataType);
+			ArrayList<EbookNodeEntity> list = dao.findAll(categoryCode, dataType);
 			dao.closeDb();			//关闭数据库
 			
 			if( ( list != null ) && ( list.size() > 0 ) )
@@ -71,8 +73,8 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 			mEbookNodeEntityList.addAll(entity.list);
 			
 			ResourceDBDao dao = new ResourceDBDao( mContext );
-			dao.deleteAll(params[2], dataType);			//先删除缓存的此类型所有数据
-			dao.insert(entity.list, params[2], dataType);	//再缓存新的数据
+			dao.deleteAll(categoryCode, dataType);			//先删除缓存的此类型所有数据
+			dao.insert(entity.list, categoryCode, dataType);	//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		
@@ -114,6 +116,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount); // 资源总数
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode);	//分类编码
 		intent.setClass(mContext, ResourceList.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
