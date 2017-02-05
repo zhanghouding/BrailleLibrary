@@ -1,15 +1,20 @@
 package com.sunteam.library.activity;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 
 public class ResourceFunctionMenu extends MenuActivity {
+	private String resourceName;	//资源名称
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private String fatherPath;	//父目录路径
 
@@ -62,8 +67,22 @@ public class ResourceFunctionMenu extends MenuActivity {
 		case 1: // 收藏当前资源
 			break;
 		case 2: // 删除当前资源
+			{
+				String path = fatherPath + resourceName + "/";
+				File file = new File( path );
+				PublicUtils.deleteFiles(file);
+				String tips = menuItem+this.getString(R.string.library_success);
+				PublicUtils.showToast(this, tips, null);
+			}
 			break;
 		case 3: // 清空分类资源
+			{
+				File file = new File( fatherPath );
+				PublicUtils.deleteFiles(file);
+				PublicUtils.createCacheDir(fatherPath, "");	//创建缓存目录(因为用deleteFiles会连fatherPath也给删除了，所以必须重建)
+				String tips = menuItem+this.getString(R.string.library_success);
+				PublicUtils.showToast(this, tips, null);
+			}
 			break;
 		default:
 			break;
@@ -72,6 +91,7 @@ public class ResourceFunctionMenu extends MenuActivity {
 
 	private void initView() {
 		Intent intent = getIntent();
+		resourceName = intent.getStringExtra(LibraryConstant.INTENT_KEY_RESOURCE);
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
 		fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		mTitle = getResources().getString(R.string.common_functionmenu);

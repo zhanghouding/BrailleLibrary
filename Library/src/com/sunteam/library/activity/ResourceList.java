@@ -134,6 +134,7 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener {
 //		String[] list = getResources().getStringArray(R.array.library_resource_function_menu_list);
 //		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 //		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, menuItem);
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
 

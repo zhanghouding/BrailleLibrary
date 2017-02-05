@@ -398,4 +398,33 @@ public class PublicUtils
         
         return txtcontent;
 	}
+	
+	//删除目录
+	public static void deleteFiles(File file) 
+	{  
+		if( file.exists() == false )
+		{
+			return;
+		}
+		if( file.isFile() ) 
+		{  
+			file.delete();  
+			return;  
+		}
+		if( file.isDirectory() )
+		{  
+			File[] childFiles = file.listFiles();  
+			if( childFiles == null || childFiles.length == 0 ) 
+			{  
+				file.delete();  
+				return;  
+			}  
+
+			for( int i = 0; i < childFiles.length; i++ ) 
+			{  
+				deleteFiles(childFiles[i]);  
+			}  
+			file.delete();  
+		}  
+	}  
 }	
