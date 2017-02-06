@@ -89,21 +89,19 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 		String dbCode;
 		String sysId;
 
+		dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
+		sysId = mEbookNodeEntityList.get(selectItem).sysId;
+		
 		switch(dataType){
-		case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
-			dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
+		case LibraryConstant.LIBRARY_DATATYPE_EBOOK:			
 			String identifier = mEbookNodeEntityList.get(selectItem).identifier;
-			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, identifier);
+			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
-			dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
-			sysId = mEbookNodeEntityList.get(selectItem).sysId;
-			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
+			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle);
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
-			dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
-			sysId = mEbookNodeEntityList.get(selectItem).sysId;
-			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId);
+			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle);
 			break;
 		default:
 			break;
@@ -147,7 +145,7 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
 		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode);	//分类编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, mEbookNodeEntityList.get(selectItem).dbCode);	//数据编码
-		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, mEbookNodeEntityList.get(selectItem).sysId);	//数据编码
+		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, mEbookNodeEntityList.get(selectItem).sysId);	//系统id
 		intent.setClass(this, ResourceFunctionMenu.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，

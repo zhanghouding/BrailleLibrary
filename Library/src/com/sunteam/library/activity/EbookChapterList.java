@@ -23,6 +23,9 @@ import com.sunteam.library.utils.LibraryConstant;
 public class EbookChapterList extends MenuActivity implements OnMenuKeyListener {
 	private String identifier;	//电子书identifier
 	private String fatherPath;	//父目录路径
+	private String dbCode;		//数据编码
+	private String sysId;		//系统id
+	private String categoryName;//分类名称
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,9 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 		mMenuList = getListFromChapterInfoEntity(mEbookChapterInfoEntityList);
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		identifier = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
+		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
+		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
+		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<EbookChapterInfoEntity> listSrc) {
@@ -96,6 +102,10 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 		Intent intent = new Intent();
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName); // 分类名称
+		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, mTitle);
+		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
+		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
 
 		intent.setClass(this, ChapterFunctionMenu.class);
 

@@ -16,6 +16,9 @@ import com.sunteam.library.utils.PublicUtils;
 
 public class VideoChapterList extends MenuActivity implements OnMenuKeyListener {
 	private String fatherPath;	//父目录路径
+	private String dbCode;		//数据编码
+	private String sysId;		//系统id
+	private String categoryName;//分类名称
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,9 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		mVideoChapterInfoEntityListt = (ArrayList<VideoChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromChapterInfoEntity(mVideoChapterInfoEntityListt);
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
+		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
+		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
+		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<VideoChapterInfoEntity> listSrc) {
@@ -115,7 +121,11 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		Intent intent = new Intent();
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_VIDEO); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
-
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName); // 分类名称
+		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, mTitle);
+		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
+		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
+		
 		intent.setClass(this, ChapterFunctionMenu.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，

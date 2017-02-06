@@ -27,6 +27,9 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	private Context mContext;
 	private String mFatherPath;
 	private String mTitle;
+	private String dbCode;			//数据库编码
+	private String sysId;			//系统id
+	private String categoryName;	//分类名称
 	private String identifier;
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList = new ArrayList<EbookChapterInfoEntity>();
 	
@@ -42,22 +45,25 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	@Override
 	protected ArrayList<EbookChapterInfoEntity> doInBackground(String... params) 
 	{
-		identifier = params[1];
-		ArrayList<EbookChapterInfoEntity> list = HttpDao.getEbookChapterList(params[0], identifier);
+		dbCode = params[0];
+		sysId = params[1];
+		categoryName = params[2];
+		identifier = params[3];
+		ArrayList<EbookChapterInfoEntity> list = HttpDao.getEbookChapterList(dbCode, identifier);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
 			mEbookChapterInfoEntityList.addAll(list);
 			
 			ChapterDBDao dao = new ChapterDBDao( mContext );
-			dao.deleteAllEbookChapter(params[0], identifier);			//先删除缓存的此类型所有数据
-			dao.insertEbookChapterInfo(list,params[0], identifier);		//再缓存新的数据
+			dao.deleteAllEbookChapter(dbCode, identifier);			//先删除缓存的此类型所有数据
+			dao.insertEbookChapterInfo(list,dbCode, identifier);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		else
 		{
 			ChapterDBDao dao = new ChapterDBDao( mContext );
-			list = dao.findAllEbookChapter(params[0], identifier);
+			list = dao.findAllEbookChapter(dbCode, identifier);
 			dao.closeDb();			//关闭数据库
 			
 			if( ( list != null ) && ( list.size() > 0 ) )
@@ -102,6 +108,9 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
+		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
+		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName);	//分类名称
 		intent.setClass(mContext, EbookChapterList.class);
 		mContext.startActivity(intent);
 	}

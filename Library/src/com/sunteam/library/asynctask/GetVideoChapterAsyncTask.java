@@ -27,6 +27,9 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	private Context mContext;
 	private String mFatherPath;
 	private String mTitle;
+	private String dbCode;			//数据库编码
+	private String sysId;			//系统id
+	private String categoryName;	//分类名称
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityList = new ArrayList<VideoChapterInfoEntity>();
 	
 	public GetVideoChapterAsyncTask(Context context, String fatherPath, String title) 
@@ -41,21 +44,24 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	@Override
 	protected ArrayList<VideoChapterInfoEntity> doInBackground(String... params) 
 	{
-		ArrayList<VideoChapterInfoEntity> list = HttpDao.getVideoChapterList(params[0], params[1]);
+		dbCode = params[0];
+		sysId = params[1];
+		categoryName = params[2];
+		ArrayList<VideoChapterInfoEntity> list = HttpDao.getVideoChapterList(dbCode, sysId);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
 			mVideoChapterInfoEntityList.addAll(list);
 			
 			ChapterDBDao dao = new ChapterDBDao( mContext );
-			dao.deleteAllVideoChapter(params[0], params[1]);			//先删除缓存的此类型所有数据
-			dao.insertVideoChapterInfo(list,params[0], params[1]);		//再缓存新的数据
+			dao.deleteAllVideoChapter(dbCode, sysId);			//先删除缓存的此类型所有数据
+			dao.insertVideoChapterInfo(list,dbCode, sysId);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		else
 		{
 			ChapterDBDao dao = new ChapterDBDao( mContext );
-			list = dao.findAllVideoChapter(params[0], params[1]);
+			list = dao.findAllVideoChapter(dbCode, sysId);
 			dao.closeDb();			//关闭数据库
 			
 			if( ( list != null ) && ( list.size() > 0 ) )
@@ -94,6 +100,9 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mVideoChapterInfoEntityList); // 数据列表
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_VIDEO); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
+		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
+		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName);	//分类名称
 		intent.setClass(mContext, VideoChapterList.class);
 		mContext.startActivity(intent);
 	}

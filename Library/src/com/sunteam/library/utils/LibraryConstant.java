@@ -38,6 +38,7 @@ public class LibraryConstant {
 	public static final String INTENT_KEY_URL = "library_resource_url";	//资源路径
 	public static final String INTENT_KEY_RESOURCE = "library_resource_name";	//资源名称
 	public static final String INTENT_KEY_CATEGORY_CODE = "library_category_code";	//分类编码
+	public static final String INTENT_KEY_CATEGORY_NAME = "library_category_name";	//分类名称
 	public static final String INTENT_KEY_DBCODE = "library_dbCode";	//数据编码
 	public static final String INTENT_KEY_SYSID = "library_sysId";		//系统id
 	
