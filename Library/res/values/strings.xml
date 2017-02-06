@@ -36,6 +36,7 @@
   	<string name="library_add_collect_resource">正在添加收藏资源</string>
   	<string name="library_add_collect_success">收藏成功！</string>
   	<string name="library_add_collect_fail">该收藏已存在！</string>
+  	<string name="library_resource_does_not_exist">该资源不存在！</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>

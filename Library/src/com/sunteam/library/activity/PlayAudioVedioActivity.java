@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -105,44 +106,59 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
     	mTvEndTime.setHeight((int)fontSize); // 设置控件高度
     	//mTvEndTime.setText(num);
     	
-    	MediaPlayerUtils.getInstance().OnMediaPlayerListener(this);
-    	
-    	final String fullpath = fatherPath + getFilename(resourceUrl);
-    	File file = new File(fullpath);
-    	if( file.exists() )
+    	if( ( null == resourceUrl ) || TextUtils.isEmpty(resourceUrl) || "null".equalsIgnoreCase(resourceUrl) )
     	{
-    		MediaPlayerUtils.getInstance().play(fullpath);	//播放音频
-    		totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
-    		showTime(mTvEndTime, totalTime);	//显示总时间
-    		mHandler.sendEmptyMessageDelayed(0, 500);
+    		String tips = this.getString(R.string.library_resource_does_not_exist);
+			PublicUtils.showToast(this, tips, new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					// TODO Auto-generated method stub
+					finish();
+				}
+			});
     	}
     	else
     	{
-	    	FileDownloader.detect(resourceUrl, new OnDetectBigUrlFileListener() {
-	    		@Override
-	    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
-	    		{
-	    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
-	    			FileDownloader.createAndStart(url, fatherPath, fileName);
-	    		}
-	    		
-	    		@Override
-	    		public void onDetectUrlFileExist(String url) 
-	    		{
-	    			FileDownloader.start(url);	
-	    			//如果文件没被下载过，将创建并开启下载，否则继续下载，自动会断点续传（如果服务器无法支持断点续传将从头开始下载）
-	    		}
-	    		
-	    		@Override
-	    		public void onDetectUrlFileFailed(String url, DetectBigUrlFileFailReason failReason) 
-	    		{
-	    			// 探测一个网络文件失败了，具体查看failReason
-	    		}
-	    	});
-	    	MediaPlayerUtils.getInstance().play(resourceUrl);	//播放音视频
-	    	totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
-    		showTime(mTvEndTime, totalTime);	//显示总时间
-	    	mHandler.sendEmptyMessageDelayed(0, 500);
+	    	MediaPlayerUtils.getInstance().OnMediaPlayerListener(this);
+	    	
+	    	final String fullpath = fatherPath + getFilename(resourceUrl);
+	    	File file = new File(fullpath);
+	    	if( file.exists() )
+	    	{
+	    		MediaPlayerUtils.getInstance().play(fullpath);	//播放音频
+	    		totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
+	    		showTime(mTvEndTime, totalTime);	//显示总时间
+	    		mHandler.sendEmptyMessageDelayed(0, 500);
+	    	}
+	    	else
+	    	{
+		    	FileDownloader.detect(resourceUrl, new OnDetectBigUrlFileListener() {
+		    		@Override
+		    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
+		    		{
+		    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
+		    			FileDownloader.createAndStart(url, fatherPath, fileName);
+		    		}
+		    		
+		    		@Override
+		    		public void onDetectUrlFileExist(String url) 
+		    		{
+		    			FileDownloader.start(url);	
+		    			//如果文件没被下载过，将创建并开启下载，否则继续下载，自动会断点续传（如果服务器无法支持断点续传将从头开始下载）
+		    		}
+		    		
+		    		@Override
+		    		public void onDetectUrlFileFailed(String url, DetectBigUrlFileFailReason failReason) 
+		    		{
+		    			// 探测一个网络文件失败了，具体查看failReason
+		    		}
+		    	});
+		    	MediaPlayerUtils.getInstance().play(resourceUrl);	//播放音视频
+		    	totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
+	    		showTime(mTvEndTime, totalTime);	//显示总时间
+		    	mHandler.sendEmptyMessageDelayed(0, 500);
+	    	}
     	}
 	}
 	
