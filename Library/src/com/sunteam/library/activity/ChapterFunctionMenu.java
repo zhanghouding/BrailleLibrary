@@ -1,5 +1,7 @@
 package com.sunteam.library.activity;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 章节列表时的功能菜单；电子书、有声书、口述影像共用一个功能菜单 
@@ -67,6 +70,14 @@ public class ChapterFunctionMenu extends MenuActivity {
 		case 1: // 下载当前资源
 			break;
 		case 2: // 删除当前资源
+			{
+				String path = fatherPath;
+				File file = new File( path );
+				PublicUtils.deleteFiles(file);
+				PublicUtils.createCacheDir(fatherPath, "");	//创建缓存目录(因为用deleteFiles会连fatherPath也给删除了，所以必须重建)
+				String tips = menuItem+this.getString(R.string.library_success);
+				PublicUtils.showToast(this, tips, null);
+			}
 			break;
 		default:
 			break;

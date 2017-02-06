@@ -298,7 +298,9 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	//退出此界面
 	private void back()
 	{
+		MediaPlayerUtils.getInstance().OnMediaPlayerListener(null);
 		MediaPlayerUtils.getInstance().stop();
+		mHandler.removeMessages(0);
 		finish();
 	}
 	
