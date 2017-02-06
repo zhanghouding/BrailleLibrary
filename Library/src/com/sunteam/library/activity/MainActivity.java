@@ -53,7 +53,7 @@ public class MainActivity extends MenuActivity {
 		if (!WifiUtils.checkWifiState(this)) {
 			WifiUtils.openWifi(this);
 		} else {
-			new LoginAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "test1");
+			new LoginAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, PublicUtils.getUserName());
 		}
 		acquireWakeLock(this);
 		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
