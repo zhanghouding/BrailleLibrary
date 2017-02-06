@@ -46,11 +46,6 @@
         <item>有声读物</item>
         <item>视频课程</item>
     </string-array>
-    <string-array name="library_download_list">
-        <item>电子图书</item>
-        <item>有声读物</item>
-        <item>视频课程</item>
-    </string-array>
     <string-array name="library_info_list">
         <item>新闻公告</item>
         <item>服务资讯</item>
@@ -75,6 +70,12 @@
         <item>跳至本章页码</item>
         <item>朗读语音</item>
         <item>背景音乐</item>
+    </string-array>
+    <string-array name="library_bookmark_manager_list">
+        <item>增加书签</item>
+        <item>查看书签</item>
+        <item>删除书签</item>
+        <item>清空书签</item>
     </string-array>
     <string-array name="library_favorite_function_menu_list">
         <item>删除</item>
