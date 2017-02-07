@@ -100,6 +100,8 @@ public class EbookConstants
 	public static final int TO_PRE_PART = 2;			//到上一个部分
 	public static final int TO_BOOK_START = 3;			//到一本书的开头
 	public static final int TO_BOOK_MARK = 4;			//到一本书的某个书签
+	public static final int TO_PART_START = 5;			//到一个部分的开头
+	public static final int TO_PART_PAGE = 6;			//到一个部分的某页
 	
 	public static final String NEW_WORD_BOOK = "生词本";
 	

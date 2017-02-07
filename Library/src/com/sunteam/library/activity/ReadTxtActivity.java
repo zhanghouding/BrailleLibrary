@@ -228,18 +228,93 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		return super.onKeyUp(keyCode, event);
 	}
 	
+	//到上一个章节
+	private void toPreChapter()
+	{
+		if( 0 == curChapter )
+		{
+			isReadPage = false;
+			String tips = this.getString(R.string.library_first_chapter);
+			PublicUtils.showToast(this, tips, new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
+		else
+		{
+			TTSUtils.getInstance().stop();
+			TTSUtils.getInstance().OnTTSListener(null);
+			RefreshScreenUtils.disableRefreshScreen();
+			TtsUtils.getInstance().setMuteFlag(true);
+			Intent intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_PRE_PART);
+			setResult(RESULT_OK, intent);
+			finish();
+		}
+	}
+	
+	//到下一个章节
+	private void toNextChapter()
+	{
+		if( curChapter+1 < totalChapter )	//还有下一章节需要朗读
+		{
+			TTSUtils.getInstance().stop();
+			TTSUtils.getInstance().OnTTSListener(null);
+			RefreshScreenUtils.disableRefreshScreen();
+			TtsUtils.getInstance().setMuteFlag(true);
+			Intent intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+			setResult(RESULT_OK, intent);
+			finish();
+		}
+		else
+		{
+			isReadPage = false;
+			String tips = this.getString(R.string.library_last_chapter);
+			PublicUtils.showToast(this, tips, new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					// TODO Auto-generated method stub
+					finish();
+				}	//如果到最后一个章节，退出到章节列表界面。
+			});
+		}
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(RESULT_OK == resultCode){
-			if(null != data){
-				int result = data.getIntExtra("result", 0);
-				switch(result){
-				case MENU_CODE:
-					isReadPage = false;
-					int curPage = data.getIntExtra("page", 1);
-					mTextReaderView.setCurPage(curPage);
-					break;
+		if(RESULT_OK == resultCode)
+		{
+			if(null != data)
+			{
+				int action = data.getIntExtra("action", EbookConstants.TO_NEXT_PART);
+				switch (action) 
+				{
+					case EbookConstants.TO_NEXT_PART:
+						toNextChapter();	//到下一个章节
+						break;
+					case EbookConstants.TO_PRE_PART:
+						toPreChapter();		//到上一个章节
+						break;
+					case EbookConstants.TO_BOOK_START:	//到一本书的开头
+						break;
+					case EbookConstants.TO_PART_START:	//到一个部分的开头
+						isReadPage = false;
+						mTextReaderView.setCurPage(1);
+						break;
+					case EbookConstants.TO_PART_PAGE:	//到一个部分的某页
+						isReadPage = false;
+						int curPage = data.getIntExtra("page", 1);
+						mTextReaderView.setCurPage(curPage);
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -274,29 +349,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			return;
 		}
 		
-		if( curChapter+1 < totalChapter )	//还有下一章节需要朗读
-		{
-			TTSUtils.getInstance().stop();
-			TTSUtils.getInstance().OnTTSListener(null);
-			RefreshScreenUtils.disableRefreshScreen();
-			TtsUtils.getInstance().setMuteFlag(true);
-			Intent intent = new Intent();
-			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
-			setResult(RESULT_OK, intent);
-			finish();
-		}
-		else
-		{
-			String tips = this.getString(R.string.library_last_chapter);
-			PublicUtils.showToast(this, tips, new PromptListener() {
-
-				@Override
-				public void onComplete() {
-					// TODO Auto-generated method stub
-					finish();
-				}	//如果到最后一个章节，退出到章节列表界面。
-			});
-		}
+		toNextChapter();	//到下一个章节
 	}
 
 	@Override
