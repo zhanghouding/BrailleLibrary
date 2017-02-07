@@ -1,5 +1,6 @@
 package com.sunteam.library.asynctask;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -7,6 +8,7 @@ import android.text.TextUtils;
 
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.activity.EbookChapterList;
 import com.sunteam.library.activity.ReadTxtActivity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
@@ -19,26 +21,41 @@ import com.sunteam.library.utils.TextFileReaderUtils;
  * @author wzp
  * @Created 2017/01/29
  */
-public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, String>
+public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boolean>
 {
 	private Context mContext;
 	private String mFatherPath;
 	private String mTitle;
+	private int mCurChapter;
+	private int mTotalChapter;
 	private String mContent;
 	
-	public GetEbookChapterContentAsyncTask(Context context, String fatherPath, String title) 
+	private String identifier;	//电子书identifier
+	private String dbCode;		//数据编码
+	private String sysId;		//系统id
+	private String categoryCode;//分类编码
+	
+	public GetEbookChapterContentAsyncTask(Context context, String fatherPath, String title, int curChapter, int totalChapter) 
 	{
 		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
 		
 		mContext = context;
 		mFatherPath = fatherPath+title+"/";
 		mTitle = title;
+		mCurChapter = curChapter;
+		mTotalChapter = totalChapter;
 	}
 
 	@Override
-	protected String doInBackground(String... params) 
+	protected Boolean doInBackground(String... params) 
 	{
-		mContent = HttpDao.getEbookChapterContent(params[0], params[1]);
+		identifier = params[0];
+		String chapterIndex = params[1];
+		dbCode = params[2];
+		sysId = params[3];
+		categoryCode = params[4];
+		
+		mContent = HttpDao.getEbookChapterContent(identifier, chapterIndex);
 		if( null == mContent )
 		{
 			mContent = PublicUtils.readContent( mFatherPath, mTitle+LibraryConstant.CACHE_FILE_SUFFIX );
@@ -52,7 +69,12 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Str
 			PublicUtils.saveContent( mFatherPath, mTitle+LibraryConstant.CACHE_FILE_SUFFIX, mContent );
 		}
 		
-		return	mContent;
+		if(TextUtils.isEmpty(mContent))
+		{
+			return	false;
+		}
+		
+		return	true;
 	}
 	
 	@Override
@@ -65,12 +87,12 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Str
 	}
 	
 	@Override
-	protected void onPostExecute(String result) 
+	protected void onPostExecute(Boolean result) 
 	{	
 		super.onPostExecute(result);
 		PublicUtils.cancelProgress();
 		
-		if(!TextUtils.isEmpty(mContent))
+		if(result)
 		{
 			startNextActivity();
 		}
@@ -88,8 +110,14 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Str
 			TextFileReaderUtils.getInstance().init(fullpath);
 			
 			Intent intent = new Intent( mContext, ReadTxtActivity.class );
-			intent.putExtra("filename", mTitle);
-			mContext.startActivity(intent);
+			intent.putExtra("dbCode", dbCode); // 数据库代码
+			intent.putExtra("sysId", sysId); // 记录标识号
+			intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
+			intent.putExtra("categoryCode", categoryCode); // 分类代码
+			intent.putExtra("filename", mTitle); // 书名
+			intent.putExtra("curChapter", mCurChapter); // 当前章节序号
+			intent.putExtra("totalChapter", mTotalChapter); // 总章节数
+			((EbookChapterList) mContext).startActivityForResult(intent, mCurChapter);
 		} 
 		catch (Exception e) 
 		{

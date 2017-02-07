@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -20,6 +21,7 @@ import com.sunteam.library.entity.ReadMode;
 import com.sunteam.library.utils.CustomToast;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.TextFileReaderUtils;
@@ -43,12 +45,16 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	private boolean isAuto = false;
 	private boolean isReadPage = false;	//是否朗读页码
 	private boolean isFinish;//是否读完
-	private String filename;
+	private String filename;		//章节名称
+	private int curChapter;			//当前章节序号，从0开始
+	private int totalChapter;		//总章节数目。
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		TtsUtils.getInstance().stop();	//先暂停TTS播放。
+		TtsUtils.getInstance().setMuteFlag(false);
 		RefreshScreenUtils.enableRefreshScreen();
 		
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
@@ -56,6 +62,8 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		
 		isAuto = this.getIntent().getBooleanExtra("isAuto", false);
 		filename = this.getIntent().getStringExtra("filename");
+		curChapter = this.getIntent().getIntExtra("curChapter", 0);
+		totalChapter = this.getIntent().getIntExtra("totalChapter", 0);
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
@@ -99,7 +107,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 				{
 					// TODO Auto-generated method stub
 					{
-						back(true);
+						finish();
 					}
 				}
 			});
@@ -251,6 +259,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		String tips = this.getString(R.string.library_to_top);
 		PublicUtils.showToast(this, tips);
 		*/
+		isFinish = true;
 		CustomToast.showToast(this, this.getString(R.string.library_to_top), Toast.LENGTH_SHORT);
 	}
 
@@ -265,9 +274,28 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			return;
 		}
 		
+		if( curChapter+1 < totalChapter )	//还有下一章节需要朗读
 		{
-			String tips = this.getString(R.string.library_has_finished_reading_the_last_book);
-			PublicUtils.showToast(this, tips);
+			TTSUtils.getInstance().stop();
+			TTSUtils.getInstance().OnTTSListener(null);
+			RefreshScreenUtils.disableRefreshScreen();
+			TtsUtils.getInstance().setMuteFlag(true);
+			Intent intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+			setResult(RESULT_OK, intent);
+			finish();
+		}
+		else
+		{
+			String tips = this.getString(R.string.library_last_chapter);
+			PublicUtils.showToast(this, tips, new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					// TODO Auto-generated method stub
+					finish();
+				}	//如果到最后一个章节，退出到章节列表界面。
+			});
 		}
 	}
 
@@ -287,14 +315,10 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	}
 	
 	//退出此界面
-	private void back( boolean isSetResult )
+	private void back()
 	{
 		TTSUtils.getInstance().stop();
 		TTSUtils.getInstance().OnTTSListener(null);
-		if( isSetResult )
-		{
-			setResult(RESULT_OK);
-		}
 		finish();
 	}
 	
@@ -303,7 +327,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	{  
 		if( event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN )
 		{
-			back(true);
+			back();
 			return true;   
 		}     
 	     
