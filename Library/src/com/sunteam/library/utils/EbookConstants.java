@@ -9,7 +9,7 @@ import com.sunteam.library.R;
  */
 public class EbookConstants 
 {
-	public static final String TTS_SETTINGS = "com.sunteam.ebook";	//TTS的appid
+	public static final String TTS_SETTINGS = "com.sunteam.library";	//TTS的appid
 	
 	public static final int[] ViewBkDrawable = {
 		R.drawable.black,

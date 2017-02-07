@@ -44,6 +44,13 @@
         <item>粤语女声</item>
         <item>童声</item>
     </string-array>
+    <string-array name="library_array_menu_voice">
+        <item>中文角色</item>
+        <!-- <item>英文角色</item>-->
+        <item>语速</item>
+        <item>语调</item>
+        <item>语音音效</item><!-- <item>语音风格</item> -->
+    </string-array>
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>
         <item>国语女声</item>
