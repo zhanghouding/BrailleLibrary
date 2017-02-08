@@ -34,17 +34,15 @@ public class MusicSettings extends MenuActivity {
 
 		switch(selectItem){
 		case 0: // 开关
-			list = getResources().getStringArray(R.array.library_array_menu_voice_china);
+			list = getResources().getStringArray(R.array.library_array_menu_music_on);
 			defaultItem = TTSUtils.getInstance().getCurRoleCnIndex();
-//			startNextActivity(VoiceChineseSpeaker.class, selectItem, menuItem, list, defaultItem);
+			startNextActivity(MusicSwitch.class, selectItem, menuItem, list, defaultItem);
 			break;
 		case 1: // 音乐选择
-			defaultItem = TTSUtils.getInstance().getSpeed();
-//			startNextActivity(MusicSelect.class, selectItem, menuItem, null, defaultItem);
+//			startNextActivity(MusicSelector.class, selectItem, menuItem, null, defaultItem);
 			break;
 		case 2: // 背景音强度
-			defaultItem = TTSUtils.getInstance().getPitch();
-//			startNextActivity(MusicVolume.class, selectItem, menuItem, null, defaultItem);
+			startNextActivity(MusicVolume.class, selectItem, menuItem, null, defaultItem);
 			break;
 		default:
 			break;
