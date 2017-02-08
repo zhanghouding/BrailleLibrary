@@ -58,6 +58,9 @@ public class VoiceTone extends BaseActivity {
 			finish();
 			return;
 		}
+
+		// 用上次设置的语速进行发音
+		TtsUtils.getInstance().setParameter(SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
 	}
 
 	// 在语速语调设置中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩

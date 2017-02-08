@@ -299,6 +299,18 @@ public class TTSUtils
 		
 		return	false;
 	}
+
+	// 设置中文发音人
+	public void setRoleCn(Context context, int index, PromptListener listener) {
+		if (index < 0 || index >= mRoleCn.length) {
+			index = 0;
+		}
+		Editor editor = mSharedPreferences.edit();
+		editor.putString(SpeechConstant.VOICE_NAME, mRoleCn[index] + "");
+		editor.commit();
+
+		PublicUtils.showToast(context, mContext.getString(R.string.library_setting_success), listener);
+	}
 	
 	//得到当前中文发音人
 	public String getCurRoleCn()

@@ -5,22 +5,20 @@ import android.content.Intent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.TTSUtils;
 
 /**
- * @Destryption 电子图书中朗读界面需要设置文本朗读的一些设置，如：中文角色、语速、语调、语音音效
+ * @Destryption 电子图书中朗读界面设置背景音乐
  * @Author Jerry
- * @Date 2017-2-7 上午9:55:09
+ * @Date 2017-2-7 下午6:25:36
  * @Note
  */
-public class VoiceSettings extends MenuActivity {
+public class MusicSettings extends MenuActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		TtsUtils.getInstance().restoreSettingParameters(); // 在菜单界面使用系统设置朗读
 
 		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
 			return;
@@ -33,25 +31,20 @@ public class VoiceSettings extends MenuActivity {
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String[] list;
 		int defaultItem = 0;
-	
+
 		switch(selectItem){
-		case 0: // 中文角色
+		case 0: // 开关
 			list = getResources().getStringArray(R.array.library_array_menu_voice_china);
 			defaultItem = TTSUtils.getInstance().getCurRoleCnIndex();
-			startNextActivity(VoiceChineseSpeaker.class, selectItem, menuItem, list, defaultItem);
+//			startNextActivity(VoiceChineseSpeaker.class, selectItem, menuItem, list, defaultItem);
 			break;
-		case 1: // 语速
+		case 1: // 音乐选择
 			defaultItem = TTSUtils.getInstance().getSpeed();
-			startNextActivity(VoiceSpeed.class, selectItem, menuItem, null, defaultItem);
+//			startNextActivity(MusicSelect.class, selectItem, menuItem, null, defaultItem);
 			break;
-		case 2: // 语调
+		case 2: // 背景音强度
 			defaultItem = TTSUtils.getInstance().getPitch();
-			startNextActivity(VoiceTone.class, selectItem, menuItem, null, defaultItem);
-			break;
-		case 3: // 语音音效
-			list = getResources().getStringArray(R.array.library_array_menu_voice_effect);
-			defaultItem = TTSUtils.getInstance().getCurEffectIndex();
-			startNextActivity(VoiceEffect.class, selectItem, menuItem, list, defaultItem);
+//			startNextActivity(MusicVolume.class, selectItem, menuItem, null, defaultItem);
 			break;
 		default:
 			break;

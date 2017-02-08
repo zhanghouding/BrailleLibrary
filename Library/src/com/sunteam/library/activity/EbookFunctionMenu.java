@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 
@@ -94,9 +95,10 @@ public class EbookFunctionMenu extends MenuActivity {
 		case 4: // 跳至本章页码
 			break;
 		case 5: // 朗读语音
-			startVoiceSettings(selectItem, menuItem);
+			startNextMenu(VoiceSettings.class, selectItem, menuItem, getResources().getStringArray(R.array.library_array_menu_voice));
 			break;
 		case 6: // 背景音乐
+			startNextMenu(MusicSettings.class, selectItem, menuItem, getResources().getStringArray(R.array.library_array_menu_music));
 			break;
 		default:
 			break;
@@ -108,6 +110,7 @@ public class EbookFunctionMenu extends MenuActivity {
 //		chapterInfo = (EbookChapterInfoEntity) intent.getSerializableExtra("chapter_info");
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_ebook_function_menu_list));
+		TtsUtils.getInstance().restoreSettingParameters(); // 在菜单界面使用系统设置朗读
 	}
 
 	// 启动书签管理界面
@@ -128,14 +131,13 @@ public class EbookFunctionMenu extends MenuActivity {
 		startActivityForResult(intent, selectItem);
 	}
 
-	// 启动语音朗读设置界面
-	public void startVoiceSettings(int selectItem, String menuItem) {
+	// 启动朗读语音设置界面
+	public void startNextMenu(Class<?> cls, int selectItem, String menuItem, String[] list) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
-		String[] list = getResources().getStringArray(R.array.library_array_menu_voice);
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list);
 
-		intent.setClass(this, VoiceSettings.class);
+		intent.setClass(this, cls);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
 		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity

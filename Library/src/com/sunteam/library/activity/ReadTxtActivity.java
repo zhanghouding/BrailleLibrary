@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -235,6 +236,12 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 				}
 			}
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		TtsUtils.getInstance().restoreSettingParameters(); // 退出文本朗读界面后使用系统设置进行朗读
 	}
 
 	@Override

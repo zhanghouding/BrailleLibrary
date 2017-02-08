@@ -2,6 +2,7 @@ package com.sunteam.library.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
@@ -20,6 +21,14 @@ import com.sunteam.library.utils.TTSUtils;
  * @Note
  */
 public class VoiceChineseSpeaker extends MenuActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// 用上次设置的发音人进行发音
+		TtsUtils.getInstance().setParameter(SpeechConstant.VOICE_NAME, Tools.getSpeaker(selectItem));
+	}
 
 	@SuppressLint("HandlerLeak")
 	private Handler mTtsCompletedHandler = new Handler() {
@@ -46,7 +55,7 @@ public class VoiceChineseSpeaker extends MenuActivity {
 		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
 		mPromptDialog.show();
 		saveRoleCnSetting(selectItem);*/
-		TTSUtils.getInstance().setRoleCn(this, Tools.getSpeaker(selectItem), new PromptListener() {
+		TTSUtils.getInstance().setRoleCn(this, selectItem, new PromptListener() {
 			@Override
 			public void onComplete() {
 				mTtsCompletedHandler.sendEmptyMessage(8);
