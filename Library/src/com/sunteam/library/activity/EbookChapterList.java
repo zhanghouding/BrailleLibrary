@@ -12,6 +12,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.menu.menuview.OnMenuKeyListener;
 import com.sunteam.library.asynctask.GetEbookChapterContentAsyncTask;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
+import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 
 /**
@@ -67,12 +68,27 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 			return;
 		}
 
+		int action = data.getIntExtra("action", EbookConstants.TO_NEXT_PART);
+		switch (action) {
+		case EbookConstants.TO_NEXT_PART:
+			mMenuView.down();
+			mMenuView.enter();
+			break;
+		case EbookConstants.TO_PRE_PART:
+			mMenuView.up();
+			mMenuView.enter();
+			break;
+		case EbookConstants.TO_BOOK_START:
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String chapterIndex = mEbookChapterInfoEntityList.get(selectItem).chapterIndex;
-		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex);
+		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName);
 	}
 
 	@SuppressWarnings("unchecked")

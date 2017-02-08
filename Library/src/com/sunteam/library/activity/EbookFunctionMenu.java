@@ -9,6 +9,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.utils.EbookConstants;
 
 /**
  * @Destryption 电子图书播放界面对应的功能菜单
@@ -87,10 +88,28 @@ public class EbookFunctionMenu extends MenuActivity {
 			startBookmarkManager(selectItem, menuItem);
 			break;
 		case 1: // 上一章
+			{
+				Intent intent = new Intent();
+				intent.putExtra("action", EbookConstants.TO_PRE_PART);
+				setResult(RESULT_OK, intent);
+				finish();
+			}
 			break;
 		case 2: // 下一章
+			{
+				Intent intent = new Intent();
+				intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+				setResult(RESULT_OK, intent);
+				finish();
+			}
 			break;
 		case 3: // 跳至本章开头
+			{
+				Intent intent = new Intent();
+				intent.putExtra("action", EbookConstants.TO_PART_START);
+				setResult(RESULT_OK, intent);
+				finish();
+			}
 			break;
 		case 4: // 跳至本章页码
 			break;
