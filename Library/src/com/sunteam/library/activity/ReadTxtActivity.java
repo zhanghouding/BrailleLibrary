@@ -396,12 +396,9 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	public void startFunctionMenu()
 	{
 		Intent intent = getIntent();
-		EbookInfoEntity ebookInfo = new EbookInfoEntity();
-		ebookInfo.pageCount = mTextReaderView.getPageCount();
-		ebookInfo.pageIndex = mTextReaderView.getCurPage();
-		// TODO 添加其它信息
-
-		intent.putExtra("ebook_info", ebookInfo);
+		intent.putExtra("page_count", mTextReaderView.getPageCount());
+		intent.putExtra("page_cur", mTextReaderView.getCurPage());
+		intent.putExtra("page_text", mTextReaderView.getReverseText());
 
 		intent.setClass(this, EbookFunctionMenu.class);
 		startActivityForResult(intent, MENU_CODE);

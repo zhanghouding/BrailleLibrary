@@ -18,12 +18,12 @@ import android.widget.TextView;
 
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.MediaPlayerUtils;
+import com.sunteam.library.utils.TTSUtils;
 
 /**
  * @Destryption 音乐强度设置，实际上就是北京音乐音量，目前看来与系统音量一致！
@@ -57,7 +57,7 @@ public class MusicVolume extends BaseActivity {
 	@Override
 	protected void onResume() {
 		String s = mTitle + ", " + musicVolume;
-		TtsUtils.getInstance().speak(s);
+		TTSUtils.getInstance().speakMenu(s);
 		super.onResume();
 	}
 
@@ -75,7 +75,7 @@ public class MusicVolume extends BaseActivity {
 	private void initView() {
 		Tools mTools = new Tools(MusicVolume.this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(mTools.getBackgroundColor()));
-		setContentView(R.layout.library_speed_setting);
+		setContentView(R.layout.common_number_edit);
 		
 		musicShared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
 		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -83,14 +83,14 @@ public class MusicVolume extends BaseActivity {
 		musicVolume = (int) ((currentVolume + MUSIC_VOLUME_SCALE / 2)/ MUSIC_VOLUME_SCALE);
 		playMusic();
 
-		mTvTitle = (TextView) findViewById(R.id.library_speed_title);
+		mTvTitle = (TextView) findViewById(R.id.common_number_edit_title);
 		mTvTitle.setText(mTitle);
 		mTvTitle.setTextColor(mTools.getFontColor()); // 设置title的文字颜色
 
-		mLine = (View) findViewById(R.id.library_speed_line);
+		mLine = (View) findViewById(R.id.common_number_edit_line);
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
 
-		mTvVolume = (TextView) findViewById(R.id.library_speed_tts_speed);
+		mTvVolume = (TextView) findViewById(R.id.common_number_edit_digit);
 		mTvVolume.setText(String.valueOf(musicVolume));
 		mTvVolume.setTextColor(mTools.getFontColor()); // 设置文字颜色
 	}
@@ -131,7 +131,7 @@ public class MusicVolume extends BaseActivity {
 		mTvVolume.setText(s);
 
 		setMusicVlolume((int) (musicVolume * MUSIC_VOLUME_SCALE));
-		TtsUtils.getInstance().speak(s); // 不朗读标题
+		TTSUtils.getInstance().speakMenu(s); // 不朗读标题
 	}
 
 	@SuppressLint("HandlerLeak")

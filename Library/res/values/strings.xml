@@ -37,6 +37,8 @@
   	<string name="library_add_collect_success">收藏成功！</string>
   	<string name="library_add_collect_fail">该收藏已存在！</string>
   	<string name="library_resource_does_not_exist">该资源不存在！</string>
+	<string name="library_input_page_num">请输入页码</string>
+	<string name="library_input_page_max">超出有效范围，自动纠正为最大页码</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>

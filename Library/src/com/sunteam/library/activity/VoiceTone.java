@@ -44,7 +44,7 @@ public class VoiceTone extends BaseActivity {
 	@Override
 	protected void onResume() {
 		String s = mTitle + ", " + ttsTone;
-		TtsUtils.getInstance().speak(s);
+		TTSUtils.getInstance().speakMenu(s);
 		super.onResume();
 	}
 
@@ -59,7 +59,7 @@ public class VoiceTone extends BaseActivity {
 			return;
 		}
 
-		// 用上次设置的语速进行发音
+		// 用上次设置的语调进行发音
 		TtsUtils.getInstance().setParameter(SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
 	}
 
@@ -67,16 +67,16 @@ public class VoiceTone extends BaseActivity {
 	private void initView() {
 		Tools mTools = new Tools(VoiceTone.this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(mTools.getBackgroundColor()));
-		setContentView(R.layout.library_speed_setting);
+		setContentView(R.layout.common_number_edit);
 
-		mTvTitle = (TextView) findViewById(R.id.library_speed_title);
+		mTvTitle = (TextView) findViewById(R.id.common_number_edit_title);
 		mTvTitle.setText(mTitle);
 		mTvTitle.setTextColor(mTools.getFontColor()); // 设置title的文字颜色
 
-		mLine = (View) findViewById(R.id.library_speed_line);
+		mLine = (View) findViewById(R.id.common_number_edit_line);
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
 
-		mTvTone = (TextView) findViewById(R.id.library_speed_tts_speed);
+		mTvTone = (TextView) findViewById(R.id.common_number_edit_digit);
 		mTvTone.setText(String.valueOf(ttsTone));
 		mTvTone.setTextColor(mTools.getFontColor()); // 设置文字颜色
 	}
@@ -117,7 +117,7 @@ public class VoiceTone extends BaseActivity {
 		mTvTone.setText(s);
 		TtsUtils.getInstance().setParameter(SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
 		
-		TtsUtils.getInstance().speak(/*mTitle + */s); // 设置语调时不朗读标题
+		TTSUtils.getInstance().speakMenu(s); // 设置语调时不朗读标题
 	}
 
 	@SuppressLint("HandlerLeak")
@@ -148,11 +148,6 @@ public class VoiceTone extends BaseActivity {
 		intent.putExtra("selectStr", menuItem);
 		setResult(resultCode, intent);
 
-		// 设置成功就有提示对话框
-		/*PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));
-		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
-		mPromptDialog.show();
-		saveToneSetting();*/
 		TTSUtils.getInstance().setPitch(this, ttsTone, new PromptListener() {
 			@Override
 			public void onComplete() {

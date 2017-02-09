@@ -18,7 +18,8 @@ import com.sunteam.library.utils.EbookConstants;
  * @Note
  */
 public class EbookFunctionMenu extends MenuActivity {
-//	private EbookChapterInfoEntity chapterInfo; // 需要定义书签管理时需要的实体信息
+	private int pageNo = 1; // 当前页码
+	private int pageCount = 10; // 页码总数
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -37,13 +38,12 @@ public class EbookFunctionMenu extends MenuActivity {
 			setResult(resultCode, data); // 需要把跳转的书签返回给朗读界面
 			finish();
 			break;
-		case 1: // 上一章
-			break;
-		case 2: // 下一章
-			break;
-		case 3: // 跳至本章开头
-			break;
 		case 4: // 跳至本章页码
+			Intent intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_PART_PAGE);
+			intent.putExtra("page", data.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, pageNo));
+			setResult(RESULT_OK, intent);
+			finish();
 			break;
 		case 5: // 朗读语音
 			finish();
@@ -88,6 +88,7 @@ public class EbookFunctionMenu extends MenuActivity {
 			}
 			break;
 		case 4: // 跳至本章页码
+			startPageNumberEdit(PageNumberEdit.class, selectItem, menuItem, pageNo, pageCount);
 			break;
 		case 5: // 朗读语音
 			startNextMenu(VoiceSettings.class, selectItem, menuItem, getResources().getStringArray(R.array.library_array_menu_voice));
@@ -101,8 +102,10 @@ public class EbookFunctionMenu extends MenuActivity {
 	}
 
 	private void initView() {
-//		Intent intent = getIntent();
-//		chapterInfo = (EbookChapterInfoEntity) intent.getSerializableExtra("chapter_info");
+		// TODO 需要传递书签管理需要的信息、当前页码、页码总数
+		Intent intent = getIntent();
+		pageNo = intent.getIntExtra("page_cur", 1);
+		pageCount = intent.getIntExtra("page_count", 1);
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_ebook_function_menu_list));
 		TtsUtils.getInstance().restoreSettingParameters(); // 在菜单界面使用系统设置朗读
@@ -136,6 +139,16 @@ public class EbookFunctionMenu extends MenuActivity {
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
 		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
+		startActivityForResult(intent, selectItem);
+	}
+
+	// 启动跳转页码编辑界面
+	public void startPageNumberEdit(Class<?> cls, int selectItem, String menuItem, int pageNo, int pageCount) {
+		Intent intent = new Intent();
+		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
+		intent.putExtra("page_cur", pageNo);
+		intent.putExtra("page_count", pageCount);
+		intent.setClass(this, cls);
 		startActivityForResult(intent, selectItem);
 	}
 

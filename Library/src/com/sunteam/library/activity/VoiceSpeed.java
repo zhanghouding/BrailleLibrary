@@ -30,7 +30,7 @@ public class VoiceSpeed extends BaseActivity {
 	private TextView mTvTitle;
 	private View mLine = null;
 	private TextView mTvSpeed;
-	private int ttsSpeed = CommonConstant.DEFAULT_VOICESPEED / TTS_SPEED_SCALE; // 功能设置范围：[1,20]，实际范围:[1,100]
+	private int ttsSpeed = CommonConstant.DEFAULT_VOICESPEED / TTS_SPEED_SCALE; // 功能设置范围：[1,20]，实际范围:[1,200]
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class VoiceSpeed extends BaseActivity {
 	@Override
 	protected void onResume() {
 		String s = mTitle + ", " + ttsSpeed;
-		TtsUtils.getInstance().speak(s);
+		TTSUtils.getInstance().speakMenu(s);
 		super.onResume();
 	}
 
@@ -64,16 +64,16 @@ public class VoiceSpeed extends BaseActivity {
 	private void initView() {
 		Tools mTools = new Tools(VoiceSpeed.this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(mTools.getBackgroundColor()));
-		setContentView(R.layout.library_speed_setting);
+		setContentView(R.layout.common_number_edit);
 
-		mTvTitle = (TextView) findViewById(R.id.library_speed_title);
+		mTvTitle = (TextView) findViewById(R.id.common_number_edit_title);
 		mTvTitle.setText(mTitle);
 		mTvTitle.setTextColor(mTools.getFontColor()); // 设置title的文字颜色
 
-		mLine = (View) findViewById(R.id.library_speed_line);
+		mLine = (View) findViewById(R.id.common_number_edit_line);
 		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
 
-		mTvSpeed = (TextView) findViewById(R.id.library_speed_tts_speed);
+		mTvSpeed = (TextView) findViewById(R.id.common_number_edit_digit);
 		mTvSpeed.setText(String.valueOf(ttsSpeed));
 		mTvSpeed.setTextColor(mTools.getFontColor()); // 设置文字颜色
 	}
@@ -114,7 +114,7 @@ public class VoiceSpeed extends BaseActivity {
 		mTvSpeed.setText(s);
 		TtsUtils.getInstance().setParameter(SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
 
-		TtsUtils.getInstance().speak(/*mTitle + */s); // 设置语速时不朗读标题
+		TTSUtils.getInstance().speakMenu(s); // 设置语速时不朗读标题
 	}
 
 	@SuppressLint("HandlerLeak")

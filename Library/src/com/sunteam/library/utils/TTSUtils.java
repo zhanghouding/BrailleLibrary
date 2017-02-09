@@ -10,6 +10,7 @@ import android.util.Log;
 import com.iflytek.cloud.SpeechConstant;
 import com.sunteam.common.tts.TtsListener;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.CommonConstant;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 
@@ -20,12 +21,13 @@ import com.sunteam.library.R;
  */
 public class TTSUtils
 {
+	public static final int TTS_SPEED_SCALE = CommonConstant.VOICE_SPEED_MAX / CommonConstant.VOICE_SPEEDSETTING_MAX; // 语速设置值与实际值的映射比例
     private static final String TAG = "TTSUtils";
 	private static final String ROLE_EN = "VOICE_EN";
 
     private static final String DEFAULT_ROLE_CN = "xiaofeng";	//默认中文发音人
     private static final String DEFAULT_ROLE_EN = "catherine";	//默认英文发音人
-    private static final String DEFAULT_SPEED = "65";	//默认语速
+    private static final String DEFAULT_SPEED = ""+CommonConstant.DEFAULT_VOICESPEED;	//默认语速
     private static final String DEFAULT_TONE = "65";	//默认语调
     private static final String DEFAULT_VOLUME = "80";	//默认音量
     
@@ -437,14 +439,14 @@ public class TTSUtils
 	//测试语速
 	public void testSpeed( int speed, final String text )
 	{
-		speakTest( text, SpeechConstant.SPEED, (speed*5)+"" );
+		speakTest( text, SpeechConstant.SPEED, (speed*TTS_SPEED_SCALE)+"" );
 	}
 		
 	//设置语速
 	public void setSpeed( Context context, int speed, PromptListener listener )
 	{
 		Editor editor = mSharedPreferences.edit();
-		editor.putString( SpeechConstant.SPEED, (speed*5)+"" );
+		editor.putString( SpeechConstant.SPEED, (speed*TTS_SPEED_SCALE)+"" );
 		editor.commit();
 		
 		PublicUtils.showToast(context, context.getString(R.string.library_setting_success), listener);
@@ -454,7 +456,7 @@ public class TTSUtils
 	public int getSpeed()
 	{
 		String speed = mSharedPreferences.getString(SpeechConstant.SPEED, DEFAULT_SPEED);
-		return	Integer.parseInt(speed)/5;
+		return	Integer.parseInt(speed)/TTS_SPEED_SCALE;
 	}
 	
 	//测试语调
