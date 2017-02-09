@@ -118,6 +118,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	public void onResume()
 	{
 		super.onResume();
+		TTSUtils.getInstance().init(this);	//初始化TTS
 		if( isReadPage )
 		{
 			mTextReaderView.readPage();		//朗读页码
