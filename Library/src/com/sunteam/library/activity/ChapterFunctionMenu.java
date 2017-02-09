@@ -1,6 +1,7 @@
 package com.sunteam.library.activity;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,9 +11,12 @@ import android.os.Bundle;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.AddCollectResourceAsyncTask;
+import com.sunteam.library.download.DownloadEbook;
 import com.sunteam.library.entity.CollectResourceEntity;
+import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
@@ -28,7 +32,10 @@ public class ChapterFunctionMenu extends MenuActivity {
 	private String categoryName;	//分类名称
 	private String resourceName;	//资源名称
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
+	private String identifier;	//电子书identifier
+	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;	//电子书章节信息
 	private String fatherPath;	//父目录路径
+	private DownloadEbook mDownloadEbook;	//电子图书下载线程
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -88,6 +95,34 @@ public class ChapterFunctionMenu extends MenuActivity {
 			}
 			break;
 		case 1: // 下载当前资源
+			switch( dataType )
+			{
+				case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书if( null == mDownloadEbook )
+					{
+						mDownloadEbook = new DownloadEbook(fatherPath, identifier, mEbookChapterInfoEntityList);
+						mDownloadEbook.start();
+						String tips = this.getString(R.string.library_downloading);
+						PublicUtils.showToast(this, tips, new PromptListener() {
+							@Override
+							public void onComplete() 
+							{
+								// TODO Auto-generated method stub
+								{
+									finish();
+								}
+							}
+						});
+						//此次还应该跳转到下载管理界面，或者弹出一个Toast.(先弹出一个Toast吧)
+					}
+					break;
+				case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//音频
+					break;
+				case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//视频
+					break;
+				default:
+					break;
+			}
+			
 			break;
 		case 2: // 删除当前资源
 			{
@@ -112,8 +147,10 @@ public class ChapterFunctionMenu extends MenuActivity {
 		fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
+		identifier = intent.getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
+		mEbookChapterInfoEntityList = (ArrayList<EbookChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_chapter_function_menu_list));
 	}
-
 }
