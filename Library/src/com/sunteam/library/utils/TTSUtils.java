@@ -508,26 +508,36 @@ public class TTSUtils
 	//测试音效
 	public boolean testEffect( String effect, final String text )
 	{
-		/*Resources res = mContext.getResources();
+		Resources res = mContext.getResources();
 		String[] ttsEffect = res.getStringArray(R.array.library_array_menu_voice_effect);
 		
 		for( int i = 0; i < ttsEffect.length; i++ )
 		{
 			if( ttsEffect[i].equals(effect) )
 			{
-				speakTest( text, TextToSpeech.KEY_PARAM_EFFECT, mEffect[i] );
+				speakTest( text, "effect", "" + mEffect[i] );
 
 				return	true;
 			}
-		}*/
+		}
 		
 		return	false;
 	}
-	
+
+	// 测试音效
+	/*public boolean testEffect(int index, final String text) {
+		if (index >= 0 && index < mEffect.length) {
+			speakTest(text, "effect", "" + mEffect[index]);
+			return true;
+		}
+
+		return false;
+	}*/
+
 	//设置音效
 	public boolean setEffect( Context context, String effect, PromptListener listener )
 	{
-		/*Resources res = mContext.getResources();
+		Resources res = mContext.getResources();
 		String[] ttsEffect = res.getStringArray(R.array.library_array_menu_voice_effect);
 		
 		for( int i = 0; i < ttsEffect.length; i++ )
@@ -535,14 +545,14 @@ public class TTSUtils
 			if( ttsEffect[i].equals(effect) )
 			{
 				Editor editor = mSharedPreferences.edit();
-				editor.putInt( TextToSpeech.KEY_PARAM_EFFECT, mEffect[i] );
+				editor.putInt( "effect", mEffect[i] );
 				editor.commit();
 				
-				PublicUtils.showToastEx(mContext, mContext.getString(R.string.library_setting_success));
+				PublicUtils.showToast(context, mContext.getString(R.string.library_setting_success));
 				
 				return	true;
 			}
-		}*/
+		}
 		
 		return	false;
 	}

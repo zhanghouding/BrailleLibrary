@@ -180,12 +180,12 @@ public class PageNumberEdit extends BaseActivity {
 
 				@Override
 				public void onComplete() {
-					TTSUtils.getInstance().speakContent(pageNo + "");
+					TTSUtils.getInstance().speakMenu(pageNo + "");
 				}
 			});
 		} else {
 			mTvNumber.setText("" + pageNo);
-			TTSUtils.getInstance().speakContent(pageNo + "");
+			TTSUtils.getInstance().speakMenu(pageNo + "");
 		}
 	}
 

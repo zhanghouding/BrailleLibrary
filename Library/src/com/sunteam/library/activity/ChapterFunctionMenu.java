@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
@@ -49,6 +50,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 
 	@Override
 	protected void onResume() {
+		TtsUtils.getInstance().restoreSettingParameters();
 		super.onResume();
 	}
 
@@ -139,6 +141,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initView() {
 		Intent intent = getIntent();
 		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);

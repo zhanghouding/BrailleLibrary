@@ -2,7 +2,6 @@ package com.sunteam.library.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 
 import com.sunteam.common.menu.MenuActivity;
@@ -10,7 +9,6 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
-import com.sunteam.library.utils.WifiUtils;
 
 /**
  * @Destryption 我的图书馆浏览界面，是固定的菜单列表
@@ -20,35 +18,6 @@ import com.sunteam.library.utils.WifiUtils;
  */
 public class MylibraryActivity extends MenuActivity {
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -56,31 +25,30 @@ public class MylibraryActivity extends MenuActivity {
 		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
 			return;
 		}
-
 	}
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String[] list = null;
-		Class<?> cls = null;
 		
 		switch (selectItem) {
 		case 0: // 收藏分类
 			list = getResources().getStringArray(R.array.library_favorite_list);
-			cls = FavoriteCategoryList.class;
+//			startNextActivity(FavoriteCategoryList.class, selectItem, menuItem, list);
 			break;
 		case 1: // 收藏资源
 			list = getResources().getStringArray(R.array.library_favorite_list);
-			cls = FavoriteResourceList.class;
+//			startNextActivity(FavoriteResourceList.class, selectItem, menuItem, list);
 			break;
 		case 2: // 最近阅读历史
-			cls = ReadingHistoryList.class;
+//			startNextActivity(ReadingHistoryList.class, selectItem, menuItem, list);
 			break;
 		case 3: // 下载管理
-//			cls = AccountBindActivity.class;
+			list = getResources().getStringArray(R.array.library_download_manager_list);
+			startNextActivity(DownloadManager.class, selectItem, menuItem, list);
 			break;
 		case 4: // 图书馆账号绑定
-			cls = AccountBindActivity.class;
+//			cls = AccountBindActivity.class;
 			break;
 		default:
 			break;
@@ -105,6 +73,7 @@ public class MylibraryActivity extends MenuActivity {
 		startActivityForResult(intent, selectItem);
 	}
 
+	@SuppressWarnings("unused")
 	private void startWifi() {
 		String s = getResources().getString(R.string.library_startwifi);
 		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);

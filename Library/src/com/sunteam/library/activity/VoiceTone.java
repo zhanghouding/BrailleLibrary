@@ -3,8 +3,6 @@ package com.sunteam.library.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,12 +14,10 @@ import android.widget.TextView;
 import com.iflytek.cloud.SpeechConstant;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.CommonConstant;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
-import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.TTSUtils;
 
 public class VoiceTone extends BaseActivity {
@@ -58,9 +54,6 @@ public class VoiceTone extends BaseActivity {
 			finish();
 			return;
 		}
-
-		// 用上次设置的语调进行发音
-		TtsUtils.getInstance().setParameter(SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
 	}
 
 	// 在语速语调设置中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩
@@ -96,14 +89,10 @@ public class VoiceTone extends BaseActivity {
 		case KeyEvent.KEYCODE_ENTER:
 			setResultCode(Activity.RESULT_OK, ttsTone * TTS_TONE_SCALE, "");
 			break;
-		case KeyEvent.KEYCODE_BACK: // 恢复上次设置
-			ttsTone = TTSUtils.getInstance().getPitch();
-			TtsUtils.getInstance().setParameter(SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
-			break;
 		default:
-			break;
+			return super.onKeyUp(keyCode, event);
 		}
-		return super.onKeyUp(keyCode, event);
+		return true;
 	}
 
 	private void updateTone(int step) {
@@ -115,9 +104,7 @@ public class VoiceTone extends BaseActivity {
 		}
 		String s = String.valueOf(ttsTone);
 		mTvTone.setText(s);
-		TtsUtils.getInstance().setParameter(SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
-		
-		TTSUtils.getInstance().speakMenu(s); // 设置语调时不朗读标题
+		TTSUtils.getInstance().speakTest(s, SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
 	}
 
 	@SuppressLint("HandlerLeak")
@@ -158,11 +145,11 @@ public class VoiceTone extends BaseActivity {
 	}
 
 	// 保存语速设置
-	public void saveToneSetting() {
-		SharedPreferences mSharedPreferences = getSharedPreferences(EbookConstants.TTS_SETTINGS, Activity.MODE_PRIVATE);
-		Editor editor = mSharedPreferences.edit();
-		editor.putString(SpeechConstant.PITCH, (ttsTone * TTS_TONE_SCALE) + "");
-		editor.commit();
-	}
+//	public void saveToneSetting() {
+//		SharedPreferences mSharedPreferences = getSharedPreferences(EbookConstants.TTS_SETTINGS, Activity.MODE_PRIVATE);
+//		Editor editor = mSharedPreferences.edit();
+//		editor.putString(SpeechConstant.PITCH, (ttsTone * TTS_TONE_SCALE) + "");
+//		editor.commit();
+//	}
 
 }

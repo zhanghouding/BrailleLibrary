@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 
+import com.iflytek.cloud.SpeechConstant;
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.TTSUtils;
@@ -18,6 +20,13 @@ import com.sunteam.library.utils.TTSUtils;
  * @Note
  */
 public class VoiceEffect extends MenuActivity {
+	private final int[] mEffect = {
+		0,	//原声	
+		2,	//回声
+		3,	//机器人
+		7,	//阴阳怪气
+	};	//音效
+	
 
 	@SuppressLint("HandlerLeak")
 	private Handler mTtsCompletedHandler = new Handler() {
@@ -43,39 +52,46 @@ public class VoiceEffect extends MenuActivity {
 		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));
 		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
 		mPromptDialog.show();
-		/*TTSUtils.getInstance().setEffect(this, selectItem, new PromptListener() {
-			@Override
-			public void onComplete() {
-				mTtsCompletedHandler.sendEmptyMessage(8);
-			}
-			
-		});*/
 	}
 
 	@Override
-	// 国语男声、国语女声、粤语女声、童声
+	// 原声、回声、机器人、阴阳怪气
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		TtsUtils.getInstance().setMuteFlag(true);
+		boolean ret = super.onKeyDown(keyCode, event);
+		if (KeyEvent.KEYCODE_DPAD_UP == keyCode || KeyEvent.KEYCODE_DPAD_DOWN == keyCode || KeyEvent.KEYCODE_DPAD_LEFT == keyCode
+				|| KeyEvent.KEYCODE_DPAD_RIGHT == keyCode) {
+			TtsUtils.getInstance().setMuteFlag(false);
+//			TtsUtils.getInstance().setParameter("effect", "" + mEffect[selectItem]);
+			String s = getSelectItemContent();
+//			TtsUtils.getInstance().speak(s);
+			TTSUtils.getInstance().testEffect(s, s);
+		}
+		return ret;
+
 		// 先设置发音人再发声
-		selectItem = getSelectItem();
+		/*selectItem = getSelectItem();
 		if (KeyEvent.KEYCODE_DPAD_UP == keyCode) {
 			selectItem--;
 			if (selectItem < 0) {
 				selectItem = mMenuList.size() - 1;
 			}
-//			TtsUtils.getInstance().setParameter(SpeechConstant.VOICE_EFFECT, Tools.getSpeaker(selectItem));
+			TtsUtils.getInstance().setParameter("effect", "" + mEffect[selectItem]);
 		} else if (KeyEvent.KEYCODE_DPAD_DOWN == keyCode) {
 			selectItem++;
 			if (selectItem >= mMenuList.size()) {
 				selectItem = 0;
 			}
-//			TtsUtils.getInstance().setParameter(SpeechConstant.VOICE_EFFECT, Tools.getSpeaker(selectItem));
+			
+			// 在使用公用菜单时，以下音效测试，会被公用菜单中的发音中断，因此，只能在此直接音效值
+			TtsUtils.getInstance().setParameter("effect", "" + mEffect[selectItem]);
+//			String s = getSelectItemContent();
+//			TTSUtils.getInstance().testEffect(selectItem, s);
 		} else if (KeyEvent.KEYCODE_BACK == keyCode) {
-			// 恢复上次设置
-			selectItem = TTSUtils.getInstance().getCurEffectIndex();
-//			TtsUtils.getInstance().setParameter(SpeechConstant.VOICE_EFFECT, Tools.getSpeaker(selectItem));
+			// 恢复上次设置; 暂时不必处理
 		}
 
-		return super.onKeyDown(keyCode, event);
+		return super.onKeyDown(keyCode, event);*/
 	}
 
 	// 不能直接返回，需要等发音结束后再返回，否则发音被中断了。

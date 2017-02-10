@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.iflytek.cloud.SpeechConstant;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.CommonConstant;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
@@ -57,7 +56,7 @@ public class VoiceSpeed extends BaseActivity {
 		}
 
 		// 用上次设置的语速进行发音
-		TtsUtils.getInstance().setParameter(SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
+//		TtsUtils.getInstance().setParameter(SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
 	}
 
 	// 在语速语调设置中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩
@@ -93,14 +92,10 @@ public class VoiceSpeed extends BaseActivity {
 		case KeyEvent.KEYCODE_ENTER:
 			setResultCode(Activity.RESULT_OK, ttsSpeed * TTS_SPEED_SCALE, "");
 			break;
-		case KeyEvent.KEYCODE_BACK: // 恢复上次设置
-			ttsSpeed = TTSUtils.getInstance().getSpeed();
-			TtsUtils.getInstance().setParameter(SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
-			break;
 		default:
-			break;
+			return super.onKeyUp(keyCode, event);
 		}
-		return super.onKeyUp(keyCode, event);
+		return true;
 	}
 
 	private void updateSpeed(int step) {
@@ -112,9 +107,7 @@ public class VoiceSpeed extends BaseActivity {
 		}
 		String s = String.valueOf(ttsSpeed);
 		mTvSpeed.setText(s);
-		TtsUtils.getInstance().setParameter(SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
-
-		TTSUtils.getInstance().speakMenu(s); // 设置语速时不朗读标题
+		TTSUtils.getInstance().speakTest(s, SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
 	}
 
 	@SuppressLint("HandlerLeak")
@@ -144,11 +137,6 @@ public class VoiceSpeed extends BaseActivity {
 		intent.putExtra("selectStr", menuItem);
 		setResult(resultCode, intent);
 
-		// 设置成功就有提示对话框
-		/*PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));
-		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
-		mPromptDialog.show();
-		saveSpeedSetting();*/
 		TTSUtils.getInstance().setSpeed(this, ttsSpeed, new PromptListener() {
 			@Override
 			public void onComplete() {
@@ -157,13 +145,5 @@ public class VoiceSpeed extends BaseActivity {
 			
 		});
 	}
-
-	/*// 保存语速设置
-	public void saveSpeedSetting() {
-		SharedPreferences mSharedPreferences = getSharedPreferences(EbookConstants.TTS_SETTINGS, Activity.MODE_PRIVATE);
-		Editor editor = mSharedPreferences.edit();
-		editor.putString(SpeechConstant.SPEED, (ttsSpeed * TTS_SPEED_SCALE) + "");
-		editor.commit();
-	}*/
 
 }

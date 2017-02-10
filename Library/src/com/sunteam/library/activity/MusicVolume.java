@@ -35,8 +35,8 @@ public class MusicVolume extends BaseActivity {
 	private final int MUSIC_VOLUME_MIN = 1; // 背景音强度设置最小值
 	public final int MUSIC_VOLUME_MAX = 10; // 背景音强度设置最大值 
 	private final int MUSIC_VOLUME_STEP = 1; // 背景音强度调整步长
-	public final int SYSTEM_VOLUME_MAX = 15; // 系统音量最大值 
-	private final float MUSIC_VOLUME_SCALE = SYSTEM_VOLUME_MAX / MUSIC_VOLUME_MAX; // 设置值与实际值的映射比例
+	public final int SYSTEM_VOLUME_MAX = 15; // 系统音量最大值
+	private final float MUSIC_VOLUME_SCALE = ((float) SYSTEM_VOLUME_MAX / MUSIC_VOLUME_MAX); // 设置值与实际值的映射比例
 
 	private String mTitle; // 菜单标题
 	private TextView mTvTitle;
@@ -130,8 +130,8 @@ public class MusicVolume extends BaseActivity {
 		String s = String.valueOf(musicVolume);
 		mTvVolume.setText(s);
 
+		TTSUtils.getInstance().speakMenu(s); // 不要把该行放到设置音量后面!因为音量变化后在主菜单中会收到广播，也会发音，但若已经在播音就不播音量值了。
 		setMusicVlolume((int) (musicVolume * MUSIC_VOLUME_SCALE));
-		TTSUtils.getInstance().speakMenu(s); // 不朗读标题
 	}
 
 	@SuppressLint("HandlerLeak")

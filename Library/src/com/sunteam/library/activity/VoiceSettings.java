@@ -18,6 +18,12 @@ import com.sunteam.library.utils.TTSUtils;
 public class VoiceSettings extends MenuActivity {
 
 	@Override
+	protected void onResume() {
+		TtsUtils.getInstance().restoreSettingParameters();
+		super.onResume();
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		TtsUtils.getInstance().restoreSettingParameters(); // 在菜单界面使用系统设置朗读

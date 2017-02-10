@@ -27,6 +27,12 @@ public class EbookFunctionMenu extends MenuActivity {
 	}
 
 	@Override
+	protected void onResume() {
+		TtsUtils.getInstance().restoreSettingParameters();
+		super.onResume();
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 

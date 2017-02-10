@@ -16,12 +16,13 @@ import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 
 /**
- * @Destryption 电子书章节列表
+ * @Destryption 电子书章节列表：在线、离线从资源列表进入；从下载管理中的已下载列表进入。
  * @Author Jerry
  * @Date 2017-2-4 下午3:20:17
- * @Note
+ * @Note 从下载管理中的已下载列表进入后，再按菜单键无效
  */
 public class EbookChapterList extends MenuActivity implements OnMenuKeyListener {
+	private int fatherWindowType = 0; //父窗口类型：0 从资源列表进入；1从下载管理进入，此时菜单键无效
 	private String identifier;	//电子书identifier
 	private String fatherPath;	//父目录路径
 	private String dbCode;		//数据编码
@@ -42,7 +43,9 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mMenuView.setMenuKeyListener(this);
+		if (0 == fatherWindowType) {
+			mMenuView.setMenuKeyListener(this);
+		}
 	}
 
 	@Override
