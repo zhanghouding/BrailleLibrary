@@ -80,6 +80,27 @@ public class MediaPlayerUtils
 		}
 	}
 
+	//设置进度百分比
+	public boolean seek( float progress )
+	{
+		if( mMediaPlayer != null )
+		{
+			try
+			{
+				int total = mMediaPlayer.getDuration();
+				mMediaPlayer.seekTo((int)(total*progress/100.0f));
+				
+				return	true;
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return	false;
+	}
+	
 	//得到总时间
 	public int getTotalTime()
 	{
@@ -324,7 +345,7 @@ public class MediaPlayerUtils
      *
      * @param text
      */
-	public void play( final String audioPath ) 
+	public void play( final String audioPath, boolean isLoop ) 
 	{
 		stop();	//先停止当前播放
 		if( mMediaPlayer != null )
@@ -334,7 +355,7 @@ public class MediaPlayerUtils
 				mMediaPlayer.reset();
 				mMediaPlayer.setDataSource(audioPath);
 				mMediaPlayer.prepare();
-				mMediaPlayer.setLooping(false);
+				mMediaPlayer.setLooping(isLoop);
 				mMediaPlayer.start();
 				mPlayStatus = PlayStatus.PLAY;
 				

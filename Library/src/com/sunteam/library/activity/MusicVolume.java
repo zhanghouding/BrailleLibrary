@@ -191,7 +191,7 @@ public class MusicVolume extends BaseActivity {
 			}
 		}
 		if (null != path) {
-			MediaPlayerUtils.getInstance().play(path);
+			MediaPlayerUtils.getInstance().play(path, true);
 		}
 	}
 

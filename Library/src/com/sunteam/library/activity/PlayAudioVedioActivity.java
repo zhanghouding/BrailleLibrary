@@ -128,7 +128,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	    	File file = new File(fullpath);
 	    	if( file.exists() )
 	    	{
-	    		MediaPlayerUtils.getInstance().play(fullpath);	//播放音频
+	    		MediaPlayerUtils.getInstance().play(fullpath, false);	//播放音频
 	    		totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
 	    		showTime(mTvEndTime, totalTime);	//显示总时间
 	    		mHandler.sendEmptyMessageDelayed(0, 500);
@@ -156,7 +156,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		    			// 探测一个网络文件失败了，具体查看failReason
 		    		}
 		    	});
-		    	MediaPlayerUtils.getInstance().play(resourceUrl);	//播放音视频
+		    	MediaPlayerUtils.getInstance().play(resourceUrl, false);	//播放音视频
 		    	totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
 	    		showTime(mTvEndTime, totalTime);	//显示总时间
 		    	mHandler.sendEmptyMessageDelayed(0, 500);
@@ -392,4 +392,40 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		intent.setClass(this, AudioFunctionMenu.class);
 		startActivityForResult(intent, MENU_CODE);
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(RESULT_OK == resultCode)
+		{
+			if(null != data)
+			{
+				int action = data.getIntExtra("action", EbookConstants.TO_NEXT_PART);
+				switch (action) 
+				{
+					case EbookConstants.TO_NEXT_PART:
+						toNextChapter();	//到下一个章节
+						break;
+					case EbookConstants.TO_PRE_PART:
+						toPreChapter();		//到上一个章节
+						break;
+					case EbookConstants.TO_BOOK_START:	//到一本书的开头
+						break;
+					case EbookConstants.TO_PART_START:	//到一个部分的开头
+						MediaPlayerUtils.getInstance().seek(0);
+						MediaPlayerUtils.getInstance().resume();
+						mIbStatus.setBackgroundResource(R.drawable.play);
+						break;
+					case EbookConstants.TO_PART_PAGE:	//到一个部分的百分比
+						float percent = data.getFloatExtra("percent", 0.0f);
+						MediaPlayerUtils.getInstance().seek(percent);
+						MediaPlayerUtils.getInstance().resume();
+						mIbStatus.setBackgroundResource(R.drawable.play);
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	}	
 }

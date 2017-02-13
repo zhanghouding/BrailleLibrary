@@ -46,7 +46,7 @@ public class AudioFunctionMenu extends MenuActivity {
 		case 4: // 跳至本章百分比
 			Intent intent = new Intent();
 			intent.putExtra("action", EbookConstants.TO_PART_PAGE);
-			intent.putExtra("percent", data.getIntExtra("percent", 0));
+			intent.putExtra("percent", data.getFloatExtra("percent", 0.0f));
 			setResult(RESULT_OK, intent);
 			finish();
 			break;
