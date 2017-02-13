@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
@@ -40,6 +41,7 @@ import com.sunteam.library.utils.PublicUtils;
 public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerListener
 {
 	private static final String TAG = "PlayAudioVedioActivity";
+	private static final int MENU_CODE = 10;
 	private TextView mTvTitle = null;
 	private View mLine = null;
 	private ImageButton mIbStatus = null;
@@ -298,6 +300,11 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 					mIbStatus.setBackgroundResource(R.drawable.play);
 				}
 				return	true;
+			case KeyEvent.KEYCODE_MENU:
+				MediaPlayerUtils.getInstance().pause();
+				mIbStatus.setBackgroundResource(R.drawable.pause);
+				startFunctionMenu();
+				return	true;
 			default:
 				break;
 		}
@@ -375,5 +382,14 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	public void onPlayProgress(int percent) {
 		// TODO 自动生成的方法存根
 		
+	}
+
+	public void startFunctionMenu()
+	{
+		Intent intent = getIntent();
+
+		// TODO 传递功能菜单所需参数
+		intent.setClass(this, AudioFunctionMenu.class);
+		startActivityForResult(intent, MENU_CODE);
 	}
 }

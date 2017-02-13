@@ -43,8 +43,8 @@ public class VoiceSettings extends MenuActivity {
 		switch(selectItem){
 		case 0: // 中文角色
 			list = getResources().getStringArray(R.array.library_array_menu_voice_china);
-			defaultItem = TTSUtils.getInstance().getCurRoleCnIndex();
-			startNextActivity(VoiceChineseSpeaker.class, selectItem, menuItem, list, defaultItem);
+			defaultItem = TTSUtils.getInstance().getRoleIndex();
+			startNextActivity(VoiceSpeaker.class, selectItem, menuItem, list, defaultItem);
 			break;
 		case 1: // 语速
 			defaultItem = TTSUtils.getInstance().getSpeed();

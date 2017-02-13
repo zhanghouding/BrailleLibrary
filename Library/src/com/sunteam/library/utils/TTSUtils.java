@@ -8,9 +8,11 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.iflytek.cloud.SpeechConstant;
+import com.sunteam.common.menu.MenuGlobal;
 import com.sunteam.common.tts.TtsListener;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.CommonConstant;
+import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 
@@ -49,7 +51,7 @@ public class TTSUtils
 	};	//中文发音人
 	
 	private static final String[] mRoleEn = {
-		"catherine",	//John，英语男声
+		"john",	//John，英语男声
 		"catherine",	//凯瑟琳，英语女声
 	};	//英文发音人
 	
@@ -301,18 +303,6 @@ public class TTSUtils
 		
 		return	false;
 	}
-
-	// 设置中文发音人
-	public void setRoleCn(Context context, int index, PromptListener listener) {
-		if (index < 0 || index >= mRoleCn.length) {
-			index = 0;
-		}
-		Editor editor = mSharedPreferences.edit();
-		editor.putString(SpeechConstant.VOICE_NAME, mRoleCn[index] + "");
-		editor.commit();
-
-		PublicUtils.showToast(context, mContext.getString(R.string.library_setting_success), listener);
-	}
 	
 	//得到当前中文发音人
 	public String getCurRoleCn()
@@ -508,36 +498,26 @@ public class TTSUtils
 	//测试音效
 	public boolean testEffect( String effect, final String text )
 	{
-		Resources res = mContext.getResources();
+		/*Resources res = mContext.getResources();
 		String[] ttsEffect = res.getStringArray(R.array.library_array_menu_voice_effect);
 		
 		for( int i = 0; i < ttsEffect.length; i++ )
 		{
 			if( ttsEffect[i].equals(effect) )
 			{
-				speakTest( text, "effect", "" + mEffect[i] );
+				speakTest( text, TextToSpeech.KEY_PARAM_EFFECT, mEffect[i] );
 
 				return	true;
 			}
-		}
+		}*/
 		
 		return	false;
 	}
-
-	// 测试音效
-	/*public boolean testEffect(int index, final String text) {
-		if (index >= 0 && index < mEffect.length) {
-			speakTest(text, "effect", "" + mEffect[index]);
-			return true;
-		}
-
-		return false;
-	}*/
-
+	
 	//设置音效
 	public boolean setEffect( Context context, String effect, PromptListener listener )
 	{
-		Resources res = mContext.getResources();
+		/*Resources res = mContext.getResources();
 		String[] ttsEffect = res.getStringArray(R.array.library_array_menu_voice_effect);
 		
 		for( int i = 0; i < ttsEffect.length; i++ )
@@ -545,14 +525,14 @@ public class TTSUtils
 			if( ttsEffect[i].equals(effect) )
 			{
 				Editor editor = mSharedPreferences.edit();
-				editor.putInt( "effect", mEffect[i] );
+				editor.putInt( TextToSpeech.KEY_PARAM_EFFECT, mEffect[i] );
 				editor.commit();
 				
-				PublicUtils.showToast(context, mContext.getString(R.string.library_setting_success));
+				PublicUtils.showToastEx(mContext, mContext.getString(R.string.library_setting_success));
 				
 				return	true;
 			}
-		}
+		}*/
 		
 		return	false;
 	}
@@ -579,8 +559,7 @@ public class TTSUtils
 	//得到当前音效序号
 	public int getCurEffectIndex()
 	{
-		/*
-		int effect = mSharedPreferences.getInt(TextToSpeech.KEY_PARAM_EFFECT, TextToSpeech.DEFAULT_EFFECT);
+		int effect = mSharedPreferences.getInt("effect", 0);
 		for( int i = 0; i < mEffect.length; i++ )
 		{
 			if( effect == mEffect[i] )
@@ -588,7 +567,7 @@ public class TTSUtils
 				return	i;
 			}
 		}
-		*/
+		
 		return	0;
 	}
 	
@@ -619,6 +598,9 @@ public class TTSUtils
 
 		// 设置合成音量; 使用语记中的默认音量即可
 		mTtsUtils.setParameter(SpeechConstant.VOLUME, mSharedPreferences.getString(SpeechConstant.VOLUME, DEFAULT_VOLUME));
+
+		// 设置合成音效
+		mTtsUtils.setParameter("effect", mSharedPreferences.getInt("effect", 0)+"");
 
 		mTtsUtils.setParameter(SpeechConstant.STREAM_TYPE, ""+android.media.AudioManager.STREAM_MUSIC); // 为何不是TTS类型?
 
@@ -678,6 +660,13 @@ public class TTSUtils
     		mTtsUtils.setParameter(SpeechConstant.VOLUME, value);
 		} else {
     		mTtsUtils.setParameter(SpeechConstant.VOLUME, mSharedPreferences.getString(SpeechConstant.VOLUME, DEFAULT_VOLUME)+"");
+    	}
+
+		// 设置合成音效
+		if ("effect".equals(key)) {
+    		mTtsUtils.setParameter("effect", value);
+		} else {
+    		mTtsUtils.setParameter("effect", mSharedPreferences.getInt("effect", 0)+"");
     	}
     }
       
@@ -766,4 +755,84 @@ public class TTSUtils
 			}
 		}		
 	};
+
+	// 测试发音人:根据界面语言用不同语言对应的发音人进行朗读
+	public boolean testRole(int index, final String text) {
+		Tools mTools = new Tools(mContext);
+		int langType = mTools.getLanguageIndex();
+		String[] mRole = Tools.mSpeakerChiList;
+		boolean ret = true;
+
+		if (CommonConstant.LANG_ENG_INDEX == langType) {
+			mRole = Tools.mSpeakerEngList;
+		}
+
+		if (index >= mRole.length) {
+			index = mRole.length - 1;
+			ret = false;
+		}
+
+		speakTest(text, SpeechConstant.VOICE_NAME, mRole[index]); // 暂时未区分中文发音人和英文发音人
+
+		return ret;
+	}
+
+	// 得到当前发音人序号
+	public int getRoleIndex() {
+		Tools mTools = new Tools(mContext);
+		int langType = mTools.getLanguageIndex();
+
+		if (CommonConstant.LANG_ENG_INDEX == langType) {
+			return getCurRoleEnIndex();
+		} else {
+			return getCurRoleCnIndex();
+		}
+	}
+
+	// 设置发音人:根据界面语言设置发音人
+	public void setRole(Context context, int index, PromptListener listener) {
+		Tools mTools = new Tools(mContext);
+		int langType = mTools.getLanguageIndex();
+		String[] mRole = Tools.mSpeakerChiList;
+
+		if (CommonConstant.LANG_ENG_INDEX == langType) {
+			mRole = Tools.mSpeakerEngList;
+		}
+
+		if (index >= mRole.length) {
+			index = mRole.length - 1;
+		}
+
+		Editor editor = mSharedPreferences.edit();
+		editor.putString(SpeechConstant.VOICE_NAME, mRole[index] + "");
+		editor.commit();
+
+		PublicUtils.showToast(context, mContext.getString(R.string.library_setting_success), listener);
+	}
+
+	// 测试音效
+	public boolean testEffect(int index, final String text) {
+		MenuGlobal.debug("[testEffect] isSuccess = " + isSuccess + ", index = " + index);
+		if (index >= 0 && index < mEffect.length) {
+			speakTest(text, "effect", "" + mEffect[index]);
+			return true;
+		}
+
+		return false;
+	}
+
+	// 设置音效
+	public boolean setEffect(Context context, int index, PromptListener listener) {
+		boolean ret = false;
+		if (index >= 0 && index < mEffect.length) {
+			Editor editor = mSharedPreferences.edit();
+			editor.putInt("effect", mEffect[index]);
+			editor.commit();
+
+			PublicUtils.showToast(context, mContext.getString(R.string.library_setting_success), listener);
+			ret = true;
+		}
+
+		return ret;
+	}
 }

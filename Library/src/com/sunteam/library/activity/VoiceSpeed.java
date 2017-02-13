@@ -39,24 +39,20 @@ public class VoiceSpeed extends BaseActivity {
 
 	@Override
 	protected void onResume() {
-		String s = mTitle + ", " + ttsSpeed;
-		TTSUtils.getInstance().speakMenu(s);
 		super.onResume();
+		String s = mTitle + ", " + ttsSpeed;
+		TTSUtils.getInstance().speakTest(s, SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
 	}
 
 	private void getIntentPara() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		ttsSpeed = intent.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, ttsSpeed);
-//		ttsSpeed /= TTS_SPEED_SCALE; // 已经除以5了
 
 		if (null == mTitle) {
 			finish();
 			return;
 		}
-
-		// 用上次设置的语速进行发音
-//		TtsUtils.getInstance().setParameter(SpeechConstant.SPEED, "" + ttsSpeed * TTS_SPEED_SCALE);
 	}
 
 	// 在语速语调设置中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩

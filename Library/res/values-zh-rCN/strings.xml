@@ -81,5 +81,12 @@
         <item>删除</item>
         <item>清空</item>
     </string-array>
+    <string-array name="library_audio_function_menu_list">
+        <item>书签管理</item>
+        <item>上一章</item>
+        <item>下一章</item>
+        <item>跳至本章开头</item>
+        <item>跳至本章百分比</item>
+    </string-array>
 
 </resources>

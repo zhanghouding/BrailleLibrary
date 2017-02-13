@@ -39,16 +39,15 @@ public class VoiceTone extends BaseActivity {
 
 	@Override
 	protected void onResume() {
-		String s = mTitle + ", " + ttsTone;
-		TTSUtils.getInstance().speakMenu(s);
 		super.onResume();
+		String s = mTitle + ", " + ttsTone;
+		TTSUtils.getInstance().speakTest(s, SpeechConstant.PITCH, "" + ttsTone * TTS_TONE_SCALE);
 	}
 
 	private void getIntentPara() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		ttsTone = intent.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, ttsTone);
-//		ttsTone /= TTS_TONE_SCALE; // 已经除以5了
 
 		if (null == mTitle) {
 			finish();

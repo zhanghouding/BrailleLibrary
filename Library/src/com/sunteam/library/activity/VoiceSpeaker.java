@@ -9,12 +9,12 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.utils.TTSUtils;
 
 /**
- * @Destryption 语音音效设置界面
+ * @Destryption 中文角色设置界面
  * @Author Jerry
  * @Date 2017-2-7 上午9:55:09
  * @Note
  */
-public class VoiceEffect extends MenuActivity {
+public class VoiceSpeaker extends MenuActivity {
 
 	@Override
 	protected void onResume() {
@@ -23,13 +23,13 @@ public class VoiceEffect extends MenuActivity {
 
 		super.onResume();
 
-		// 允许朗读
+		// 按电子书中上次设置进行朗读。
 		TtsUtils.getInstance().setMuteFlag(false);
 		if (!wakeupFlag) { // 不是休眠唤醒时才朗读焦点行内容
 			String s = mTitle + "," + mMenuList.get(selectItem);
-			TTSUtils.getInstance().testEffect(selectItem, s);
+			TTSUtils.getInstance().testRole(selectItem, s);
 		}
-	}	
+	}
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
@@ -37,8 +37,7 @@ public class VoiceEffect extends MenuActivity {
 			selectItem = 0;
 		}
 
-		// 设置成功就有提示对话框
-		TTSUtils.getInstance().setEffect(this, selectItem, new PromptListener() {
+		TTSUtils.getInstance().setRole(this, selectItem, new PromptListener() {
 			@Override
 			public void onComplete() {
 				returnFatherActivity();
@@ -48,16 +47,19 @@ public class VoiceEffect extends MenuActivity {
 	}
 
 	@Override
-	// 原声、回声、机器人、阴阳怪气
+	// 国语男声、国语女声、粤语女声、童声
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// 禁止父类朗读菜单焦点行
 		TtsUtils.getInstance().setMuteFlag(true);
+
 		boolean ret = super.onKeyDown(keyCode, event);
+
+		// 允许朗读
 		TtsUtils.getInstance().setMuteFlag(false);
 		if (KeyEvent.KEYCODE_DPAD_UP == keyCode || KeyEvent.KEYCODE_DPAD_DOWN == keyCode || KeyEvent.KEYCODE_DPAD_LEFT == keyCode
 				|| KeyEvent.KEYCODE_DPAD_RIGHT == keyCode) {
-			int selectItem = getSelectItem();
-			String menuItem = getSelectItemContent();
-			TTSUtils.getInstance().testEffect(selectItem, menuItem);
+			String s = getSelectItemContent();
+			TTSUtils.getInstance().testRole(getSelectItem(), s);
 		}
 		return ret;
 	}
@@ -66,7 +68,7 @@ public class VoiceEffect extends MenuActivity {
 	private void returnFatherActivity() {
 		selectItem = getSelectItem();
 		String menuItem = getSelectItemContent();
-		VoiceEffect.super.setResultCode(Activity.RESULT_OK, selectItem, menuItem);
+		VoiceSpeaker.super.setResultCode(Activity.RESULT_OK, selectItem, menuItem);
 	}
 
 }

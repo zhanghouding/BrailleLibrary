@@ -41,6 +41,7 @@ public class LibraryConstant {
 	public static final String INTENT_KEY_CATEGORY_NAME = "library_category_name";	//分类名称
 	public static final String INTENT_KEY_DBCODE = "library_dbCode";	//数据编码
 	public static final String INTENT_KEY_SYSID = "library_sysId";		//系统id
+	public static final String INTENT_KEY_PERCENT = "percent"; // 百分比
 	
 	// 资源列表常量
 	public static final int LIBRARY_RESOURCE_PAGESIZE = 10; // 资源列表时一页的资源数
