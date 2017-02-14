@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.sunteam.library.entity.AudioChapterInfoEntity;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.CollectCategoryEntity;
 import com.sunteam.library.entity.CollectResourceEntity;
@@ -14,11 +15,15 @@ import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
+import com.sunteam.library.parse.AddBookMarkParseResponse;
 import com.sunteam.library.parse.AddCollectCategoryParseResponse;
 import com.sunteam.library.parse.AddCollectResourceParseResponse;
 import com.sunteam.library.parse.AddHistoryParseResponse;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
+import com.sunteam.library.parse.GetBookMarkParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
+import com.sunteam.library.parse.GetCollectCategoryParseResponse;
+import com.sunteam.library.parse.GetCollectResourceParseResponse;
 import com.sunteam.library.parse.GetEbookChapterContentParseResponse;
 import com.sunteam.library.parse.GetEbookChapterParseResponse;
 import com.sunteam.library.parse.GetEbookParseResponse;
@@ -256,6 +261,63 @@ public class HttpDao
 	}
 	
 	/**
+	 * 得到收藏分类列表
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/14
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<CollectCategoryEntity> getCollectCategoryList( String username ) 
+	{
+		String json = "{UserName:\""+username+"\"}";
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "SearchCategory");
+		requestParams.put("jsonObj", json);
+		
+		return (ArrayList<CollectCategoryEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new GetCollectCategoryParseResponse() );
+	}
+	
+	/**
+	 * 得到收藏资源列表
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/14
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<CollectResourceEntity> getCollectResourceList( String username ) 
+	{
+		String json = "{UserName:\""+username+"\"}";
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "SearchCollect");
+		requestParams.put("jsonObj", json);
+		
+		return (ArrayList<CollectResourceEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new GetCollectResourceParseResponse() );
+	}
+	
+	/**
+	 * 得到书签列表
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/14
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<BookmarkEntity> getBookMarkList( String username ) 
+	{
+		String json = "{UserName:\""+username+"\"}";
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "GetBookmarks");
+		requestParams.put("jsonObj", json);
+		
+		return (ArrayList<BookmarkEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new GetBookMarkParseResponse() );
+	}
+	
+	/**
 	 * 添加阅读历史
 	 * 
 	 * @param username
@@ -370,4 +432,42 @@ public class HttpDao
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectResourceParseResponse() );
 	}
+	
+	/**
+	 * 添加书签
+	 * 
+	 * @param entity
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/05
+	 */
+	public static Integer addBookMark( BookmarkEntity entity ) 
+	{
+		String json = 
+				"{"
+				+ "\"UserName\":\""+entity.userName+"\","
+				+ "\"BookId\":\""+entity.bookId+"\","
+				+ "\"Begin\":\""+entity.begin+"\","
+				+ "\"ChapterIndex\":\""+entity.chapterIndex+"\","
+				+ "\"ChapterTitle\":\""+entity.chapterTitle+"\","
+				+ "\"MarkName\":\""+entity.markName+"\","
+				+ "\"Percent\":\""+entity.percent+"\""
+				+ "}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "AddBookmark");
+		requestParams.put("jsonObj", encodeJson);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new AddBookMarkParseResponse() );
+	}	
 }

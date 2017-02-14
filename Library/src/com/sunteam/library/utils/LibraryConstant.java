@@ -17,6 +17,7 @@ public class LibraryConstant {
 	public static final String URL_INTERFACE_INFO = "InformationInterface.ashx";	//咨询相关接口
 	public static final String URL_INTERFACE_HISTORY = "ReadHistoryInterface.ashx";	// 阅读历史相关接口
 	public static final String URL_INTERFACE_COLLECT = "CollectInterface.ashx";	// 收藏相关接口
+	public static final String URL_INTERFACE_BOOKMARK = "BookmarkInterface.ashx";	// 书签相关接口
 
 	// 类别常量
 	public static final int LIBRARY_CATEGORY_ROOT_ID = -1; // 类别树形结构中的根节点ID
