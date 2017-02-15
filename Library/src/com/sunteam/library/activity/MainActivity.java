@@ -23,6 +23,7 @@ import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
+import com.sunteam.library.utils.WifiAdmin;
 import com.sunteam.library.utils.WifiUtils;
 
 /**
@@ -39,6 +40,8 @@ public class MainActivity extends MenuActivity {
 		super.onCreate(savedInstanceState);
 		MenuGlobal.debug("[Library-MainActivity][onCreate], this = " + this);
 		
+		//WifiAdmin wa = new WifiAdmin(this);
+		//wa.addNetwork(wa.CreateWifiInfo("wzp_dyf_home", "nmdyf198063wzp1029", 3));
 		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
 	}
 
@@ -51,7 +54,7 @@ public class MainActivity extends MenuActivity {
 	protected void onResume() {
 		super.onResume();
 		if (!WifiUtils.checkWifiState(this)) {
-			WifiUtils.openWifi(this);
+			//WifiUtils.openWifi(this);
 		} else {
 			new LoginAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, PublicUtils.getUserName());
 		}
@@ -80,7 +83,7 @@ public class MainActivity extends MenuActivity {
 		if (null != TtsUtils.getInstance()) {
 			TtsUtils.getInstance().destroy();
 		}
-		WifiUtils.closeWifi(this);
+		//WifiUtils.closeWifi(this);
 		releaseWakeLock();
 		/*
 		android.os.Process.killProcess(android.os.Process.myPid());
