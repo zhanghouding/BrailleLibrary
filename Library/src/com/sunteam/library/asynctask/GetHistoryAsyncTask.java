@@ -33,7 +33,8 @@ public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<Histo
 	@Override
 	protected ArrayList<HistoryEntity> doInBackground(String... params) 
 	{
-		ArrayList<HistoryEntity> list = HttpDao.getHistoryList(params[0]);
+		String username = PublicUtils.getUserName();
+		ArrayList<HistoryEntity> list = HttpDao.getHistoryList(username);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{

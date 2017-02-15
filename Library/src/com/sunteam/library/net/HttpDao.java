@@ -307,9 +307,14 @@ public class HttpDao
 	 * @Created 2017/02/14
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<BookmarkEntity> getBookMarkList( String username ) 
+	public static ArrayList<BookmarkEntity> getBookMarkList( String username, String bookId ) 
 	{
-		String json = "{UserName:\""+username+"\"}";
+		String json = 
+				"{"
+				+ "\"UserName\":\""+username+"\","
+				+ "\"BookId\":\""+bookId+"\","
+				+ "}";
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "GetBookmarks");
 		requestParams.put("jsonObj", json);

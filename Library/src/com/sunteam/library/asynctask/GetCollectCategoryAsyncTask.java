@@ -32,7 +32,8 @@ public class GetCollectCategoryAsyncTask extends AsyncTask<String, Void, ArrayLi
 	@Override
 	protected ArrayList<CollectCategoryEntity> doInBackground(String... params) 
 	{
-		ArrayList<CollectCategoryEntity> list = HttpDao.getCollectCategoryList(params[0]);
+		String username = PublicUtils.getUserName();
+		ArrayList<CollectCategoryEntity> list = HttpDao.getCollectCategoryList(username);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{

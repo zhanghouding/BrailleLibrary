@@ -32,7 +32,9 @@ public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<Book
 	@Override
 	protected ArrayList<BookmarkEntity> doInBackground(String... params) 
 	{
-		ArrayList<BookmarkEntity> list = HttpDao.getBookMarkList(params[0]);
+		String username = PublicUtils.getUserName();
+		String bookId = params[0];
+		ArrayList<BookmarkEntity> list = HttpDao.getBookMarkList(username, bookId);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
