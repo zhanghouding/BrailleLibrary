@@ -9,6 +9,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
 
 /**
@@ -20,6 +21,7 @@ import com.sunteam.library.utils.EbookConstants;
 public class EbookFunctionMenu extends MenuActivity {
 	private int pageNo = 1; // 当前页码
 	private int pageCount = 10; // 页码总数
+	private BookmarkEntity mBookmarkEntity;
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -112,6 +114,7 @@ public class EbookFunctionMenu extends MenuActivity {
 		Intent intent = getIntent();
 		pageNo = intent.getIntExtra("page_cur", 1);
 		pageCount = intent.getIntExtra("page_count", 1);
+		mBookmarkEntity = (BookmarkEntity) intent.getSerializableExtra("book_mark");
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_ebook_function_menu_list));
 	}
@@ -120,6 +123,7 @@ public class EbookFunctionMenu extends MenuActivity {
 	public void startBookmarkManager(int selectItem, String menuItem) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
+		intent.putExtra("book_mark", mBookmarkEntity);
 		
 		// TODO 以下内容需要在电子图书播放界面按菜单键启动当前界面时传入，此时，启动书签管理界面时传给书签管理界面！
 //		intent.putExtra("book_id", chapterInfo.bookId); // 书本ID

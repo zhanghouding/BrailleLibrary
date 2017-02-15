@@ -8,6 +8,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.LibraryConstant;
 
 /**
@@ -21,6 +22,7 @@ public class BookmarkManager extends MenuActivity {
 	private int chapterIndex; // 章节号
 	private int beginOff; // 起始位置
 	private String bookmarkName; // 书签名
+	private BookmarkEntity mBookmarkEntity;
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -66,13 +68,17 @@ public class BookmarkManager extends MenuActivity {
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		switch(selectItem){
 		case 0: // 增加书签
+			//to houding：此处应该像电子书那样，启动一个新的Activity显示书签内容，在哪个Activity中按【OK】键需要异步调用添加书签的接口(按【OK】键后调用异步线程的动作我来添加即可)。书签内容：mBookmarkEntity.markName
 			break;
 		case 1: // 查看书签
+			//to houding：此处先调用异步线程GetBookMarkAsyncTask得到书签列表，再跳转。代码应该写在此异步线程里面。
 			startNextActivity(BookmarViewkList.class, selectItem, menuItem);
 			break;
 		case 2: // 删除书签
+			//to houding：此处先调用异步线程GetBookMarkAsyncTask得到书签列表，再跳转。代码应该写在此异步线程里面。
 			break;
 		case 3: // 清空书签
+			//to houding：后续提供接口，此处代码我来添加。
 			break;
 		default:
 			break;
@@ -86,6 +92,7 @@ public class BookmarkManager extends MenuActivity {
 		chapterIndex = intent.getIntExtra("chapter_index", 0);
 		beginOff = intent.getIntExtra("begin", 0);
 		bookmarkName = intent.getStringExtra("bookmark_name");
+		mBookmarkEntity = (BookmarkEntity) intent.getSerializableExtra("book_mark");
 		
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_bookmark_manager_list));
 	}
@@ -94,7 +101,7 @@ public class BookmarkManager extends MenuActivity {
 	public void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
-
+		
 		intent.setClass(this, cls);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，

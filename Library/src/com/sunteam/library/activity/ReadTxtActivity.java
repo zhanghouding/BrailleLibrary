@@ -16,6 +16,7 @@ import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.ReadMode;
 import com.sunteam.library.utils.CustomToast;
@@ -46,6 +47,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	private boolean isReadPage = false;	//是否朗读页码
 	private boolean isFinish;//是否读完
 	private String filename;		//章节名称
+	private String identifier;		//书本id
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
 	
@@ -64,6 +66,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		filename = this.getIntent().getStringExtra("filename");
 		curChapter = this.getIntent().getIntExtra("curChapter", 0);
 		totalChapter = this.getIntent().getIntExtra("totalChapter", 0);
+		identifier = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
@@ -400,6 +403,16 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		intent.putExtra("page_count", mTextReaderView.getPageCount());
 		intent.putExtra("page_cur", mTextReaderView.getCurPage());
 		intent.putExtra("page_text", mTextReaderView.getReverseText());
+		
+		BookmarkEntity entity = new BookmarkEntity();
+		entity.userName = PublicUtils.getUserName();
+		entity.bookId = identifier;
+		entity.begin = 0;
+		entity.chapterIndex = curChapter;
+		entity.chapterTitle = filename;
+		entity.markName = mTextReaderView.getFirstLineText();
+		entity.percent = "10.00%";	//暂时将进度设置为10.00%
+		intent.putExtra("book_mark", entity);
 
 		intent.setClass(this, EbookFunctionMenu.class);
 		startActivityForResult(intent, MENU_CODE);

@@ -112,9 +112,10 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 			Intent intent = new Intent( mContext, ReadTxtActivity.class );
 			intent.putExtra("dbCode", dbCode); // 数据库代码
 			intent.putExtra("sysId", sysId); // 记录标识号
+			intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);	//书本id
 			intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
 			intent.putExtra("categoryCode", categoryCode); // 分类代码
-			intent.putExtra("filename", mTitle); // 书名
+			intent.putExtra("filename", mTitle); // 章节名
 			intent.putExtra("curChapter", mCurChapter); // 当前章节序号
 			intent.putExtra("totalChapter", mTotalChapter); // 总章节数
 			((EbookChapterList) mContext).startActivityForResult(intent, mCurChapter);
