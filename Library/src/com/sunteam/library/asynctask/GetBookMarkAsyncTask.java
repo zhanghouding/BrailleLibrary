@@ -2,11 +2,15 @@ package com.sunteam.library.asynctask;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.activity.BookmarViewkList;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.PublicUtils;
@@ -20,12 +24,14 @@ import com.sunteam.library.utils.PublicUtils;
 public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<BookmarkEntity>>
 {
 	private Context mContext;
+	private int mSelectItem;
 	private String mTitle;
-	private ArrayList<BookmarkEntity> mCollectResourceEntityList = new ArrayList<BookmarkEntity>();
+	private ArrayList<BookmarkEntity> mBookmarkEntityList = new ArrayList<BookmarkEntity>();
 	
-	public GetBookMarkAsyncTask(Context context, String title) 
+	public GetBookMarkAsyncTask(Context context, int select, String title) 
 	{
 		mContext = context;
+		mSelectItem = select;
 		mTitle = title;
 	}
 
@@ -38,7 +44,7 @@ public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<Book
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
-			mCollectResourceEntityList.addAll(list);
+			mBookmarkEntityList.addAll(list);
 			/*
 			HistoryDBDao dao = new HistoryDBDao( mContext );
 			dao.deleteAll();		//先删除所有数据
@@ -54,11 +60,11 @@ public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<Book
 			*/
 			if( ( list != null ) && ( list.size() > 0 ) )
 			{
-				mCollectResourceEntityList.addAll(list);
+				mBookmarkEntityList.addAll(list);
 			}
 		}
 		
-		return	mCollectResourceEntityList;
+		return	mBookmarkEntityList;
 	}
 	
 	@Override
@@ -88,15 +94,11 @@ public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<Book
 	}
 
 	private void startNextActivity() {
-		/*
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mCollectResourceEntityList); // 数据列表
-		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);
-		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
-		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
-		intent.setClass(mContext, EbookOnlineChapterList.class);
-		mContext.startActivity(intent);
-		*/
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mBookmarkEntityList); // 数据列表
+		intent.putExtra("type", mSelectItem); // 区分查看书签、删除书签
+		intent.setClass(mContext, BookmarViewkList.class);
+		((Activity) mContext).startActivityForResult(intent, mSelectItem);
 	}
 }

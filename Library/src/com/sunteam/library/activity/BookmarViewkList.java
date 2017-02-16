@@ -8,6 +8,12 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.utils.ConfirmDialog;
+import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
+import com.sunteam.library.R;
+import com.sunteam.library.entity.BookmarkEntity;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 查看书签
@@ -16,37 +22,14 @@ import com.sunteam.common.menu.MenuConstant;
  * @Note 理论上，一本书的书签可以是无穷多个，但实际上我们可以限制在Intent传输的数据量大小之内！
  */
 public class BookmarViewkList extends MenuActivity {
-	// TODO 需要定义书签实体类
-//	private ArrayList<BookmarkEntity> mBookmarkEntityList; // 书签列表：数目ID, 章节号, 起始位置, 书签名等
+	private int type = 1; // 查看书签和删除书签共用一个界面： 1 查看书签，2
+							// 删除书签；该值就是书签管理菜单中查看书签或删除书签的序号
+	private ArrayList<BookmarkEntity> mBookmarkEntityList; // 书签列表：数目ID, 章节号,
+															// 起始位置, 书签名等
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
 		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
@@ -61,25 +44,85 @@ public class BookmarViewkList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		// TODO 跳转到指定位置
+		if (selectItem >= mBookmarkEntityList.size()) {
+			return;
+		}
+
+		if (1 == type) { // 查看书签，点击后跳转到该书签浏览
+			// TODO 跳转到指定位置
+			BookmarkEntity mBookmarkEntity = mBookmarkEntityList.get(selectItem);
+			Intent intent = new Intent();
+			intent.putExtra("book_mark", mBookmarkEntity);
+			setResult(Activity.RESULT_OK, intent);
+			finish();
+		} else { // 删除指定书签
+			deleteBookMark(selectItem);
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-//		mBookmarkEntityList = (ArrayList<BookmarkEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
-//		mMenuList = getListFromChapterInfoEntity(mBookmarkEntityList);
+		type = intent.getIntExtra("type", type);
+		mBookmarkEntityList = (ArrayList<BookmarkEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mMenuList = getListFromBookmarkEntity(mBookmarkEntityList);
 		mMenuList = new ArrayList<String>();
 	}
 
 	// 从书签列表中获取书签名列表
-//	private ArrayList<String> getListFromBookmarkEntity(ArrayList<BookmarkEntity> listSrc) {
-//		ArrayList<String> list = new ArrayList<String>();
-//		for (int i = 0; i < listSrc.size(); i++) {
-//			list.add(listSrc.get(i).bookmarkName);
-//		}
-//
-//		return list;
-//	}
+	private ArrayList<String> getListFromBookmarkEntity(ArrayList<BookmarkEntity> listSrc) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < listSrc.size(); i++) {
+			list.add(listSrc.get(i).markName);
+		}
+
+		return list;
+	}
+
+	// 删除指定书签
+	private void deleteBookMark(final int position) {
+		String title = getResources().getString(R.string.library_dialog_delete);
+		String confrim = getResources().getString(R.string.library_dialog_yes);
+		String cancel = getResources().getString(R.string.library_dialog_no);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title, confrim, cancel);
+
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+
+			@Override
+			public void doConfirm() {
+				// TODO delete bookmark
+//				BookmarkEntity mBookmarkEntity = mBookmarkEntityList.get(position);
+				final boolean islast = position == (mMenuList.size() - 1) ? true : false;
+				mMenuList.remove(position);
+				mBookmarkEntityList.remove(position);
+				PublicUtils.showToast(BookmarViewkList.this, getString(R.string.library_dialog_delete_su), new PromptListener() {
+
+					@Override
+					public void onComplete() {
+						if (0 == mMenuList.size()) {
+							PublicUtils.showToast(BookmarViewkList.this, getResources().getString(R.string.library_menu_mark_null), true);
+						} else {
+							if (null != mMenuView) {
+								if (islast) {
+									mMenuView.setSelectItem(0);
+								}
+								setListData(mMenuList);
+							}
+						}
+
+					}
+				});
+			}
+
+			@Override
+			public void doCancel() {
+				if (null != mMenuView) {
+					mMenuView.onResume();
+				}
+			}
+		});
+		mConfirmDialog.show();
+	}
 
 }

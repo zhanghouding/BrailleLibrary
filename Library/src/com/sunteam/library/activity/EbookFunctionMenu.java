@@ -38,7 +38,7 @@ public class EbookFunctionMenu extends MenuActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) {
 			return;
 		}
 		switch(requestCode){
@@ -124,13 +124,6 @@ public class EbookFunctionMenu extends MenuActivity {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
 		intent.putExtra("book_mark", mBookmarkEntity);
-		
-		// TODO 以下内容需要在电子图书播放界面按菜单键启动当前界面时传入，此时，启动书签管理界面时传给书签管理界面！
-//		intent.putExtra("book_id", chapterInfo.bookId); // 书本ID
-//		intent.putExtra("chapter_index", chapterInfo.chapterIndex); // 当前序号
-//		intent.putExtra("begin", 0); // 当前阅读位置
-//		intent.putExtra("bookmark_name", chapterInfo.bookId); // 书签名
-
 		intent.setClass(this, BookmarkManager.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
