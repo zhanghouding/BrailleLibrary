@@ -57,6 +57,7 @@ public class EbookFunctionMenu extends MenuActivity {
 			finish();
 			break;
 		case 6: // 背景音乐
+			setResult(RESULT_OK, data);
 			finish();
 			break;
 		default:

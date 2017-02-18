@@ -3,6 +3,7 @@ package com.sunteam.library.asynctask;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
@@ -19,10 +20,12 @@ import com.sunteam.library.utils.PublicUtils;
 public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 {
 	private Context mContext;
+	private Handler mHandler;
 	
-	public DelBookMarkAsyncTask(Context context) 
+	public DelBookMarkAsyncTask(Context context, Handler h) 
 	{
 		mContext = context;
+		mHandler =  h;
 	}
 
 	@Override
@@ -62,7 +65,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 					
 					@Override
 					public void onComplete() {
-						setResultCode((Activity)mContext);
+						sendEmptyMessage(1);
 					}
 				});
 				break;
@@ -71,7 +74,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 					
 					@Override
 					public void onComplete() {
-						setResultCode((Activity)mContext);
+						sendEmptyMessage(0);
 					}
 				});
 				break;
@@ -80,7 +83,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 					
 					@Override
 					public void onComplete() {
-						setResultCode((Activity)mContext);
+						sendEmptyMessage(2);
 					}
 				});
 				break;
@@ -89,8 +92,9 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 		}
 	}
 	
-	public void setResultCode(Activity activity) {
-		activity.setResult(Activity.RESULT_OK);
-		activity.finish();
+	private void sendEmptyMessage(int what){
+		if(null != mHandler){
+			mHandler.sendEmptyMessage(what);
+		}
 	}
 }

@@ -108,7 +108,7 @@ public class MusicVolume extends BaseActivity {
 			break;
 		case KeyEvent.KEYCODE_DPAD_CENTER:
 		case KeyEvent.KEYCODE_ENTER:
-			setResultCode(Activity.RESULT_OK, (int) (musicVolume * MUSIC_VOLUME_SCALE), "");
+			showPromptDialog();
 			break;
 		case KeyEvent.KEYCODE_BACK: // 恢复上次设置
 			stopMusic();
@@ -139,6 +139,10 @@ public class MusicVolume extends BaseActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 8:
+				Intent intent = new Intent();
+				intent.putExtra("action", EbookConstants.TO_PLAY_MUSIC);
+				setResult(Activity.RESULT_OK, intent);
+				MediaPlayerUtils.getInstance().stop();
 				finish();
 				break;
 
@@ -148,25 +152,13 @@ public class MusicVolume extends BaseActivity {
 		}
 	};
 
-	/**
-	 * @Name: setResultCode
-	 * @Description: 父类在需要退出时，调用该方法
-	 * @param @param data 需要传递给子类的数据
-	 * @return void
-	 * @author Jerry
-	 */
-	private void setResultCode(int resultCode, int selectItem, String menuItem) {
-		Intent intent = new Intent();
-		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem);
-		intent.putExtra("selectStr", menuItem);
-		setResult(resultCode, intent);
-
+	private void showPromptDialog() {
+		stopMusic();
+		setMusicVlolume((int) (musicVolume * MUSIC_VOLUME_SCALE));
 		// 设置成功就有提示对话框
 		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));
 		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
 		mPromptDialog.show();
-		stopMusic();
-		setMusicVlolume((int) (musicVolume * MUSIC_VOLUME_SCALE));
 	}
 
 	// 保存背景音乐强度设置

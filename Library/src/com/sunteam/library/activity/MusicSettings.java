@@ -20,7 +20,7 @@ public class MusicSettings extends MenuActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) { // 在子菜单中回传的标志
 			return;
 		}
 		// 设置成功后，销毁当前界面，返回到父窗口

@@ -2,13 +2,20 @@ package com.sunteam.library.activity;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.utils.ConfirmDialog;
+import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.library.R;
 import com.sunteam.library.asynctask.DelBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
@@ -40,6 +47,36 @@ public class BookmarViewkList extends MenuActivity {
 
 	}
 
+	@SuppressLint("HandlerLeak")
+	private Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0: // 删除成功
+				selectItem = getSelectItem();
+				if (selectItem < mMenuList.size()) {
+					mBookmarkEntityList.remove(selectItem);
+					mMenuList.remove(selectItem);
+				}
+				if (0 == mMenuList.size()) {
+					setResult(Activity.RESULT_OK);
+					finish();
+				} else {
+					if (selectItem >= mMenuList.size()) {
+						selectItem = mMenuList.size() - 1;
+					}
+					setListData(mMenuList);
+					mMenuView.setSelectItem(selectItem, true);
+				}
+				break;
+			case 1: // 网络未连接
+			case 2: // 删除异常
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		if (selectItem >= mBookmarkEntityList.size()) {
@@ -54,7 +91,7 @@ public class BookmarViewkList extends MenuActivity {
 			setResult(Activity.RESULT_OK, intent);
 			finish();
 		} else { // 删除指定书签
-			new DelBookMarkAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.id);
+			confirmDeleteBookmark(this, mBookmarkEntity.id);
 		}
 	}
 
@@ -77,4 +114,23 @@ public class BookmarViewkList extends MenuActivity {
 		return list;
 	}
 
+	private void confirmDeleteBookmark(final Context context, final int id) {
+		String s = getResources().getString(R.string.library_dialog_delete);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+
+			@Override
+			public void doConfirm() {
+				new DelBookMarkAsyncTask(context, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
+			}
+
+			@Override
+			public void doCancel() {
+			}
+		});
+		mConfirmDialog.show();
+	}
+
+
+	
 }

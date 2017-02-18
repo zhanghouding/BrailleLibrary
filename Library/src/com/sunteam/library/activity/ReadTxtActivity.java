@@ -234,6 +234,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			case KeyEvent.KEYCODE_NUMPAD_0:		//百科查询
 				return	true;
 			case KeyEvent.KEYCODE_MENU:
+				MediaPlayerUtils.getInstance().stop();
 				startFunctionMenu();
 				break;
 			case KeyEvent.KEYCODE_STAR:			//反查
@@ -439,6 +440,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	public void onDestroy()
 	{
 		super.onDestroy();
+		MediaPlayerUtils.getInstance().stop();
 	}
 	
 	@Override

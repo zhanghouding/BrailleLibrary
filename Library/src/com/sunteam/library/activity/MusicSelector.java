@@ -12,14 +12,18 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.library.R;
 import com.sunteam.library.entity.FileInfo;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.FileOperateUtils;
+import com.sunteam.library.utils.MediaPlayerUtils;
+import com.sunteam.library.utils.TTSUtils;
 
 /**
  * @Destryption 背景音乐选择
@@ -36,6 +40,22 @@ public class MusicSelector extends MenuActivity {
 		super.onCreate(savedInstanceState);
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MediaPlayerUtils.getInstance().stop();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		boolean ret = super.onKeyDown(keyCode, event);
+
+		MediaPlayerUtils.getInstance().stop();
+		MediaPlayerUtils.getInstance().play(fileList.get(getSelectItem()).path, true);
+
+		return ret;
+	}
+
 	@SuppressLint("HandlerLeak")
 	private Handler mTtsCompletedHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -44,6 +64,7 @@ public class MusicSelector extends MenuActivity {
 				Intent intent = new Intent();
 				intent.putExtra("action", EbookConstants.TO_PLAY_MUSIC);
 				setResult(Activity.RESULT_OK, intent);
+				MediaPlayerUtils.getInstance().stop();
 				finish();
 				break;
 			default:
@@ -54,10 +75,7 @@ public class MusicSelector extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		if (0 == selectItem || 1 == selectItem) {
 			saveMusicFile(selectItem);
-			setResult(Activity.RESULT_OK);
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -82,12 +100,13 @@ public class MusicSelector extends MenuActivity {
 				}
 			}
 		}
+		MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
 	}
 
 	private void saveMusicFile(int index) {
 		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
 		Editor edit = shared.edit();
-		edit.putString(EbookConstants.MUSICE_PATH, fileList.get(selectItem).path);
+		edit.putString(EbookConstants.MUSICE_PATH, fileList.get(index).path);
 		edit.commit();
 
 		// 提示设定成功
