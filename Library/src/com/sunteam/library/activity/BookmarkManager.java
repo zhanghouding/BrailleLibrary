@@ -11,7 +11,6 @@ import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
-import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 书签管理：增加、查看、删除、清空书签

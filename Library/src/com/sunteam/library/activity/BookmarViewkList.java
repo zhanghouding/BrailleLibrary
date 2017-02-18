@@ -16,6 +16,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.asynctask.AddBookMarkAsyncTask;
 import com.sunteam.library.asynctask.DelBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
+import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.PublicUtils;
 
 /**
@@ -55,6 +56,7 @@ public class BookmarViewkList extends MenuActivity {
 		if (1 == type) { // 查看书签，点击后跳转到该书签浏览
 			// TODO 跳转到指定位置
 			Intent intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_BOOK_MARK);
 			intent.putExtra("book_mark", mBookmarkEntity);
 			setResult(Activity.RESULT_OK, intent);
 			finish();

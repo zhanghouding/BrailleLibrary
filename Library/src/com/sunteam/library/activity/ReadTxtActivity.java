@@ -19,13 +19,11 @@ import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.entity.BookmarkEntity;
-import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.ReadMode;
 import com.sunteam.library.entity.ReverseInfo;
 import com.sunteam.library.utils.CustomToast;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
-import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.TextFileReaderUtils;
@@ -319,6 +317,41 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 						isReadPage = false;
 						int curPage = data.getIntExtra("page", 1);
 						mTextReaderView.setCurPage(curPage);
+						break;
+					case EbookConstants.TO_BOOK_MARK:	//到某个书签位置
+						BookmarkEntity entity = (BookmarkEntity) data.getSerializableExtra("book_mark");
+						if( entity != null )
+						{
+							if( entity.chapterIndex == curChapter )	//如果在同一章跳转
+							{
+								int lineNumber = mTextReaderView.getlineNumber(entity.begin);	//根据书签位置得到行号
+								if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), lineNumber, entity.begin, 0, 0, true, filename) == false )
+						    	{
+						    		
+						    		TTSUtils.getInstance().stop();
+									TTSUtils.getInstance().OnTTSListener(null);
+									PublicUtils.showToast( this, this.getString(R.string.library_checksum_error), new PromptListener() {
+										@Override
+										public void onComplete() 
+										{
+											// TODO Auto-generated method stub
+											{
+												finish();
+											}
+										}
+									});
+						    	}
+							}
+							else	//在不同章节跳转
+							{
+								TTSUtils.getInstance().stop();
+								TTSUtils.getInstance().OnTTSListener(null);
+								RefreshScreenUtils.disableRefreshScreen();
+								TtsUtils.getInstance().setMuteFlag(true);
+								setResult(RESULT_OK, data);
+								finish();
+							}
+						}
 						break;
 					default:
 						break;

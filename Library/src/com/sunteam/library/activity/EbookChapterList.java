@@ -73,18 +73,18 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 
 		int action = data.getIntExtra("action", EbookConstants.TO_NEXT_PART);
 		switch (action) {
-		case EbookConstants.TO_NEXT_PART:
-			mMenuView.down();
-			mMenuView.enter();
-			break;
-		case EbookConstants.TO_PRE_PART:
-			mMenuView.up();
-			mMenuView.enter();
-			break;
-		case EbookConstants.TO_BOOK_START:
-			break;
-		default:
-			break;
+			case EbookConstants.TO_NEXT_PART:	//上一章
+				mMenuView.down();
+				mMenuView.enter();
+				break;
+			case EbookConstants.TO_PRE_PART:	//下一章
+				mMenuView.up();
+				mMenuView.enter();
+				break;
+			case EbookConstants.TO_BOOK_MARK:	//书签
+				break;
+			default:
+				break;
 		}
 	}
 

@@ -257,6 +257,21 @@ import android.view.View;
 		 }
 	 }
 	 
+	 //根据位置得到行号
+	 public int getlineNumber( int offset )
+	 {
+		 int size = mSplitInfoList.size();
+		 for( int i = 0; i < size; i++ )
+		 {
+			 if( offset < mSplitInfoList.get(i).startPos )
+			 {
+				 return	i-1;
+			 }
+		 }
+		 
+		 return	 0;
+	 }
+	 
 	 //朗读页码
 	 public void readPage()
 	 {
