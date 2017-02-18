@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
@@ -12,6 +13,8 @@ import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.AddBookMarkAsyncTask;
+import com.sunteam.library.asynctask.DelBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.PublicUtils;
 
@@ -48,15 +51,15 @@ public class BookmarViewkList extends MenuActivity {
 			return;
 		}
 
+		BookmarkEntity mBookmarkEntity = mBookmarkEntityList.get(selectItem);
 		if (1 == type) { // 查看书签，点击后跳转到该书签浏览
 			// TODO 跳转到指定位置
-			BookmarkEntity mBookmarkEntity = mBookmarkEntityList.get(selectItem);
 			Intent intent = new Intent();
 			intent.putExtra("book_mark", mBookmarkEntity);
 			setResult(Activity.RESULT_OK, intent);
 			finish();
 		} else { // 删除指定书签
-			deleteBookMark(selectItem);
+			new DelBookMarkAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.id);
 		}
 	}
 
@@ -67,7 +70,6 @@ public class BookmarViewkList extends MenuActivity {
 		type = intent.getIntExtra("type", type);
 		mBookmarkEntityList = (ArrayList<BookmarkEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromBookmarkEntity(mBookmarkEntityList);
-		mMenuList = new ArrayList<String>();
 	}
 
 	// 从书签列表中获取书签名列表
@@ -78,51 +80,6 @@ public class BookmarViewkList extends MenuActivity {
 		}
 
 		return list;
-	}
-
-	// 删除指定书签
-	private void deleteBookMark(final int position) {
-		String title = getResources().getString(R.string.library_dialog_delete);
-		String confrim = getResources().getString(R.string.library_dialog_yes);
-		String cancel = getResources().getString(R.string.library_dialog_no);
-		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title, confrim, cancel);
-
-		mConfirmDialog.setConfirmListener(new ConfirmListener() {
-
-			@Override
-			public void doConfirm() {
-				// TODO delete bookmark
-//				BookmarkEntity mBookmarkEntity = mBookmarkEntityList.get(position);
-				final boolean islast = position == (mMenuList.size() - 1) ? true : false;
-				mMenuList.remove(position);
-				mBookmarkEntityList.remove(position);
-				PublicUtils.showToast(BookmarViewkList.this, getString(R.string.library_dialog_delete_su), new PromptListener() {
-
-					@Override
-					public void onComplete() {
-						if (0 == mMenuList.size()) {
-							PublicUtils.showToast(BookmarViewkList.this, getResources().getString(R.string.library_menu_mark_null), true);
-						} else {
-							if (null != mMenuView) {
-								if (islast) {
-									mMenuView.setSelectItem(0);
-								}
-								setListData(mMenuList);
-							}
-						}
-
-					}
-				});
-			}
-
-			@Override
-			public void doCancel() {
-				if (null != mMenuView) {
-					mMenuView.onResume();
-				}
-			}
-		});
-		mConfirmDialog.show();
 	}
 
 }
