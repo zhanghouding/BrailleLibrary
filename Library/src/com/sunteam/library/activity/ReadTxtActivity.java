@@ -51,6 +51,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	private String identifier;		//书本id
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
+	private BookmarkEntity mBookmarkEntity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		curChapter = this.getIntent().getIntExtra("curChapter", 0);
 		totalChapter = this.getIntent().getIntExtra("totalChapter", 0);
 		identifier = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
+		mBookmarkEntity = (BookmarkEntity) this.getIntent().getSerializableExtra("book_mark");
 		
 		Tools tools = new Tools(this);
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(tools.getBackgroundColor())); // 设置窗口背景色
@@ -117,7 +119,35 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			});
     	}
 	}
-	
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) 
+	{
+		// TODO 自动生成的方法存根
+		super.onWindowFocusChanged(hasFocus);
+		
+		if( mBookmarkEntity != null )
+		{
+			int lineNumber = mTextReaderView.getlineNumber(mBookmarkEntity.begin);	//根据书签位置得到行号
+			if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), lineNumber, mBookmarkEntity.begin, 0, 0, true, filename) == false )
+	    	{
+	    		
+	    		TTSUtils.getInstance().stop();
+				TTSUtils.getInstance().OnTTSListener(null);
+				PublicUtils.showToast( this, this.getString(R.string.library_checksum_error), new PromptListener() {
+					@Override
+					public void onComplete() 
+					{
+						// TODO Auto-generated method stub
+						{
+							finish();
+						}
+					}
+				});
+	    	}
+		}
+	}
+
 	@Override
 	public void onResume()
 	{
@@ -452,7 +482,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		entity.begin = ri.startPos;
 		entity.chapterIndex = curChapter;
 		entity.chapterTitle = filename;
-		entity.markName = String.format(this.getString(R.string.library_page_read_tips2), curPage)+" "+reverseText;
+		entity.markName = filename + " " + String.format(this.getString(R.string.library_page_read_tips2), curPage) + " " + reverseText;
 		DecimalFormat decimalFormat = new DecimalFormat(".00%");//构造方法的字符格式这里如果小数不足2位,会以0补足.
 		entity.percent = decimalFormat.format(percent);
 		intent.putExtra("book_mark", entity);

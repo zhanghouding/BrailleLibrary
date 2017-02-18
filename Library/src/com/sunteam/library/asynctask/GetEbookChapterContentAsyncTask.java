@@ -9,6 +9,7 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.EbookChapterList;
 import com.sunteam.library.activity.ReadTxtActivity;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -34,7 +35,9 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 	private String sysId;		//系统id
 	private String categoryCode;//分类编码
 	
-	public GetEbookChapterContentAsyncTask(Context context, String fatherPath, String title, int curChapter, int totalChapter) 
+	private BookmarkEntity mBookmarkEntity = null;
+	
+	public GetEbookChapterContentAsyncTask(Context context, String fatherPath, String title, int curChapter, int totalChapter, BookmarkEntity entity ) 
 	{
 		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
 		
@@ -43,6 +46,7 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 		mTitle = title;
 		mCurChapter = curChapter;
 		mTotalChapter = totalChapter;
+		mBookmarkEntity = entity;
 	}
 
 	@Override
@@ -117,6 +121,10 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 			intent.putExtra("filename", mTitle); // 章节名
 			intent.putExtra("curChapter", mCurChapter); // 当前章节序号
 			intent.putExtra("totalChapter", mTotalChapter); // 总章节数
+			if( mBookmarkEntity != null )
+			{
+				intent.putExtra("book_mark", mBookmarkEntity);	//书签
+			}
 			((EbookChapterList) mContext).startActivityForResult(intent, mCurChapter);
 		} 
 		catch (Exception e) 

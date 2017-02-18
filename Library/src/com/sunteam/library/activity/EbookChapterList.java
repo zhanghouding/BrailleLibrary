@@ -11,6 +11,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.menu.menuview.OnMenuKeyListener;
 import com.sunteam.library.asynctask.GetEbookChapterContentAsyncTask;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
@@ -29,7 +30,8 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	private String sysId;		//系统id
 	private String categoryName;//分类名称
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;
-
+	private BookmarkEntity mBookmarkEntity;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
 		super.onCreate(savedInstanceState);
@@ -82,6 +84,32 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 				mMenuView.enter();
 				break;
 			case EbookConstants.TO_BOOK_MARK:	//书签
+				mBookmarkEntity = (BookmarkEntity) data.getSerializableExtra("book_mark");
+				if( mBookmarkEntity != null )
+				{
+					int chapterIndex = mBookmarkEntity.chapterIndex;
+					int selectItem = mMenuView.getSelectItem();
+					if( chapterIndex == selectItem )
+					{
+						
+					}
+					else if( chapterIndex > selectItem )
+					{
+						for( int i = selectItem; i < chapterIndex; i++ )
+						{
+							mMenuView.down();
+						}
+					}
+					else
+					{
+						for( int i = selectItem; i > chapterIndex; i-- )
+						{
+							mMenuView.up();
+						}
+					}
+					
+					mMenuView.enter();
+				}
 				break;
 			default:
 				break;
@@ -91,7 +119,8 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String chapterIndex = mEbookChapterInfoEntityList.get(selectItem).chapterIndex;
-		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName);
+		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size(), mBookmarkEntity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName);
+		mBookmarkEntity = null;
 	}
 
 	@SuppressWarnings("unchecked")
