@@ -68,7 +68,7 @@ public class BookmarkNameEdit extends BaseActivity {
 		mTvBookmarkName.setText(mBookmarkEntity.markName);
 		mTvBookmarkName.setTextColor(mTools.getFontColor()); // 设置文字颜色
 		mTvBookmarkName.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
-		mTvBookmarkName.setHeight(mTools.convertSpToPixel(fontSize));
+//		mTvBookmarkName.setHeight(mTools.convertSpToPixel(fontSize));
 
 		TTSUtils.getInstance().speakMenu(mTitle + "，" + mTvBookmarkName.getText().toString());
 	}
@@ -81,7 +81,6 @@ public class BookmarkNameEdit extends BaseActivity {
 			break;
 		case KeyEvent.KEYCODE_DPAD_CENTER: // 确定
 		case KeyEvent.KEYCODE_ENTER:
-			// TODO 插入书签
 			new AddBookMarkAsyncTask(this, mBookmarkEntity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			return true;
 		}

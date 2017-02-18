@@ -9,15 +9,9 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.utils.ConfirmDialog;
-import com.sunteam.common.utils.dialog.ConfirmListener;
-import com.sunteam.common.utils.dialog.PromptListener;
-import com.sunteam.library.R;
-import com.sunteam.library.asynctask.AddBookMarkAsyncTask;
 import com.sunteam.library.asynctask.DelBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
-import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 查看书签
@@ -54,7 +48,6 @@ public class BookmarViewkList extends MenuActivity {
 
 		BookmarkEntity mBookmarkEntity = mBookmarkEntityList.get(selectItem);
 		if (1 == type) { // 查看书签，点击后跳转到该书签浏览
-			// TODO 跳转到指定位置
 			Intent intent = new Intent();
 			intent.putExtra("action", EbookConstants.TO_BOOK_MARK);
 			intent.putExtra("book_mark", mBookmarkEntity);

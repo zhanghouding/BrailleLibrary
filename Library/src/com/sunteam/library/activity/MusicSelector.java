@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.library.R;
 import com.sunteam.library.entity.FileInfo;
@@ -28,7 +29,6 @@ import com.sunteam.library.utils.FileOperateUtils;
  */
 public class MusicSelector extends MenuActivity {
 	private ArrayList<FileInfo> fileList = null;
-	private int musicPosition = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,9 @@ public class MusicSelector extends MenuActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 8:
+				Intent intent = new Intent();
+				intent.putExtra("action", EbookConstants.TO_PLAY_MUSIC);
+				setResult(Activity.RESULT_OK, intent);
 				finish();
 				break;
 			default:
@@ -59,6 +62,10 @@ public class MusicSelector extends MenuActivity {
 
 	@SuppressWarnings("unchecked")
 	private void initView() {
+		Intent intent = getIntent();
+		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		mMenuList = new ArrayList<String>();
+		fileList = new ArrayList<FileInfo>();
 		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
 		String path = shared.getString(EbookConstants.MUSICE_PATH, null);
 		ArrayList<File> filesList = FileOperateUtils.getMusicInDir();
@@ -68,25 +75,20 @@ public class MusicSelector extends MenuActivity {
 				FileInfo info = new FileInfo();
 				info.name = f.getName();
 				info.path = f.getPath();
-				mMenuList.add(info.name);
 				fileList.add(info);
+				mMenuList.add(info.name);
 				if(f.getPath().equals(path)){
-					musicPosition = i;
+					selectItem = i;
 				}
 			}
 		}
-		
-		mMenuView.setSelectItem(musicPosition);
 	}
 
 	private void saveMusicFile(int index) {
 		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
-		Intent intent = new Intent(EbookConstants.MENU_PAGE_EDIT);
 		Editor edit = shared.edit();
-		intent.putExtra("result_flag", 2);
 		edit.putString(EbookConstants.MUSICE_PATH, fileList.get(selectItem).path);
 		edit.commit();
-		sendBroadcast(intent);
 
 		// 提示设定成功
 		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));

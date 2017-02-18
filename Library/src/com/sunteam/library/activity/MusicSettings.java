@@ -24,7 +24,8 @@ public class MusicSettings extends MenuActivity {
 			return;
 		}
 		// 设置成功后，销毁当前界面，返回到父窗口
-		super.setResultCode(Activity.RESULT_OK, requestCode, getSelectItemContent());
+		setResult(Activity.RESULT_OK, data);
+		finish();
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class MusicSettings extends MenuActivity {
 			startNextActivity(MusicSwitch.class, selectItem, menuItem, list, defaultItem);
 			break;
 		case 1: // 音乐选择
-//			startNextActivity(MusicSelector.class, selectItem, menuItem, null, defaultItem);
+			startNextActivity(MusicSelector.class, selectItem, menuItem, null, defaultItem);
 			break;
 		case 2: // 背景音强度
 			startNextActivity(MusicVolume.class, selectItem, menuItem, null, defaultItem);
