@@ -87,10 +87,10 @@ public class BookmarkManager extends MenuActivity {
 			startAddBookmarkActivity(selectItem, menuItem);
 			break;
 		case 1: // 查看书签
-			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, PublicUtils.getUserName(), mBookmarkEntity.bookId);
+			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
 			break;
 		case 2: // 删除书签
-			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, PublicUtils.getUserName(), mBookmarkEntity.bookId);
+			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
 			break;
 		case 3: // 清空书签
 			// to houding：后续提供接口，此处代码我来添加。

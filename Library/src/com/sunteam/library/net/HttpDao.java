@@ -312,12 +312,12 @@ public class HttpDao
 		String json = 
 				"{"
 				+ "\"UserName\":\""+username+"\","
-				+ "\"BookId\":\""+bookId+"\","
+				+ "\"BookId\":\""+bookId+"\""
 				+ "}";
 		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "GetBookmarks");
-		requestParams.put("jsonObj", json);
+		requestParams.put("jsonObj", URLEncoder.encode(json));
 		
 		return (ArrayList<BookmarkEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new GetBookMarkParseResponse() );
 	}
