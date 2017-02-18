@@ -15,7 +15,6 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
-import com.sunteam.library.utils.MediaPlayerUtils;
 
 /**
  * @Destryption 音乐开关设置界面
@@ -36,9 +35,7 @@ public class MusicSwitch extends MenuActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 8:
-				Intent intent = new Intent();
-				intent.putExtra("action", EbookConstants.TO_PLAY_MUSIC);
-				setResult(Activity.RESULT_OK, intent);
+				setResult(Activity.RESULT_OK);
 				finish();
 				break;
 

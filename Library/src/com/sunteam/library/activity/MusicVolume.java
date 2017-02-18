@@ -139,9 +139,7 @@ public class MusicVolume extends BaseActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 8:
-				Intent intent = new Intent();
-				intent.putExtra("action", EbookConstants.TO_PLAY_MUSIC);
-				setResult(Activity.RESULT_OK, intent);
+				setResult(Activity.RESULT_OK);
 				MediaPlayerUtils.getInstance().stop();
 				finish();
 				break;
@@ -172,7 +170,6 @@ public class MusicVolume extends BaseActivity {
 	}
 
 	private void playMusic() {
-		// TODO to create class FileOperateUtils 
 		String path = musicShared.getString(EbookConstants.MUSICE_PATH, null);
 		if (null == path) {
 //			path = FileOperateUtils.getFirstMusicInDir();

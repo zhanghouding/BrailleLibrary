@@ -111,7 +111,6 @@ public class EbookFunctionMenu extends MenuActivity {
 	}
 
 	private void initView() {
-		// TODO 需要传递书签管理需要的信息、当前页码、页码总数
 		Intent intent = getIntent();
 		pageNo = intent.getIntExtra("page_cur", 1);
 		pageCount = intent.getIntExtra("page_count", 1);

@@ -16,14 +16,12 @@ import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.library.R;
 import com.sunteam.library.entity.FileInfo;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.FileOperateUtils;
 import com.sunteam.library.utils.MediaPlayerUtils;
-import com.sunteam.library.utils.TTSUtils;
 
 /**
  * @Destryption 背景音乐选择
@@ -41,12 +39,6 @@ public class MusicSelector extends MenuActivity {
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		MediaPlayerUtils.getInstance().stop();
-	}
-
-	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		boolean ret = super.onKeyDown(keyCode, event);
 
@@ -61,9 +53,7 @@ public class MusicSelector extends MenuActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 8:
-				Intent intent = new Intent();
-				intent.putExtra("action", EbookConstants.TO_PLAY_MUSIC);
-				setResult(Activity.RESULT_OK, intent);
+				setResult(Activity.RESULT_OK);
 				MediaPlayerUtils.getInstance().stop();
 				finish();
 				break;

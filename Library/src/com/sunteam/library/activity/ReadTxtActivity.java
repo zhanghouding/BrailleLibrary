@@ -106,7 +106,6 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
     	//mTextReaderView.setTextSize(tools.getFontSize());
     	   	
     	TTSUtils.getInstance().init(this);	//初始化TTS
-    	playMusic();	//播放背景音乐
     	if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), 0, 0, 0, 0, isAuto, filename) == false )
     	{
     		
@@ -163,6 +162,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			mTextReaderView.readPage();		//朗读页码
 		}
 		isReadPage = true;
+		playMusic();	//播放背景音乐
 	}
 	
 	@Override
@@ -388,9 +388,6 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 								finish();
 							}
 						}
-						break;
-					case EbookConstants.TO_PLAY_MUSIC:	//播放音乐
-						playMusic();	//播放背景音乐
 						break;
 					default:
 						break;
