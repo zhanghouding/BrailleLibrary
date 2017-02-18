@@ -58,7 +58,7 @@ public class AddCollectResourceAsyncTask extends AsyncTask<String, Void, Integer
 		switch( result )
 		{
 			case LibraryConstant.RESULT_EXCEPTION:	//异常
-				PublicUtils.showToast(mContext, "网络未连接！", null);
+				PublicUtils.showToast(mContext, mContext.getString(R.string.library_net_error), null);
 				//如果出现网络异常，应该收藏到本地数据库中。
 				break;
 			case LibraryConstant.RESULT_SUCCESS:	//成功

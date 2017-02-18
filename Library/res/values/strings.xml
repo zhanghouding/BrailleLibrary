@@ -47,15 +47,17 @@
 	<string name="library_dialog_clear">确认清空</string>
 	<string name="library_dialog_clear_su">清空成功</string>
 	<string name="library_no_file">无文件</string>
+	<string name="library_add_bookmark">正在添加书签</string>
 	<string name="library_add_mark_su">添加书签成功</string>
 	<string name="library_add_mark_cancel">取消增加书签</string>
-	<string name="library_add_mark_has">书签名已存在</string>
+	<string name="library_add_mark_has">该书签已存在，不可重复创建！</string>
 	<string name="library_input_page_num">请输入页码</string>
 	<string name="library_input_page_max">超出有效范围，自动纠正为最大页码</string>
 	<string name="library_input_percent_num">请输入百分比</string>
 	<string name="library_input_percent_max">超出有效范围，自动纠正为百分比</string>
 	<string name="library_input_percent_error">输入错误</string>
 	<string name="library_downloading">正在下载当前资源！</string>
+	<string name="library_net_error">网络未连接！</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>

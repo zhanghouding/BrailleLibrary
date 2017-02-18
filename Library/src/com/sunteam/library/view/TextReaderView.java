@@ -317,6 +317,12 @@ import android.view.View;
 		 speakTips(tips);
 	 }
 	 
+	 //得到反显百分比
+	 public float getCurPercent()
+	 {
+		 return	(float)mReverseInfo.startPos*100.0f/(float)mMbBufLen;
+	 }
+	 
 	 //得到反显内容
 	 public String getReverseText()
 	 {

@@ -11,6 +11,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
+
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
@@ -19,6 +21,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.ReadMode;
+import com.sunteam.library.entity.ReverseInfo;
 import com.sunteam.library.utils.CustomToast;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
@@ -399,19 +402,26 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 
 	public void startFunctionMenu()
 	{
+		int pageCount = mTextReaderView.getPageCount();	//总页码
+		int curPage = mTextReaderView.getCurPage();		//当前页码
+		String reverseText = mTextReaderView.getReverseText();	//反显内容
+		float percent = mTextReaderView.getCurPercent();	//当前阅读百分比
+		ReverseInfo ri = mTextReaderView.getReverseInfo();
+		
 		Intent intent = getIntent();
-		intent.putExtra("page_count", mTextReaderView.getPageCount());
-		intent.putExtra("page_cur", mTextReaderView.getCurPage());
-		intent.putExtra("page_text", mTextReaderView.getReverseText());
+		intent.putExtra("page_count", pageCount);
+		intent.putExtra("page_cur", curPage);
+		intent.putExtra("page_text", reverseText);
 		
 		BookmarkEntity entity = new BookmarkEntity();
 		entity.userName = PublicUtils.getUserName();
 		entity.bookId = identifier;
-		entity.begin = 0;
+		entity.begin = ri.startPos;
 		entity.chapterIndex = curChapter;
 		entity.chapterTitle = filename;
-		entity.markName = mTextReaderView.getFirstLineText();
-		entity.percent = "10.00%";	//暂时将进度设置为10.00%
+		entity.markName = String.format(this.getString(R.string.library_page_read_tips2), curPage)+" "+reverseText;
+		DecimalFormat decimalFormat = new DecimalFormat(".00%");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+		entity.percent = decimalFormat.format(percent);
 		intent.putExtra("book_mark", entity);
 
 		intent.setClass(this, EbookFunctionMenu.class);

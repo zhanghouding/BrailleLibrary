@@ -3,6 +3,7 @@ package com.sunteam.library.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -12,8 +13,8 @@ import android.widget.TextView;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.Tools;
-import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.AddBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
@@ -81,18 +82,7 @@ public class BookmarkNameEdit extends BaseActivity {
 		case KeyEvent.KEYCODE_DPAD_CENTER: // 确定
 		case KeyEvent.KEYCODE_ENTER:
 			// TODO 插入书签
-			boolean hasMark = true; // insertBookmark(mBookmarkEntity);
-			int id = R.string.library_add_mark_su;
-			if (hasMark) {
-				id = R.string.library_add_mark_has;
-			}
-			PublicUtils.showToast(this, getResources().getString(id), new PromptListener() {
-				
-				@Override
-				public void onComplete() {
-					setResultCode();
-				}
-			});
+			new AddBookMarkAsyncTask(this, mBookmarkEntity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
