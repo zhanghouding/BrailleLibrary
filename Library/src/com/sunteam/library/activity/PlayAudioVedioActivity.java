@@ -1,6 +1,7 @@
 package com.sunteam.library.activity;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
@@ -26,6 +27,7 @@ import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
@@ -55,6 +57,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	private int totalTime;			//总时间
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
+	private String identifier;		//书本id
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
 		setContentView(R.layout.library_activity_play_audio_vedio);
 		
+		identifier = this.getIntent().getStringExtra("identifier");
 		filename = this.getIntent().getStringExtra("filename");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		resourceUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
@@ -387,8 +391,21 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	public void startFunctionMenu()
 	{
 		Intent intent = getIntent();
-
 		// TODO 传递功能菜单所需参数
+
+		BookmarkEntity entity = new BookmarkEntity();
+		entity.userName = PublicUtils.getUserName();
+		entity.bookId = identifier;
+		entity.begin = MediaPlayerUtils.getInstance().getCurTime();
+		entity.chapterIndex = curChapter;
+		entity.chapterTitle = filename;
+		entity.markName = filename + " " + mTvStartTime.getText();
+		float percent = MediaPlayerUtils.getInstance().getPercent();
+		DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+		entity.percent = decimalFormat.format(percent)+"%";
+		intent.putExtra("book_mark", entity);
+		intent.putExtra("percent", percent);
+
 		intent.setClass(this, AudioFunctionMenu.class);
 		startActivityForResult(intent, MENU_CODE);
 	}

@@ -80,6 +80,24 @@ public class MediaPlayerUtils
 		}
 	}
 
+	//得到进度百分比
+	public float getPercent()
+	{
+		if( mMediaPlayer != null )
+		{
+			try
+			{
+				return	(float)mMediaPlayer.getCurrentPosition() * 100.0f / (float)mMediaPlayer.getDuration();
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return	0.0f;
+	}
+	
 	//设置进度百分比
 	public boolean seek( float progress )
 	{

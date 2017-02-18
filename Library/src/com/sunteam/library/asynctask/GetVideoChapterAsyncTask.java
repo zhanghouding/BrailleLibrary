@@ -29,6 +29,7 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	private String mTitle;
 	private String dbCode;			//数据库编码
 	private String sysId;			//系统id
+	private String identifier;		//书本id
 	private String categoryName;	//分类名称
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityList = new ArrayList<VideoChapterInfoEntity>();
 	
@@ -47,6 +48,7 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		dbCode = params[0];
 		sysId = params[1];
 		categoryName = params[2];
+		identifier = params[3];
 		ArrayList<VideoChapterInfoEntity> list = HttpDao.getVideoChapterList(dbCode, sysId);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
@@ -102,6 +104,7 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
+		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);	//书本id
 		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName);	//分类名称
 		intent.setClass(mContext, VideoChapterList.class);
 		mContext.startActivity(intent);

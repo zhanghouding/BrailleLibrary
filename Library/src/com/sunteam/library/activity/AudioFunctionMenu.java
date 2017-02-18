@@ -9,6 +9,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
 
 /**
@@ -18,7 +19,8 @@ import com.sunteam.library.utils.EbookConstants;
  * @Note
  */
 public class AudioFunctionMenu extends MenuActivity {
-	private float mPercentFloat = 0.0f; // 当前播放位置
+	private float percent = 0.0f;
+	private BookmarkEntity mBookmarkEntity = null;	//书签实体类
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -97,7 +99,8 @@ public class AudioFunctionMenu extends MenuActivity {
 	private void initView() {
 		// TODO 需要传递书签管理需要的信息、当前页码、页码总数
 		Intent intent = getIntent();
-
+		percent = intent.getFloatExtra("percent", 0.0f);
+		mBookmarkEntity = (BookmarkEntity) intent.getSerializableExtra("book_mark");
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_audio_function_menu_list));
 	}
@@ -113,6 +116,7 @@ public class AudioFunctionMenu extends MenuActivity {
 //		intent.putExtra("begin", 0); // 当前阅读位置
 //		intent.putExtra("bookmark_name", chapterInfo.bookId); // 书签名
 
+		intent.putExtra("book_mark", mBookmarkEntity);
 		intent.setClass(this, BookmarkManager.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
@@ -124,7 +128,7 @@ public class AudioFunctionMenu extends MenuActivity {
 	public void startPercentEdit(int selectItem, String menuItem) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
-		intent.putExtra("percent", mPercentFloat);
+		intent.putExtra("percent", percent);
 		intent.setClass(this, PercentEdit.class);
 		startActivityForResult(intent, selectItem);
 	}

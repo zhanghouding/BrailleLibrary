@@ -18,6 +18,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	private String fatherPath;	//父目录路径
 	private String dbCode;		//数据编码
 	private String sysId;		//系统id
+	private String identifier;	//书本id
 	private String categoryName;//分类名称
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 
@@ -85,6 +86,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		Intent intent = new Intent( this, PlayAudioVedioActivity.class );
 		intent.putExtra("dbCode", mVideoChapterInfoEntityListt.get(selectItem).databaseCode); // 数据库代码
 		intent.putExtra("sysId", mVideoChapterInfoEntityListt.get(selectItem).sysId); // 记录标识号
+		intent.putExtra("identifier", identifier);	//书本id
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_VIDEO); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra("categoryCode", mVideoChapterInfoEntityListt.get(selectItem).categoryName); // 分类代码
 		intent.putExtra("filename", menuItem); // 书名
@@ -104,6 +106,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
+		identifier = intent.getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
 		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);
 	}
 

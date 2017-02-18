@@ -88,20 +88,21 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String dbCode;
 		String sysId;
-
+		String identifier;
+		
 		dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
 		sysId = mEbookNodeEntityList.get(selectItem).sysId;
+		identifier = mEbookNodeEntityList.get(selectItem).identifier;
 		
 		switch(dataType){
 		case LibraryConstant.LIBRARY_DATATYPE_EBOOK:			
-			String identifier = mEbookNodeEntityList.get(selectItem).identifier;
 			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
-			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle);
+			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
-			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle);
+			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
 			break;
 		default:
 			break;

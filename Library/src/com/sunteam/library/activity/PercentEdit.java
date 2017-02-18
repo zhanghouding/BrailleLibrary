@@ -8,6 +8,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.Tools;
@@ -41,7 +43,8 @@ public class PercentEdit extends BaseActivity {
 		if(0.0f == mPercentFloat){
 			mPercentStr = "0";
 		} else {
-			mPercentStr = String.format("%##.##f", mPercentFloat);
+			DecimalFormat decimalFormat = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+			mPercentStr = decimalFormat.format(mPercentFloat);
 		}
 
 		if (null == mTitle) {
