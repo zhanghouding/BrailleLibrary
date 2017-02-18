@@ -58,6 +58,9 @@
 	<string name="library_input_percent_error">输入错误</string>
 	<string name="library_downloading">正在下载当前资源！</string>
 	<string name="library_net_error">网络未连接！</string>
+	<string name="library_del_bookmark">正在删除书签</string>
+	<string name="library_del_bookmark_success">删除书签成功！</string>
+	<string name="library_del_bookmark_fail">该书签不存在！</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>

@@ -19,6 +19,7 @@ import com.sunteam.library.parse.AddBookMarkParseResponse;
 import com.sunteam.library.parse.AddCollectCategoryParseResponse;
 import com.sunteam.library.parse.AddCollectResourceParseResponse;
 import com.sunteam.library.parse.AddHistoryParseResponse;
+import com.sunteam.library.parse.DelBookMarkParseResponse;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetBookMarkParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
@@ -302,6 +303,7 @@ public class HttpDao
 	 * 得到书签列表
 	 * 
 	 * @param username
+	 * @param bookId
 	 * @return
 	 * @author wzp
 	 * @Created 2017/02/14
@@ -475,4 +477,30 @@ public class HttpDao
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new AddBookMarkParseResponse() );
 	}	
+	
+	/**
+	 * 删除书签
+	 * 
+	 * @param username
+	 * @param id
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/18
+	 */
+	@SuppressWarnings("unchecked")
+	public static Integer delBookMark( String username, String id ) 
+	{
+		String json = 
+				"{"
+				+ "\"UserName\":\""+username+"\","
+				+ "\"Id\":\""+id+"\""
+				+ "}";
+		
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteBookmark");
+		requestParams.put("jsonObj", URLEncoder.encode(json));
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new DelBookMarkParseResponse() );
+	}
+		
 }

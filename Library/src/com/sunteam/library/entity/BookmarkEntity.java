@@ -15,7 +15,7 @@ public class BookmarkEntity implements Serializable
 	 */
 	private static final long serialVersionUID = 8872374053931056239L;
 	
-    public int id;				//标识列
+    public int id;				//标识id
     public String userName;		//用户名
     public String bookId;		//书目ID
     public String addedTime;	//创建时间
