@@ -1,7 +1,9 @@
 package com.sunteam.library.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -11,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.text.DecimalFormat;
 
 import com.sunteam.common.tts.TtsUtils;
@@ -23,7 +26,9 @@ import com.sunteam.library.entity.ReadMode;
 import com.sunteam.library.entity.ReverseInfo;
 import com.sunteam.library.utils.CustomToast;
 import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.FileOperateUtils;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.TextFileReaderUtils;
@@ -101,7 +106,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
     	//mTextReaderView.setTextSize(tools.getFontSize());
     	   	
     	TTSUtils.getInstance().init(this);	//初始化TTS
-    	
+    	playMusic();	//播放背景音乐
     	if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), 0, 0, 0, 0, isAuto, filename) == false )
     	{
     		
@@ -383,13 +388,47 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 							}
 						}
 						break;
+					case EbookConstants.TO_PLAY_MUSIC:	//播放音乐
+						playMusic();	//播放背景音乐
+						break;
 					default:
 						break;
 				}
 			}
 		}
 	}
-
+	
+	//播放背景音乐
+	private void playMusic()
+	{
+		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE,Context.MODE_PRIVATE);
+		boolean isMusic = shared.getBoolean(EbookConstants.MUSICE_STATE, false);
+		if(isMusic)
+		{
+			String path = shared.getString(EbookConstants.MUSICE_PATH, null);
+			if(null == path)
+			{
+				path = FileOperateUtils.getFirstMusicInDir();
+			}
+			else
+			{
+				File file = new File(path);
+				if(!file.exists())
+				{
+					path = FileOperateUtils.getFirstMusicInDir();
+				}
+			}
+			if(null != path)
+			{
+				MediaPlayerUtils.getInstance().play(path, true);
+			}
+		}
+		else
+		{
+			MediaPlayerUtils.getInstance().stop();
+		}
+	}
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
