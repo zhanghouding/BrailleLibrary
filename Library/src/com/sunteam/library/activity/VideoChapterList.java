@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.menu.menuview.OnMenuKeyListener;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
@@ -21,6 +22,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	private String identifier;	//书本id
 	private String categoryName;//分类名称
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
+	private BookmarkEntity mBookmarkEntity;
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -71,7 +73,33 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 			mMenuView.up();
 			mMenuView.enter();
 			break;
-		case EbookConstants.TO_BOOK_START:
+		case EbookConstants.TO_BOOK_MARK:	//书签
+			mBookmarkEntity = (BookmarkEntity) data.getSerializableExtra("book_mark");
+			if( mBookmarkEntity != null )
+			{
+				int chapterIndex = mBookmarkEntity.chapterIndex;
+				int selectItem = mMenuView.getSelectItem();
+				if( chapterIndex == selectItem )
+				{
+					
+				}
+				else if( chapterIndex > selectItem )
+				{
+					for( int i = selectItem; i < chapterIndex; i++ )
+					{
+						mMenuView.down();
+					}
+				}
+				else
+				{
+					for( int i = selectItem; i > chapterIndex; i-- )
+					{
+						mMenuView.up();
+					}
+				}
+				
+				mMenuView.enter();
+			}
 			break;
 		default:
 			break;
@@ -94,7 +122,13 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		intent.putExtra("totalChapter", mVideoChapterInfoEntityListt.size()); // 总章节数
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");		//父目录
 		intent.putExtra(LibraryConstant.INTENT_KEY_URL, mVideoChapterInfoEntityListt.get(selectItem).videoUrl);	//资源路径
+		if( mBookmarkEntity != null )
+		{
+			intent.putExtra("book_mark", mBookmarkEntity);	//书签
+		}
 		this.startActivityForResult(intent, selectItem);
+		
+		mBookmarkEntity = null;
 	}
 
 	@SuppressWarnings("unchecked")

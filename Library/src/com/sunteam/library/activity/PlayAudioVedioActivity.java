@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
@@ -34,6 +33,7 @@ import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.MediaPlayerUtils.OnMediaPlayerListener;
 import com.sunteam.library.utils.MediaPlayerUtils.PlayStatus;
 import com.sunteam.library.utils.PublicUtils;
+import com.sunteam.library.utils.TTSUtils;
 
 /**
  * 音视频播放界面
@@ -58,6 +58,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
 	private String identifier;		//书本id
+	private BookmarkEntity mBookmarkEntity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
 		setContentView(R.layout.library_activity_play_audio_vedio);
 		
+		mBookmarkEntity = (BookmarkEntity) this.getIntent().getSerializableExtra("book_mark");
 		identifier = this.getIntent().getStringExtra("identifier");
 		filename = this.getIntent().getStringExtra("filename");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
@@ -133,6 +135,10 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	    	if( file.exists() )
 	    	{
 	    		MediaPlayerUtils.getInstance().play(fullpath, false);	//播放音频
+	    		if( mBookmarkEntity != null )
+		    	{
+		    		MediaPlayerUtils.getInstance().seek(mBookmarkEntity.begin);
+		    	}
 	    		totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
 	    		showTime(mTvEndTime, totalTime);	//显示总时间
 	    		mHandler.sendEmptyMessageDelayed(0, 500);
@@ -161,6 +167,10 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		    		}
 		    	});
 		    	MediaPlayerUtils.getInstance().play(resourceUrl, false);	//播放音视频
+		    	if( mBookmarkEntity != null )
+		    	{
+		    		MediaPlayerUtils.getInstance().seek(mBookmarkEntity.begin);
+		    	}
 		    	totalTime = MediaPlayerUtils.getInstance().getTotalTime()/1000;
 	    		showTime(mTvEndTime, totalTime);	//显示总时间
 		    	mHandler.sendEmptyMessageDelayed(0, 500);
@@ -230,6 +240,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		{
 			RefreshScreenUtils.disableRefreshScreen();
 			MediaPlayerUtils.getInstance().stop();
+			TtsUtils.getInstance().setMuteFlag(true);
 			Intent intent = new Intent();
 			intent.putExtra("action", EbookConstants.TO_PRE_PART);
 			setResult(RESULT_OK, intent);
@@ -438,6 +449,26 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 						MediaPlayerUtils.getInstance().seek(percent);
 						MediaPlayerUtils.getInstance().resume();
 						mIbStatus.setBackgroundResource(R.drawable.play);
+						break;
+					case EbookConstants.TO_BOOK_MARK:	//到某个书签位置
+						BookmarkEntity entity = (BookmarkEntity) data.getSerializableExtra("book_mark");
+						if( entity != null )
+						{
+							if( entity.chapterIndex == curChapter )	//如果在同一章跳转
+							{
+								MediaPlayerUtils.getInstance().seek(entity.begin);
+								MediaPlayerUtils.getInstance().resume();
+								mIbStatus.setBackgroundResource(R.drawable.play);
+							}
+							else	//在不同章节跳转
+							{
+								RefreshScreenUtils.disableRefreshScreen();
+								TTSUtils.getInstance().stop();
+								TtsUtils.getInstance().setMuteFlag(true);
+								setResult(RESULT_OK, data);
+								finish();
+							}
+						}
 						break;
 					default:
 						break;

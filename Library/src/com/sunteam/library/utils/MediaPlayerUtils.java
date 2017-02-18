@@ -98,6 +98,26 @@ public class MediaPlayerUtils
 		return	0.0f;
 	}
 	
+	//跳转到某个时间点播放
+	public boolean seek( int offset )
+	{
+		if( mMediaPlayer != null )
+		{
+			try
+			{
+				mMediaPlayer.seekTo(offset);
+				
+				return	true;
+			}
+			catch( Exception e )
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		return	false;
+	}
+	
 	//设置进度百分比
 	public boolean seek( float progress )
 	{
