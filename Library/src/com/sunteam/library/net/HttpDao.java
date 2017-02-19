@@ -20,6 +20,9 @@ import com.sunteam.library.parse.AddCollectCategoryParseResponse;
 import com.sunteam.library.parse.AddCollectResourceParseResponse;
 import com.sunteam.library.parse.AddHistoryParseResponse;
 import com.sunteam.library.parse.DelBookMarkParseResponse;
+import com.sunteam.library.parse.DelCollectCategoryParseResponse;
+import com.sunteam.library.parse.DelCollectResourceParseResponse;
+import com.sunteam.library.parse.DelHistoryParseResponse;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetBookMarkParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
@@ -479,6 +482,83 @@ public class HttpDao
 	}	
 	
 	/**
+	 * 删除历史
+	 * 
+	 * @param username
+	 * @param dbCode
+	 * @param sysId
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/19
+	 */
+	public static Integer delHistory( String username, String dbCode, String sysId ) 
+	{
+		String json = 
+				"{"
+				+ "\"UserName\":\""+username+"\","
+				+ "\"DbCode\":\""+dbCode+"\","
+				+ "\"SysId\":\""+sysId+"\""
+				+ "}";
+		
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteHistory");
+		requestParams.put("jsonObj", URLEncoder.encode(json));
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new DelHistoryParseResponse() );
+	}
+	
+	/**
+	 * 删除收藏分类
+	 * 
+	 * @param username
+	 * @param categoryCode
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/19
+	 */
+	@SuppressWarnings("unchecked")
+	public static Integer delCollectCategory( String username, String categoryCode ) 
+	{
+		String json = 
+				"{"
+				+ "\"UserName\":\""+username+"\","
+				+ "\"CategoryCode\":\""+categoryCode+"\""
+				+ "}";
+		
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteCategory");
+		requestParams.put("jsonObj", URLEncoder.encode(json));
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new DelCollectCategoryParseResponse() );
+	}
+	
+	/**
+	 * 删除收藏资源
+	 * 
+	 * @param username
+	 * @param dbCode
+	 * @param sysId
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/19
+	 */
+	public static Integer delCollectResource( String username, String dbCode, String sysId ) 
+	{
+		String json = 
+				"{"
+				+ "\"UserName\":\""+username+"\","
+				+ "\"DbCode\":\""+dbCode+"\","
+				+ "\"SysId\":\""+sysId+"\""
+				+ "}";
+		
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteCollect");
+		requestParams.put("jsonObj", URLEncoder.encode(json));
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new DelCollectResourceParseResponse() );
+	}
+	
+	/**
 	 * 删除书签
 	 * 
 	 * @param username
@@ -501,6 +581,5 @@ public class HttpDao
 		requestParams.put("jsonObj", URLEncoder.encode(json));
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new DelBookMarkParseResponse() );
-	}
-		
+	}	
 }
