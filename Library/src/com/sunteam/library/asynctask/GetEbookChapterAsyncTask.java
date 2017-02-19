@@ -32,14 +32,30 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	private String categoryName;	//分类名称
 	private String identifier;
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList = new ArrayList<EbookChapterInfoEntity>();
+	private boolean isHistory = false;	//是否是从历史记录进入
+	private int lastChapterIndex = 0;
+	private int offset = 0;
 	
-	public GetEbookChapterAsyncTask(Context context, String fatherPath, String title) 
+	private void init(Context context, String fatherPath, String title)
 	{
 		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
 		
 		mContext = context;
 		mFatherPath = fatherPath+title+"/";
 		mTitle = title;
+	}
+	
+	public GetEbookChapterAsyncTask(Context context, String fatherPath, String title) 
+	{
+		init( context, fatherPath, title );
+	}
+	
+	public GetEbookChapterAsyncTask(Context context, String fatherPath, String title, int chapterIndex, int begin) 
+	{
+		init( context, fatherPath, title );
+		lastChapterIndex = chapterIndex;
+		offset = begin;
+		isHistory = true;
 	}
 
 	@Override
@@ -111,6 +127,9 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
 		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName);	//分类名称
+		intent.putExtra("isHistory", isHistory);
+		intent.putExtra("lastChapterIndex", lastChapterIndex);
+		intent.putExtra("offset", offset);
 		intent.setClass(mContext, EbookChapterList.class);
 		mContext.startActivity(intent);
 	}

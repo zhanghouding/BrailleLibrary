@@ -119,22 +119,24 @@ public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListene
 			fatherPath += (categoryName[i]+"/");
 		}
 		
+		int offset = 0;	//起始位置
+		
 		switch(dataType)
 		{
 			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	
 				sysId = "";
 				identifier = entity.sysId;
-				new GetEbookChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
+				new GetEbookChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
 				sysId = entity.sysId;
 				identifier = "";
-				new GetAudioChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
+				new GetAudioChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
 				sysId = entity.sysId;
 				identifier = "";
-				new GetVideoChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
+				new GetVideoChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
 				break;
 			default:
 				break;
