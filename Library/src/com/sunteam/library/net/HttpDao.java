@@ -256,7 +256,7 @@ public class HttpDao
 		String json = "{UserName:\""+username+"\"}";
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "SearchHistory");
-		requestParams.put("jsonObj", json);
+		requestParams.put("jsonObj", URLEncoder.encode(json));
 		
 		return (ArrayList<HistoryEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new GetHistoryParseResponse() );
 	}
@@ -275,7 +275,7 @@ public class HttpDao
 		String json = "{UserName:\""+username+"\"}";
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "SearchCategory");
-		requestParams.put("jsonObj", json);
+		requestParams.put("jsonObj", URLEncoder.encode(json));
 		
 		return (ArrayList<CollectCategoryEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new GetCollectCategoryParseResponse() );
 	}
@@ -294,7 +294,7 @@ public class HttpDao
 		String json = "{UserName:\""+username+"\"}";
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "SearchCollect");
-		requestParams.put("jsonObj", json);
+		requestParams.put("jsonObj", URLEncoder.encode(json));
 		
 		return (ArrayList<CollectResourceEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new GetCollectResourceParseResponse() );
 	}
