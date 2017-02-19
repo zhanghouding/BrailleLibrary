@@ -129,6 +129,8 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		{
 			intent.putExtra("book_mark", mBookmarkEntity);	//书签
 		}
+		intent.putExtra("isHistory", isHistory); // 阅读历史标志
+		intent.putExtra("offset", offset);
 		this.startActivityForResult(intent, selectItem);
 		
 		mBookmarkEntity = null;
@@ -148,6 +150,10 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		isHistory = intent.getBooleanExtra("isHistory", false);
 		lastChapterIndex = intent.getIntExtra("lastChapterIndex", 0);
 		offset = intent.getIntExtra("offset", 0);
+		if (isHistory) {
+			selectItem = lastChapterIndex;
+			setResultCode (Activity.RESULT_OK, selectItem, (String) mMenuList.get(selectItem));
+		}
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<VideoChapterInfoEntity> listSrc) {

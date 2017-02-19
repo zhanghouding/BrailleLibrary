@@ -34,10 +34,13 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 	private String dbCode;		//数据编码
 	private String sysId;		//系统id
 	private String categoryCode;//分类编码
+
+	private boolean isHistory = false;	//是否是从历史记录进入
+	private int offset = 0;
 	
 	private BookmarkEntity mBookmarkEntity = null;
 	
-	public GetEbookChapterContentAsyncTask(Context context, String fatherPath, String title, int curChapter, int totalChapter, BookmarkEntity entity ) 
+	public GetEbookChapterContentAsyncTask(Context context, String fatherPath, String title, int curChapter, int totalChapter, BookmarkEntity entity, boolean historyFlag, int off ) 
 	{
 		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
 		
@@ -47,6 +50,8 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 		mCurChapter = curChapter;
 		mTotalChapter = totalChapter;
 		mBookmarkEntity = entity;
+		isHistory = historyFlag;
+		offset = off;
 	}
 
 	@Override
@@ -125,6 +130,8 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 			{
 				intent.putExtra("book_mark", mBookmarkEntity);	//书签
 			}
+			intent.putExtra("isHistory", isHistory); // 阅读历史标志
+			intent.putExtra("offset", offset);
 			((EbookChapterList) mContext).startActivityForResult(intent, mCurChapter);
 		} 
 		catch (Exception e) 

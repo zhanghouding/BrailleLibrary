@@ -102,7 +102,7 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String chapterIndex = mEbookChapterInfoEntityList.get(selectItem).chapterIndex;
-		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size(), mBookmarkEntity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName);
+		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size(), mBookmarkEntity,isHistory, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName);
 		mBookmarkEntity = null;
 	}
 
@@ -120,6 +120,10 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 		isHistory = intent.getBooleanExtra("isHistory", false);
 		lastChapterIndex = intent.getIntExtra("lastChapterIndex", 0);
 		offset = intent.getIntExtra("offset", 0);
+		if (isHistory) {
+			selectItem = lastChapterIndex;
+			setResultCode (Activity.RESULT_OK, selectItem, (String) mMenuList.get(selectItem));
+		}
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<EbookChapterInfoEntity> listSrc) {
