@@ -2,6 +2,7 @@ package com.sunteam.library.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 
 import com.sunteam.common.menu.MenuActivity;
@@ -9,6 +10,9 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.GetCollectCategoryAsyncTask;
+import com.sunteam.library.asynctask.GetCollectResourceAsyncTask;
+import com.sunteam.library.asynctask.GetHistoryAsyncTask;
 
 /**
  * @Destryption 我的图书馆浏览界面，是固定的菜单列表
@@ -32,16 +36,14 @@ public class MylibraryActivity extends MenuActivity {
 		String[] list = null;
 		
 		switch (selectItem) {
-		case 0: // 收藏分类
-			list = getResources().getStringArray(R.array.library_favorite_list);
-//			startNextActivity(FavoriteCategoryList.class, selectItem, menuItem, list);
+		case 0: // 收藏资源
+			new GetCollectResourceAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			break;
-		case 1: // 收藏资源
-			list = getResources().getStringArray(R.array.library_favorite_list);
-//			startNextActivity(FavoriteResourceList.class, selectItem, menuItem, list);
+		case 1: // 收藏分类
+			new GetCollectCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			break;
 		case 2: // 最近阅读历史
-//			startNextActivity(ReadingHistoryList.class, selectItem, menuItem, list);
+			new GetHistoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			break;
 		case 3: // 下载管理
 			list = getResources().getStringArray(R.array.library_download_manager_list);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.entity.HistoryEntity;
 
 /**
  * @Destryption 阅读历史列表；阅读历史中只保存了书本
@@ -16,44 +17,18 @@ import com.sunteam.common.menu.MenuConstant;
  * @Note
  */
 public class ReadingHistoryList extends MenuActivity {
+	private ArrayList<HistoryEntity> mHistoryEntityList = new ArrayList<HistoryEntity>();
 
 	public void onCreate(Bundle savedInstanceState) {
-		mMenuList = new ArrayList<String>();
-		Intent intent = getIntent();
-		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		initView();
 		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) { // 在子菜单中回传的标志
 			return;
 		}
 
@@ -65,6 +40,23 @@ public class ReadingHistoryList extends MenuActivity {
 		Class<?> cls = null;
 
 		startNextActivity(cls, selectItem, menuItem, list);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void initView() {
+		Intent intent = getIntent();
+		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		mHistoryEntityList = (ArrayList<HistoryEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mMenuList = getListFromHistoryEntity(mHistoryEntityList);
+	}
+
+	private ArrayList<String> getListFromHistoryEntity(ArrayList<HistoryEntity> listSrc) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < listSrc.size(); i++) {
+			list.add(listSrc.get(i).categoryFullName);
+		}
+
+		return list;
 	}
 
 	private void startNextActivity(Class<?> cls, int selectItem, String title, String[] list){

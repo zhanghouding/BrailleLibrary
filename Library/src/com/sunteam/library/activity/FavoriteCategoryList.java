@@ -1,11 +1,14 @@
 package com.sunteam.library.activity;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.entity.CollectCategoryEntity;
 
 /**
  * @Destryption 收藏分类列表；电子书、有声书、口述影像公用一个界面
@@ -14,34 +17,11 @@ import com.sunteam.common.menu.MenuConstant;
  * @Note
  */
 public class FavoriteCategoryList extends MenuActivity {
+	private ArrayList<CollectCategoryEntity> mCollectCategoryEntityList = new ArrayList<CollectCategoryEntity>();
 
 	public void onCreate(Bundle savedInstanceState) {
+		initView();
 		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
@@ -57,6 +37,23 @@ public class FavoriteCategoryList extends MenuActivity {
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		startNextActivity(selectItem, menuItem);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void initView() {
+		Intent intent = getIntent();
+		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		mCollectCategoryEntityList = (ArrayList<CollectCategoryEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mMenuList = getListFromCollectCategoryEntity(mCollectCategoryEntityList);
+	}
+
+	private ArrayList<String> getListFromCollectCategoryEntity(ArrayList<CollectCategoryEntity> listSrc) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < listSrc.size(); i++) {
+			list.add(listSrc.get(i).categoryFullName);
+		}
+
+		return list;
 	}
 
 	private void startNextActivity(int selectItem, String title) {

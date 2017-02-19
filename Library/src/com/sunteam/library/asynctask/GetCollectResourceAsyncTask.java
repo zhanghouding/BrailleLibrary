@@ -3,10 +3,13 @@ package com.sunteam.library.asynctask;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.activity.FavoriteResourceList;
 import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.PublicUtils;
@@ -87,15 +90,10 @@ public class GetCollectResourceAsyncTask extends AsyncTask<String, Void, ArrayLi
 	}
 
 	private void startNextActivity() {
-		/*
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mCollectResourceEntityList); // 数据列表
-		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);
-		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
-		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
-		intent.setClass(mContext, EbookOnlineChapterList.class);
+		intent.setClass(mContext, FavoriteResourceList.class);
 		mContext.startActivity(intent);
-		*/
 	}
 }

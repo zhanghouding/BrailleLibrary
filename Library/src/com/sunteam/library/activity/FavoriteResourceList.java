@@ -2,19 +2,13 @@ package com.sunteam.library.activity;
 
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.utils.CommonUtils;
-import com.sunteam.common.utils.SunteamToast;
-import com.sunteam.library.R;
-import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.entity.CollectResourceEntity;
 
 /**
  * @Destryption 收藏资源列表，与手机端的收藏资源保持一致
@@ -23,48 +17,18 @@ import com.sunteam.library.utils.LibraryConstant;
  * @Note
  */
 public class FavoriteResourceList extends MenuActivity {
-	private int favoriteType = 0; // 收藏类型：新闻、电子书、有声书、口述影像
+	private ArrayList<CollectResourceEntity> mCollectResourceEntityList = new ArrayList<CollectResourceEntity>();
 
 	public void onCreate(Bundle savedInstanceState) {
-		getIntentPara();
+		initView();
 		super.onCreate(savedInstanceState);
-	}
-
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (0 == mMenuList.size()) {
-			SunteamToast mSunteamToast = new SunteamToast(this);
-			mSunteamToast.show(R.string.library_wait_reading_data);
-			getFavoriteData(favoriteType);
-		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) { // 在子菜单中回传的标志
 			return;
 		}
 
@@ -72,73 +36,36 @@ public class FavoriteResourceList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
+		startNextActivity(selectItem, menuItem);
 	}
 
-	private void getIntentPara() {
+	@SuppressWarnings("unchecked")
+	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-		favoriteType = intent.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
-		mMenuList = new ArrayList<String>();
+		mCollectResourceEntityList = (ArrayList<CollectResourceEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mMenuList = getListFromCollectResourceEntity(mCollectResourceEntityList);
 	}
 
-	@SuppressLint("HandlerLeak")
-	private Handler mHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case LibraryConstant.MSG_HTTP_FAVROITE_SEARCH:
-				parseFavoriteSearchResult((String) msg.obj);
-				break;
-			case LibraryConstant.MSG_CONFIRMDIALOG_RETURN:
-				parseFavoriteSearchResult((String) msg.obj);
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
-
-	private void getFavoriteData(int type) {
-		String userName = CommonUtils.getSettingSecureString(this, LibraryConstant.ACCESSIBILITY_DEVICEID);// Settings.Secure.ACCESSIBILITY_DEVICEID
-		switch (type) {
-		case 0: // 新闻
-			getFavoritNews(userName);
-			break;
-		case 1: // 电子书
-			break;
-		case 2: // 有声书
-			break;
-		case 3: // 口述影像
-			break;
-		default:
-			break;
+	private ArrayList<String> getListFromCollectResourceEntity(ArrayList<CollectResourceEntity> listSrc) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (int i = 0; i < listSrc.size(); i++) {
+			list.add(listSrc.get(i).categoryFullName);
 		}
 
+		return list;
 	}
 
-	private void getFavoritNews(String userName) {
-		/*if (WifiUtils.checkWifiState(this)) {
-			HttpGetUtils mHttpGetUtils = new HttpGetUtils();
-			String url = "http://www.blc.org.cn/API/CollectInterface.ashx";
-			mHttpGetUtils.addGetParameter("requestType", "SearchCollect");
-			String jsonObj = "{" + JsonUtils.addQuotation("UserName") + ":" + JsonUtils.addQuotation(userName) + "}";
-			mHttpGetUtils.addGetParameter("jsonObj", jsonObj);
-			mHttpGetUtils.addGetParameter("pageSize", "1");
-			mHttpGetUtils.addGetParameter("pageIndex", "3");
-			mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_FAVROITE_SEARCH);
-		}*/
-	}
+	private void startNextActivity(int selectItem, String title) {
+		Intent intent = new Intent();
+/*		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
+		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem); // 选中的选项
 
-	private void parseFavoriteSearchResult(String mJson) {
-		/*MenuGlobal.debug("[Library-MainActivity][parseUserInfo] mJson = " + mJson);
-		if (null == mJson || 0 == mJson.length()) {
-			PromptDialog mPromptDialog = new PromptDialog(this, "");
-			mPromptDialog.setHandler(mHandler, LibraryConstant.MSG_CONFIRMDIALOG_RETURN);
-			return;
-		}
+		intent.setClass(this, FavoriteActivity.class);*/
 
-		int checkState = JsonUtils.getInt(mJson, "CheckState");
-		if (1 == checkState) {
-		}*/
+		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
+		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
+		startActivityForResult(intent, selectItem);
 	}
+	
 }
