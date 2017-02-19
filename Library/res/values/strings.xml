@@ -61,6 +61,9 @@
 	<string name="library_del_bookmark">正在删除书签</string>
 	<string name="library_del_bookmark_success">删除书签成功！</string>
 	<string name="library_del_bookmark_fail">该书签不存在！</string>
+	<string name="library_favorite_category_null">无收藏的分类</string>
+	<string name="library_favorite_resource_null">无收藏的资源</string>
+	<string name="library_reading_history_null">无阅读历史</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>

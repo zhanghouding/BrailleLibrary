@@ -37,16 +37,6 @@ public class BookmarViewkList extends MenuActivity {
 		super.onCreate(savedInstanceState);
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
-			return;
-		}
-
-	}
-
 	@SuppressLint("HandlerLeak")
 	private Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -130,7 +120,5 @@ public class BookmarViewkList extends MenuActivity {
 		});
 		mConfirmDialog.show();
 	}
-
-
 	
 }

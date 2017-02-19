@@ -77,4 +77,11 @@ public class LibraryConstant {
 	public static final int RESULT_SUCCESS = 0;		//成功
 	public static final int RESULT_FAIL = -1;		//失败
 	public static final int RESULT_EXCEPTION = -2;	//异常
+	
+	// 公用的删除、清空菜单界面
+	public static final int MYLIBRARY_FAVARITE_CATEGORY = 0; // 我收藏的分类
+	public static final int MYLIBRARY_FAVARITE_RESOURCE = 1; // 我收藏的资源
+	public static final int MYLIBRARY_READING_HISTORY = 2; // 我的阅读历史
+	public static final int MYLIBRARY_DOWNLOADING = 3; // 正在下载
+	public static final int MYLIBRARY_DOWNLOADED = 4; // 已下载
 }

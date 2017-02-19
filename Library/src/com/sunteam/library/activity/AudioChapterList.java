@@ -36,29 +36,9 @@ public class AudioChapterList extends MenuActivity implements OnMenuKeyListener 
 	}
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
 		mMenuView.setMenuKeyListener(this);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override

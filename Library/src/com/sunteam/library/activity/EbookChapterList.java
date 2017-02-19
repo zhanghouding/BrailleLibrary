@@ -38,31 +38,11 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	}
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
 		if (0 == fatherWindowType) {
 			mMenuView.setMenuKeyListener(this);
 		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override

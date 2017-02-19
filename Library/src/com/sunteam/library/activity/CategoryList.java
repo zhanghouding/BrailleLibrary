@@ -47,31 +47,6 @@ public class CategoryList extends MenuActivity implements ShowView/*, OnClickLis
 	}
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
@@ -176,14 +151,5 @@ public class CategoryList extends MenuActivity implements ShowView/*, OnClickLis
 		TextView tvIcon = null; // 图标
 		TextView tvMenu = null; // 菜单项
 	}
-
-	/*private void startResourceList(int selectItem, String menuItem) {
-		Intent intent = new Intent();
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem); // 菜单名称
-		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
-		intent.setClass(this, ResourceOlineList.class);
-
-		startActivity(intent);
-	}*/
 
 }
