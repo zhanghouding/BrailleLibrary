@@ -23,6 +23,9 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	private String categoryName;//分类名称
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 	private BookmarkEntity mBookmarkEntity;
+	private boolean isHistory = false;	//是否是从历史记录进入
+	private int lastChapterIndex = 0;
+	private int offset = 0;
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -142,6 +145,9 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
 		identifier = intent.getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
 		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);
+		isHistory = intent.getBooleanExtra("isHistory", false);
+		lastChapterIndex = intent.getIntExtra("lastChapterIndex", 0);
+		offset = intent.getIntExtra("offset", 0);
 	}
 
 	private ArrayList<String> getListFromChapterInfoEntity(ArrayList<VideoChapterInfoEntity> listSrc) {
