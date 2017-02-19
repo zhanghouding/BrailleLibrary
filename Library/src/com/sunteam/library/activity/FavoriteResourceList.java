@@ -4,11 +4,16 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
+import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
+import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.entity.CollectResourceEntity;
+import com.sunteam.library.utils.LibraryConstant;
 
 /**
  * @Destryption 收藏资源列表，与手机端的收藏资源保持一致
@@ -56,16 +61,44 @@ public class FavoriteResourceList extends MenuActivity {
 		return list;
 	}
 
-	private void startNextActivity(int selectItem, String title) {
-		Intent intent = new Intent();
-/*		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem); // 选中的选项
-
-		intent.setClass(this, FavoriteActivity.class);*/
-
-		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
-		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
-		startActivityForResult(intent, selectItem);
+	private void startNextActivity(int selectItem, String menuItem) 
+	{
+		CollectResourceEntity entity = mCollectResourceEntityList.get(selectItem);
+		int dataType = entity.resType;
+		String dbCode;
+		String sysId;
+		String identifier;
+		String[] categoryName = entity.categoryFullName.split("-");
+		dbCode = entity.dbCode;
+		
+		int size = categoryName.length;
+		String title = categoryName[size-1];
+		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH;
+		for( int i = 0; i < size-1; i++ )
+		{
+			fatherPath += (categoryName[i]+"/");
+		}
+		
+		switch(dataType)
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	
+				sysId = "";
+				identifier = entity.sysId;
+				new GetEbookChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
+				sysId = entity.sysId;
+				identifier = "";
+				new GetAudioChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
+				sysId = entity.sysId;
+				identifier = "";
+				new GetVideoChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+				break;
+			default:
+				break;
+		}
 	}
 	
 }

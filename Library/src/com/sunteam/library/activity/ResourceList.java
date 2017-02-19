@@ -146,7 +146,15 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
 		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode);	//分类编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, mEbookNodeEntityList.get(selectItem).dbCode);	//数据编码
-		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, mEbookNodeEntityList.get(selectItem).sysId);	//系统id
+		switch( dataType )
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书
+				intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, mEbookNodeEntityList.get(selectItem).identifier);	//书本d
+				break;
+			default:
+				intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, mEbookNodeEntityList.get(selectItem).sysId);	//系统id
+				break;
+		}
 		intent.setClass(this, ResourceFunctionMenu.class);
 
 		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
