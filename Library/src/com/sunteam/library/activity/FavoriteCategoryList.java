@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.library.asynctask.GetEbookAsyncTask;
 import com.sunteam.library.entity.CollectCategoryEntity;
+import com.sunteam.library.utils.LibraryConstant;
 
 /**
  * @Destryption 收藏分类列表；电子书、有声书、口述影像公用一个界面
@@ -56,16 +59,23 @@ public class FavoriteCategoryList extends MenuActivity {
 		return list;
 	}
 
-	private void startNextActivity(int selectItem, String title) {
-		Intent intent = new Intent();
-/*		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem); // 选中的选项
-
-		intent.setClass(this, FavoriteActivity.class);*/
-
-		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
-		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
-		startActivityForResult(intent, selectItem);
+	private void startNextActivity(int selectItem, String menuItem) {
+		CollectCategoryEntity entity = mCollectCategoryEntityList.get(selectItem);
+		String pageIndex = "1";
+		String pageSize = "" + LibraryConstant.LIBRARY_RESOURCE_PAGESIZE;
+		String categoryCode = entity.categoryCode;
+		int dataType = entity.resType;
+		
+		String[] categoryName = entity.categoryFullName.split("-");
+		int size = categoryName.length;
+		String title = entity.categoryName;
+		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH;
+		for( int i = 0; i < size-1; i++ )
+		{
+			fatherPath += (categoryName[i]+"/");
+		}
+		
+		new GetEbookAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, categoryCode, "" + dataType);
 	}
 
 }

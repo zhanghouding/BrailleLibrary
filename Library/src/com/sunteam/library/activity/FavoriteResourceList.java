@@ -72,7 +72,7 @@ public class FavoriteResourceList extends MenuActivity {
 		dbCode = entity.dbCode;
 		
 		int size = categoryName.length;
-		String title = categoryName[size-1];
+		String title = entity.title;
 		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH;
 		for( int i = 0; i < size-1; i++ )
 		{
@@ -84,17 +84,17 @@ public class FavoriteResourceList extends MenuActivity {
 			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	
 				sysId = "";
 				identifier = entity.sysId;
-				new GetEbookChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+				new GetEbookChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
 				sysId = entity.sysId;
 				identifier = "";
-				new GetAudioChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+				new GetAudioChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
 				sysId = entity.sysId;
 				identifier = "";
-				new GetVideoChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+				new GetVideoChapterAsyncTask(this, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
 				break;
 			default:
 				break;
