@@ -11,27 +11,28 @@ import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
 /**
- * 删除书签异步加载类
+ * 删除阅读历史异步加载类
  * 
  * @author wzp
- * @Created 2017/02/18
+ * @Created 2017/02/19
  */
-public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
+public class DelHistoryAsyncTask extends AsyncTask<String, Void, Integer>
 {
 	private Context mContext;
 	private Handler mHandler;
 	
-	public DelBookMarkAsyncTask(Context context, Handler h) 
+	public DelHistoryAsyncTask(Context context, Handler h) 
 	{
 		mContext = context;
 		mHandler =  h;
 	}
 
 	@Override
-	protected Integer doInBackground(Integer... params) 
+	protected Integer doInBackground(String... params) 
 	{
-		int id = params[0];
-		Integer result = HttpDao.delBookMark(PublicUtils.getUserName(), id+"");
+		String dbCode = params[0];
+		String sysId = params[1];
+		Integer result = HttpDao.delHistory(PublicUtils.getUserName(), dbCode, sysId);
 		
 		if( null == result )
 		{
@@ -46,7 +47,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 	{	
 		super.onPreExecute();
 		
-		String s = mContext.getResources().getString(R.string.library_del_bookmark);
+		String s = mContext.getResources().getString(R.string.library_del_history);
 		PublicUtils.showProgress(mContext, s);
 		//TtsUtils.getInstance().speak(s);
 	}
@@ -69,7 +70,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 				});
 				break;
 			case LibraryConstant.RESULT_SUCCESS:	//成功
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_bookmark_success), new PromptListener() {
+				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_success), new PromptListener() {
 					
 					@Override
 					public void onComplete() {
@@ -78,7 +79,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 				});
 				break;
 			case LibraryConstant.RESULT_FAIL:		//失败
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_bookmark_fail), new PromptListener() {
+				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_fail), new PromptListener() {
 					
 					@Override
 					public void onComplete() {

@@ -64,6 +64,11 @@
 	<string name="library_favorite_category_null">无收藏的分类</string>
 	<string name="library_favorite_resource_null">无收藏的资源</string>
 	<string name="library_reading_history_null">无阅读历史</string>
+	<string name="library_del_collect_category">正在删除收藏的分类</string>
+	<string name="library_del_collect_resource">正在删除收藏的资源</string>
+	<string name="library_del_history">正在删除阅读历史</string>
+	<string name="library_del_success">删除成功！</string>
+	<string name="library_del_fail">删除失败！</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>
