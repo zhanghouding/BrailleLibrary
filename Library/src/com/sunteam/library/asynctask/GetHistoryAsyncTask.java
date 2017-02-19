@@ -42,18 +42,20 @@ public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<Histo
 		if( ( list != null ) && ( list.size() > 0 ) )
 		{
 			mHistoryEntityList.addAll(list);
-			
+			/*
 			HistoryDBDao dao = new HistoryDBDao( mContext );
 			dao.deleteAll();		//先删除所有数据
 			dao.insert(list);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
+			*/
 		}
 		else
 		{
+			/*
 			HistoryDBDao dao = new HistoryDBDao( mContext );
 			list = dao.findAll();
 			dao.closeDb();			//关闭数据库
-			
+			*/
 			if( ( list != null ) && ( list.size() > 0 ) )
 			{
 				mHistoryEntityList.addAll(list);
