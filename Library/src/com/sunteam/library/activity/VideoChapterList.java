@@ -33,29 +33,14 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	}
 
 	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-	}
-
-	@Override
 	protected void onResume() {
 		super.onResume();
 		mMenuView.setMenuKeyListener(this);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+		if (isHistory) {
+			if(null != mMenuView){
+				mMenuView.setSelectItem(selectItem);
+			}
+		}
 	}
 
 	@Override
@@ -151,7 +136,9 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		lastChapterIndex = intent.getIntExtra("lastChapterIndex", 0);
 		offset = intent.getIntExtra("offset", 0);
 		if (isHistory) {
-			selectItem = lastChapterIndex;
+			if (lastChapterIndex < mMenuList.size()) {
+				selectItem = lastChapterIndex;
+			}
 			setResultCode (Activity.RESULT_OK, selectItem, (String) mMenuList.get(selectItem));
 		}
 	}

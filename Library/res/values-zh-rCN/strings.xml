@@ -28,6 +28,9 @@
         <item>有声读物</item>
         <item>视频课程</item>
         <item>盲人资讯</item>
+        <item>个性推荐</item>
+        <item>最新更新</item>
+        <item>精品专区</item> 
     </string-array>
     <string-array name="library_mylibrary_list">
         <item>我收藏的资源</item>

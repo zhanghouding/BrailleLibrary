@@ -46,6 +46,11 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 		if (0 == fatherWindowType) {
 			mMenuView.setMenuKeyListener(this);
 		}
+		if (isHistory) {
+			if(null != mMenuView){
+				mMenuView.setSelectItem(selectItem);
+			}
+		}
 	}
 
 	@Override
@@ -121,8 +126,10 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 		lastChapterIndex = intent.getIntExtra("lastChapterIndex", 0);
 		offset = intent.getIntExtra("offset", 0);
 		if (isHistory) {
-			selectItem = lastChapterIndex;
-			setResultCode (Activity.RESULT_OK, selectItem, (String) mMenuList.get(selectItem));
+			if (lastChapterIndex < mMenuList.size()) {
+				selectItem = lastChapterIndex;
+			}
+			setResultCode(Activity.RESULT_OK, selectItem, (String) mMenuList.get(selectItem));
 		}
 	}
 
