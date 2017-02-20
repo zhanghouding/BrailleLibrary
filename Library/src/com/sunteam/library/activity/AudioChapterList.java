@@ -106,8 +106,8 @@ public class AudioChapterList extends MenuActivity implements OnMenuKeyListener 
 		PublicUtils.createCacheDir(fatherPath, menuItem);	//创建缓存目录
 		
 		Intent intent = new Intent( this, PlayAudioVedioActivity.class );
-		intent.putExtra("dbCode", mAudioChapterInfoEntityList.get(selectItem).databaseCode); // 数据库代码
-		intent.putExtra("sysId", mAudioChapterInfoEntityList.get(selectItem).sysId); // 记录标识号
+		intent.putExtra("dbCode", dbCode); // 数据库代码
+		intent.putExtra("sysId", sysId); // 记录标识号
 		intent.putExtra("identifier", identifier);	//书本id
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra("categoryCode", mAudioChapterInfoEntityList.get(selectItem).categoryName); // 分类代码
