@@ -108,7 +108,6 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String chapterIndex = mEbookChapterInfoEntityList.get(selectItem).chapterIndex;
 		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size(), mBookmarkEntity,isHistory, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName);
-		mBookmarkEntity = null;
 	}
 
 	@SuppressWarnings("unchecked")

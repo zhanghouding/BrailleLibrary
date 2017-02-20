@@ -130,9 +130,17 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 			{
 				intent.putExtra("book_mark", mBookmarkEntity);	//书签
 			}
-			intent.putExtra("isHistory", isHistory); // 阅读历史标志
-			intent.putExtra("offset", offset);
+			else if( isHistory )
+			{
+				BookmarkEntity entity = new BookmarkEntity();
+				entity.begin = offset;
+				intent.putExtra("book_mark", entity);			//把历史记录变成临时书签
+			}
 			((EbookChapterList) mContext).startActivityForResult(intent, mCurChapter);
+
+			mBookmarkEntity = null;
+			isHistory = false;
+			offset = 0;
 		} 
 		catch (Exception e) 
 		{

@@ -120,11 +120,17 @@ public class AudioChapterList extends MenuActivity implements OnMenuKeyListener 
 		{
 			intent.putExtra("book_mark", mBookmarkEntity);	//书签
 		}
-		intent.putExtra("isHistory", isHistory); // 阅读历史标志
-		intent.putExtra("offset", offset);
+		else if( isHistory )
+		{
+			BookmarkEntity entity = new BookmarkEntity();
+			entity.begin = offset;
+			intent.putExtra("book_mark", entity);			//把历史记录变成临时书签
+		}
 		this.startActivityForResult(intent, selectItem);
 		
 		mBookmarkEntity = null;
+		isHistory = false;
+		offset = 0;
 	}
 
 	@SuppressWarnings("unchecked")

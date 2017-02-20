@@ -57,7 +57,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	private int totalTime;			//总时间
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
-	private String identifier;		//书本id
+	private String sysId;		//书本id
 	private BookmarkEntity mBookmarkEntity;
 	
 	@Override
@@ -72,7 +72,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		setContentView(R.layout.library_activity_play_audio_vedio);
 		
 		mBookmarkEntity = (BookmarkEntity) this.getIntent().getSerializableExtra("book_mark");
-		identifier = this.getIntent().getStringExtra("identifier");
+		sysId = this.getIntent().getStringExtra("sysId");
 		filename = this.getIntent().getStringExtra("filename");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		resourceUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
@@ -406,7 +406,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 
 		BookmarkEntity entity = new BookmarkEntity();
 		entity.userName = PublicUtils.getUserName();
-		entity.bookId = identifier;
+		entity.bookId = sysId;
 		entity.begin = MediaPlayerUtils.getInstance().getCurTime();
 		entity.chapterIndex = curChapter;
 		entity.chapterTitle = filename;
