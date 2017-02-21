@@ -36,21 +36,20 @@ public class DownloadManager extends MenuActivity {
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		switch(selectItem){
 		case 0: // 正在下载
+			startNextActivity(DownloadingList.class, selectItem, menuItem);
 			break;
 		case 1: // 已下载
+			startNextActivity(DownloadedList.class, selectItem, menuItem);
 			break;
 		default:
 			break;
 		}
 	}
 
-	// 进入查看书签列表界面；如果需要在异步任务中获取云端数据，则需要在成功获取数据后调用该方法
-	public void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
+	private void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
 		intent.setClass(this, cls);
-
-		// 第二个参数requestCode用于区分谁启动了Activity，或者说是从哪一个Acitivty返回的。
 		startActivityForResult(intent, selectItem);
 	}
 

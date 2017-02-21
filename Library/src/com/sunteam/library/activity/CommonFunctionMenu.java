@@ -1,13 +1,22 @@
 package com.sunteam.library.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.DelCollectCategoryAsyncTask;
+import com.sunteam.library.asynctask.DelCollectResourceAsyncTask;
+import com.sunteam.library.asynctask.DelHistoryAsyncTask;
 import com.sunteam.library.entity.CollectCategoryEntity;
 import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.entity.HistoryEntity;
@@ -50,8 +59,27 @@ public class CommonFunctionMenu extends MenuActivity {
 		mType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
 	}
 
-	private void showConfirmDialogue(final Context context, final int id, final int selectItem) {
-		String s = getResources().getString(id);
+	@SuppressLint("HandlerLeak")
+	private Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0: // 删除成功
+				Intent intent = new Intent();
+				intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, getSelectItem()); // 用于区分当前选择是删除还是清空
+				setResult(Activity.RESULT_OK, intent);
+				finish();
+				break;
+			case 1: // 网络未连接
+			case 2: // 删除异常
+				break;
+			default:
+				break;
+			}
+		}
+	};
+
+	private void showConfirmDialogue(final Context context, final int resId, final int selectItem) {
+		String s = getResources().getString(resId);
 		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
 		mConfirmDialog.setConfirmListener(new ConfirmListener() {
 
@@ -76,16 +104,16 @@ public class CommonFunctionMenu extends MenuActivity {
 	private void deleteRecord() {
 		switch(mType){
 		case LibraryConstant.MYLIBRARY_FAVARITE_CATEGORY:
-			// TODO 删除收藏分类
-			CollectCategoryEntity mCollectCategoryEntity = (CollectCategoryEntity) mEntity;
+			CollectCategoryEntity ce = (CollectCategoryEntity) mEntity;
+			new DelCollectCategoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ce.categoryCode);
 			break;
 		case LibraryConstant.MYLIBRARY_FAVARITE_RESOURCE:
-			// TODO 删除收藏资源
-			CollectResourceEntity mCollectResourceEntity = (CollectResourceEntity) mEntity;
+			CollectResourceEntity re = (CollectResourceEntity) mEntity;
+			new DelCollectResourceAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, re.dbCode, re.sysId);
 			break;
 		case LibraryConstant.MYLIBRARY_READING_HISTORY:
-			// TODO 删除阅读历史
-			HistoryEntity mHistoryEntity = (HistoryEntity) mEntity;
+			HistoryEntity he = (HistoryEntity) mEntity;
+			new DelHistoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, he.dbCode, he.sysId);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
 			break;

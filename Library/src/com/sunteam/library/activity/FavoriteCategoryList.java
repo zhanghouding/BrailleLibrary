@@ -45,12 +45,15 @@ public class FavoriteCategoryList extends MenuActivity implements OnMenuKeyListe
 			return;
 		}
 
-		if (1 == requestCode) { // 清空成功
-			setResult(Activity.RESULT_OK, data);
+		// 从功能菜单返回，需要判断是删除还是清空
+		int index = data.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
+		if (1 == index) { // 清空成功
+			setResult(Activity.RESULT_OK);
 			finish();
 			return;
 		}
 
+		// 删除成功
 		selectItem = getSelectItem();
 		if (selectItem < mMenuList.size()) {
 			mCollectCategoryEntityList.remove(selectItem);

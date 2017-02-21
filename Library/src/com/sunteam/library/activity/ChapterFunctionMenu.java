@@ -89,6 +89,9 @@ public class ChapterFunctionMenu extends MenuActivity {
 				entity.title = resourceName;
 				entity.dbCode = dbCode;
 				entity.sysId = sysId;
+				if (LibraryConstant.LIBRARY_DATATYPE_EBOOK == dataType) {
+					entity.sysId = identifier;
+				}
 				entity.userName = PublicUtils.getUserName();
 				entity.resType = dataType;
 				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName + "-" + resourceName;
