@@ -12,6 +12,7 @@ import com.sunteam.library.entity.CollectCategoryEntity;
 import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
+import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.entity.InformationEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
@@ -581,5 +582,33 @@ public class HttpDao
 		requestParams.put("jsonObj", URLEncoder.encode(json));
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new DelBookMarkParseResponse() );
+	}	
+	
+	/**
+	 * 得到推荐列表
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/22
+	 */
+	public static EbookInfoEntity getRecommendList( int type, String username ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		switch( type )
+		{
+			case LibraryConstant.RECOMMEND_TYPE_GETPERSONALLIST:		//个性推荐
+				requestParams.put("requestType", "GetPersonalList");
+				requestParams.put("UserName", username);
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_RECOMMEND, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.RECOMMEND_TYPE_GETLATESTSERIALIZED:	//最新更新
+				requestParams.put("requestType", "GetLatestSerialized");
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_RECOMMEND, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.RECOMMEND_TYPE_GETBOUTIQUEDATA:		//精品专区
+				requestParams.put("requestType", "GetBoutiqueData");
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_RECOMMEND, requestParams, new GetEbookParseResponse() );
+			default:
+				return	null;
+		}
 	}	
 }

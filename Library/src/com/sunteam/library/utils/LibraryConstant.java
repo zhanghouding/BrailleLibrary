@@ -18,6 +18,11 @@ public class LibraryConstant {
 	public static final String URL_INTERFACE_HISTORY = "ReadHistoryInterface.ashx";	// 阅读历史相关接口
 	public static final String URL_INTERFACE_COLLECT = "CollectInterface.ashx";	// 收藏相关接口
 	public static final String URL_INTERFACE_BOOKMARK = "BookmarkInterface.ashx";	// 书签相关接口
+	public static final String URL_INTERFACE_RECOMMEND = "RecommendInterface.ashx";	// 推荐相关接口
+	
+	public static final int RECOMMEND_TYPE_GETPERSONALLIST = 0;		//个性推荐
+	public static final int RECOMMEND_TYPE_GETLATESTSERIALIZED = 1;	//最新更新
+	public static final int RECOMMEND_TYPE_GETBOUTIQUEDATA = 2;		//精品专区
 
 	// 类别常量
 	public static final int LIBRARY_CATEGORY_ROOT_ID = -1; // 类别树形结构中的根节点ID
