@@ -18,6 +18,7 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCategoryAsyncTask;
+import com.sunteam.library.asynctask.GetRecommendAsyncTask;
 import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
@@ -130,6 +131,15 @@ public class MainActivity extends MenuActivity {
 			PublicUtils.createCacheDir(LibraryConstant.LIBRARY_ROOT_PATH, menuItem);	//创建缓存目录
 			list = getResources().getStringArray(R.array.library_info_list);
 			startNextActivity(LibraryNewsCategoryList.class, selectItem, menuItem, list);
+			break;
+		case 6:	//个性推荐
+			new GetRecommendAsyncTask(this, LibraryConstant.LIBRARY_ROOT_PATH, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.RECOMMEND_TYPE_GETPERSONALLIST);
+			break;
+		case 7:	//最新更新
+			new GetRecommendAsyncTask(this, LibraryConstant.LIBRARY_ROOT_PATH, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.RECOMMEND_TYPE_GETLATESTSERIALIZED);
+			break;
+		case 8:	//精品专区
+			new GetRecommendAsyncTask(this, LibraryConstant.LIBRARY_ROOT_PATH, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.RECOMMEND_TYPE_GETBOUTIQUEDATA);
 			break;
 		default:
 			break;
