@@ -25,7 +25,6 @@ public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 	private String mFatherPath;
 	private String mTitle;
 	private int type;
-	private int bookCount = 0; // 资源总数，即当前分类下的书本总数
 	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
 	
 	public GetSearchResultAsyncTask(Context context, String fatherPath, String title) 
@@ -43,37 +42,23 @@ public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 		String pageIndex = params[0];
 		String pageSize = params[1];
 		String searchWord = params[2]; 
+		
 		EbookInfoEntity entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
-	
 		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
 		{
-			/*
-			ResourceDBDao dao = new ResourceDBDao( mContext );
-			ArrayList<EbookNodeEntity> list = dao.findAll(categoryCode, dataType);
-			dao.closeDb();			//关闭数据库
-			
-			if( ( list != null ) && ( list.size() > 0 ) )
-			{
-				bookCount = list.size();
-				mEbookNodeEntityList.addAll(list);
-				
-				return	true;
-			}
-			*/
-			return	false;
+			mEbookNodeEntityList.addAll(entity.list);
 		}
-		
-		bookCount = entity.itemCount;
-		
-		if( ( entity.list != null ) && ( entity.list.size() > 0 ) )
+
+		entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
+		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
 		{
 			mEbookNodeEntityList.addAll(entity.list);
-			/*
-			ResourceDBDao dao = new ResourceDBDao( mContext );
-			dao.deleteAll(categoryCode, dataType);			//先删除缓存的此类型所有数据
-			dao.insert(entity.list, categoryCode, dataType);	//再缓存新的数据
-			dao.closeDb();			//关闭数据库
-			*/
+		}
+		
+		entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_VIDEO);
+		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
+		{
+			mEbookNodeEntityList.addAll(entity.list);
 		}
 		
 		return	true;
