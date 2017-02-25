@@ -9,7 +9,6 @@ public class DatabaseConstants
 {
 	public static final int DATABASE_VERSION = 1;					//数据库版本
 	public static final String LIBRARY_DATABASE_NAME = "library.db";//图书馆数据库名称
-	public static final String HISTORY_DATABASE_NAME = "history.db";//历史数据库名称
 	
 	public static final String CATEGORY_TABLE_NAME = "categorys";	//分类表名称
 	public static final String RESOURCE_TABLE_NAME = "resources";	//资源表名称

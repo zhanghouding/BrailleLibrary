@@ -12,21 +12,21 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 public class HistoryDBDao 
 {
-	private HistoryDBHelper mHistoryDBHelper = null;
+	private LibraryDBHelper mLibraryDBHelper = null;
 
 	public HistoryDBDao( Context context, String name, CursorFactory factory, int version ) 
 	{
-		mHistoryDBHelper = new HistoryDBHelper( context, name, factory, version );
+		mLibraryDBHelper = new LibraryDBHelper( context, name, factory, version );
 	}
 	
 	public HistoryDBDao( Context context, String name ) 
 	{
-		mHistoryDBHelper = new HistoryDBHelper( context, name, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, name, null, DatabaseConstants.DATABASE_VERSION );
 	}
 	
 	public HistoryDBDao( Context context ) 
 	{
-		mHistoryDBHelper = new HistoryDBHelper( context, DatabaseConstants.HISTORY_DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
+		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.LIBRARY_DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
 	}
 	
 	public void insert( HistoryEntity entity ) 
@@ -36,7 +36,7 @@ public class HistoryDBDao
 			return;
 		}
 		
-		SQLiteDatabase db = mHistoryDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		String sql = 
 				"insert into " + DatabaseConstants.HISTORY_TABLE_NAME +
 				" (" +
@@ -70,7 +70,7 @@ public class HistoryDBDao
 			return;
 		}
 		
-		SQLiteDatabase db = mHistoryDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		
 		int size = list.size();
 		for( int i = 0; i < size; i++ )
@@ -110,7 +110,7 @@ public class HistoryDBDao
 			return;
 		}
 		
-		SQLiteDatabase db = mHistoryDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		
 		int size = list.size();
 		for( int i = size-1; i >= 0; i-- )
@@ -147,7 +147,7 @@ public class HistoryDBDao
 	{
 		String sql1 = "DELETE FROM " + DatabaseConstants.HISTORY_TABLE_NAME +";";
 		String sql2= "update sqlite_sequence set seq=0 where name='" + DatabaseConstants.HISTORY_TABLE_NAME + "'";
-		SQLiteDatabase db = mHistoryDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		db.execSQL(sql1);
 		db.execSQL(sql2);
 		db.close();
@@ -156,7 +156,7 @@ public class HistoryDBDao
 	//查找所有数据条数
 	public long getCount() 
 	{
-		SQLiteDatabase db = mHistoryDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		if( null == db )
 		{
 			return	0;
@@ -183,7 +183,7 @@ public class HistoryDBDao
 	//查找所有数据
 	public ArrayList<HistoryEntity> findAll() 
 	{
-		SQLiteDatabase db = mHistoryDBHelper.getReadableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.HISTORY_TABLE_NAME, null);
 		if( null == cursor )
 		{
@@ -229,7 +229,7 @@ public class HistoryDBDao
 	//删除所有的数据
 	public void deleteAll() 
 	{
-		SQLiteDatabase db = mHistoryDBHelper.getWritableDatabase();
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
 		db.execSQL("delete from " + DatabaseConstants.HISTORY_TABLE_NAME, null);
 		db.close();
 	}
@@ -237,9 +237,9 @@ public class HistoryDBDao
 	//关闭数据库
     public void closeDb() 
     {
-    	if (mHistoryDBHelper != null)
+    	if (mLibraryDBHelper != null)
     	{
-    		mHistoryDBHelper.close();
+    		mLibraryDBHelper.close();
     	}
    }
 }
