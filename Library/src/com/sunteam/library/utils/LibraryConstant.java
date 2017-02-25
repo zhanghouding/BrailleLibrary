@@ -30,6 +30,11 @@ public class LibraryConstant {
 	public static final int LIBRARY_DATATYPE_EBOOK = 2; // 电子书
 	public static final int LIBRARY_DATATYPE_VIDEO = 3; // 口述影像
 
+	// 通过DbCode 来区分资源类型；从推荐模块查询得到的资源列表可能会混合三种类型的数据
+	public static final String LIBRARY_DBCODE_AUDIO = "sound"; // 有声书
+	public static final String LIBRARY_DBCODE_EBOOK = "ebook"; // 电子书
+	public static final String LIBRARY_DBCODE_VIDEO = "video"; // 口述影像
+
 	// 咨询类别常量
 	public static final int LIBRARY_INFOTYPE_NOTICE = 0; 		// 新闻公告
 	public static final int LIBRARY_INFOTYPE_SERVICEINFO = 1; 	// 服务资讯

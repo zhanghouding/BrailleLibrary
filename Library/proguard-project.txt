@@ -63,7 +63,7 @@
     public static final android.os.Parcelable$Creator *;
 }
 
--libraryjars ../../system-jars/libs-system/framework-base.jar
+#-libraryjars ../system-jars/framework-base.jar
 -libraryjars ../SunteamUtilsLib/libs/android-support-v4.jar
 -libraryjars ../SunteamUtilsLib/libs/Msc.jar
 -libraryjars ../SunteamUtilsLib/libs/SunteamUtils.jar
