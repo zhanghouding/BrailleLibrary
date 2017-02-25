@@ -38,7 +38,7 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private int bookCount = 0; // 当前类资源总数，在分页加载时，需要使用该值
 	private String fatherPath;	//父目录路径
-	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
+	private ArrayList<EbookNodeEntity> mEbookNodeEntityList;
 
 	private Tools mTools;
 

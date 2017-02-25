@@ -145,6 +145,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	    	}
 	    	else
 	    	{
+	    		/*
 		    	FileDownloader.detect(resourceUrl, new OnDetectBigUrlFileListener() {
 		    		@Override
 		    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
@@ -166,6 +167,8 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		    			// 探测一个网络文件失败了，具体查看failReason
 		    		}
 		    	});
+		    	*/	//不在后台自动缓存文件了。
+	    		
 		    	MediaPlayerUtils.getInstance().play(resourceUrl, false);	//播放音视频
 		    	if( mBookmarkEntity != null )
 		    	{

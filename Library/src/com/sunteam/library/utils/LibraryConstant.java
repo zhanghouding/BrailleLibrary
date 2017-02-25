@@ -54,8 +54,10 @@ public class LibraryConstant {
 	public static final String INTENT_KEY_SYSID = "library_sysId";		//系统id
 	public static final String INTENT_KEY_PERCENT = "percent"; // 百分比
 	
+	// 资讯列表常量
+	public static final int LIBRARY_INFO_PAGESIZE = 100; // 盲人资讯列表时一页的资源数
 	// 资源列表常量
-	public static final int LIBRARY_RESOURCE_PAGESIZE = 10; // 资源列表时一页的资源数
+	public static final int LIBRARY_RESOURCE_PAGESIZE = 1000; // 资源列表时一页的资源数
 	
 	// SharePref文件名，KEY类型，如：登录状态，有些界面需要根据登录状态获取不同的数据源
 	public static final String LIBRARY_CONFIG_FILE = "config";

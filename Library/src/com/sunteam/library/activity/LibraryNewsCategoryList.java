@@ -61,7 +61,7 @@ public class LibraryNewsCategoryList extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		new GetInformationAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_RESOURCE_PAGESIZE, selectItem);
+		new GetInformationAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_INFO_PAGESIZE, selectItem);
 	}
 
 	@Override
