@@ -611,4 +611,40 @@ public class HttpDao
 				return	null;
 		}
 	}	
+	
+	/**
+	 * 得到查找结果列表
+	 * 
+	 * @param pageIndex
+	 * @param pageSize
+	 * @param searchWord
+	 * @param categoryType
+	 * @return
+	 * @author wzp
+	 * @Created 2017/02/25
+	 */
+	public static EbookInfoEntity getSearchList( String pageIndex, String pageSize, String searchWord, int categoryType ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("pageIndex", pageIndex);
+		requestParams.put("pageSize", pageSize);
+		requestParams.put("searchField", "Title");
+		requestParams.put("searchWord", searchWord);
+		
+		switch( categoryType )
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书
+				requestParams.put("requestType", "GetEbookDataList");
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//有声读物
+				requestParams.put("requestType", "GetAudioDataList");
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetEbookParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//口述影像
+				requestParams.put("requestType", "GetVideoDataList");
+				return (EbookInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetEbookParseResponse() );
+			default:
+				return	null;
+		}
+	}
+		
 }
