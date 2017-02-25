@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
+import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.utils.DatabaseConstants;
 import com.sunteam.library.utils.LibraryConstant;
@@ -31,6 +32,77 @@ public class ChapterDBDao
 	public ChapterDBDao( Context context ) 
 	{
 		mLibraryDBHelper = new LibraryDBHelper( context, DatabaseConstants.LIBRARY_DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION );
+	}
+	
+	//是否存在
+	private boolean isExist( ArrayList<EbookChapterInfoEntity> list, EbookChapterInfoEntity entity )
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return	false;
+		}
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			EbookChapterInfoEntity entityOld = list.get(i);
+			if( ( entityOld.father == entity.father ) &&
+				( entityOld.seq == entity.seq ) &&
+				( entityOld.level == entity.level ) &&
+				( entityOld.chapterIndex.equals(entity.chapterIndex) ) &&
+				( entityOld.chapterName.equals(entity.chapterName) ) )
+			{
+				return	true;
+			}
+		}
+		
+		return	false;
+	}
+	
+	//顺序插入电子书章节(只插入新数据)
+	public void insertEbookChapterInfo( ArrayList<EbookChapterInfoEntity> listOld, ArrayList<EbookChapterInfoEntity> list, String dbCode, String identifier ) 
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return;
+		}
+		
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			EbookChapterInfoEntity entity = list.get(i);
+			if( isExist( listOld, entity ) )
+			{
+				continue;
+			}	//如果数据库中已经存在此记录，则不再插入。
+			
+			Chapter chapter = new Chapter();
+			chapter.father = entity.father;
+			chapter.seq = entity.seq;
+			chapter.level = entity.level;
+			chapter.dbCode = dbCode;
+			chapter.identifier = identifier;
+			chapter.index = entity.chapterIndex;
+			chapter.name = entity.chapterName;
+			
+			String sql = 
+					"insert into " + DatabaseConstants.CHAPTER_TABLE_NAME +
+					" (" +
+					DatabaseConstants.RESOURCE_TYPE + "," +
+					DatabaseConstants.CHAPTER_FATHER + "," +
+					DatabaseConstants.CHAPTER_SEQ + "," +
+					DatabaseConstants.CHAPTER_LEVEL + "," +
+					DatabaseConstants.CHAPTER_DBCODE + "," +
+					DatabaseConstants.CHAPTER_SYSID + "," +
+					DatabaseConstants.CHAPTER_IDENTIFIER + "," +
+					DatabaseConstants.CHAPTER_INDEX + "," +
+					DatabaseConstants.CHAPTER_NAME + "," +
+					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_EBOOK,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
+		}
+		db.close();
 	}
 		
 	//顺序插入电子书章节
@@ -74,6 +146,77 @@ public class ChapterDBDao
 		db.close();
 	}
 	
+	//是否存在
+	private boolean isExist( ArrayList<AudioChapterInfoEntity> list, AudioChapterInfoEntity entity )
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return	false;
+		}
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			AudioChapterInfoEntity entityOld = list.get(i);
+			if( ( entityOld.father == entity.father ) &&
+				( entityOld.seq == entity.seq ) &&
+				( entityOld.level == entity.level ) &&
+				( entityOld.title.equals(entity.title) ) &&
+				( entityOld.audioUrl.equals(entity.audioUrl) ) )
+			{
+				return	true;
+			}
+		}
+		
+		return	false;
+	}
+	
+	//顺序插入有声书章节(只插入新数据)
+	public void insertAudioChapterInfo( ArrayList<AudioChapterInfoEntity> listOld, ArrayList<AudioChapterInfoEntity> list, String dbCode, String sysId ) 
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return;
+		}
+		
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			AudioChapterInfoEntity entity = list.get(i);
+			if( isExist( listOld, entity ) )
+			{
+				continue;
+			}	//如果数据库中已经存在此记录，则不再插入。
+			
+			Chapter chapter = new Chapter();
+			chapter.father = entity.father;
+			chapter.seq = entity.seq;
+			chapter.level = entity.level;
+			chapter.dbCode = dbCode;
+			chapter.sysId = sysId;
+			chapter.name = entity.title;
+			chapter.url = entity.audioUrl;
+			
+			String sql = 
+					"insert into " + DatabaseConstants.CHAPTER_TABLE_NAME +
+					" (" +
+					DatabaseConstants.RESOURCE_TYPE + "," +
+					DatabaseConstants.CHAPTER_FATHER + "," +
+					DatabaseConstants.CHAPTER_SEQ + "," +
+					DatabaseConstants.CHAPTER_LEVEL + "," +
+					DatabaseConstants.CHAPTER_DBCODE + "," +
+					DatabaseConstants.CHAPTER_SYSID + "," +
+					DatabaseConstants.CHAPTER_IDENTIFIER + "," +
+					DatabaseConstants.CHAPTER_INDEX + "," +
+					DatabaseConstants.CHAPTER_NAME + "," +
+					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_AUDIO,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
+		}
+		db.close();
+	}
+	
 	//顺序插入有声书章节
 	public void insertAudioChapterInfo( ArrayList<AudioChapterInfoEntity> list, String dbCode, String sysId ) 
 	{
@@ -111,6 +254,77 @@ public class ChapterDBDao
 					DatabaseConstants.CHAPTER_NAME + "," +
 					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?,?,?,?)";
 			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_AUDIO,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
+		}
+		db.close();
+	}
+	
+	//是否存在
+	private boolean isExist( ArrayList<VideoChapterInfoEntity> list, VideoChapterInfoEntity entity )
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return	false;
+		}
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			VideoChapterInfoEntity entityOld = list.get(i);
+			if( ( entityOld.father == entity.father ) &&
+				( entityOld.seq == entity.seq ) &&
+				( entityOld.level == entity.level ) &&
+				( entityOld.title.equals(entity.title) ) &&
+				( entityOld.videoUrl.equals(entity.videoUrl) ) )
+			{
+				return	true;
+			}
+		}
+		
+		return	false;
+	}
+	
+	//顺序插入口述影像章节
+	public void insertVideoChapterInfo( ArrayList<VideoChapterInfoEntity> listOld, ArrayList<VideoChapterInfoEntity> list, String dbCode, String sysId ) 
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return;
+		}
+		
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			VideoChapterInfoEntity entity = list.get(i);
+			if( isExist( listOld, entity ) )
+			{
+				continue;
+			}	//如果数据库中已经存在此记录，则不再插入。
+			
+			Chapter chapter = new Chapter();
+			chapter.father = entity.father;
+			chapter.seq = entity.seq;
+			chapter.level = entity.level;
+			chapter.dbCode = dbCode;
+			chapter.sysId = sysId;
+			chapter.name = entity.title;
+			chapter.url = entity.videoUrl;
+			
+			String sql = 
+					"insert into " + DatabaseConstants.CHAPTER_TABLE_NAME +
+					" (" +
+					DatabaseConstants.RESOURCE_TYPE + "," +
+					DatabaseConstants.CHAPTER_FATHER + "," +
+					DatabaseConstants.CHAPTER_SEQ + "," +
+					DatabaseConstants.CHAPTER_LEVEL + "," +
+					DatabaseConstants.CHAPTER_DBCODE + "," +
+					DatabaseConstants.CHAPTER_SYSID + "," +
+					DatabaseConstants.CHAPTER_IDENTIFIER + "," +
+					DatabaseConstants.CHAPTER_INDEX + "," +
+					DatabaseConstants.CHAPTER_NAME + "," +
+					DatabaseConstants.CHAPTER_URL + ") values (?,?,?,?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{LibraryConstant.LIBRARY_DATATYPE_VIDEO,chapter.father,chapter.seq,chapter.level,chapter.dbCode,chapter.sysId,chapter.identifier,chapter.index,chapter.name,chapter.url});
 		}
 		db.close();
 	}

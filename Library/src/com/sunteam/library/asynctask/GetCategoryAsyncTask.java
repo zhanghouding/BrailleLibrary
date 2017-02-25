@@ -92,8 +92,9 @@ public class GetCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Cat
 			mCategoryInfoNodeEntityList.addAll(list);
 			
 			CategoryDBDao dao = new CategoryDBDao( mContext );
-			dao.deleteAll(type);	//先删除缓存的此类型所有数据
-			dao.insert(list, type);	//再缓存新的数据
+			//dao.deleteAll(type);	//先删除缓存的此类型所有数据
+			ArrayList<CategoryInfoNodeEntity> listOld = dao.findAll(type);	//得到此类型所有的数据
+			dao.insert(listOld, list, type);	//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		else

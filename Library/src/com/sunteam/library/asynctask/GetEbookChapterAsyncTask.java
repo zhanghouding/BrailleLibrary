@@ -72,8 +72,9 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 			mEbookChapterInfoEntityList.addAll(list);
 			
 			ChapterDBDao dao = new ChapterDBDao( mContext );
-			dao.deleteAllEbookChapter(dbCode, identifier);			//先删除缓存的此类型所有数据
-			dao.insertEbookChapterInfo(list,dbCode, identifier);		//再缓存新的数据
+			//dao.deleteAllEbookChapter(dbCode, identifier);			//先删除缓存的此类型所有数据
+			ArrayList<EbookChapterInfoEntity> listOld = dao.findAllEbookChapter(dbCode, identifier);
+			dao.insertEbookChapterInfo(listOld, list,dbCode, identifier);		//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		else

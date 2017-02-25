@@ -50,6 +50,67 @@ public class CategoryDBDao
 		db.execSQL( sql, new Object[]{resourceType,entity.father,entity.seq,entity.level,entity.name,entity.code,entity.type});
 		db.close();
 	}
+	
+	//是否存在
+	private boolean isExist( ArrayList<CategoryInfoNodeEntity> list, CategoryInfoNodeEntity entity )
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return	false;
+		}
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			CategoryInfoNodeEntity entityOld = list.get(i);
+			if( ( entityOld.father == entity.father ) &&
+				( entityOld.seq == entity.seq ) &&
+				( entityOld.level == entity.level ) &&
+				( entityOld.recordCount == entity.recordCount ) &&
+				( entityOld.name.equals(entity.name) ) &&
+				( entityOld.code.equals(entity.code) ) &&
+				( entityOld.type.equals(entity.type) ) )
+			{
+				return	true;
+			}
+		}
+		
+		return	false;
+	}
+
+	//顺序插入(只插入新数据)
+	public void insert( ArrayList<CategoryInfoNodeEntity> listOld, ArrayList<CategoryInfoNodeEntity> list, int resourceType ) 
+	{
+		if( ( null == list ) || ( list.size() == 0 ) )
+		{
+			return;
+		}
+		
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		
+		int size = list.size();
+		for( int i = 0; i < size; i++ )
+		{
+			CategoryInfoNodeEntity entity = list.get(i);
+			if( isExist( listOld, entity ) )
+			{
+				continue;
+			}	//如果数据库中已经存在此记录，则不再插入。
+			
+			String sql = 
+					"insert into " + DatabaseConstants.CATEGORY_TABLE_NAME +
+					" (" +
+					DatabaseConstants.RESOURCE_TYPE + "," +
+					DatabaseConstants.CATEGORY_FATHER + "," +
+					DatabaseConstants.CATEGORY_SEQ + "," +
+					DatabaseConstants.CATEGORY_LEVEL + "," +
+					DatabaseConstants.CATEGORY_NAME + "," +
+					DatabaseConstants.CATEGORY_CODE + "," +
+					DatabaseConstants.CATEGORY_TYPE + ") values (?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{resourceType,entity.father,entity.seq,entity.level,entity.name,entity.code,entity.type});
+		}
+		db.close();
+	}
 
 	//顺序插入
 	public void insert( ArrayList<CategoryInfoNodeEntity> list, int resourceType ) 

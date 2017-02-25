@@ -73,8 +73,9 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 			mEbookNodeEntityList.addAll(entity.list);
 			
 			ResourceDBDao dao = new ResourceDBDao( mContext );
-			dao.deleteAll(categoryCode, dataType);			//先删除缓存的此类型所有数据
-			dao.insert(entity.list, categoryCode, dataType);	//再缓存新的数据
+			//dao.deleteAll(categoryCode, dataType);			//先删除缓存的此类型所有数据
+			ArrayList<EbookNodeEntity> listOld = dao.findAll(categoryCode, dataType);
+			dao.insert(listOld, entity.list, categoryCode, dataType);	//再缓存新的数据
 			dao.closeDb();			//关闭数据库
 		}
 		
