@@ -3,9 +3,6 @@ package com.sunteam.library.activity;
 import java.io.File;
 import java.text.DecimalFormat;
 
-import org.wlf.filedownloader.FileDownloader;
-import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;

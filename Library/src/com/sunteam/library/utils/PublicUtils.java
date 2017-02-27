@@ -3,6 +3,7 @@ package com.sunteam.library.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -440,5 +441,30 @@ public class PublicUtils
 		String[] list = context.getResources().getStringArray(R.array.library_category_list);
 		
 		return	list[type];
+	}
+	
+	//得到网络是否连接
+	public static boolean isNetworkConnect()
+	{
+		try 
+		{
+			Process p = Runtime.getRuntime().exec( "ping -c 1 -w 5 www.baidu.com");
+			int status = p.waitFor();
+			if (status == 0)
+			{
+				return	true;
+			} 
+		} 
+		catch (IOException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch( InterruptedException e )
+		{
+			e.printStackTrace();
+		}
+		
+		return	false;
 	}
 }	
