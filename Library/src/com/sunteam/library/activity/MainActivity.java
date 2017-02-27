@@ -112,8 +112,7 @@ public class MainActivity extends MenuActivity {
 //			testCreateFile();
 			break;
 		case 1: // 资源检索
-			// list = getResources().getStringArray(R.array.settings_bluetooth_list);
-//			cls = SearchActivity.class;
+			startNextActivity(SearchActivity.class, selectItem, menuItem, null);
 			break;
 		case 2: // 电子书
 			new GetCategoryAsyncTask(this, LibraryConstant.LIBRARY_ROOT_PATH, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LibraryConstant.LIBRARY_DATATYPE_EBOOK);

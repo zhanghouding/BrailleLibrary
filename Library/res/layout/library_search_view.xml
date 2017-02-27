@@ -56,14 +56,15 @@
             android:focusableInTouchMode="true"
             android:listSelector="@android:color/transparent" />
 
-        <TextView
-            android:id="@+id/library_search_view_list_text"
+        <!-- <TextView
+            android:id="@+id/library_search_view_list_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:textSize="@dimen/title_text_size" />
+            android:text="@string/library_search_resource_empty"
+            android:textSize="@dimen/text_big_size" /> -->
     </FrameLayout>
 
 </LinearLayout>

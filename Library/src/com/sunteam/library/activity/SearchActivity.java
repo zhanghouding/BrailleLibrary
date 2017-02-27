@@ -1,91 +1,144 @@
 package com.sunteam.library.activity;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.widget.FrameLayout;
 
-import com.sunteam.common.menu.MenuActivity;
+import com.sunteam.common.menu.BaseActivity;
+import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsListener;
+import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.Tools;
+import com.sunteam.library.R;
+import com.sunteam.library.utils.LogUtils;
+import com.sunteam.library.view.LibrarySearchView;
 
-public class SearchActivity extends MenuActivity {
+public class SearchActivity extends BaseActivity/* implements TextWatcher, OnEnterListener*/ {
+	private FrameLayout mFlContainer = null;
+	private LibrarySearchView mMainView = null;
+	private Boolean hasCreated = false; 
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.common_menu_activity);
+		initView();
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
+		if (hasFocus) {
+			if(!hasCreated){
+				hasCreated = true;
+				// 在平板电脑上运行时，若在onCreate()中，会出现java.lang.NullPointerException异常
+				mFlContainer.removeAllViews();
+				mFlContainer.addView(mMainView.getView());
+				// mMainView.calcItemCount();
+			}
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		if (null != mMainView) {
+			mMainView.onResume();
+		}
+
+		TtsUtils.getInstance(this, mTtsListener);
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-	}
-	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+	private void initView() {
+//		this.getWindow().setBackgroundDrawable(new ColorDrawable(new Tools(this).getBackgroundColor()));
 
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
-			return;
+		mFlContainer = (FrameLayout) this.findViewById(R.id.common_menu_fl_container);
+		Intent intent = getIntent();
+		String mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		try {
+			mMainView = new LibrarySearchView(this, mTitle);
+		} catch (Exception e) {
+			e.printStackTrace();
+			finish();
 		}
 
+		/*// 在平板电脑上运行时，会出现java.lang.NullPointerException异常，可把这两行放到onWindowFocusChanged()中
+		mFlContainer.removeAllViews();
+		mFlContainer.addView(mMainView.getView());*/
+
+		/*Global.setHandler(mHandler);
+		Global.setContext(this);*/
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		boolean ret = false;
+		try {
+			ret = mMainView.onKeyDown(keyCode, event);
+			LogUtils.d("[MainActivity] onKeyDown(): keyCode = " + keyCode + ", ret = " + ret);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (!ret) {
+			ret = super.onKeyDown(keyCode, event);
+		}
+
+		return ret;
 	}
 
 	@Override
-	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		String[] list = null;
-		Class<?> cls = null;
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		boolean ret = false;
+		try {
+			ret = mMainView.onKeyUp(keyCode, event);
+			LogUtils.d("[MainActivity] onKeyDown(): onKeyUp = " + keyCode + ", ret = " + ret);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (!ret) {
+			ret = super.onKeyUp(keyCode, event);
+		}
+
+		return ret;
+	}
+
+	private TtsListener mTtsListener = new TtsListener() {
 		
-		switch (selectItem) {
-		case 0: // 新闻
-//			list = getResources().getStringArray(R.array.settings_wifi_list);
-			cls = SearchActivity.class;
-			break;
-		case 1: // 电子书
-//			list = getResources().getStringArray(R.array.settings_voice_list);
-			cls = SearchActivity.class;
-			break;
-		case 2: // 有声书
-//			list = getResources().getStringArray(R.array.settings_language_list);
-			cls = SearchActivity.class;
-			break;
-		case 3: // 口述影像
-//			list = getResources().getStringArray(R.array.settings_power_saving_list);
-			cls = SearchActivity.class;
-			break;
-		default:
-			break;
+		@Override
+		public void onSpeakResumed() {
 		}
-
-		startNextActivity(cls, selectItem, menuItem, list);
-	}
-
-	private void startNextActivity(Class<?> cls, int selectItem, String title, String[] list){
-		/*Intent intent = new Intent();
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
-
-		intent.setClass(this, cls);
-		 
-        // 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
-		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
-		startActivityForResult(intent, selectItem);*/
-	}
+		
+		@Override
+		public void onSpeakProgress(int percent, int beginPos, int endPos) {
+		}
+		
+		@Override
+		public void onSpeakPaused() {
+		}
+		
+		@Override
+		public void onSpeakBegin() {
+		}
+		
+		@Override
+		public void onInit(int code) {
+		}
+		
+		@Override
+		public void onCompleted(String error) {
+			mMainView.processLongKey();
+		}
+		
+		@Override
+		public void onBufferProgress(int percent, int beginPos, int endPos, String info) {
+			
+		}
+	};
 
 }

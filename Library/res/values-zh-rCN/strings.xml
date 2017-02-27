@@ -14,7 +14,8 @@
     <string name="library_category_ebook">电子图书</string>
     <string name="library_category_audio">有声读物</string>
     <string name="library_category_video">视频课程</string>
-    <string name="library_search_edit_hint">请输入检索字符串</string>
+    <string name="library_search_edit_hint">请输入检索字符串，按菜单键开始检索</string>
+    <string name="library_search_resource_empty">没有检索资源</string>
 
     <string-array name="library_category_list">
         <item>盲人资讯</item>
