@@ -111,6 +111,7 @@ public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListene
 		String dbCode;
 		String sysId;
 		String identifier;
+		String categoryCode = entity.categoryCode;
 		String[] categoryName = entity.categoryFullName.split("-");
 		dbCode = entity.dbCode;
 		
@@ -129,17 +130,17 @@ public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListene
 			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	
 				sysId = "";
 				identifier = entity.sysId;
-				new GetEbookChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
+				new GetEbookChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier, categoryCode);
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
 				sysId = entity.sysId;
 				identifier = "";
-				new GetAudioChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
+				new GetAudioChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier, categoryCode);
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
 				sysId = entity.sysId;
 				identifier = "";
-				new GetVideoChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier);
+				new GetVideoChapterAsyncTask(this, fatherPath, title, entity.lastChapterIndex, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName[size-2], identifier, categoryCode);
 				break;
 			default:
 				break;

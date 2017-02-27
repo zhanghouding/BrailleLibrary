@@ -31,6 +31,7 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	private String sysId;			//系统id
 	private String identifier;		//书本id
 	private String categoryName;	//分类名称
+	private String categoryCode;
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityList = new ArrayList<VideoChapterInfoEntity>();
 	private boolean isHistory = false;	//是否是从历史记录进入
 	private int lastChapterIndex = 0;
@@ -65,6 +66,7 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		sysId = params[1];
 		categoryName = params[2];
 		identifier = params[3];
+		categoryCode = params[4];
 		ArrayList<VideoChapterInfoEntity> list = HttpDao.getVideoChapterList(dbCode, sysId);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
@@ -123,6 +125,7 @@ public class GetVideoChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
 		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);	//书本id
 		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName);	//分类名称
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode);	//分类编码
 		intent.putExtra("isHistory", isHistory);
 		intent.putExtra("lastChapterIndex", lastChapterIndex);
 		intent.putExtra("offset", offset);

@@ -77,7 +77,8 @@ public class LibraryNewsList extends MenuActivity {
 			TextFileReaderUtils.getInstance().init(fullpath);
 			
 			Intent intent = new Intent( this, ReadTxtActivity.class );
-			intent.putExtra("filename", menuItem);
+			intent.putExtra("isNews", true);
+			intent.putExtra("chapterName", menuItem);
 			this.startActivity(intent);
 		} 
 		catch (Exception e) 

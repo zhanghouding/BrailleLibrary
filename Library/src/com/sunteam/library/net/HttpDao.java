@@ -336,8 +336,12 @@ public class HttpDao
 	 * @author wzp
 	 * @Created 2017/02/04
 	 */
-	public static boolean addHistory( HistoryEntity entity ) 
+	public static HistoryEntity addHistory( HistoryEntity entity ) 
 	{
+		if( null == entity )
+		{
+			return	null;
+		}
 		String json = 
 				"{"
 				+ "\"UserName\":\""+entity.userName+"\","
@@ -362,13 +366,13 @@ public class HttpDao
 		{
 			e.printStackTrace();
 			
-			return	false;
+			return	entity;
 		}
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "AddHistory");
 		requestParams.put("jsonObj", encodeJson);
 		
-		return (Boolean) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new AddHistoryParseResponse() );
+		return (HistoryEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new AddHistoryParseResponse() );
 	}
 	
 	/**

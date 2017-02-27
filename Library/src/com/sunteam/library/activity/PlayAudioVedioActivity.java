@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,7 +24,9 @@ import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.AddHistoryAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
+import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
@@ -48,13 +51,19 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	private TextView mTvStartTime = null;
 	private TextView mTvEndTime = null;
 	private SeekBar mSeekBar = null;
-	private String filename;		//章节名称
+	
+	private String chapterName;		//章节名称
 	private String fatherPath;		//父目录
 	private String resourceUrl;		//资源url
+	private int resType;			//资源类型
 	private int totalTime;			//总时间
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
-	private String sysId;		//书本id
+	private String sysId;			//sysid
+	private String dbCode;
+	private String resourceName;
+	private String categoryName;
+	private String categoryCode;
 	private BookmarkEntity mBookmarkEntity;
 	
 	@Override
@@ -70,7 +79,12 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		
 		mBookmarkEntity = (BookmarkEntity) this.getIntent().getSerializableExtra("book_mark");
 		sysId = this.getIntent().getStringExtra("sysId");
-		filename = this.getIntent().getStringExtra("filename");
+		dbCode = this.getIntent().getStringExtra("dbCode");
+		resourceName = this.getIntent().getStringExtra("resourceName");
+		categoryName = this.getIntent().getStringExtra("categoryName");
+		categoryCode = this.getIntent().getStringExtra("categoryCode");
+		resType = this.getIntent().getIntExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
+		chapterName = this.getIntent().getStringExtra("chapterName");
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		resourceUrl = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_URL);
 		curChapter = this.getIntent().getIntExtra("curChapter", 0);
@@ -97,7 +111,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		float fontSize = tools.getFontSize() * scale;
     	mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
-    	mTvTitle.setText(filename);
+    	mTvTitle.setText(chapterName);
     	
     	mTvNum.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSize-2*EbookConstants.LINE_SPACE*scale);
     	mTvNum.setHeight((int)fontSize); // 设置控件高度
@@ -119,7 +133,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 				@Override
 				public void onComplete() {
 					// TODO Auto-generated method stub
-					finish();
+					exit();
 				}
 			});
     	}
@@ -244,7 +258,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 			Intent intent = new Intent();
 			intent.putExtra("action", EbookConstants.TO_PRE_PART);
 			setResult(RESULT_OK, intent);
-			finish();
+			exit();
 		}
 	}
 	
@@ -265,7 +279,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 				public void onComplete() {
 					// TODO Auto-generated method stub
 					MediaPlayerUtils.getInstance().stop();
-					finish();
+					exit();
 				}	//如果到最后一个章节，退出到章节列表界面。
 			});
 		}
@@ -277,7 +291,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 			Intent intent = new Intent();
 			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
 			setResult(RESULT_OK, intent);
-			finish();
+			exit();
 		}
 	}
 	
@@ -339,7 +353,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		MediaPlayerUtils.getInstance().OnMediaPlayerListener(null);
 		MediaPlayerUtils.getInstance().stop();
 		mHandler.removeMessages(0);
-		finish();
+		exit();
 	}
 	
 	@Override
@@ -409,8 +423,8 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		entity.bookId = sysId;
 		entity.begin = MediaPlayerUtils.getInstance().getCurTime();
 		entity.chapterIndex = curChapter;
-		entity.chapterTitle = filename;
-		entity.markName = filename + " " + mTvStartTime.getText();
+		entity.chapterTitle = chapterName;
+		entity.markName = chapterName + " " + mTvStartTime.getText();
 		float percent = MediaPlayerUtils.getInstance().getPercent();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
 		entity.percent = decimalFormat.format(percent)+"%";
@@ -466,7 +480,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 								TTSUtils.getInstance().stop();
 								TtsUtils.getInstance().setMuteFlag(true);
 								setResult(RESULT_OK, data);
-								finish();
+								exit();
 							}
 						}
 						break;
@@ -475,5 +489,31 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 				}
 			}
 		}
+	}
+	
+	private void exit()
+	{
+		HistoryEntity entity = new HistoryEntity();
+		
+		int time = MediaPlayerUtils.getInstance().getCurTime();
+		int h = time / 3600;
+		int m = (time % 3600) / 60;
+		int s = (time % 3600) % 60;
+		
+		entity.userName = PublicUtils.getUserName();			//用户名
+	    entity.title = resourceName;							//标题
+	    entity.dbCode = dbCode;									//数据编码
+	    entity.sysId = sysId;									//sysId
+	    entity.resType = resType;				//资源类型 1:有声读物 2:电子图书  3:视频影像
+	    entity.lastChapterIndex = curChapter;	//最后阅读的章节序号
+	    entity.enterPoint = String.format("%02d:%02d:%02d", h, m, s);			//最后阅读的音视频时间点，格式"00:00:00"
+	    entity.bookTitle = resourceName;		//标题
+	    float percent = MediaPlayerUtils.getInstance().getPercent();
+		DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+		entity.percent = decimalFormat.format(percent)+"%";
+	    entity.categoryFullName = PublicUtils.getCategoryName(this, entity.resType) + "-" + categoryName + "-" + resourceName;	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
+	    entity.categoryCode = categoryCode;		//分类编码
+		
+		new AddHistoryAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entity);
 	}	
 }

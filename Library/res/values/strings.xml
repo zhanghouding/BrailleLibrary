@@ -69,6 +69,9 @@
 	<string name="library_del_history">正在删除阅读历史</string>
 	<string name="library_del_success">删除成功！</string>
 	<string name="library_del_fail">删除失败！</string>
+	<string name="library_add_history">正在添加阅读历史</string>
+	<string name="library_add_history_success">添加阅读历史成功！</string>
+	<string name="library_add_history_fail">添加阅读历史失败！</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>

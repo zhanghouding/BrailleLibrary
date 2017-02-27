@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -21,7 +22,9 @@ import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.AddHistoryAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
+import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.entity.ReadMode;
 import com.sunteam.library.entity.ReverseInfo;
 import com.sunteam.library.utils.CustomToast;
@@ -49,11 +52,17 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	private TextView mTvCurPage = null;
 	private View mLine = null;
 	private TextReaderView mTextReaderView = null;
+	
+	private boolean isNews = false;		//是否是盲人资讯
 	private boolean isAuto = false;
 	private boolean isReadPage = false;	//是否朗读页码
 	private boolean isFinish;//是否读完
-	private String filename;		//章节名称
+	private String chapterName;		//章节名称
 	private String identifier;		//书本id
+	private String dbCode;			//dbCode
+	private String categoryName;	//categoryName
+	private String resourceName;	//resourceName
+	private String categoryCode;	//categoryCode
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
 	private BookmarkEntity mBookmarkEntity;
@@ -69,11 +78,16 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);	//禁止休眠
 		setContentView(R.layout.library_activity_read_txt);
 		
+		isNews = this.getIntent().getBooleanExtra("isNews", false);
 		isAuto = this.getIntent().getBooleanExtra("isAuto", false);
-		filename = this.getIntent().getStringExtra("filename");
+		chapterName = this.getIntent().getStringExtra("chapterName");
 		curChapter = this.getIntent().getIntExtra("curChapter", 0);
 		totalChapter = this.getIntent().getIntExtra("totalChapter", 0);
 		identifier = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
+		dbCode = this.getIntent().getStringExtra("dbCode");
+		categoryName = this.getIntent().getStringExtra("categoryName");
+		resourceName = this.getIntent().getStringExtra("resourceName");
+		categoryCode = this.getIntent().getStringExtra("categoryCode");
 		mBookmarkEntity = (BookmarkEntity) this.getIntent().getSerializableExtra("book_mark");
 		
 		Tools tools = new Tools(this);
@@ -94,7 +108,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
     	mTvPageCount.setTextSize(TypedValue.COMPLEX_UNIT_PX, (fontSize-3*EbookConstants.LINE_SPACE)/2*scale);
     	mTvCurPage.setTextSize(TypedValue.COMPLEX_UNIT_PX, (fontSize-3*EbookConstants.LINE_SPACE)/2*scale);
     	mTvTitle.setHeight((int)fontSize); // 设置控件高度
-    	mTvTitle.setText(filename);
+    	mTvTitle.setText(chapterName);
     	mTvPageCount.setHeight((int)(fontSize/2));
     	mTvCurPage.setHeight((int)(fontSize/2));
     	
@@ -106,7 +120,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
     	//mTextReaderView.setTextSize(tools.getFontSize());
     	   	
     	TTSUtils.getInstance().init(this);	//初始化TTS
-    	if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), 0, 0, 0, 0, isAuto, filename) == false )
+    	if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), 0, 0, 0, 0, isAuto, chapterName) == false )
     	{
     		
     		TTSUtils.getInstance().stop();
@@ -117,7 +131,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 				{
 					// TODO Auto-generated method stub
 					{
-						finish();
+						exit();
 					}
 				}
 			});
@@ -133,7 +147,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		if( mBookmarkEntity != null )
 		{
 			int lineNumber = mTextReaderView.getlineNumber(mBookmarkEntity.begin);	//根据书签位置得到行号
-			if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), lineNumber, mBookmarkEntity.begin, 0, 0, true, filename) == false )
+			if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), lineNumber, mBookmarkEntity.begin, 0, 0, true, chapterName) == false )
 	    	{
 	    		
 	    		TTSUtils.getInstance().stop();
@@ -144,7 +158,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 					{
 						// TODO Auto-generated method stub
 						{
-							finish();
+							exit();
 						}
 					}
 				});
@@ -234,8 +248,11 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			case KeyEvent.KEYCODE_NUMPAD_0:		//百科查询
 				return	true;
 			case KeyEvent.KEYCODE_MENU:
-				MediaPlayerUtils.getInstance().stop();
-				startFunctionMenu();
+				if( !isNews )
+				{
+					MediaPlayerUtils.getInstance().stop();
+					startFunctionMenu();
+				}
 				break;
 			case KeyEvent.KEYCODE_STAR:			//反查
 				String content = mTextReaderView.getReverseText();	//得到当前反显内容
@@ -294,7 +311,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			Intent intent = new Intent();
 			intent.putExtra("action", EbookConstants.TO_PRE_PART);
 			setResult(RESULT_OK, intent);
-			finish();
+			exit();
 		}
 	}
 	
@@ -310,7 +327,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			Intent intent = new Intent();
 			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
 			setResult(RESULT_OK, intent);
-			finish();
+			exit();
 		}
 		else
 		{
@@ -321,7 +338,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 				@Override
 				public void onComplete() {
 					// TODO Auto-generated method stub
-					finish();
+					exit();
 				}	//如果到最后一个章节，退出到章节列表界面。
 			});
 		}
@@ -361,7 +378,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 							if( entity.chapterIndex == curChapter )	//如果在同一章跳转
 							{
 								int lineNumber = mTextReaderView.getlineNumber(entity.begin);	//根据书签位置得到行号
-								if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), lineNumber, entity.begin, 0, 0, true, filename) == false )
+								if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), lineNumber, entity.begin, 0, 0, true, chapterName) == false )
 						    	{
 						    		
 						    		TTSUtils.getInstance().stop();
@@ -372,7 +389,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 										{
 											// TODO Auto-generated method stub
 											{
-												finish();
+												exit();
 											}
 										}
 									});
@@ -385,7 +402,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 								RefreshScreenUtils.disableRefreshScreen();
 								TtsUtils.getInstance().setMuteFlag(true);
 								setResult(RESULT_OK, data);
-								finish();
+								exit();
 							}
 						}
 						break;
@@ -486,7 +503,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	{
 		TTSUtils.getInstance().stop();
 		TTSUtils.getInstance().OnTTSListener(null);
-		finish();
+		exit();
 	}
 	
 	@Override
@@ -519,8 +536,8 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		entity.bookId = identifier;
 		entity.begin = ri.startPos;
 		entity.chapterIndex = curChapter;
-		entity.chapterTitle = filename;
-		entity.markName = filename + " " + String.format(this.getString(R.string.library_page_read_tips2), curPage) + " " + reverseText;
+		entity.chapterTitle = chapterName;
+		entity.markName = chapterName + " " + String.format(this.getString(R.string.library_page_read_tips2), curPage) + " " + reverseText;
 		DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
 		entity.percent = decimalFormat.format(percent)+"%";
 		intent.putExtra("book_mark", entity);
@@ -529,4 +546,31 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		startActivityForResult(intent, MENU_CODE);
 	}
 	
+	private void exit()
+	{
+		if( isNews )
+		{
+			finish();
+			
+			return;
+		}
+	
+		HistoryEntity entity = new HistoryEntity();
+		
+		entity.userName = PublicUtils.getUserName();			//用户名
+	    entity.title = resourceName;							//标题
+	    entity.dbCode = dbCode;									//数据编码
+	    entity.sysId = identifier;								//bookId
+	    entity.resType = LibraryConstant.LIBRARY_DATATYPE_EBOOK;				//资源类型 1:有声读物 2:电子图书  3:视频影像
+	    entity.lastChapterIndex = curChapter;	//最后阅读的章节序号
+	    entity.enterPoint = "00:00:00";			//最后阅读的音视频时间点，格式"00:00:00"
+	    entity.bookTitle = resourceName;		//标题
+	    float percent = mTextReaderView.getCurPercent();	//当前阅读百分比
+	    DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+		entity.percent = decimalFormat.format(percent)+"%";	//电子书阅读进度，格式"0.00%"
+	    entity.categoryFullName = PublicUtils.getCategoryName(this, entity.resType) + "-" + categoryName + "-" + resourceName;	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
+	    entity.categoryCode = categoryCode;		//分类编码
+		
+		new AddHistoryAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entity);
+	}
 }

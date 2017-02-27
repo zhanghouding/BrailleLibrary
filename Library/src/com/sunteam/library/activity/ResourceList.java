@@ -96,13 +96,13 @@ public class ResourceList extends MenuActivity implements OnMenuKeyListener, Sho
 		
 		switch(dataType){
 		case LibraryConstant.LIBRARY_DATATYPE_EBOOK:			
-			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode );
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
-			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
 			break;
 		case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
-			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
 			break;
 		default:
 			break;
