@@ -21,6 +21,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	private String sysId;		//系统id
 	private String identifier;	//书本id
 	private String categoryName;//分类名称
+	private String categoryCode;
 	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
 	private BookmarkEntity mBookmarkEntity;
 	private boolean isHistory = false;	//是否是从历史记录进入
@@ -104,8 +105,11 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		intent.putExtra("sysId", sysId); // 记录标识号
 		intent.putExtra("identifier", identifier);	//书本id
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_VIDEO); // 数据类别：电子书、有声书、口述影像
-		intent.putExtra("categoryCode", mVideoChapterInfoEntityListt.get(selectItem).categoryName); // 分类代码
-		intent.putExtra("filename", menuItem); // 书名
+		intent.putExtra("categoryCode", categoryCode); // 分类代码
+		intent.putExtra("categoryName", categoryName); // 分类名称
+		intent.putExtra("resourceName", mTitle);	// 资源名称
+		intent.putExtra("categoryCode", categoryCode);
+		intent.putExtra("chapterName", menuItem); // 章节名
 		intent.putExtra("curChapter", selectItem); // 当前章节序号
 		intent.putExtra("totalChapter", mVideoChapterInfoEntityListt.size()); // 总章节数
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");		//父目录
@@ -138,6 +142,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
 		identifier = intent.getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
 		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);
+		categoryCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE);
 		isHistory = intent.getBooleanExtra("isHistory", false);
 		lastChapterIndex = intent.getIntExtra("lastChapterIndex", 0);
 		offset = intent.getIntExtra("offset", 0);

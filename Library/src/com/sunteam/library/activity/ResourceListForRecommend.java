@@ -87,14 +87,15 @@ public class ResourceListForRecommend extends MenuActivity implements OnMenuKeyL
 		String dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
 		String sysId = mEbookNodeEntityList.get(selectItem).sysId;
 		String identifier = mEbookNodeEntityList.get(selectItem).identifier;
+		String categoryCode = mEbookNodeEntityList.get(selectItem).categoryCode;
 		
 		String type = dbCode.toLowerCase();
 		if(type.contains(LibraryConstant.LIBRARY_DBCODE_EBOOK)){
-			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
 		} else if(type.contains(LibraryConstant.LIBRARY_DBCODE_AUDIO)){
-			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
 		} else if(type.contains(LibraryConstant.LIBRARY_DBCODE_VIDEO)){
-			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier);
+			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
 		}
 	}
 

@@ -29,6 +29,7 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	private String dbCode;		//数据编码
 	private String sysId;		//系统id
 	private String categoryName;//分类名称
+	private String categoryCode;
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;
 	private BookmarkEntity mBookmarkEntity;
 	private boolean isHistory = false;	//是否是从历史记录进入
@@ -107,7 +108,7 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		String chapterIndex = mEbookChapterInfoEntityList.get(selectItem).chapterIndex;
-		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size(), mBookmarkEntity,isHistory, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName);
+		new GetEbookChapterContentAsyncTask(this, fatherPath, menuItem,selectItem,mEbookChapterInfoEntityList.size(), mBookmarkEntity,isHistory, offset).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, identifier, chapterIndex, dbCode, sysId, categoryName, mTitle, categoryCode);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -121,6 +122,7 @@ public class EbookChapterList extends MenuActivity implements OnMenuKeyListener 
 		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
 		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);
+		categoryCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE);
 		isHistory = intent.getBooleanExtra("isHistory", false);
 		lastChapterIndex = intent.getIntExtra("lastChapterIndex", 0);
 		offset = intent.getIntExtra("offset", 0);

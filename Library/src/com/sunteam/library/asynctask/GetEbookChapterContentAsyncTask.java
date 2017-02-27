@@ -33,7 +33,9 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 	private String identifier;	//电子书identifier
 	private String dbCode;		//数据编码
 	private String sysId;		//系统id
-	private String categoryCode;//分类编码
+	private String categoryName;//分类名称
+	private String resourceName;//资源名称
+	private String categoryCode;
 
 	private boolean isHistory = false;	//是否是从历史记录进入
 	private int offset = 0;
@@ -61,7 +63,9 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 		String chapterIndex = params[1];
 		dbCode = params[2];
 		sysId = params[3];
-		categoryCode = params[4];
+		categoryName = params[4];
+		resourceName = params[5];
+		categoryCode = params[6];
 		
 		mContent = HttpDao.getEbookChapterContent(identifier, chapterIndex);
 		if( null == mContent )
@@ -122,9 +126,11 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 			intent.putExtra("sysId", sysId); // 记录标识号
 			intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);	//书本id
 			intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_EBOOK); // 数据类别：电子书、有声书、口述影像
-			intent.putExtra("categoryCode", categoryCode); // 分类代码
-			intent.putExtra("filename", mTitle); // 章节名
-			intent.putExtra("curChapter", mCurChapter); // 当前章节序号
+			intent.putExtra("categoryName", categoryName);	// 分类名称
+			intent.putExtra("resourceName", resourceName);	// 资源名称
+			intent.putExtra("categoryCode", categoryCode);
+			intent.putExtra("chapterName", mTitle); 		// 章节名
+			intent.putExtra("curChapter", mCurChapter); 	// 当前章节序号
 			intent.putExtra("totalChapter", mTotalChapter); // 总章节数
 			if( mBookmarkEntity != null )
 			{

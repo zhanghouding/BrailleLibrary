@@ -31,6 +31,7 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 	private String sysId;			//系统id
 	private String categoryName;	//分类名称
 	private String identifier;
+	private String categoryCode;
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList = new ArrayList<EbookChapterInfoEntity>();
 	private boolean isHistory = false;	//是否是从历史记录进入
 	private int lastChapterIndex = 0;
@@ -65,6 +66,7 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		sysId = params[1];
 		categoryName = params[2];
 		identifier = params[3];
+		categoryCode = params[4];
 		ArrayList<EbookChapterInfoEntity> list = HttpDao.getEbookChapterList(dbCode, identifier);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
@@ -128,6 +130,7 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
 		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName);	//分类名称
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode);
 		intent.putExtra("isHistory", isHistory);
 		intent.putExtra("lastChapterIndex", lastChapterIndex);
 		intent.putExtra("offset", offset);
