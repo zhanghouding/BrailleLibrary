@@ -32,12 +32,12 @@ public class DownloadedList extends MenuActivity implements OnMenuKeyListener {
 		// TODO 进入章节列表界面
 	}
 
-	private void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
-		Intent intent = new Intent();
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
-		intent.setClass(this, cls);
-		startActivityForResult(intent, selectItem);
-	}
+//	private void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
+//		Intent intent = new Intent();
+//		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
+//		intent.setClass(this, cls);
+//		startActivityForResult(intent, selectItem);
+//	}
 
 	@Override
 	public void onMenuKeyCompleted(int selectItem, String menuItem) {

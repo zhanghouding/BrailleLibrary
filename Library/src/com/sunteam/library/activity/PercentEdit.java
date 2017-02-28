@@ -1,5 +1,7 @@
 package com.sunteam.library.activity;
 
+import java.text.DecimalFormat;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -8,25 +10,21 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
-import com.sunteam.library.utils.TTSUtils;
 
 public class PercentEdit extends BaseActivity {
-	private final float maxPercent = 99.99f; // 最大百分比s
-	private final int numberWidth = 5; // 百分比数字位数
 	private String mTitle; // 菜单标题
 	private TextView mTvTitle;
 	private View mLine = null;
 	private TextView mTvNumber;
-	private String mPercentStr; // 百分比字符串
+	private String mPercentStr; // 百分比字符串; 把字符串作为编辑对象
 	private float mPercentFloat = (float) 0.0; // 百分比数字
 	private boolean isNumericKey = false; // 是否按了数字键，按上下左右键时为false, 按数字键时为true
 
@@ -40,10 +38,10 @@ public class PercentEdit extends BaseActivity {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		mPercentFloat = intent.getFloatExtra(LibraryConstant.INTENT_KEY_PERCENT, mPercentFloat);
-		if(0.0f == mPercentFloat){
+		if (0.0f == mPercentFloat) {
 			mPercentStr = "0";
 		} else {
-			DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+			DecimalFormat decimalFormat = new DecimalFormat("0.00");// 构造方法的字符格式这里如果小数不足2位,会以0补足.
 			mPercentStr = decimalFormat.format(mPercentFloat);
 		}
 
@@ -69,35 +67,50 @@ public class PercentEdit extends BaseActivity {
 		mTvNumber = (TextView) findViewById(R.id.common_number_edit_digit);
 		mTvNumber.setText(mPercentStr);
 		mTvNumber.setTextColor(mTools.getFontColor()); // 设置文字颜色
-		TTSUtils.getInstance().speakMenu(mTitle + "," + mPercentStr);
+		TtsUtils.getInstance().speak(mTitle + "," + mPercentStr);
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		boolean ret = true;
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_STAR: // 屏蔽星号键功能
+			break;
+		default:
+			ret = false;
+			break;
+		}
+		if (!ret) {
+			ret = super.onKeyDown(keyCode, event);
+		}
+		return ret;
 	}
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		boolean ret = true;
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_DPAD_UP: // 数字减1
 			isNumericKey = false;
-			decNumber();
-			setPercent();
+			incDecNumber(false);
 			break;
 		case KeyEvent.KEYCODE_DPAD_DOWN: // 数字增1
 			isNumericKey = false;
-			incNumber();
-			setPercent();
+			incDecNumber(true);
+			break;
+		case KeyEvent.KEYCODE_STAR: // 星号键也实现删除功能
+			readingPromptInfo(R.string.library_input_percent_error);
 			break;
 		case KeyEvent.KEYCODE_DPAD_LEFT: // 删除尾部数字
 			isNumericKey = false;
-			mPercentStr = mPercentStr.substring(0, mPercentStr.length() - 1);
-			setPercent();
+			deleteTailCh();
 			break;
 		case KeyEvent.KEYCODE_DPAD_RIGHT: // 尾部添0
 			isNumericKey = false;
-			tenTimesNumber();
-			setPercent();
+			appendZero();
 			break;
 		case KeyEvent.KEYCODE_POUND: // '#'输入小数点
 			inputDot();
-			setPercent();
 			break;
 		case KeyEvent.KEYCODE_0:
 		case KeyEvent.KEYCODE_NUMPAD_0:
@@ -147,71 +160,95 @@ public class PercentEdit extends BaseActivity {
 			finish();
 			break;
 		default:
+			ret = false;
 			break;
 		}
-		return super.onKeyUp(keyCode, event);
+		if (!ret) {
+			ret = super.onKeyUp(keyCode, event);
+		}
+		return ret;
 	}
 
 	// 设置当前输入的百分比
 	private void setPercent() {
 		mTvNumber.setText(mPercentStr);
-		TTSUtils.getInstance().speakMenu(mPercentStr);
+		TtsUtils.getInstance().speak(mPercentStr);
 	}
-	
-	// 数字尾部减1
-	private void decNumber() {
+
+	// 数字尾部增减1；state true 增1；false 减1
+	private void incDecNumber(boolean state) {
+		String format = "$###.00"; // 使用"#"号会删除前导0和尾部多余的0;使用"0",则前后补0
 		int index = mPercentStr.indexOf('.'); // 小数点位置
 		float step = 0.0f;
-		if(-1 == index){
+		if (-1 == index) {
 			step = 1;
-		} else if(1 == mPercentStr.length() - index){
-			step= 0.1f;
-		} else{
+			format = "###";
+		} else if (2 == mPercentStr.length() - index) {
+			step = 0.1f;
+			format = "##0.0";
+		} else {
 			step = 0.01f;
+			format = "##0.00";
 		}
 		mPercentFloat = str2FloatNumber(mPercentStr);
-		mPercentFloat -= step;
-		if(mPercentFloat < 0){
-			mPercentFloat = maxPercent;
+		if (!state) {
+			step = -step;
 		}
-	}
-	
-	// 数字尾部减1
-	private void incNumber() {
-		int index = mPercentStr.indexOf('.'); // 小数点位置
-		float step = 0.0f;
-		if(-1 == index){
-			step = 1;
-		} else if(1 == mPercentStr.length() - index){
-			step= 0.1f;
-		} else{
-			step = 0.01f;
-		}
-		mPercentFloat = str2FloatNumber(mPercentStr);
 		mPercentFloat += step;
-		if(mPercentFloat > maxPercent){
+
+		if (mPercentFloat > 100) {
 			mPercentFloat = 0;
+			format = "###";
+		} else if (mPercentFloat < 0) {
+			mPercentFloat = 100;
+			format = "###";
+		}
+
+		DecimalFormat df = new DecimalFormat(format);
+		mPercentStr = df.format(mPercentFloat);
+
+		setPercent();
+	}
+
+	// 删除尾部字符，已经删空后提示输入数字
+	private void deleteTailCh() {
+		if (0 == mPercentStr.length()) {
+			readingPromptInfo(R.string.library_input_percent_error);
+		} else {
+			mPercentStr = mPercentStr.substring(0, mPercentStr.length() - 1);
+			setPercent();
 		}
 	}
-	
-	// 数字尾部添0
-	private void tenTimesNumber() {
-		mPercentStr = mPercentStr + "0";
-		mPercentFloat = str2FloatNumber(mPercentStr);
-		if(mPercentFloat > maxPercent){
-			mPercentFloat = maxPercent;
-			mPercentStr = "" + mPercentFloat;
+
+	// 数字尾部添0;需要判断超出有效范围
+	private void appendZero() {
+		if (0 == mPercentStr.length()) {
+			readingPromptInfo(R.string.library_input_percent_error);
+		} else {
+			mPercentStr = mPercentStr + "0";
+			checkValidValue();
 		}
 	}
-	
-	// 数字尾部添加小数点：如果已经有小数点，则提示错误
+
+	// 数字尾部添加小数点：如果已经有小数点，则提示错误; 通过方向键输入时也允许输入小数点!
 	private void inputDot() {
+		mPercentFloat = str2FloatNumber(mPercentStr);
 		int index = mPercentStr.indexOf('.'); // 小数点位置
-		if(-1 != index){
-			readingOutOfRange(R.string.library_input_percent_error);
+		if (-1 != index) {
+			readingPromptInfo(R.string.library_input_percent_error);
 			return;
 		}
-		mPercentStr = mPercentStr + ".0";
+		if (mPercentStr.equals("100")) {
+			if (isNumericKey) {
+				mPercentStr = "0.";
+			} else {
+				mPercentStr = "0.0";
+			}
+		} else {
+			mPercentStr = mPercentStr + ".";
+		}
+
+		setPercent();
 	}
 
 	// 通过输入数字键编辑百分比，digit 是当前输入的数字键对应数字
@@ -220,29 +257,36 @@ public class PercentEdit extends BaseActivity {
 			isNumericKey = true;
 			mPercentFloat = digit;
 			mPercentStr = "" + digit;
+			setPercent();
 		} else {
 			mPercentStr = mPercentStr + digit;
-			mPercentFloat = str2FloatNumber(mPercentStr);
-			if (mPercentFloat > maxPercent) {
-				int index = mPercentStr.indexOf('.'); // 小数点位置
-				if (-1 == index) {
-					mPercentFloat = mPercentFloat / 10;
-				} else if (mPercentStr.length() > numberWidth) {
-					mPercentFloat = maxPercent;
-					mPercentStr = "" + mPercentStr;
-					setPercent();
-					readingOutOfRange(R.string.library_input_percent_max);
-					return;
-				}
-			}
+			checkValidValue();
 		}
-		setPercent();
+	}
+
+	// 判断是否超出有效范围
+	private void checkValidValue() {
+		// 前导0只保留一个
+		mPercentStr = mPercentStr.replaceAll("^0+", "0");
+
+		// 小数点后面只保留两位有效位；
+		int dotIndex = mPercentStr.indexOf('.'); // 小数点位置,没有小数点时为-1
+		if (-1 == dotIndex) {
+			dotIndex = mPercentStr.length();
+		}
+
+		// 1. 总长度最大为5："xx.xx";2.整数长度最大为3:"100";3.小数有效位最大为2;4.整数长度为3而字符串大于"100"
+		if (mPercentStr.length() > 5 || dotIndex > 3 || mPercentStr.length() - dotIndex - 1 > 2 || (dotIndex == 3 && mPercentStr.compareTo("100") > 0)) {
+			readingOutOfRange(R.string.library_input_percent_max, "100");
+		} else{
+			setPercent();
+		}
 	}
 
 	// 跳转到指定百分比
 	private void jumpToPercent() {
 		mPercentFloat = str2FloatNumber(mPercentStr);
-		if (mPercentFloat <= 0 || mPercentFloat > maxPercent) {
+		if (mPercentFloat <= 0 || mPercentFloat > 100) {
 			PublicUtils.showToast(this, getResources().getString(R.string.library_input_percent_num));
 		} else {
 			Intent intent = new Intent();
@@ -252,6 +296,7 @@ public class PercentEdit extends BaseActivity {
 		}
 	}
 
+	// 有可能为空字符串
 	private float str2FloatNumber(String percent) {
 		float number = 0;
 		try {
@@ -261,24 +306,21 @@ public class PercentEdit extends BaseActivity {
 		}
 		return number;
 	}
-	
-	private String floatNumber2Str(float number){
-		String str;
-		if(0.0f == number){
-			str = "0";
-		} else {
-			str = String.format("%##.##f", number);
-		}
-		return str;
+
+	// 提示超出范围
+	private void readingOutOfRange(int id, String value) {
+		mPercentStr = value;
+		mTvNumber.setText(mPercentStr);
+		readingPromptInfo(id);
 	}
 
-	// 提示超出范围，
-	private void readingOutOfRange(int id) {
+	// 朗读提示信息
+	private void readingPromptInfo(int id) {
 		PublicUtils.showToast(this, getResources().getString(id), new PromptListener() {
 
 			@Override
 			public void onComplete() {
-				TTSUtils.getInstance().speakMenu(mPercentStr);
+				TtsUtils.getInstance().speak(mPercentStr);
 			}
 		});
 	}

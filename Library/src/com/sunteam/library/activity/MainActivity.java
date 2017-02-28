@@ -48,7 +48,7 @@ public class MainActivity extends MenuActivity {
 		super.onWindowFocusChanged(hasFocus);
 	}
 
-	@Override
+	@SuppressLint("DefaultLocale") @Override
 	protected void onResume() {
 		super.onResume();
 		if (!WifiUtils.checkWifiState(this)) {
@@ -57,19 +57,19 @@ public class MainActivity extends MenuActivity {
 			new LoginAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, PublicUtils.getUserName());
 		}
 		acquireWakeLock(this);
-		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
+//		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		MenuGlobal.debug("[Library-MainActivity][onPause], this = " + this);
+//		MenuGlobal.debug("[Library-MainActivity][onPause], this = " + this);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		MenuGlobal.debug("[Library-MainActivity][onStop], this = " + this);
+//		MenuGlobal.debug("[Library-MainActivity][onStop], this = " + this);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class MainActivity extends MenuActivity {
 		android.os.Process.killProcess(android.os.Process.myPid());
 		System.exit(1);
 		*/
-		MenuGlobal.debug("[Library-MainActivity][onDestroy], this = " + this);
+//		MenuGlobal.debug("[Library-MainActivity][onDestroy], this = " + this);
 	}
 
 	@Override

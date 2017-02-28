@@ -74,16 +74,8 @@ public class LibraryNewsCategoryList extends MenuActivity {
 		return super.onKeyUp(keyCode, event);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void initView() {
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
-		/*Intent intent = getIntent();
-		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-		mEbookNodeEntityList = (ArrayList<EbookNodeEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
-		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
-		mMenuList = getListFromEbookNodeEntity(mEbookNodeEntityList);
-		bookCount = mMenuList.size();
-		bookCount = intent.getIntExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount);*/
 	}
 
 }

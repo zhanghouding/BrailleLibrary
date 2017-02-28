@@ -1,7 +1,6 @@
 package com.sunteam.library.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
@@ -10,12 +9,11 @@ import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsListener;
 import com.sunteam.common.tts.TtsUtils;
-import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.LogUtils;
 import com.sunteam.library.view.LibrarySearchView;
 
-public class SearchActivity extends BaseActivity/* implements TextWatcher, OnEnterListener*/ {
+public class SearchActivity extends BaseActivity {
 	private FrameLayout mFlContainer = null;
 	private LibrarySearchView mMainView = null;
 	private Boolean hasCreated = false; 
