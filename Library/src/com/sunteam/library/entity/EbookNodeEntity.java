@@ -51,4 +51,8 @@ public class EbookNodeEntity implements Serializable
 	public String resourceType;
 	public String detailUrl;
 	public String onlineViewUrl;
+	
+	public int resType;				//资源检索时用
+	public String categoryName;		//资源检索时用
+	public String categoryFullName;	//资源检索时用
 }

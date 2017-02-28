@@ -26,6 +26,7 @@ import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
 import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
+import com.sunteam.library.asynctask.GetSearchResultAsyncTask;
 import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.EbookNodeEntity;
@@ -444,23 +445,31 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 
 	// 进入章节列表界面
 	public void onEnterCompleted(int selectItem, String itemStr) {
-		EbookNodeEntity entity = mEbookNodeEntityList.get(selectItem);
+		EbookNodeEntity entity = GetSearchResultAsyncTask.mEbookNodeEntityList.get(selectItem);
 		String dbCode = entity.dbCode;
 		String sysId = entity.sysId;
 		String identifier = entity.identifier;
-		String lowerStr = dbCode.toLowerCase();
-		String categoryName = "古典文学"; // TODO 需要根据CategoryCode获取分类名
-		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH; // TODO 需要根据CategoryCode获取路径全名
+		String categoryCode = entity.categoryCode;
+		String categoryName = entity.categoryName;
+		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH;
 		String title = entity.title;
 		
-		if (lowerStr.contains(LibraryConstant.LIBRARY_DBCODE_EBOOK)) {
-			fatherPath = fatherPath + PublicUtils.getCategoryName(mContext, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
-			fatherPath = fatherPath + "/" + categoryName;
-			new GetEbookChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier);
-		} else if (lowerStr.contains(LibraryConstant.LIBRARY_DBCODE_AUDIO)) {
-			new GetAudioChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier);
-		} else {
-			new GetVideoChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier);
+		switch( entity.resType )
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetEbookChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetAudioChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetVideoChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -469,8 +478,8 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		String inputStr = mEditText.getText().toString();
 		if (!inputStr.isEmpty()) {
 			String pageIndex = "1";
-			String pageSize = "1000";
-			new GetSearchResultAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, inputStr);
+			String pageSize = LibraryConstant.LIBRARY_RESOURCE_PAGESIZE+"";
+			new GetSearchResultAsyncTask(mContext, mAdapter, mMenuList).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, inputStr);
 		} else {
 			inputStr = mEditText.getHint().toString();
 			TtsUtils.getInstance().speak(inputStr);
@@ -491,80 +500,6 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		if (null != mWakeLock && mWakeLock.isHeld()) {
 			mWakeLock.release();
 			mWakeLock = null;
-		}
-	}
-
-	// 刷新列表
-	private void updateResourceList() {
-		mMenuList.clear();
-		for (int i = 0; i < mEbookNodeEntityList.size(); i++) {
-			String dbCode = mEbookNodeEntityList.get(i).dbCode.toLowerCase();
-			String typeName;
-			if (dbCode.contains(LibraryConstant.LIBRARY_DBCODE_AUDIO)) {
-				typeName = getResources().getString(R.string.library_category_audio);
-			} else if (dbCode.contains(LibraryConstant.LIBRARY_DBCODE_EBOOK)) {
-				typeName = getResources().getString(R.string.library_category_ebook);
-			} else {
-				typeName = getResources().getString(R.string.library_category_video);
-			}
-			String title = typeName + " " + mEbookNodeEntityList.get(i).title;
-			mMenuList.add(title);
-		}
-		mAdapter.setListData(mMenuList);
-		mAdapter.setSelectItem(0);
-//		listView.setVisibility(View.VISIBLE);
-	}
-
-	// 以下是检索资源内部类; 因为数据需要在该界面中加载，为了避免大数据通过静态属性传输或通过Intent数据传输，直接作为内部类，以便界面可以直接访问检索结果
-	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
-
-	private class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			String pageIndex = params[0];
-			String pageSize = params[1];
-			String searchWord = params[2];
-
-			EbookInfoEntity entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
-			if ((null != entity) && (null != entity.list) && (0 != entity.list.size())) {
-				mEbookNodeEntityList.addAll(entity.list);
-			}
-
-			entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
-			if ((null != entity) && (null != entity.list) && (0 != entity.list.size())) {
-				mEbookNodeEntityList.addAll(entity.list);
-			}
-
-			entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_VIDEO);
-			if ((null != entity) && (null != entity.list) && (0 != entity.list.size())) {
-				mEbookNodeEntityList.addAll(entity.list);
-			}
-
-			return true;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			PublicUtils.showProgress(mContext);
-			String s = mContext.getResources().getString(R.string.library_wait_reading_data);
-			TtsUtils.getInstance().speak(s);
-
-			mEbookNodeEntityList.clear();
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
-			PublicUtils.cancelProgress();
-
-			if (null != mEbookNodeEntityList && mEbookNodeEntityList.size() > 0) {
-				updateResourceList();
-			} else {
-				String s = mContext.getResources().getString(R.string.library_reading_data_error);
-				TtsUtils.getInstance().speak(s);
-			}
 		}
 	}
 }

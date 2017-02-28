@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.sunteam.common.menu.MenuListAdapter;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.net.HttpDao;
@@ -22,20 +24,46 @@ import com.sunteam.library.utils.PublicUtils;
 public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 {
 	private Context mContext;
-	private String mFatherPath;
-	private String mTitle;
-	private int type;
+	private MenuListAdapter mAdapter = null;
+	private ArrayList<String> mMenuList = new ArrayList<String>();
 	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
 	
-	public GetSearchResultAsyncTask(Context context, String fatherPath, String title) 
+	public GetSearchResultAsyncTask(Context context, MenuListAdapter adapter, ArrayList<String> list ) 
 	{
-		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
-		
 		mContext = context;
-		mFatherPath = fatherPath+title+"/";
-		mTitle = title;
+		mAdapter = adapter;
+		mMenuList = list;
 	}
 
+	private void search( String pageIndex, String pageSize, String searchWord, int resType )
+	{
+		EbookInfoEntity entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, resType);
+		if( ( null != entity ) && ( ( null != entity.list ) && ( 0 != entity.list.size() ) ) )
+		{
+			mEbookNodeEntityList.addAll(entity.list);
+			
+			ArrayList<CategoryInfoNodeEntity> list = HttpDao.getCategoryInfoList(resType);
+			if( ( list != null) && ( list.size() > 0 ) )
+			{
+				int size1 = entity.list.size();
+				int size2 = list.size();
+				String categoryName = PublicUtils.getCategoryName(mContext, resType);
+				for( int i = 0; i < size1; i++ )
+				{
+					entity.list.get(i).resType = resType;
+					for( int j = 0; j < size2; j++ )
+					{
+						if( entity.list.get(i).categoryCode.contains(list.get(j).code) )
+						{
+							entity.list.get(i).categoryName = list.get(j).name;
+							entity.list.get(i).categoryFullName = categoryName + "-" + entity.list.get(i).categoryName + "-" + entity.list.get(i).title;
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	protected Boolean doInBackground(String... params) 
 	{
@@ -43,23 +71,9 @@ public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 		String pageSize = params[1];
 		String searchWord = params[2]; 
 		
-		EbookInfoEntity entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
-		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
-		{
-			mEbookNodeEntityList.addAll(entity.list);
-		}
-
-		entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
-		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
-		{
-			mEbookNodeEntityList.addAll(entity.list);
-		}
-		
-		entity = HttpDao.getSearchList(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_VIDEO);
-		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
-		{
-			mEbookNodeEntityList.addAll(entity.list);
-		}
+		search(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_EBOOK);
+		search(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_AUDIO);
+		search(pageIndex, pageSize, searchWord, LibraryConstant.LIBRARY_DATATYPE_VIDEO);
 		
 		return	true;
 	}
@@ -83,7 +97,7 @@ public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 		
 		if(null != mEbookNodeEntityList && mEbookNodeEntityList.size() > 0)
 		{
-			startNextActivity();
+			updateResourceList();
 		}
 		else
 		{
@@ -92,20 +106,17 @@ public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 		}
 	}
 
-	private void startNextActivity() {
-		/*
-		Intent intent = new Intent();
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
-		//intent.putExtra(MenuConstant.INTENT_KEY_LIST, mEbookNodeEntityList); // 菜单名称
-		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
-		intent.putExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount); // 资源总数
-		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, mFatherPath);	//父目录
-		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode);	//分类编码
-		intent.setClass(mContext, ResourceList.class);
 
-		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
-		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
-		mContext.startActivity(intent);
-		*/
+	// 刷新列表
+	private void updateResourceList() 
+	{
+		mMenuList.clear();
+		for (int i = 0; i < mEbookNodeEntityList.size(); i++) 
+		{
+			mMenuList.add(mEbookNodeEntityList.get(i).categoryFullName);
+		}
+		mAdapter.setListData(mMenuList);
+		mAdapter.setSelectItem(0);
+//		listView.setVisibility(View.VISIBLE);
 	}
 }
