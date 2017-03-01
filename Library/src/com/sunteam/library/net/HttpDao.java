@@ -12,9 +12,9 @@ import com.sunteam.library.entity.CollectCategoryEntity;
 import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
-import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.entity.InformationEntity;
+import com.sunteam.library.entity.UserInfoEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.parse.AddBookMarkParseResponse;
 import com.sunteam.library.parse.AddCollectCategoryParseResponse;
@@ -36,6 +36,8 @@ import com.sunteam.library.parse.GetHistoryParseResponse;
 import com.sunteam.library.parse.GetInformationParseResponse;
 import com.sunteam.library.parse.GetVideoChapterParseResponse;
 import com.sunteam.library.parse.LoginParseResponse;
+import com.sunteam.library.parse.RegisterParseResponse;
+import com.sunteam.library.parse.UserGetPasswordParseResponse;
 import com.sunteam.library.utils.LibraryConstant;
 
 /**
@@ -67,6 +69,176 @@ public class HttpDao
 		return (Boolean) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new LoginParseResponse() );
 	}
 	
+	/**
+	 * 得到用户密码信息(找回密码第一步)
+	 * 
+	 * @param authenticType ：验证类型：1 读者卡号 2：残疾人证号
+	 * @param realName	: 真实姓名
+	 * @param cardNo	: 号码(验证类型为1，号码就是读者卡号；验证类型为2，号码就是残疾人证号)
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/01
+	 */
+	public static UserInfoEntity userGetPassword( int authenticType, String realName, String cardNo ) 
+	{
+		String userInfo = null;
+		switch( authenticType )
+		{
+			case 1:	//读者卡号
+				userInfo = 
+						"{"
+						+ "\"RealName\":\""+realName+"\","
+						+ "\"ReaderCardNo\":\""+cardNo+"\""
+						+ "}";
+				break;
+			case 2:	//残疾人证号
+				userInfo = 
+						"{"
+						+ "\"RealName\":\""+realName+"\","
+						+ "\"DisableCardNo\":\""+cardNo+"\""
+						+ "}";
+				break;
+			default:
+				return	null;
+		}
+		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(userInfo,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	null;
+		}
+		
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "UserGetPassword");
+		requestParams.put("AuthenticType", authenticType+"");
+		requestParams.put("UserInfo", encodeJson);
+		
+		return (UserInfoEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new UserGetPasswordParseResponse() );
+	}
+	
+	/**
+	 * 更新用户密码信息(找回密码第二步)
+	 * 
+	 * @param authenticType ：验证类型：1 读者卡号 2：残疾人证号
+	 * @param username	: 用户名
+	 * @param realName	: 真实姓名
+	 * @param cardNo	: 号码(验证类型为1，号码就是读者卡号；验证类型为2，号码就是残疾人证号)
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/01
+	 */
+	public static Integer updateGetPassword( int authenticType, String userName, String realName, String cardNo, String password ) 
+	{
+		String userInfo = null;
+		switch( authenticType )
+		{
+			case 1:	//读者卡号
+				userInfo = 
+						"{"
+						+ "\"UserName\":\""+userName+"\","
+						+ "\"RealName\":\""+realName+"\","
+						+ "\"ReaderCardNo\":\""+cardNo+"\","
+						+ "\"Password\":\""+password+"\""
+						+ "}";
+				break;
+			case 2:	//残疾人证号
+				userInfo = 
+						"{"
+						+ "\"UserName\":\""+userName+"\","
+						+ "\"RealName\":\""+realName+"\","
+						+ "\"DisableCardNo\":\""+cardNo+"\","
+						+ "\"Password\":\""+password+"\""
+						+ "}";
+				break;
+			default:
+				return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(userInfo,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "UpdatePassword");
+		requestParams.put("AuthenticType", authenticType+"");
+		requestParams.put("UserInfo", encodeJson);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new UserGetPasswordParseResponse() );
+	}
+	
+	/**
+	 * 注册
+	 * 
+	 * @param authenticType ：验证类型：1 读者卡号 2：残疾人证号
+	 * @param username	: 用户名
+	 * @param realName	: 真实姓名
+	 * @param cardNo	: 号码(验证类型为1，号码就是读者卡号；验证类型为2，号码就是残疾人证号)
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/01
+	 */
+	public static Integer register( int authenticType, String userName, String realName, String cardNo, String password ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		
+		String userInfo = null;
+		switch( authenticType )
+		{
+			case 1:	//读者卡号
+				userInfo = 
+						"{"
+						+ "\"ReaderCardNo\":\""+cardNo+"\","
+						+ "\"RealName\":\""+realName+"\","
+						+ "\"UserName\":\""+userName+"\","
+						+ "\"Password\":\""+password+"\""
+						+ "}";
+				requestParams.put("requestType", "UserAddByReaderCard");
+				break;
+			case 2:	//残疾人证号
+				userInfo = 
+						"{"
+						+ "\"DisableCardNo\":\""+cardNo+"\","
+						+ "\"RealName\":\""+realName+"\","
+						+ "\"UserName\":\""+userName+"\","
+						+ "\"Password\":\""+password+"\""
+						+ "}";
+				requestParams.put("requestType", "UserAddByDisabledCardNo");
+				break;
+			default:
+				return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(userInfo,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
+		requestParams.put("UserInfo", encodeJson);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new RegisterParseResponse() );
+	}
+		
 	/**
 	 * 得到所有的分类信息
 	 * 
@@ -258,9 +430,21 @@ public class HttpDao
 	public static ArrayList<HistoryEntity> getHistoryList( String username ) 
 	{
 		String json = "{UserName:\""+username+"\"}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	null;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "SearchHistory");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (ArrayList<HistoryEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new GetHistoryParseResponse() );
 	}
@@ -277,9 +461,21 @@ public class HttpDao
 	public static ArrayList<CollectCategoryEntity> getCollectCategoryList( String username ) 
 	{
 		String json = "{UserName:\""+username+"\"}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	null;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "SearchCategory");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (ArrayList<CollectCategoryEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new GetCollectCategoryParseResponse() );
 	}
@@ -296,9 +492,21 @@ public class HttpDao
 	public static ArrayList<CollectResourceEntity> getCollectResourceList( String username ) 
 	{
 		String json = "{UserName:\""+username+"\"}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	null;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "SearchCollect");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (ArrayList<CollectResourceEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new GetCollectResourceParseResponse() );
 	}
@@ -321,9 +529,21 @@ public class HttpDao
 				+ "\"BookId\":\""+bookId+"\""
 				+ "}";
 		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	null;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "GetBookmarks");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (ArrayList<BookmarkEntity>) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new GetBookMarkParseResponse() );
 	}
@@ -505,9 +725,21 @@ public class HttpDao
 				+ "\"SysId\":\""+sysId+"\""
 				+ "}";
 		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "DeleteHistory");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new DelHistoryParseResponse() );
 	}
@@ -521,7 +753,6 @@ public class HttpDao
 	 * @author wzp
 	 * @Created 2017/02/19
 	 */
-	@SuppressWarnings("unchecked")
 	public static Integer delCollectCategory( String username, String categoryCode ) 
 	{
 		String json = 
@@ -530,9 +761,21 @@ public class HttpDao
 				+ "\"CategoryCode\":\""+categoryCode+"\""
 				+ "}";
 		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "DeleteCategory");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new DelCollectCategoryParseResponse() );
 	}
@@ -556,9 +799,21 @@ public class HttpDao
 				+ "\"SysId\":\""+sysId+"\""
 				+ "}";
 		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "DeleteCollect");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new DelCollectResourceParseResponse() );
 	}
@@ -572,7 +827,6 @@ public class HttpDao
 	 * @author wzp
 	 * @Created 2017/02/18
 	 */
-	@SuppressWarnings("unchecked")
 	public static Integer delBookMark( String username, String id ) 
 	{
 		String json = 
@@ -581,9 +835,21 @@ public class HttpDao
 				+ "\"Id\":\""+id+"\""
 				+ "}";
 		
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	LibraryConstant.RESULT_EXCEPTION;
+		}
+		
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "DeleteBookmark");
-		requestParams.put("jsonObj", URLEncoder.encode(json));
+		requestParams.put("jsonObj", encodeJson);
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new DelBookMarkParseResponse() );
 	}	
