@@ -62,6 +62,8 @@ public class LibraryConstant {
 	// SharePref文件名，KEY类型，如：登录状态，有些界面需要根据登录状态获取不同的数据源
 	public static final String LIBRARY_CONFIG_FILE = "config";
 	public static final String LIBRARY_LOGIN_STATE = "login_state";
+	public static final String LIBRARY_LOGIN_USERNAME = "login_username";
+	public static final String LIBRARY_LOGIN_PASSWD = "login_passwd";
 
 	// Handler处理的消息类型
 	public static final int MSG_CONFIRMDIALOG_RETURN = 0; // 确认对话框返回;arg1:0确认,1取消
@@ -96,4 +98,5 @@ public class LibraryConstant {
 	public static final int MYLIBRARY_READING_HISTORY = 2; // 我的阅读历史
 	public static final int MYLIBRARY_DOWNLOADING = 3; // 正在下载
 	public static final int MYLIBRARY_DOWNLOADED = 4; // 已下载
+
 }

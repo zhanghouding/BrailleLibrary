@@ -177,7 +177,7 @@ public class PercentEdit extends BaseActivity {
 
 	// 数字尾部增减1；state true 增1；false 减1
 	private void incDecNumber(boolean state) {
-		String format = "$###.00"; // 使用"#"号会删除前导0和尾部多余的0;使用"0",则前后补0
+		String format = "###.00"; // 使用"#"号会删除前导0和尾部多余的0;使用"0",则前后补0
 		int index = mPercentStr.indexOf('.'); // 小数点位置
 		float step = 0.0f;
 		if (-1 == index) {

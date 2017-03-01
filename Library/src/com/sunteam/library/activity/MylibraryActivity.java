@@ -50,7 +50,8 @@ public class MylibraryActivity extends MenuActivity {
 			startNextActivity(DownloadManager.class, selectItem, menuItem, list);
 			break;
 		case 4: // 图书馆账号绑定
-//			cls = AccountBindActivity.class;
+			list = getResources().getStringArray(R.array.library_account_manager_list);
+			startNextActivity(AccountManager.class, selectItem, menuItem, list);
 			break;
 		default:
 			break;
@@ -67,11 +68,7 @@ public class MylibraryActivity extends MenuActivity {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
-
 		intent.setClass(this, cls);
-		 
-        // 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
-		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
 		startActivityForResult(intent, selectItem);
 	}
 
