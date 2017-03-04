@@ -44,11 +44,12 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 	
 	public GetEbookChapterContentAsyncTask(Context context, String fatherPath, String title, int curChapter, int totalChapter, BookmarkEntity entity, boolean historyFlag, int off ) 
 	{
-		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
+		mTitle = PublicUtils.format(title);
+		
+		PublicUtils.createCacheDir(fatherPath, mTitle);	//创建缓存目录
 		
 		mContext = context;
-		mFatherPath = fatherPath+title+"/";
-		mTitle = title;
+		mFatherPath = fatherPath+mTitle+"/";
 		mCurChapter = curChapter;
 		mTotalChapter = totalChapter;
 		mBookmarkEntity = entity;

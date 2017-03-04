@@ -181,10 +181,10 @@ public class HistoryDBDao
 	}
 
 	//查找所有数据
-	public ArrayList<HistoryEntity> findAll() 
+	public ArrayList<HistoryEntity> findAll( String userName ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.HISTORY_TABLE_NAME, null);
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.HISTORY_TABLE_NAME + " where " + DatabaseConstants.HISTORY_USERNAME + " = ?", new String[]{userName});
 		if( null == cursor )
 		{
 			db.close();
@@ -226,6 +226,14 @@ public class HistoryDBDao
 		return	list;
 	}
 
+	//删除数据
+	public void delete( HistoryEntity entity )
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		db.execSQL("delete from " + DatabaseConstants.HISTORY_TABLE_NAME + " where " + DatabaseConstants.HISTORY_USERNAME + " = ? and " + DatabaseConstants.HISTORY_DBCODE + " = ? and " + DatabaseConstants.HISTORY_SYSID + " = ?", new String[]{entity.userName, entity.dbCode, entity.sysId});
+		db.close();
+	}
+	
 	//删除所有的数据
 	public void deleteAll() 
 	{

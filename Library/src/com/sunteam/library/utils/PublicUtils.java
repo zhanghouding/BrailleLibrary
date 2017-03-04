@@ -375,7 +375,7 @@ public class PublicUtils
     {
     	String str = s.replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", ""); 
     	
-    	return str;
+    	return str.replaceAll("//", "");
     }
     
 	/**

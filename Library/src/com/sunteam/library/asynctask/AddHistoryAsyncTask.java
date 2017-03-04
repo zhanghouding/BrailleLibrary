@@ -1,16 +1,10 @@
 package com.sunteam.library.asynctask;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.sunteam.common.utils.dialog.PromptListener;
-import com.sunteam.library.R;
-import com.sunteam.library.db.CategoryDBDao;
 import com.sunteam.library.db.HistoryDBDao;
-import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.PublicUtils;
@@ -33,7 +27,27 @@ public class AddHistoryAsyncTask extends AsyncTask<HistoryEntity, Void, HistoryE
 	@Override
 	protected HistoryEntity doInBackground(HistoryEntity... params) 
 	{
-		return	HttpDao.addHistory( params[0] );
+		HistoryEntity he = params[0];
+		HistoryEntity entity = HttpDao.addHistory( he );
+		if( null == entity )	//添加历史记录失败则调用更新接口
+		{
+			entity = HttpDao.updateHistory( he );
+		}
+		
+		HistoryDBDao dao = new HistoryDBDao( mContext );
+		if( null == entity )	//如果添加或者更新历史记录都失败了，则保存原始数据
+		{
+			dao.delete( he );
+			dao.insert( he );
+		}
+		else
+		{
+			dao.delete( entity );
+			dao.insert( entity );
+		}
+		dao.closeDb();			//关闭数据库
+		
+		return	entity;
 	}
 	
 	@Override
@@ -59,9 +73,6 @@ public class AddHistoryAsyncTask extends AsyncTask<HistoryEntity, Void, HistoryE
 				
 				@Override
 				public void onComplete() {
-					HistoryDBDao dao = new HistoryDBDao( mContext );
-					dao.insert(result);		//缓存新的数据
-					dao.closeDb();			//关闭数据库
 					((Activity) mContext).finish();
 				}
 			});

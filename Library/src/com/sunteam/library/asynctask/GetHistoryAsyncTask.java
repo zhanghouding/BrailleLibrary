@@ -51,11 +51,10 @@ public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<Histo
 		}
 		else
 		{
-			/*
 			HistoryDBDao dao = new HistoryDBDao( mContext );
-			list = dao.findAll();
+			list = dao.findAll( PublicUtils.getUserName() );
 			dao.closeDb();			//关闭数据库
-			*/
+
 			if( ( list != null ) && ( list.size() > 0 ) )
 			{
 				mHistoryEntityList.addAll(list);

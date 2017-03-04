@@ -42,7 +42,7 @@ public class DownloadEbook extends Thread
 			String content = HttpDao.getEbookChapterContent(identifier, entity.chapterIndex);
 			if( content != null)
 			{
-				PublicUtils.saveContent( faterPath, entity.chapterName+LibraryConstant.CACHE_FILE_SUFFIX, content );
+				PublicUtils.saveContent( faterPath, PublicUtils.format(entity.chapterName)+LibraryConstant.CACHE_FILE_SUFFIX, content );
 			}
 		}
 	}

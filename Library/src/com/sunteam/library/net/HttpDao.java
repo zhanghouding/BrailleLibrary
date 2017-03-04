@@ -916,5 +916,51 @@ public class HttpDao
 				return	null;
 		}
 	}
+	
+	/**
+	 * 更新阅读历史
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/04
+	 */
+	public static HistoryEntity updateHistory( HistoryEntity entity ) 
+	{
+		if( null == entity )
+		{
+			return	null;
+		}
+		String json = 
+				"{"
+				+ "\"UserName\":\""+entity.userName+"\","
+				+ "\"Title\":\""+entity.title+"\","
+				+ "\"DbCode\":\""+entity.dbCode+"\","
+				+ "\"SysId\":\""+entity.sysId+"\","
+				+ "\"ResType\":\""+entity.resType+"\","
+				+ "\"CategoryCode\":\""+entity.categoryCode+"\","
+				+ "\"LastChapterIndex\":\""+entity.lastChapterIndex+"\","
+				+ "\"EnterPoint\":\""+entity.enterPoint+"\","
+				+ "\"BookTitle\":\""+entity.bookTitle+"\","
+				+ "\"CoverUrl\":\""+entity.coverUrl+"\","
+				+ "\"Percent\":\""+entity.percent+"\","
+				+ "\"CategoryFullName\":\""+entity.categoryFullName+"\""
+				+ "}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	entity;
+		}
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "UpdateHistory");
+		requestParams.put("jsonObj", encodeJson);
 		
+		return (HistoryEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new AddHistoryParseResponse() );
+	}		
 }
