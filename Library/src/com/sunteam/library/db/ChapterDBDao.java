@@ -412,7 +412,7 @@ public class ChapterDBDao
 	public ArrayList<EbookChapterInfoEntity> findAllEbookChapter( String dbCode, String identifier) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_IDENTIFIER + " = ?", new String[]{"0", dbCode, identifier});
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_IDENTIFIER + " = ?", new String[]{LibraryConstant.LIBRARY_DATATYPE_EBOOK+"", dbCode, identifier});
 		if( null == cursor )
 		{
 			db.close();
@@ -445,7 +445,7 @@ public class ChapterDBDao
 	public ArrayList<AudioChapterInfoEntity> findAllAudioChapter( String dbCode, String sysId ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{"1", dbCode, sysId});
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{LibraryConstant.LIBRARY_DATATYPE_AUDIO+"", dbCode, sysId});
 		if( null == cursor )
 		{
 			db.close();
@@ -478,7 +478,7 @@ public class ChapterDBDao
 	public ArrayList<VideoChapterInfoEntity> findAllVideoChapter( String dbCode, String sysId ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{"2", dbCode, sysId});
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{LibraryConstant.LIBRARY_DATATYPE_VIDEO+"", dbCode, sysId});
 		if( null == cursor )
 		{
 			db.close();
@@ -519,7 +519,7 @@ public class ChapterDBDao
 	public void deleteAllEbookChapter( String dbCode, String identifier)
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		db.execSQL("delete from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_IDENTIFIER + " = ?", new String[]{"0", dbCode, identifier});
+		db.execSQL("delete from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_IDENTIFIER + " = ?", new String[]{LibraryConstant.LIBRARY_DATATYPE_EBOOK+"", dbCode, identifier});
 		db.close();
 	}
 
@@ -527,7 +527,7 @@ public class ChapterDBDao
 	public void deleteAllAudioChapter( String dbCode, String sysId)
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		db.execSQL("delete from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{"1", dbCode, sysId});
+		db.execSQL("delete from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{LibraryConstant.LIBRARY_DATATYPE_AUDIO+"", dbCode, sysId});
 		db.close();
 	}
 
@@ -535,7 +535,7 @@ public class ChapterDBDao
 	public void deleteAllVideoChapter( String dbCode, String sysId)
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
-		db.execSQL("delete from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{"2", dbCode, sysId});
+		db.execSQL("delete from " + DatabaseConstants.CHAPTER_TABLE_NAME + " where " + DatabaseConstants.RESOURCE_TYPE + " = ? and " + DatabaseConstants.CHAPTER_DBCODE + " = ? and " + DatabaseConstants.CHAPTER_SYSID + " = ?", new String[]{LibraryConstant.LIBRARY_DATATYPE_VIDEO+"", dbCode, sysId});
 		db.close();
 	}
 	
