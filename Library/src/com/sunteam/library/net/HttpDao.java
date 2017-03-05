@@ -427,9 +427,14 @@ public class HttpDao
 	 * @Created 2017/02/04
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<HistoryEntity> getHistoryList( String username ) 
+	public static ArrayList<HistoryEntity> getHistoryList( String userName, int pageIndex, int pageSize ) 
 	{
-		String json = "{UserName:\""+username+"\"}";
+		String json = 
+				"{"
+				+ "\"UserName\":\""+userName+"\","
+				+ "\"PageIndex\":\""+pageIndex+"\","
+				+ "\"PageSize\":\""+pageSize+"\""
+				+ "}";
 		String encodeJson = null;
 		try
 		{

@@ -13,6 +13,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCollectCategoryAsyncTask;
 import com.sunteam.library.asynctask.GetCollectResourceAsyncTask;
 import com.sunteam.library.asynctask.GetHistoryAsyncTask;
+import com.sunteam.library.utils.LibraryConstant;
 
 /**
  * @Destryption 我的图书馆浏览界面，是固定的菜单列表
@@ -43,7 +44,7 @@ public class MylibraryActivity extends MenuActivity {
 			new GetCollectCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			break;
 		case 2: // 最近阅读历史
-			new GetHistoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new GetHistoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_HISTORY_PAGESIZE);
 			break;
 		case 3: // 下载管理
 			list = getResources().getStringArray(R.array.library_download_manager_list);

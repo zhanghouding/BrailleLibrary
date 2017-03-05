@@ -21,7 +21,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/04
  */
-public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<HistoryEntity>>
+public class GetHistoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<HistoryEntity>>
 {
 	private Context mContext;
 	private String mTitle;
@@ -84,11 +84,11 @@ public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<Histo
 	}
 	
 	@Override
-	protected ArrayList<HistoryEntity> doInBackground(String... params) 
+	protected ArrayList<HistoryEntity> doInBackground(Integer... params) 
 	{
 		String username = PublicUtils.getUserName(mContext);
 		
-		ArrayList<HistoryEntity> list1 = HttpDao.getHistoryList(username);	//从云端得到历史记录
+		ArrayList<HistoryEntity> list1 = HttpDao.getHistoryList(username, params[0], params[1] );	//从云端得到历史记录
 		HistoryDBDao dao = new HistoryDBDao( mContext );
 		ArrayList<HistoryEntity> list2 = dao.findAll(username);				//从本地得到历史记录
 		
