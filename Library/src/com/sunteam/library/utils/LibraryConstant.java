@@ -62,6 +62,8 @@ public class LibraryConstant {
 	public static final int LIBRARY_HISTORY_PAGESIZE = 200;		// 历史记录列表时一页的数量
 	// 收藏分类列表常量
 	public static final int LIBRARY_COLLECT_CATEGORY_PAGESIZE = 200;	// 收藏分类记录列表时一页的数量
+	// 收藏资源列表常量
+	public static final int LIBRARY_COLLECT_RESOURCE_PAGESIZE = 200;	// 收藏资源记录列表时一页的数量
 	
 	// SharePref文件名，KEY类型，如：登录状态，有些界面需要根据登录状态获取不同的数据源
 	public static final String LIBRARY_CONFIG_FILE = "config";

@@ -38,7 +38,7 @@ public class MylibraryActivity extends MenuActivity {
 		
 		switch (selectItem) {
 		case 0: // 收藏资源
-			new GetCollectResourceAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new GetCollectResourceAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_COLLECT_RESOURCE_PAGESIZE);
 			break;
 		case 1: // 收藏分类
 			new GetCollectCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_COLLECT_CATEGORY_PAGESIZE);
