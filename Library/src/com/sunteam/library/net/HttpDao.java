@@ -608,8 +608,13 @@ public class HttpDao
 	 * @author wzp
 	 * @Created 2017/02/05
 	 */
-	public static Integer addCollectCategory( CollectCategoryEntity entity ) 
+	public static CollectCategoryEntity addCollectCategory( CollectCategoryEntity entity ) 
 	{
+		if( null == entity )
+		{
+			return	null;
+		}
+		
 		String json = 
 				"{"
 				+ "\"UserName\":\""+entity.userName+"\","
@@ -627,13 +632,13 @@ public class HttpDao
 		{
 			e.printStackTrace();
 			
-			return	LibraryConstant.RESULT_EXCEPTION;
+			return	entity;
 		}
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "AddCategory");
 		requestParams.put("jsonObj", encodeJson);
 		
-		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectCategoryParseResponse() );
+		return (CollectCategoryEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectCategoryParseResponse() );
 	}
 	
 	/**
@@ -967,5 +972,45 @@ public class HttpDao
 		requestParams.put("jsonObj", encodeJson);
 		
 		return (HistoryEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new AddHistoryParseResponse() );
-	}		
+	}
+	
+	/**
+	 * 更新收藏分类
+	 * 
+	 * @param username
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/04
+	 */
+	public static CollectCategoryEntity updateCollectCategory( CollectCategoryEntity entity ) 
+	{
+		if( null == entity )
+		{
+			return	null;
+		}
+		String json = 
+				"{"
+				+ "\"UserName\":\""+entity.userName+"\","
+				+ "\"CategoryName\":\""+entity.categoryName+"\","
+				+ "\"CategoryCode\":\""+entity.categoryCode+"\","
+				+ "\"CategoryFullName\":\""+entity.categoryFullName+"\","
+				+ "\"ResType\":\""+entity.resType+"\""
+				+ "}";
+		String encodeJson = null;
+		try
+		{
+			encodeJson = URLEncoder.encode(json,"utf-8");
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+			
+			return	entity;
+		}
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "UpdateCollect");
+		requestParams.put("jsonObj", encodeJson);
+		
+		return (CollectCategoryEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectCategoryParseResponse() );
+	}	
 }

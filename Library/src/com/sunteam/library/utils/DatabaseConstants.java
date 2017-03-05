@@ -13,10 +13,10 @@ public class DatabaseConstants
 	public static final String CATEGORY_TABLE_NAME = "categorys";	//分类表名称
 	public static final String RESOURCE_TABLE_NAME = "resources";	//资源表名称
 	public static final String CHAPTER_TABLE_NAME = "chapters";		//章节表名称
-	public static final String INFO_TABLE_NAME = "infos";			//资讯表名称
-	
+	public static final String INFO_TABLE_NAME = "infos";			//资讯表名称	
 	public static final String HISTORY_TABLE_NAME = "historys";		//历史表名称
 	public static final String BOOKMARK_TABLE_NAME = "bookmarks";	//书签表名称
+	public static final String COLLECT_CATEGORY_TABLE_NAME = "collect_categorys";	//收藏分类表名称
 	
 	public static final String RESOURCE_TYPE = "resource_type";		//资源类型
 	//分类表字段
@@ -70,4 +70,12 @@ public class DatabaseConstants
     public static final String HISTORY_PERCENT = "percent";				//电子书阅读进度，格式"0.00%"
     public static final String HISTORY_CFULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
     public static final String HISTORY_CATEGORYCODE = "categoryCode";	//分类编码
+    
+    //收藏分类表字段
+  	public static final String COLLECT_CATEGORY_ID = "id";				//记录id
+  	public static final String COLLECT_CATEGORY_USERNAME = "userName";	//用户名
+  	public static final String COLLECT_CATEGORY_NAME = "categoryName";	//分类名称
+  	public static final String COLLECT_CATEGORY_FULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
+  	public static final String COLLECT_CATEGORY_CODE = "categoryCode";	//分类名称
+  	public static final String COLLECT_CATEGORY_RESTYPE = "resType";	//分类类型
 }

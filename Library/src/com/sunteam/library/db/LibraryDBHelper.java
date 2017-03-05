@@ -46,7 +46,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.CHAPTER_SYSID + " varchar(128)," +
 			DatabaseConstants.CHAPTER_IDENTIFIER + " varchar(128)," +
 			DatabaseConstants.CHAPTER_INDEX + " varchar(128)," +
-			DatabaseConstants.CHAPTER_NAME + " varchar(128)," +
+			DatabaseConstants.CHAPTER_NAME + " varchar(512)," +
 			DatabaseConstants.CHAPTER_URL + " varchar(1024))";
 	
 	public static final String CREATE_INFO_TABLE =	//创建资源表
@@ -73,8 +73,18 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.HISTORY_BOOKTITLE + " varchar(128)," +
 			DatabaseConstants.HISTORY_COVERURL + " varchar(1024)," +
 			DatabaseConstants.HISTORY_PERCENT + " varchar(16)," +
-			DatabaseConstants.HISTORY_CFULLNAME + " varchar(128)," +			
+			DatabaseConstants.HISTORY_CFULLNAME + " varchar(1024)," +			
 			DatabaseConstants.HISTORY_CATEGORYCODE + " varchar(128))";
+	
+	public static final String CREATE_COLLECT_CATEGORY_TABLE =	//创建收藏分类表
+			"create table if not exists " + DatabaseConstants.COLLECT_CATEGORY_TABLE_NAME +
+			" (_id integer PRIMARY KEY AUTOINCREMENT," +
+			DatabaseConstants.COLLECT_CATEGORY_ID + " integer," +
+			DatabaseConstants.COLLECT_CATEGORY_RESTYPE + " integer," +
+			DatabaseConstants.COLLECT_CATEGORY_USERNAME + " varchar(64)," +
+			DatabaseConstants.COLLECT_CATEGORY_NAME + " varchar(128)," +
+			DatabaseConstants.COLLECT_CATEGORY_FULLNAME + " varchar(1024)," +
+			DatabaseConstants.COLLECT_CATEGORY_CODE + " varchar(128))";
 	
 	public LibraryDBHelper( Context context, String name, CursorFactory factory, int version ) 
 	{
@@ -90,6 +100,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 		db.execSQL(CREATE_CHAPTER_TABLE);	//创建章节表
 		db.execSQL(CREATE_INFO_TABLE);		//创建资讯表
 		db.execSQL(CREATE_HISTORY_TABLE);	//创建历史表
+		db.execSQL(CREATE_COLLECT_CATEGORY_TABLE);	//创建收藏分类表
 	}
 
 	@Override

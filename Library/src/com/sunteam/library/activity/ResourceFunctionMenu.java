@@ -62,7 +62,7 @@ public class ResourceFunctionMenu extends MenuActivity {
 				entity.resType = dataType;
 				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName;
 				
-				new AddCollectCategoryAsyncTask(this, entity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+				new AddCollectCategoryAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entity);
 			}
 			break;
 		case 1: // 收藏当前资源
