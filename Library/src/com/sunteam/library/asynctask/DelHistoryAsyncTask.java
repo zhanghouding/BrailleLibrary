@@ -32,7 +32,7 @@ public class DelHistoryAsyncTask extends AsyncTask<String, Void, Integer>
 	{
 		String dbCode = params[0];
 		String sysId = params[1];
-		Integer result = HttpDao.delHistory(PublicUtils.getUserName(), dbCode, sysId);
+		Integer result = HttpDao.delHistory(PublicUtils.getUserName(mContext), dbCode, sysId);
 		
 		if( null == result )
 		{

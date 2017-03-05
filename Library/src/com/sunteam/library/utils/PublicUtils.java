@@ -9,9 +9,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import com.iflytek.cloud.SpeechConstant;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.dict.utils.DBUtil;
@@ -430,9 +433,10 @@ public class PublicUtils
 	}
 	
 	//得到用户名
-	public static String getUserName()
+	public static String getUserName( Context context )
 	{
-		return	"test1";
+		SharedPreferences spf = context.getSharedPreferences(LibraryConstant.USER_INFO, Activity.MODE_PRIVATE);
+		return	spf.getString(LibraryConstant.USER_NAME, "");
 	}
 	
 	//得到分类名称
@@ -466,5 +470,15 @@ public class PublicUtils
 		}
 		
 		return	false;
+	}
+	
+	//保存用户信息
+	public static void saveUserInfo( Context context, String username, String password )
+	{
+		SharedPreferences spf = context.getSharedPreferences(LibraryConstant.USER_INFO, Activity.MODE_PRIVATE);
+		Editor editor = spf.edit();
+		editor.putString( LibraryConstant.USER_NAME, username );
+		editor.putString( LibraryConstant.USER_PASSWORD, password );
+		editor.commit();
 	}
 }	

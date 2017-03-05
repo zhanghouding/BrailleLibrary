@@ -32,7 +32,7 @@ public class DelCollectResourceAsyncTask extends AsyncTask<String, Void, Integer
 	{
 		String dbCode = params[0];
 		String sysId = params[1];
-		Integer result = HttpDao.delCollectResource(PublicUtils.getUserName(), dbCode, sysId);
+		Integer result = HttpDao.delCollectResource(PublicUtils.getUserName(mContext), dbCode, sysId);
 		
 		if( null == result )
 		{

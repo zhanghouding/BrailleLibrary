@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
 
+    <string name="library_login_success">登录成功</string>
+    <string name="library_login_fail">登录失败</string>
     <string name="library_account_bind_account_text">图书馆账号</string>
     <string name="library_account_bind_account_passwd_text">账号密码</string>
     <string name="library_account_bind_account_hint">请输入账号</string>

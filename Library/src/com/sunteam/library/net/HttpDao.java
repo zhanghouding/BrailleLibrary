@@ -52,11 +52,11 @@ public class HttpDao
 	 * 登录
 	 * 
 	 * @param username
-	 * @return
+	 * @return password
 	 * @author wzp
 	 * @Created 2017/01/24
 	 */
-	public static Boolean login( String username ) 
+	public static String login( String username ) 
 	{
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "UserAuthentication");
@@ -66,7 +66,7 @@ public class HttpDao
 		requestParams.put("userName", username);
 		requestParams.put("EncryptedStr", "6fb7e13bb86e5bddd89f3ef2ba2cb28f");
 		
-		return (Boolean) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new LoginParseResponse() );
+		return (String) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new LoginParseResponse() );
 	}
 	
 	/**

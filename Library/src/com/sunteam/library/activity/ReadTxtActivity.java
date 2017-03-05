@@ -532,7 +532,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		intent.putExtra("page_text", reverseText);
 		
 		BookmarkEntity entity = new BookmarkEntity();
-		entity.userName = PublicUtils.getUserName();
+		entity.userName = PublicUtils.getUserName(this);
 		entity.bookId = identifier;
 		entity.begin = ri.startPos;
 		entity.chapterIndex = curChapter;
@@ -557,7 +557,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	
 		HistoryEntity entity = new HistoryEntity();
 		
-		entity.userName = PublicUtils.getUserName();			//用户名
+		entity.userName = PublicUtils.getUserName(this);			//用户名
 	    entity.title = resourceName;							//标题
 	    entity.dbCode = dbCode;									//数据编码
 	    entity.sysId = identifier;								//bookId

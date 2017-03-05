@@ -18,15 +18,25 @@ public class LoginParseResponse extends AbsParseResponse
 		try
 		{
 			JSONObject jsonObject = new JSONObject(responseStr);
-			Boolean result = (jsonObject.optInt("CheckState") == 1) ? true : false;
+			boolean result = (jsonObject.optInt("CheckState") == 1) ? true : false;
+			if( false == result )
+			{
+				return	null;
+			}
 			
-			return	result;
+			JSONObject json = jsonObject.optJSONObject("ResultObject");
+			if( null == json )
+			{
+				return	null;
+			}
+			
+			return	json.optString("Password");
 		}
 		catch( Exception e )
 		{
 			e.printStackTrace();
 		}
 		
-		return false;
+		return null;
 	}
 }

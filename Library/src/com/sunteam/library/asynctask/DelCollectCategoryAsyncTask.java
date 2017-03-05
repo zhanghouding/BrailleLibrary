@@ -31,7 +31,7 @@ public class DelCollectCategoryAsyncTask extends AsyncTask<String, Void, Integer
 	protected Integer doInBackground(String... params) 
 	{
 		String categoryCode = params[0];
-		Integer result = HttpDao.delCollectCategory(PublicUtils.getUserName(), categoryCode);
+		Integer result = HttpDao.delCollectCategory(PublicUtils.getUserName(mContext), categoryCode);
 		
 		if( null == result )
 		{

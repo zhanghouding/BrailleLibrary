@@ -419,7 +419,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		// TODO 传递功能菜单所需参数
 
 		BookmarkEntity entity = new BookmarkEntity();
-		entity.userName = PublicUtils.getUserName();
+		entity.userName = PublicUtils.getUserName(this);
 		entity.bookId = sysId;
 		entity.begin = MediaPlayerUtils.getInstance().getCurTime();
 		entity.chapterIndex = curChapter;
@@ -500,7 +500,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		int m = (time % 3600) / 60;
 		int s = (time % 3600) % 60;
 		
-		entity.userName = PublicUtils.getUserName();			//用户名
+		entity.userName = PublicUtils.getUserName(this);			//用户名
 	    entity.title = resourceName;							//标题
 	    entity.dbCode = dbCode;									//数据编码
 	    entity.sysId = sysId;									//sysId

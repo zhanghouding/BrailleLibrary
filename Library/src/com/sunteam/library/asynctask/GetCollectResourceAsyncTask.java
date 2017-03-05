@@ -35,7 +35,7 @@ public class GetCollectResourceAsyncTask extends AsyncTask<String, Void, ArrayLi
 	@Override
 	protected ArrayList<CollectResourceEntity> doInBackground(String... params) 
 	{
-		String username = PublicUtils.getUserName();
+		String username = PublicUtils.getUserName(mContext);
 		ArrayList<CollectResourceEntity> list = HttpDao.getCollectResourceList(username);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )

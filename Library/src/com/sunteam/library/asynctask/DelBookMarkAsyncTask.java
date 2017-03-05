@@ -31,7 +31,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 	protected Integer doInBackground(Integer... params) 
 	{
 		int id = params[0];
-		Integer result = HttpDao.delBookMark(PublicUtils.getUserName(), id+"");
+		Integer result = HttpDao.delBookMark(PublicUtils.getUserName(mContext), id+"");
 		
 		if( null == result )
 		{

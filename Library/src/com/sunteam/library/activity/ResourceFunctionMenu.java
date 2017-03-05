@@ -58,7 +58,7 @@ public class ResourceFunctionMenu extends MenuActivity {
 				CollectCategoryEntity entity = new CollectCategoryEntity();
 				entity.categoryCode = categoryCode;
 				entity.categoryName = categoryName;
-				entity.userName = PublicUtils.getUserName();
+				entity.userName = PublicUtils.getUserName(this);
 				entity.resType = dataType;
 				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName;
 				
@@ -72,7 +72,7 @@ public class ResourceFunctionMenu extends MenuActivity {
 				entity.title = resourceName;
 				entity.dbCode = dbCode;
 				entity.sysId = sysId;
-				entity.userName = PublicUtils.getUserName();
+				entity.userName = PublicUtils.getUserName(this);
 				entity.resType = dataType;
 				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName + "-" + resourceName;
 				

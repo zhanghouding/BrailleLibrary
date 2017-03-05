@@ -36,7 +36,7 @@ public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<Histo
 	@Override
 	protected ArrayList<HistoryEntity> doInBackground(String... params) 
 	{
-		String username = PublicUtils.getUserName();
+		String username = PublicUtils.getUserName(mContext);
 		ArrayList<HistoryEntity> list = HttpDao.getHistoryList(username);
 		
 		if( ( list != null ) && ( list.size() > 0 ) )
@@ -52,7 +52,7 @@ public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<Histo
 		else
 		{
 			HistoryDBDao dao = new HistoryDBDao( mContext );
-			list = dao.findAll( PublicUtils.getUserName() );
+			list = dao.findAll( PublicUtils.getUserName(mContext) );
 			dao.closeDb();			//关闭数据库
 
 			if( ( list != null ) && ( list.size() > 0 ) )

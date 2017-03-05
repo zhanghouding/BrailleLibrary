@@ -98,5 +98,9 @@ public class LibraryConstant {
 	public static final int MYLIBRARY_READING_HISTORY = 2; // 我的阅读历史
 	public static final int MYLIBRARY_DOWNLOADING = 3; // 正在下载
 	public static final int MYLIBRARY_DOWNLOADED = 4; // 已下载
+	
+	public static final String USER_INFO = "user_info";	//保持用户信息的SharedPreferences
+	public static final String USER_NAME = "user_name";
+	public static final String USER_PASSWORD = "user_password";
 
 }

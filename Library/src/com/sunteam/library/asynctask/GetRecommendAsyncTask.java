@@ -44,7 +44,7 @@ public class GetRecommendAsyncTask extends AsyncTask<Integer, Void, Boolean>
 	protected Boolean doInBackground(Integer... params) 
 	{
 		type = params[0];
-		String username = PublicUtils.getUserName();
+		String username = PublicUtils.getUserName(mContext);
 		EbookInfoEntity entity = HttpDao.getRecommendList(params[0], username);
 	
 		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
