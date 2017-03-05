@@ -55,7 +55,7 @@ public class HistoryDBDao
 				DatabaseConstants.HISTORY_COVERURL + "," +
 				DatabaseConstants.HISTORY_PERCENT + "," +
 				DatabaseConstants.HISTORY_CFULLNAME + "," +
-				DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.userName,entity.title,entity.dbCode,entity.sysId,
 				entity.enterPoint,entity.url,entity.createTime,entity.updateTime,entity.bookTitle,entity.coverUrl,entity.percent,entity.categoryFullName,entity.categoryCode});
 		db.close();
@@ -93,7 +93,7 @@ public class HistoryDBDao
 					DatabaseConstants.HISTORY_COVERURL + "," +
 					DatabaseConstants.HISTORY_PERCENT + "," +
 					DatabaseConstants.HISTORY_CFULLNAME + "," +
-					DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+					DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.userName,entity.title,entity.dbCode,entity.sysId,
 					entity.enterPoint,entity.url,entity.createTime,entity.updateTime,entity.bookTitle,entity.coverUrl,entity.percent,entity.categoryFullName,entity.categoryCode});
 		}
@@ -132,7 +132,7 @@ public class HistoryDBDao
 					DatabaseConstants.HISTORY_COVERURL + "," +
 					DatabaseConstants.HISTORY_PERCENT + "," +
 					DatabaseConstants.HISTORY_CFULLNAME + "," +
-					DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+					DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.userName,entity.title,entity.dbCode,entity.sysId,
 					entity.enterPoint,entity.url,entity.createTime,entity.updateTime,entity.bookTitle,entity.coverUrl,entity.percent,entity.categoryFullName,entity.categoryCode});
 		}
