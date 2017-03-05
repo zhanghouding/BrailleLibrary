@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.text.TextUtils;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
@@ -42,6 +43,16 @@ public class MainActivity extends MenuActivity {
 		
 		TTSUtils.getInstance().init(this);
 		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
+		
+		String username = PublicUtils.getUserName(this);
+		if( ( null == username ) || ( TextUtils.isEmpty(username) ) )
+		{
+			//todo 此处跳转到账户管理界面
+		}
+		else
+		{
+			//本地已经保存了用户名和密码，不需要再登录了。
+		}
 	}
 
 	@Override
@@ -54,9 +65,11 @@ public class MainActivity extends MenuActivity {
 		super.onResume();
 		if (!WifiUtils.checkWifiState(this)) {
 			WifiUtils.openWifi(this);
-		} else {
+		} 
+		else 
+		{
 			new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "test1", "123");
-		}
+		}	//后续加上登录界面后，需要去掉这段代码。
 		acquireWakeLock(this);
 //		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
 	}
