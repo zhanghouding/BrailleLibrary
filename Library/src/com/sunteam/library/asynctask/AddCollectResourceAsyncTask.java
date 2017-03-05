@@ -4,9 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.sunteam.library.R;
+import com.sunteam.library.db.CollectResourceDBDao;
 import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.net.HttpDao;
-import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
 /**
@@ -15,28 +15,42 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/05
  */
-public class AddCollectResourceAsyncTask extends AsyncTask<String, Void, Integer>
+public class AddCollectResourceAsyncTask extends AsyncTask<CollectResourceEntity, Void, CollectResourceEntity>
 {
 	private Context mContext;
-	private CollectResourceEntity mCollectResourceEntity;
 	
-	public AddCollectResourceAsyncTask(Context context, CollectResourceEntity entity) 
+	public AddCollectResourceAsyncTask(Context context) 
 	{
 		mContext = context;
-		mCollectResourceEntity = entity;
 	}
 
 	@Override
-	protected Integer doInBackground(String... params) 
+	protected CollectResourceEntity doInBackground(CollectResourceEntity... params) 
 	{
-		Integer result = HttpDao.addCollectResource(mCollectResourceEntity);
+		CollectResourceEntity cre = params[0];
+		CollectResourceEntity entity = HttpDao.addCollectResource( cre );
 		
-		if( null == result )
+		if( null == entity )	//添加收藏记录失败则调用更新接口(先删除，后添加。直接调用更新接口总失败)
 		{
-			return	LibraryConstant.RESULT_EXCEPTION;
+			HttpDao.delCollectResource(cre.userName, cre.dbCode, cre.sysId);
+			entity = HttpDao.addCollectResource( cre );
 		}
 		
-		return	result;
+		CollectResourceDBDao dao = new CollectResourceDBDao( mContext );		
+		
+		if( null == entity )	//如果添加或者更新收藏资源都失败了，则保存原始数据
+		{
+			dao.delete( cre );
+			dao.insert( cre );
+		}
+		else
+		{
+			dao.delete( entity );
+			dao.insert( entity );
+		}
+		dao.closeDb();			//关闭数据库
+		
+		return	entity;
 	}
 	
 	@Override
@@ -50,25 +64,11 @@ public class AddCollectResourceAsyncTask extends AsyncTask<String, Void, Integer
 	}
 	
 	@Override
-	protected void onPostExecute(Integer result) 
+	protected void onPostExecute(CollectResourceEntity result) 
 	{	
 		super.onPostExecute(result);
 		PublicUtils.cancelProgress();
 		
-		switch( result )
-		{
-			case LibraryConstant.RESULT_EXCEPTION:	//异常
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_net_error), null);
-				//如果出现网络异常，应该收藏到本地数据库中。
-				break;
-			case LibraryConstant.RESULT_SUCCESS:	//成功
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_success), null);
-				break;
-			case LibraryConstant.RESULT_FAIL:		//失败
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_fail), null);
-				break;
-			default:
-				break;
-		}
+		PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_success), null);
 	}
 }

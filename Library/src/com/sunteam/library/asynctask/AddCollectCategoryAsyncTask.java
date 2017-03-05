@@ -29,7 +29,7 @@ public class AddCollectCategoryAsyncTask extends AsyncTask<CollectCategoryEntity
 	{
 		CollectCategoryEntity cce = params[0];
 		CollectCategoryEntity entity = HttpDao.addCollectCategory( cce );
-		if( null == entity )	//添加历史记录失败则调用更新接口(先删除，后添加。直接调用更新接口总失败)
+		if( null == entity )	//添加收藏记录失败则调用更新接口(先删除，后添加。直接调用更新接口总失败)
 		{
 			HttpDao.delCollectCategory(cce.userName, cce.categoryCode);
 			entity = HttpDao.addCollectCategory( cce );

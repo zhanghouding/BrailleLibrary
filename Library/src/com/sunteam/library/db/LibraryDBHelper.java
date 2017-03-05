@@ -86,6 +86,19 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.COLLECT_CATEGORY_FULLNAME + " varchar(1024)," +
 			DatabaseConstants.COLLECT_CATEGORY_CODE + " varchar(128))";
 	
+	public static final String CREATE_COLLECT_RESOURCE_TABLE =	//创建收藏资源表
+			"create table if not exists " + DatabaseConstants.COLLECT_RESOURCE_TABLE_NAME +
+			" (_id integer PRIMARY KEY AUTOINCREMENT," +
+			DatabaseConstants.COLLECT_RESOURCE_ID + " integer," +
+			DatabaseConstants.COLLECT_RESOURCE_RESTYPE + " integer," +
+			DatabaseConstants.COLLECT_RESOURCE_USERNAME + " varchar(64)," +
+			DatabaseConstants.COLLECT_RESOURCE_TITLE + " varchar(128)," +
+			DatabaseConstants.COLLECT_RESOURCE_DBCODE + " varchar(128)," +
+			DatabaseConstants.COLLECT_RESOURCE_SYSID + " varchar(128)," +
+			DatabaseConstants.COLLECT_RESOURCE_FULLNAME + " varchar(1024)," +
+			DatabaseConstants.COLLECT_RESOURCE_COVERURL + " varchar(1024)," +
+			DatabaseConstants.COLLECT_RESOURCE_CREATETIME + " varchar(64))";
+	
 	public LibraryDBHelper( Context context, String name, CursorFactory factory, int version ) 
 	{
 		super(context, name, factory, version);

@@ -96,7 +96,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 				entity.resType = dataType;
 				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName + "-" + resourceName;
 				
-				new AddCollectResourceAsyncTask(this, entity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+				new AddCollectResourceAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entity);
 			}
 			break;
 		case 1: // 下载当前资源

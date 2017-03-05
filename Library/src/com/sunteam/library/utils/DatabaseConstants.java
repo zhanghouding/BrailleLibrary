@@ -17,6 +17,7 @@ public class DatabaseConstants
 	public static final String HISTORY_TABLE_NAME = "historys";		//历史表名称
 	public static final String BOOKMARK_TABLE_NAME = "bookmarks";	//书签表名称
 	public static final String COLLECT_CATEGORY_TABLE_NAME = "collect_categorys";	//收藏分类表名称
+	public static final String COLLECT_RESOURCE_TABLE_NAME = "collect_resources";	//收藏资源表名称
 	
 	public static final String RESOURCE_TYPE = "resource_type";		//资源类型
 	//分类表字段
@@ -78,4 +79,15 @@ public class DatabaseConstants
   	public static final String COLLECT_CATEGORY_FULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
   	public static final String COLLECT_CATEGORY_CODE = "categoryCode";	//分类名称
   	public static final String COLLECT_CATEGORY_RESTYPE = "resType";	//分类类型
+  	
+  	//收藏资源表字段
+  	public static final String COLLECT_RESOURCE_ID = "id";				//记录id
+  	public static final String COLLECT_RESOURCE_USERNAME = "userName";	//用户名
+  	public static final String COLLECT_RESOURCE_TITLE = "title";		//书名
+  	public static final String COLLECT_RESOURCE_DBCODE = "dbCode";		//数据编码
+  	public static final String COLLECT_RESOURCE_SYSID = "sysId";		//系统id
+  	public static final String COLLECT_RESOURCE_RESTYPE = "resType";	//分类类型
+  	public static final String COLLECT_RESOURCE_FULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
+  	public static final String COLLECT_RESOURCE_COVERURL = "coverUrl";		//封面地址
+  	public static final String COLLECT_RESOURCE_CREATETIME = "createTime";	//创建时间
 }
