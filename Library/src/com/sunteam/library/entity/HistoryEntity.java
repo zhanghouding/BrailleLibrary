@@ -31,6 +31,4 @@ public class HistoryEntity implements Serializable
     public String percent;			//电子书阅读进度，格式"0.00%"
     public String categoryFullName;	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
     public String categoryCode;		//分类编码
-    
-    public int sync;				//数据同步标志，0：未同步 1：已同步
 }

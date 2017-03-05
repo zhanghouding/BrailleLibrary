@@ -43,7 +43,6 @@ public class HistoryDBDao
 				DatabaseConstants.HISTORY_ID + "," +
 				DatabaseConstants.HISTORY_RESTYPE + "," +
 				DatabaseConstants.HISTORY_LCINDEX + "," +
-				DatabaseConstants.HISTORY_SYNC + "," +
 				DatabaseConstants.HISTORY_USERNAME + "," +
 				DatabaseConstants.HISTORY_TITLE + "," +
 				DatabaseConstants.HISTORY_DBCODE + "," +
@@ -57,7 +56,7 @@ public class HistoryDBDao
 				DatabaseConstants.HISTORY_PERCENT + "," +
 				DatabaseConstants.HISTORY_CFULLNAME + "," +
 				DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-		db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.sync,entity.userName,entity.title,entity.dbCode,entity.sysId,
+		db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.userName,entity.title,entity.dbCode,entity.sysId,
 				entity.enterPoint,entity.url,entity.createTime,entity.updateTime,entity.bookTitle,entity.coverUrl,entity.percent,entity.categoryFullName,entity.categoryCode});
 		db.close();
 	}
@@ -82,7 +81,6 @@ public class HistoryDBDao
 					DatabaseConstants.HISTORY_ID + "," +
 					DatabaseConstants.HISTORY_RESTYPE + "," +
 					DatabaseConstants.HISTORY_LCINDEX + "," +
-					DatabaseConstants.HISTORY_SYNC + "," +
 					DatabaseConstants.HISTORY_USERNAME + "," +
 					DatabaseConstants.HISTORY_TITLE + "," +
 					DatabaseConstants.HISTORY_DBCODE + "," +
@@ -96,14 +94,14 @@ public class HistoryDBDao
 					DatabaseConstants.HISTORY_PERCENT + "," +
 					DatabaseConstants.HISTORY_CFULLNAME + "," +
 					DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.sync,entity.userName,entity.title,entity.dbCode,entity.sysId,
+			db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.userName,entity.title,entity.dbCode,entity.sysId,
 					entity.enterPoint,entity.url,entity.createTime,entity.updateTime,entity.bookTitle,entity.coverUrl,entity.percent,entity.categoryFullName,entity.categoryCode});
 		}
 		db.close();
 	}
 	
 	//倒序插入
-	public void insertDescending( ArrayList<HistoryEntity> list, int resourceType ) 
+	public void insertDescending( ArrayList<HistoryEntity> list ) 
 	{
 		if( ( null == list ) || ( list.size() == 0 ) )
 		{
@@ -122,7 +120,6 @@ public class HistoryDBDao
 					DatabaseConstants.HISTORY_ID + "," +
 					DatabaseConstants.HISTORY_RESTYPE + "," +
 					DatabaseConstants.HISTORY_LCINDEX + "," +
-					DatabaseConstants.HISTORY_SYNC + "," +
 					DatabaseConstants.HISTORY_USERNAME + "," +
 					DatabaseConstants.HISTORY_TITLE + "," +
 					DatabaseConstants.HISTORY_DBCODE + "," +
@@ -136,7 +133,7 @@ public class HistoryDBDao
 					DatabaseConstants.HISTORY_PERCENT + "," +
 					DatabaseConstants.HISTORY_CFULLNAME + "," +
 					DatabaseConstants.HISTORY_CATEGORYCODE + ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.sync,entity.userName,entity.title,entity.dbCode,entity.sysId,
+			db.execSQL( sql, new Object[]{entity.id,entity.resType,entity.lastChapterIndex,entity.userName,entity.title,entity.dbCode,entity.sysId,
 					entity.enterPoint,entity.url,entity.createTime,entity.updateTime,entity.bookTitle,entity.coverUrl,entity.percent,entity.categoryFullName,entity.categoryCode});
 		}
 		db.close();
@@ -198,7 +195,6 @@ public class HistoryDBDao
 			entity.id = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.HISTORY_ID));
 			entity.resType = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.HISTORY_RESTYPE));
 			entity.lastChapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.HISTORY_LCINDEX));
-			entity.sync = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.HISTORY_SYNC));
 			
 			entity.userName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.HISTORY_USERNAME));
 			entity.title = cursor.getString(cursor.getColumnIndex(DatabaseConstants.HISTORY_TITLE));
@@ -214,7 +210,7 @@ public class HistoryDBDao
 			entity.categoryFullName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.HISTORY_CFULLNAME));
 			entity.categoryCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.HISTORY_CATEGORYCODE));
 			
-		    list.add(entity);
+		    list.add(0,entity);	//逆序插入
 		}
 		
 		if (!cursor.isClosed()) 
@@ -233,7 +229,15 @@ public class HistoryDBDao
 		db.execSQL("delete from " + DatabaseConstants.HISTORY_TABLE_NAME + " where " + DatabaseConstants.HISTORY_USERNAME + " = ? and " + DatabaseConstants.HISTORY_DBCODE + " = ? and " + DatabaseConstants.HISTORY_SYSID + " = ?", new String[]{entity.userName, entity.dbCode, entity.sysId});
 		db.close();
 	}
-	
+
+	//删除数据
+	public void deleteAll( String username )
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		db.execSQL("delete from " + DatabaseConstants.HISTORY_TABLE_NAME + " where " + DatabaseConstants.HISTORY_USERNAME + " = ?", new String[]{username});
+		db.close();
+	}
+		
 	//删除所有的数据
 	public void deleteAll() 
 	{

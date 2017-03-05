@@ -62,7 +62,6 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.HISTORY_ID + " integer," +
 			DatabaseConstants.HISTORY_RESTYPE + " integer," +
 			DatabaseConstants.HISTORY_LCINDEX + " integer," +
-			DatabaseConstants.HISTORY_SYNC + " integer," +
 			DatabaseConstants.HISTORY_USERNAME + " varchar(64)," +
 			DatabaseConstants.HISTORY_TITLE + " varchar(128)," +
 			DatabaseConstants.HISTORY_DBCODE + " varchar(128)," +

@@ -24,5 +24,4 @@ public class CollectResourceEntity implements Serializable
 	public String categoryFullName;	//完整的分类名，格式"电子图书-古典文学"
 	public String coverUrl;			//封面url
 	public String createTime;		//创建时间
-    public int sync;				//数据同步标志，0：未同步 1：已同步
 }

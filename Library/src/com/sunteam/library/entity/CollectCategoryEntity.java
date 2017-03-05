@@ -21,5 +21,4 @@ public class CollectCategoryEntity implements Serializable
 	public String categoryCode;		//分类编码
 	public String categoryFullName;	//完整的分类名，格式"电子图书-古典文学"
     public int resType;				//资源类型 1:有声读物 2:电子图书  3:视频影像
-    public int sync;				//数据同步标志，0：未同步 1：已同步
 }
