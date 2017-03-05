@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.db.HistoryDBDao;
+import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -16,7 +18,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/19
  */
-public class DelHistoryAsyncTask extends AsyncTask<String, Void, Integer>
+public class DelHistoryAsyncTask extends AsyncTask<HistoryEntity, Void, Integer>
 {
 	private Context mContext;
 	private Handler mHandler;
@@ -28,18 +30,32 @@ public class DelHistoryAsyncTask extends AsyncTask<String, Void, Integer>
 	}
 
 	@Override
-	protected Integer doInBackground(String... params) 
+	protected Integer doInBackground(HistoryEntity... params) 
 	{
-		String dbCode = params[0];
-		String sysId = params[1];
-		Integer result = HttpDao.delHistory(PublicUtils.getUserName(mContext), dbCode, sysId);
+		HistoryEntity entity = (HistoryEntity)params[0];
+		String userName = entity.userName;
+		String dbCode = entity.dbCode;
+		String sysId = entity.sysId;
 		
-		if( null == result )
+		HistoryDBDao dao = new HistoryDBDao( mContext );
+		dao.delete(userName, dbCode, sysId);
+		dao.closeDb();
+		
+		if( 0 == entity.id )	//本地历史记录
 		{
-			return	LibraryConstant.RESULT_EXCEPTION;
+			return	LibraryConstant.RESULT_SUCCESS;
 		}
-		
-		return	result;
+		else					//网络历史记录
+		{
+			Integer result = HttpDao.delHistory(userName, dbCode, sysId);
+			
+			if( null == result )
+			{
+				return	LibraryConstant.RESULT_EXCEPTION;
+			}
+			
+			return	result;
+		}
 	}
 	
 	@Override

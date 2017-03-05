@@ -221,7 +221,15 @@ public class HistoryDBDao
 		
 		return	list;
 	}
-
+	
+	//删除数据
+	public void delete( String userName, String dbCode, String sysId )
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		db.execSQL("delete from " + DatabaseConstants.HISTORY_TABLE_NAME + " where " + DatabaseConstants.HISTORY_USERNAME + " = ? and " + DatabaseConstants.HISTORY_DBCODE + " = ? and " + DatabaseConstants.HISTORY_SYSID + " = ?", new String[]{userName, dbCode, sysId});
+		db.close();
+	}
+	
 	//删除数据
 	public void delete( HistoryEntity entity )
 	{

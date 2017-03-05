@@ -48,6 +48,7 @@ public class MainActivity extends MenuActivity {
 		if( ( null == username ) || ( TextUtils.isEmpty(username) ) )
 		{
 			//todo 此处跳转到账户管理界面
+			new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "test1", "123");
 		}
 		else
 		{
@@ -65,11 +66,7 @@ public class MainActivity extends MenuActivity {
 		super.onResume();
 		if (!WifiUtils.checkWifiState(this)) {
 			WifiUtils.openWifi(this);
-		} 
-		else 
-		{
-			new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "test1", "123");
-		}	//后续加上登录界面后，需要去掉这段代码。
+		}
 		acquireWakeLock(this);
 //		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
 	}

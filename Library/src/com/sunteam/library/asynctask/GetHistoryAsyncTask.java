@@ -100,6 +100,8 @@ public class GetHistoryAsyncTask extends AsyncTask<String, Void, ArrayList<Histo
 				ArrayList<HistoryEntity> list = dataFuse( list1, list2 );	//数据融合
 				dao.deleteAll(username);		//先删除所有数据
 				dao.insertDescending(list);		//再缓存新的数据
+				
+				mHistoryEntityList.addAll(list);
 			}
 			else
 			{
