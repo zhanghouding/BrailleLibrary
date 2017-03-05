@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.db.CollectCategoryDBDao;
+import com.sunteam.library.entity.CollectCategoryEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -16,7 +18,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/19
  */
-public class DelCollectCategoryAsyncTask extends AsyncTask<String, Void, Integer>
+public class DelCollectCategoryAsyncTask extends AsyncTask<CollectCategoryEntity, Void, Integer>
 {
 	private Context mContext;
 	private Handler mHandler;
@@ -28,17 +30,32 @@ public class DelCollectCategoryAsyncTask extends AsyncTask<String, Void, Integer
 	}
 
 	@Override
-	protected Integer doInBackground(String... params) 
+	protected Integer doInBackground(CollectCategoryEntity... params) 
 	{
-		String categoryCode = params[0];
-		Integer result = HttpDao.delCollectCategory(PublicUtils.getUserName(mContext), categoryCode);
+		CollectCategoryEntity entity = (CollectCategoryEntity)params[0];
+		String userName = entity.userName;
+		int resType = entity.resType;
+		String categoryCode = entity.categoryCode;
 		
-		if( null == result )
+		CollectCategoryDBDao dao = new CollectCategoryDBDao( mContext );
+		dao.delete(userName, resType, categoryCode);
+		dao.closeDb();
+		
+		if( 0 == entity.id )	//本地收藏分类记录
 		{
-			return	LibraryConstant.RESULT_EXCEPTION;
+			return	LibraryConstant.RESULT_SUCCESS;
 		}
-		
-		return	result;
+		else					//网络收藏分类记录
+		{
+			Integer result = HttpDao.delCollectCategory(userName, categoryCode);
+			
+			if( null == result )
+			{
+				return	LibraryConstant.RESULT_EXCEPTION;
+			}
+			
+			return	result;
+		}
 	}
 	
 	@Override

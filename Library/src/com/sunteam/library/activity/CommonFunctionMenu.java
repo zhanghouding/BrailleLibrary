@@ -105,7 +105,7 @@ public class CommonFunctionMenu extends MenuActivity {
 		switch(mType){
 		case LibraryConstant.MYLIBRARY_FAVARITE_CATEGORY:
 			CollectCategoryEntity ce = (CollectCategoryEntity) mEntity;
-			new DelCollectCategoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ce.categoryCode);
+			new DelCollectCategoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ce);
 			break;
 		case LibraryConstant.MYLIBRARY_FAVARITE_RESOURCE:
 			CollectResourceEntity re = (CollectResourceEntity) mEntity;

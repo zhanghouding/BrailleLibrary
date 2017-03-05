@@ -41,7 +41,7 @@ public class MylibraryActivity extends MenuActivity {
 			new GetCollectResourceAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			break;
 		case 1: // 收藏分类
-			new GetCollectCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new GetCollectCategoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_COLLECT_CATEGORY_PAGESIZE);
 			break;
 		case 2: // 最近阅读历史
 			new GetHistoryAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, LibraryConstant.LIBRARY_HISTORY_PAGESIZE);

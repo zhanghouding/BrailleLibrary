@@ -463,9 +463,14 @@ public class HttpDao
 	 * @Created 2017/02/14
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<CollectCategoryEntity> getCollectCategoryList( String username ) 
+	public static ArrayList<CollectCategoryEntity> getCollectCategoryList( String userName, int pageIndex, int pageSize ) 
 	{
-		String json = "{UserName:\""+username+"\"}";
+		String json = 
+				"{"
+				+ "\"UserName\":\""+userName+"\","
+				+ "\"PageIndex\":\""+pageIndex+"\","
+				+ "\"PageSize\":\""+pageSize+"\""
+				+ "}";
 		String encodeJson = null;
 		try
 		{
