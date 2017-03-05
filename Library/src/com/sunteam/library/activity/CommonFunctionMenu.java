@@ -109,7 +109,7 @@ public class CommonFunctionMenu extends MenuActivity {
 			break;
 		case LibraryConstant.MYLIBRARY_FAVARITE_RESOURCE:
 			CollectResourceEntity re = (CollectResourceEntity) mEntity;
-			new DelCollectResourceAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, re.dbCode, re.sysId);
+			new DelCollectResourceAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, re);
 			break;
 		case LibraryConstant.MYLIBRARY_READING_HISTORY:
 			HistoryEntity he = (HistoryEntity) mEntity;

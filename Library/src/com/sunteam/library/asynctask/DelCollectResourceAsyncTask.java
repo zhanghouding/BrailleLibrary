@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.db.CollectResourceDBDao;
+import com.sunteam.library.entity.CollectResourceEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -16,7 +18,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/19
  */
-public class DelCollectResourceAsyncTask extends AsyncTask<String, Void, Integer>
+public class DelCollectResourceAsyncTask extends AsyncTask<CollectResourceEntity, Void, Integer>
 {
 	private Context mContext;
 	private Handler mHandler;
@@ -28,18 +30,32 @@ public class DelCollectResourceAsyncTask extends AsyncTask<String, Void, Integer
 	}
 
 	@Override
-	protected Integer doInBackground(String... params) 
+	protected Integer doInBackground(CollectResourceEntity... params) 
 	{
-		String dbCode = params[0];
-		String sysId = params[1];
-		Integer result = HttpDao.delCollectResource(PublicUtils.getUserName(mContext), dbCode, sysId);
+		CollectResourceEntity entity = (CollectResourceEntity)params[0];
+		String userName = entity.userName;
+		String dbCode = entity.dbCode;
+		String sysId = entity.sysId;
 		
-		if( null == result )
+		CollectResourceDBDao dao = new CollectResourceDBDao( mContext );
+		dao.delete(userName, dbCode, sysId);
+		dao.closeDb();
+		
+		if( 0 == entity.id )	//本地收藏资源记录
 		{
-			return	LibraryConstant.RESULT_EXCEPTION;
+			return	LibraryConstant.RESULT_SUCCESS;
 		}
-		
-		return	result;
+		else					//网络收藏资源记录
+		{
+			Integer result = HttpDao.delCollectResource(userName, dbCode, sysId);
+			
+			if( null == result )
+			{
+				return	LibraryConstant.RESULT_EXCEPTION;
+			}
+			
+			return	result;
+		}
 	}
 	
 	@Override
