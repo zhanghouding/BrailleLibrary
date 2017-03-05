@@ -50,6 +50,11 @@
             android:name=".activity.AccountManager"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter> -->
         </activity>
         <activity
             android:name=".activity.AccountPasswdRecovery"
@@ -153,6 +158,11 @@
         </activity>
         <activity
             android:name=".activity.LibraryNewsList"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name="com.sunteam.common.menu.MenuActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>

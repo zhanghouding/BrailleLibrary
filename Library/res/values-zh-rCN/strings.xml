@@ -5,12 +5,36 @@
     <string name="library_main_title">数字图书馆</string>
     <string name="library_startwifi">无线网络未连接，现在连接</string>
     <string name="library_wifi_setting">无线网络设置</string>
+    <string name="library_account_manage">账号管理</string>
     <string name="library_account_username">用户名: </string>
     <string name="library_account_passwd">密码: </string>
     <string name="library_account_login_username_hint">请输入用户名</string>
     <string name="library_account_login_passwd_hint">请输入密码</string>
     <string name="library_account_login">登录</string>
     <string name="library_account_logout">退出</string>
+    
+    <string name="library_account_reader_certificate_no">证件号: </string>
+    <string name="library_account_certificate_no_hint">请输入读者证件号，按菜单键可选择其它证件类型 </string>
+    <string name="library_account_disabled_id_number_hint">请输入二代残疾人证号，按菜单键可选择其它证件类型  </string>
+    <string name="library_account_name">姓名: </string>
+    <string name="library_account_name_hint">请输入中文姓名</string>
+    <string name="library_account_passwd_confirm">确认密码: </string>
+    <string name="library_account_passwd_confirm_hint">请再次输入密码</string>
+    <string name="library_account_personal_detail_expansion">个人详细信息(选填) 展开</string>
+    <string name="library_account_personal_detail_contraction">个人详细信息(选填) 收取</string>
+    <string name="library_account_personal_phone">联系电话</string>
+    <string name="library_account_personal_phone_hint">请输入联系电话</string>
+    <string name="library_account_personal_email">E-mail</string>
+    <string name="library_account_personal_email_hint">请输入Email</string>
+    <string name="library_account_personal_company">单位名称</string>
+    <string name="library_account_personal_company_hint">请输入单位名称</string>
+    <string name="library_account_personal_zip">邮编</string>
+    <string name="library_account_personal_zip_hint">请输入邮政编码</string>
+    <string name="library_account_personal_addr">联系地址</string>
+    <string name="library_account_personal_addr_hint">请输入联系地址</string>
+    <string name="library_account_register">注册</string>
+    <string name="library_account_certificate_type_select">证件类型选择 </string>
+    
     <string name="library_wait_reading_data">正在加载数据，请稍等</string>
     <string name="library_reading_data_error">加载数据失败</string>
     <string name="library_category_ebook">电子图书</string>
@@ -42,7 +66,7 @@
         <item>我收藏的分类</item>
         <item>我的阅读历史</item>
         <item>下载管理</item>
-        <item>账号管理</item>
+        <item>退出当前账号</item>
     </string-array>
     <string-array name="library_download_manager_list">
         <item>下载中</item>
@@ -50,7 +74,6 @@
     </string-array>
     <string-array name="library_account_manager_list">
         <item>登录</item>
-        <item>退出当前账号</item>
         <item>注册</item>
         <item>密码找回</item>
     </string-array>
@@ -101,6 +124,10 @@
         <item>下一章</item>
         <item>跳至本章开头</item>
         <item>跳至本章百分比</item>
+    </string-array>
+    <string-array name="library_certificate_type_menu_list">
+        <item>读者证件号</item>
+        <item>二代残疾人证号</item>
     </string-array>
 
 </resources>

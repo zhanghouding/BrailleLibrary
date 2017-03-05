@@ -50,9 +50,9 @@ public class MylibraryActivity extends MenuActivity {
 			list = getResources().getStringArray(R.array.library_download_manager_list);
 			startNextActivity(DownloadManager.class, selectItem, menuItem, list);
 			break;
-		case 4: // 图书馆账号绑定
-			list = getResources().getStringArray(R.array.library_account_manager_list);
-			startNextActivity(AccountManager.class, selectItem, menuItem, list);
+		case 4: // 退出当前账号
+			// TODO 调用接口即可
+			finish();
 			break;
 		default:
 			break;

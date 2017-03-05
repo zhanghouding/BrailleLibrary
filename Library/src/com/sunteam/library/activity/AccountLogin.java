@@ -2,7 +2,10 @@ package com.sunteam.library.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -15,15 +18,17 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.LoginAsyncTask;
+import com.sunteam.library.utils.PublicUtils;
 
-public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener {
+public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
 	private TextView mTvTitle;
 	private View mLine = null;
 	private EditText mEtUserName; // 用户名编辑控件
 	private EditText mEtPasswd; // 密码编辑控件
-	private Button mBtLogin; // 登录按钮
-	private Button mBtLogout; // 取消按钮
+	private Button mBtConfirm; // 登录按钮
+	private Button mBtCancel; // 取消按钮
 	
 	private int fontColor, backgroundColor, hightColor;
 
@@ -70,24 +75,28 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		mTvPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_login_passwd_input);
 		mEtPasswd.setTextColor(fontColor);
-		
+
 		// Button
-		mBtLogin = (Button) findViewById(R.id.library_account_login_confirm);
-		mBtLogin.setTextColor(fontColor);
-		mBtLogin.setBackgroundColor(mTools.getBackgroundColor());
-		mBtLogout = (Button) findViewById(R.id.library_account_login_cancel);
-		mBtLogout.setTextColor(fontColor);
-		mBtLogout.setBackgroundColor(mTools.getBackgroundColor());
+		mBtConfirm = (Button) findViewById(R.id.library_account_login_confirm);
+		mBtConfirm.setTextColor(fontColor);
+		mBtConfirm.setBackgroundColor(mTools.getBackgroundColor());
+		mBtCancel = (Button) findViewById(R.id.library_account_login_cancel);
+		mBtCancel.setTextColor(fontColor);
+		mBtCancel.setBackgroundColor(mTools.getBackgroundColor());
 
 		// 设置编辑框按键监听
 		mEtUserName.setOnKeyListener(this);
 		mEtPasswd.setOnKeyListener(this);
 
+		// 添加编辑框文本变化监听
+		mEtUserName.addTextChangedListener(this);
+		mEtPasswd.addTextChangedListener(this);
+
 		// 设置焦点监听
 		mEtUserName.setOnFocusChangeListener(this);
 		mEtPasswd.setOnFocusChangeListener(this);
-		mBtLogin.setOnFocusChangeListener(this);
-		mBtLogout.setOnFocusChangeListener(this);
+		mBtConfirm.setOnFocusChangeListener(this);
+		mBtCancel.setOnFocusChangeListener(this);
 
 		mEtUserName.requestFocus();
 		
@@ -128,12 +137,15 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		return ret;
 	}
 
-	public void onClickForLogin(View v) {
-		finish();
+	public void onClickForConfirm(View v) {
+		TtsUtils.getInstance().speak(mBtConfirm.getText().toString());
+		String account = mEtUserName.getText().toString();
+		String passwd = mEtPasswd.getText().toString();
+		new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, account, passwd);
 	}
 
 	public void onClickForCancel(View v) {
-		finish();
+		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
 	}
 
 	private String getFocusString() {
@@ -148,10 +160,21 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 			if (s.isEmpty()) {
 				s = mEtPasswd.getHint().toString();
 			}
-		} else if (mBtLogin.isFocused()) {
-			s = mBtLogin.getText().toString();
-		} else if (mBtLogout.isFocused()) {
-			s = mBtLogout.getText().toString();
+		} else if (mBtConfirm.isFocused()) {
+			s = mBtConfirm.getText().toString();
+		} else if (mBtCancel.isFocused()) {
+			s = mBtCancel.getText().toString();
+		}
+
+		return s;
+	}
+
+	private String getFocusHint() {
+		String s = "";
+		if (mEtUserName.isFocused()) {
+			s = mEtUserName.getHint().toString();
+		} else if (mEtPasswd.isFocused()) {
+			s = mEtPasswd.getHint().toString();
 		}
 
 		return s;
@@ -164,6 +187,7 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 			s = et.getHint().toString();
 		} else {
 			et.setText(s.substring(0, s.length() - 1));
+			et.setSelection(s.length() - 1);
 			s = getResources().getString(R.string.common_delete) + ", " + s.substring(s.length() - 1);
 		}
 		TtsUtils.getInstance().speak(s);
@@ -179,6 +203,7 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		} else {
 			ret = false;
 		}
+//		CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 
 		return ret;
 	}
@@ -216,6 +241,34 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 
 		// 把其它键都传给下一个控件
 		return false;
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		if (0 == after && count > 0) {
+			String s1 = s.toString().substring(start, start + count);
+			s1 = getResources().getString(R.string.common_delete) + " " + s1;
+			TtsUtils.getInstance().speak(s1);
+		}
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		if (count <= 0) {
+			return;
+		}
+		String s1 = s.toString().substring(start, start + count);
+
+		TtsUtils.getInstance().speak(s1);
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		String s1 = s.toString();
+		if (null == s1 || 0 == s1.length()) {
+			s1 = getFocusHint();
+			TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
+		}
 	}
 
 }

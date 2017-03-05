@@ -134,7 +134,7 @@
                     android:nextFocusLeft="@+id/library_account_login_passwd_input"
                     android:nextFocusRight="@+id/library_account_login_cancel"
                     android:nextFocusUp="@+id/library_account_login_passwd_input"
-                    android:onClick="onClickForLogin"
+                    android:onClick="onClickForConfirm"
                     android:paddingBottom="@dimen/dialog_bottom_padding"
                     android:paddingLeft="@dimen/dialog_left_padding"
                     android:paddingRight="@dimen/dialog_right_padding"

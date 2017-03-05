@@ -5,6 +5,7 @@ import com.sunteam.library.R;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.PublicUtils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -26,7 +27,6 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Boolean>
 	@Override
 	protected Boolean doInBackground(String... params) 
 	{
-		// TODO Auto-generated method stub
 		String username = params[0];
 		String password = params[1];
 		
@@ -58,7 +58,8 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Boolean>
 				
 				@Override
 				public void onComplete() {
-					
+					((Activity) mContext).setResult(Activity.RESULT_OK);
+					((Activity) mContext).finish();
 				}
 			});
 		}

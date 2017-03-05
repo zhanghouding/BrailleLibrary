@@ -20,7 +20,6 @@ import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCategoryAsyncTask;
 import com.sunteam.library.asynctask.GetRecommendAsyncTask;
-import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
@@ -44,16 +43,7 @@ public class MainActivity extends MenuActivity {
 		TTSUtils.getInstance().init(this);
 		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
 		
-		String username = PublicUtils.getUserName(this);
-		if( ( null == username ) || ( TextUtils.isEmpty(username) ) )
-		{
-			//todo 此处跳转到账户管理界面
-			new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "test1", "123");
-		}
-		else
-		{
-			//本地已经保存了用户名和密码，不需要再登录了。
-		}
+		startAccountManage(); // 如果已经登录，就不必进入账号管理界面
 	}
 
 	@Override
@@ -61,12 +51,23 @@ public class MainActivity extends MenuActivity {
 		super.onWindowFocusChanged(hasFocus);
 	}
 
+	// 如果启动账号登录后，若登录失败或退出登录，则需要从此处退出APP
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (Activity.RESULT_OK != resultCode) {
+			finish(); // 说明退出APP
+		}
+	}
+
 	@SuppressLint("DefaultLocale") @Override
 	protected void onResume() {
 		super.onResume();
 		if (!WifiUtils.checkWifiState(this)) {
 			WifiUtils.openWifi(this);
-		}
+		} 
+
 		acquireWakeLock(this);
 //		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
 	}
@@ -99,16 +100,6 @@ public class MainActivity extends MenuActivity {
 		System.exit(1);
 		*/
 //		MenuGlobal.debug("[Library-MainActivity][onDestroy], this = " + this);
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
-			return;
-		}
-
 	}
 
 	@Override
@@ -198,6 +189,15 @@ public class MainActivity extends MenuActivity {
 			}
 		}
 	};
+
+	// 如果已经登录过就不用登录了
+	private void startAccountManage() {
+		String username = PublicUtils.getUserName(this);
+		if ((null == username) || (TextUtils.isEmpty(username))) {
+			Intent intent = new Intent(this, AccountManager.class);
+			startActivityForResult(intent, 0);
+		}
+	}
 
 	// 电子图书馆界面禁止休眠
 	private WakeLock mWakeLock = null; // 唤醒锁
