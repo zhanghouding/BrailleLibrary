@@ -114,6 +114,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 		db.execSQL(CREATE_INFO_TABLE);		//创建资讯表
 		db.execSQL(CREATE_HISTORY_TABLE);	//创建历史表
 		db.execSQL(CREATE_COLLECT_CATEGORY_TABLE);	//创建收藏分类表
+		db.execSQL(CREATE_COLLECT_RESOURCE_TABLE);	//创建收藏资源表
 	}
 
 	@Override
