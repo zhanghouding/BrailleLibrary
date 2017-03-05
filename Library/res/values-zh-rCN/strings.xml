@@ -14,7 +14,7 @@
     <string name="library_account_logout">退出</string>
     
     <string name="library_account_reader_certificate_no">证件号: </string>
-    <string name="library_account_certificate_no_hint">请输入读者证件号，按菜单键可选择其它证件类型 </string>
+    <string name="library_account_certificate_no_hint">请输入读者证件号，按菜单键选择其它证件类型 </string>
     <string name="library_account_disabled_id_number_hint">请输入二代残疾人证号，按菜单键可选择其它证件类型  </string>
     <string name="library_account_name">姓名: </string>
     <string name="library_account_name_hint">请输入中文姓名</string>

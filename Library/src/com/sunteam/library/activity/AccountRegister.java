@@ -52,7 +52,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) {
 			return;
 		}
 		switch (requestCode) {
@@ -60,7 +60,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			certificateType = data.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
 			updateCertificateHint(); // 刷新证件号输入框中的提示信息
 			break;
-		case 1: // 已下载
+		case 1: //
 			break;
 		default:
 			break;
@@ -405,9 +405,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		String title = getResources().getString(R.string.library_account_certificate_type_select);
 		String[] list = getResources().getStringArray(R.array.library_certificate_type_menu_list);
 		Intent intent = new Intent();
-		String packageName = "com.sunteam.common.menu";
-		String className = "com.sunteam.common.menu.MenuActivity";
-		intent.setClassName(packageName, className);
+		intent.setClass(this, AccountRegisterFunctionMenu.class);
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
 		startActivityForResult(intent, 0);

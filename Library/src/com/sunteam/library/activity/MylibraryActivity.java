@@ -14,6 +14,7 @@ import com.sunteam.library.asynctask.GetCollectCategoryAsyncTask;
 import com.sunteam.library.asynctask.GetCollectResourceAsyncTask;
 import com.sunteam.library.asynctask.GetHistoryAsyncTask;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 我的图书馆浏览界面，是固定的菜单列表
@@ -51,8 +52,9 @@ public class MylibraryActivity extends MenuActivity {
 			startNextActivity(DownloadManager.class, selectItem, menuItem, list);
 			break;
 		case 4: // 退出当前账号
-			// TODO 调用接口即可
-			finish();
+			PublicUtils.saveUserInfo(this, "", "");	// 保存用户信息
+			setResult(Activity.RESULT_OK);
+			PublicUtils.showToast(this, getResources().getString(R.string.library_account_logout_success), true);
 			break;
 		default:
 			break;

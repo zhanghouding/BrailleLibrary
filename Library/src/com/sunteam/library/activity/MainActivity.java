@@ -59,6 +59,31 @@ public class MainActivity extends MenuActivity {
 		if (Activity.RESULT_OK != resultCode) {
 			finish(); // 说明退出APP
 		}
+		switch(requestCode){
+		case 0: // 我的图书馆
+			startAccountManage(); // 如果已经登录，就不必进入账号管理界面
+			break;
+		case 1: // 资源检索
+			break;
+		case 2: // 电子书
+			break;
+		case 3: // 有声书
+			break;
+		case 4: // 口述影像
+			break;
+		case 5: // 图书馆新闻
+			break;
+		case 6:	//个性推荐
+			break;
+		case 7:	// 最新更新
+			break;
+		case 8:	// 精品专区
+			break;
+		case 9:	// 账号管理
+			break;
+		default:
+			break;
+		}
 	}
 
 	@SuppressLint("DefaultLocale") @Override
@@ -160,11 +185,7 @@ public class MainActivity extends MenuActivity {
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, LibraryConstant.LIBRARY_ROOT_PATH+title+"/");	//父目录
-
 		intent.setClass(this, cls);
-
-		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
-		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
 		startActivityForResult(intent, selectItem);
 	}
 
@@ -195,7 +216,7 @@ public class MainActivity extends MenuActivity {
 		String username = PublicUtils.getUserName(this);
 		if ((null == username) || (TextUtils.isEmpty(username))) {
 			Intent intent = new Intent(this, AccountManager.class);
-			startActivityForResult(intent, 0);
+			startActivityForResult(intent, mMenuList.size());
 		}
 	}
 

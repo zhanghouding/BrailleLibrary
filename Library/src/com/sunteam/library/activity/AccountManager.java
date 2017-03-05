@@ -61,27 +61,4 @@ public class AccountManager extends MenuActivity {
 		startActivityForResult(intent, selectItem);
 	}
 
-//	// 缓存登录账号和密码
-//	@SuppressWarnings("deprecation")
-//	private void saveLoginInfo(String userName, String passwd) {
-//		Context context = getApplicationContext();
-//		String file = LibraryConstant.LIBRARY_CONFIG_FILE;
-//		SharedPrefUtils.setSharedPrefString(context, file, Context.MODE_WORLD_READABLE, LibraryConstant.LIBRARY_LOGIN_USERNAME, userName);
-//		SharedPrefUtils.setSharedPrefString(context, file, Context.MODE_WORLD_READABLE, LibraryConstant.LIBRARY_LOGIN_PASSWD, passwd);
-//	}
-//
-//	// 缓存登录账号和密码
-//	@SuppressWarnings("deprecation")
-//	private void setLoginState(int state) {
-//		Context context = getApplicationContext();
-//		String file = LibraryConstant.LIBRARY_CONFIG_FILE;
-//		SharedPrefUtils.setSharedPrefInt(context, file, Context.MODE_WORLD_READABLE, LibraryConstant.LIBRARY_LOGIN_STATE, state);
-//	}
-//
-//	// 注销账号，实际上就是退出登录，只设置登录状态即可
-//	private void logoutAccount() {
-//		setLoginState(0);
-//		PublicUtils.showToast(this, getResources().getString(R.string.library_account_logout_success), true);
-//	}
-
 }
