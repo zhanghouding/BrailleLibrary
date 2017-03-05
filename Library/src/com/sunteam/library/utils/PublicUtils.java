@@ -8,9 +8,12 @@ import java.io.IOException;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -111,7 +114,7 @@ public class PublicUtils
 	 * 
 	 * @param context
 	 */
-	public static void showProgress(Context context, String info) {
+	public static void showProgress(Context context, String info, final AsyncTask<?, ?, ?> asyncTask) {
 		cancelProgress();
 
 		progress = new ProgressDialog(context, R.style.progress_dialog);
@@ -124,6 +127,16 @@ public class PublicUtils
 		tvInfo.setText(info);
 		
 		TTSUtils.getInstance().speakMenu(info);
+		
+		progress.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) 
+			{
+				// TODO Auto-generated method stub
+				asyncTask.cancel(true);
+				//执行异步线程取消操作　　
+			}
+		});
 	}
 	
 	/**
@@ -131,7 +144,7 @@ public class PublicUtils
 	 * 
 	 * @param context
 	 */
-	public static void showProgress(Context context) {
+	public static void showProgress(Context context, final AsyncTask<?, ?, ?> asyncTask) {
 		cancelProgress();
 
 		progress = new ProgressDialog(context, R.style.progress_dialog);
@@ -140,6 +153,16 @@ public class PublicUtils
 		progress.setCanceledOnTouchOutside(false);
 		progress.show();
 		progress.setContentView(R.layout.progress_layout);
+		
+		progress.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) 
+			{
+				// TODO Auto-generated method stub
+				asyncTask.cancel(true);
+				//执行异步线程取消操作　　
+			}
+		});
 	}
 
 	public static void cancelProgress() {

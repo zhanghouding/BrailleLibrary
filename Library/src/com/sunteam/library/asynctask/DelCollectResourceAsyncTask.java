@@ -48,7 +48,7 @@ public class DelCollectResourceAsyncTask extends AsyncTask<String, Void, Integer
 		super.onPreExecute();
 		
 		String s = mContext.getResources().getString(R.string.library_del_collect_resource);
-		PublicUtils.showProgress(mContext, s);
+		PublicUtils.showProgress(mContext, s, this);
 		//TtsUtils.getInstance().speak(s);
 	}
 	

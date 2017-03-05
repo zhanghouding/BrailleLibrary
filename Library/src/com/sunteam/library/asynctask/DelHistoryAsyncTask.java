@@ -64,7 +64,7 @@ public class DelHistoryAsyncTask extends AsyncTask<HistoryEntity, Void, Integer>
 		super.onPreExecute();
 		
 		String s = mContext.getResources().getString(R.string.library_del_history);
-		PublicUtils.showProgress(mContext, s);
+		PublicUtils.showProgress(mContext, s, this);
 		//TtsUtils.getInstance().speak(s);
 	}
 	

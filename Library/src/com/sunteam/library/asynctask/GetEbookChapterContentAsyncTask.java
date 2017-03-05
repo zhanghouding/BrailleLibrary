@@ -94,7 +94,7 @@ public class GetEbookChapterContentAsyncTask extends AsyncTask<String, Void, Boo
 	protected void onPreExecute() 
 	{	
 		super.onPreExecute();
-		PublicUtils.showProgress(mContext);
+		PublicUtils.showProgress(mContext, this);
 		String s = mContext.getResources().getString(R.string.library_wait_reading_data);
 		TtsUtils.getInstance().speak(s);
 	}

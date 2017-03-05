@@ -47,7 +47,7 @@ public class AddBookMarkAsyncTask extends AsyncTask<String, Void, Integer>
 		super.onPreExecute();
 		
 		String s = mContext.getResources().getString(R.string.library_add_bookmark);
-		PublicUtils.showProgress(mContext, s);
+		PublicUtils.showProgress(mContext, s, this);
 		//TtsUtils.getInstance().speak(s);
 	}
 	
