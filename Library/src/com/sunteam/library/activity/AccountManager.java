@@ -29,7 +29,7 @@ public class AccountManager extends MenuActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) {
 			return;
 		}
 		setResult(Activity.RESULT_OK);
@@ -46,8 +46,7 @@ public class AccountManager extends MenuActivity {
 			startNextActivity(AccountRegister.class, selectItem, menuItem);
 			break;
 		case 2: // 密码找回
-			// startNextActivity(AccountPasswdRecovery.class, selectItem,
-			// menuItem);
+			startNextActivity(AccountPasswdRecovery.class, selectItem, menuItem);
 			break;
 		default:
 			break;
@@ -57,6 +56,7 @@ public class AccountManager extends MenuActivity {
 	private void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
+		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem);
 		intent.setClass(this, cls);
 		startActivityForResult(intent, selectItem);
 	}

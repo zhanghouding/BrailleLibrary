@@ -57,7 +57,10 @@ public class MainActivity extends MenuActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (Activity.RESULT_OK != resultCode) {
-			finish(); // 说明退出APP
+			if (requestCode >= mMenuList.size()) { // 如果是从账号管理界面返回，则直接退出APP
+				finish();
+			}
+			return;
 		}
 		switch(requestCode){
 		case 0: // 我的图书馆

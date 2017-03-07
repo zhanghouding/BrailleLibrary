@@ -1,114 +1,117 @@
 package com.sunteam.library.activity;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sunteam.common.menu.BaseActivity;
-import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
-import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
-import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
-import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
-public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
+public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
 	private TextView mTvTitle;
 	private View mLine = null;
-	private EditText mEtUserName; // 用户名编辑控件
-	private EditText mEtPasswd; // 密码编辑控件
-	private Button mBtConfirm; // 登录按钮
-	private Button mBtCancel; // 取消按钮
-	
+	private TextView mTvUserName; // 用户名
+	private EditText mEtPasswd; // 密码
+	private EditText mEtPasswdConfirm; // 确认密码
+	private Button mBtConfirm; // 确定按钮
+	private Button mBtCancel; // 退出按钮
+
 	private int fontColor, backgroundColor, hightColor;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getIntentPara();
 		initView();
 	}
 
-	private void getIntentPara() {
-		Intent intent = getIntent();
-		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 
-		if (null == mTitle) {
-			finish();
+		if (Activity.RESULT_OK != resultCode) {
 			return;
+		}
+		switch (requestCode) {
+		case 0: // 
+			break;
+		case 1: //
+			break;
+		default:
+			break;
 		}
 	}
 
 	private void initView() {
-		Tools mTools = new Tools(AccountLogin.this);
+		Tools mTools = new Tools(AccountPasswdSetting.this);
 		fontColor = mTools.getFontColor();
 		backgroundColor = mTools.getBackgroundColor();
 		hightColor = mTools.getHighlightColor();
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(mTools.getBackgroundColor()));
-		setContentView(R.layout.library_account_login);
+		setContentView(R.layout.library_account_passwd_setting);
 
-		mTvTitle = (TextView) findViewById(R.id.library_account_login_title);
+		mTvTitle = (TextView) findViewById(R.id.library_account_passwd_setting_title);
+		mTitle = getResources().getString(R.string.library_account_passwd_setting);
 		mTvTitle.setText(mTitle);
 		mTvTitle.setTextColor(fontColor); // 设置title的文字颜色
 
-		mLine = (View) findViewById(R.id.library_account_login_line);
+		mLine = (View) findViewById(R.id.library_account_passwd_setting_line);
 		mLine.setBackgroundColor(fontColor); // 设置分割线的背景色
 
 		// 用户名
-		TextView mTvUsernameHint = (TextView) findViewById(R.id.library_account_login_username_hint);
-		mTvUsernameHint.setTextColor(fontColor);
-		mEtUserName = (EditText) findViewById(R.id.library_account_login_username_input);
-		mEtUserName.setTextColor(fontColor);
+		TextView mTvHint = (TextView) findViewById(R.id.library_account_passwd_setting_username_hint);
+		mTvHint.setTextColor(fontColor);
+		mTvUserName = (TextView) findViewById(R.id.library_account_passwd_setting_username_input);
+		mTvUserName.setTextColor(fontColor);
 
 		// 密码
-		TextView mTvPasswdHint = (TextView) findViewById(R.id.library_account_login_passwd_hint);
-		mTvPasswdHint.setTextColor(fontColor);
-		mEtPasswd = (EditText) findViewById(R.id.library_account_login_passwd_input);
+		mTvHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_hint);
+		mTvHint.setTextColor(fontColor);
+		mEtPasswd = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_input);
 		mEtPasswd.setTextColor(fontColor);
 
+		// 确认密码
+		mTvHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_confirm_hint);
+		mTvHint.setTextColor(fontColor);
+		mEtPasswdConfirm = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_confirm_input);
+		mEtPasswdConfirm.setTextColor(fontColor);
+
 		// Button
-		mBtConfirm = (Button) findViewById(R.id.library_account_login_confirm);
+		mBtConfirm = (Button) findViewById(R.id.library_account_passwd_setting_confirm);
 		mBtConfirm.setTextColor(fontColor);
 		mBtConfirm.setBackgroundColor(mTools.getBackgroundColor());
-		mBtCancel = (Button) findViewById(R.id.library_account_login_cancel);
+		mBtCancel = (Button) findViewById(R.id.library_account_passwd_setting_cancel);
 		mBtCancel.setTextColor(fontColor);
 		mBtCancel.setBackgroundColor(mTools.getBackgroundColor());
 
 		// 设置编辑框按键监听
-		mEtUserName.setOnKeyListener(this);
 		mEtPasswd.setOnKeyListener(this);
+		mEtPasswdConfirm.setOnKeyListener(this);
 
 		// 添加编辑框文本变化监听
-		mEtUserName.addTextChangedListener(this);
 		mEtPasswd.addTextChangedListener(this);
+		mEtPasswdConfirm.addTextChangedListener(this);
 
 		// 设置焦点监听
-		mEtUserName.setOnFocusChangeListener(this);
 		mEtPasswd.setOnFocusChangeListener(this);
+		mEtPasswdConfirm.setOnFocusChangeListener(this);
 		mBtConfirm.setOnFocusChangeListener(this);
 		mBtCancel.setOnFocusChangeListener(this);
 
-		// 设置测试账号
-		mEtUserName.setText("test1");
-		mEtPasswd.setText("123");
-		
-		mEtUserName.requestFocus();
-		
-		TtsUtils.getInstance().speak(mTitle + "," + getFocusString());
+		mEtPasswd.requestFocus();
+
+		speak(mTitle + "," + getFocusString());
 	}
 
 	@Override
@@ -145,45 +148,58 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		return ret;
 	}
 
+	// 确定
 	public void onClickForConfirm(View v) {
-		TtsUtils.getInstance().speak(mBtConfirm.getText().toString());
-		String account = mEtUserName.getText().toString();
-		String passwd = mEtPasswd.getText().toString();
-		new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, account, passwd);
+		// TODO 启动密码找回异步任务
+//		TtsUtils.getInstance().speak(((Button) v).getText().toString());
+//		finish();
 	}
 
+	// 退出
 	public void onClickForCancel(View v) {
 		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
 	}
 
+	// 获取焦点控件上的朗读字符串
 	private String getFocusString() {
-		String s = "";
-		if (mEtUserName.isFocused()) {
-			s = mEtUserName.getText().toString();
-			if (s.isEmpty()) {
-				s = mEtUserName.getHint().toString();
+		View rootview = this.getWindow().getDecorView();
+		View v = rootview.findFocus();
+		String s= "";
+		
+		int id = v.getId();
+		switch(id){
+		case R.id.library_account_passwd_setting_passwd_input:
+		case R.id.library_account_passwd_setting_passwd_confirm_input:
+			s = ((EditText)v).getText().toString();
+			if(s.isEmpty()){
+				s = ((EditText)v).getHint().toString();
 			}
-		} else if (mEtPasswd.isFocused()) {
-			s = mEtPasswd.getText().toString();
-			if (s.isEmpty()) {
-				s = mEtPasswd.getHint().toString();
-			}
-		} else if (mBtConfirm.isFocused()) {
-			s = mBtConfirm.getText().toString();
-		} else if (mBtCancel.isFocused()) {
-			s = mBtCancel.getText().toString();
-		}
+			break;
+		case R.id.library_account_passwd_setting_confirm:
+		case R.id.library_account_passwd_setting_cancel:
+			s = ((Button)v).getText().toString();
+			break;
+		default:
+			break;
+		}				
 
 		return s;
 	}
 
+	// 获取焦点控件上提示信息
 	private String getFocusHint() {
-		String s = "";
-		if (mEtUserName.isFocused()) {
-			s = mEtUserName.getHint().toString();
-		} else if (mEtPasswd.isFocused()) {
-			s = mEtPasswd.getHint().toString();
-		}
+		View rootview = this.getWindow().getDecorView();
+		View v = rootview.findFocus();
+		String s= "";
+		
+		switch(v.getId()){
+		case R.id.library_account_passwd_setting_passwd_input:
+		case R.id.library_account_passwd_setting_passwd_confirm_input:
+			s = ((EditText)v).getHint().toString();
+			break;
+		default:
+			break;
+		}				
 
 		return s;
 	}
@@ -198,38 +214,41 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 			et.setSelection(s.length() - 1);
 			s = getResources().getString(R.string.common_delete) + ", " + s.substring(s.length() - 1);
 		}
-		TtsUtils.getInstance().speak(s);
+		speak(s);
 	}
 
 	// 处理【退出】键: 焦点在编辑控件上则删除尾部字符；否则退出当前界面
 	private boolean processKeyBack() {
 		boolean ret = true;
-		if (mEtUserName.isFocused()) {
-			delTailCh(mEtUserName);
-		} else if (mEtPasswd.isFocused()) {
-			delTailCh(mEtPasswd);
-		} else {
+		View rootview = this.getWindow().getDecorView();
+		View v = rootview.findFocus();
+		
+		switch(v.getId()){
+		case R.id.library_account_passwd_setting_passwd_input:
+		case R.id.library_account_passwd_setting_passwd_confirm_input:
+			delTailCh((EditText) v);
+			break;
+		default:
 			ret = false;
-		}
-//		CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			break;
+		}	
 
 		return ret;
 	}
 
-	// 焦点变化
+	// 焦点变化: 朗读焦点编辑控件中编辑内容；若是Button，则需要设置Button背景色
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
-		if(hasFocus){
+		if (hasFocus) {
 			String s = getFocusString();
-			TtsUtils.getInstance().speak(s);
+			speak(s);
 		}
 
 		// Button需要设置背景和焦点色
-		if(v.getId() == R.id.library_account_login_confirm || v.getId() == R.id.library_account_login_cancel){
-			if(hasFocus){
+		if (v.getId() == mBtConfirm.getId() || v.getId() == mBtCancel.getId()) {
+			if (hasFocus) {
 				v.setBackgroundColor(hightColor);
-				toggleInputmethodWindow(this);
-			} else{
+			} else {
 				v.setBackgroundColor(backgroundColor);
 			}
 		}
@@ -257,7 +276,7 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		if (0 == after && count > 0) {
 			String s1 = s.toString().substring(start, start + count);
 			s1 = getResources().getString(R.string.common_delete) + " " + s1;
-			TtsUtils.getInstance().speak(s1);
+			speak(s1);
 		}
 	}
 
@@ -268,7 +287,7 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		}
 		String s1 = s.toString().substring(start, start + count);
 
-		TtsUtils.getInstance().speak(s1);
+		speak(s1);
 	}
 
 	@Override
@@ -276,49 +295,18 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		String s1 = s.toString();
 		if (null == s1 || 0 == s1.length()) {
 			s1 = getFocusHint();
-			TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
+			speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}
 	}
 
-	// 显示、隐藏切换
-	private void toggleInputmethodWindow(Context context) {
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-		if (imm.isActive()) {
-			// 显示、隐藏切换
-			imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);
+	private void speak(String s) {
+		speak(s, TtsUtils.TTS_QUEUE_FLUSH);
+	}
+
+	private void speak(String s, int type) {
+		if (null != TtsUtils.getInstance()) {
+			TtsUtils.getInstance().speak(s);
 		}
-	}
-
-	@SuppressWarnings("unused")
-	private void startWifi() {
-		String s = getResources().getString(R.string.library_startwifi);
-		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
-		mConfirmDialog.setConfirmListener(new ConfirmListener() {
-
-			@Override
-			public void doConfirm() {
-				new Handler().postDelayed(new Runnable() {
-					public void run() {
-						startWifiSetting();
-					}
-				}, 10);
-			}
-
-			@Override
-			public void doCancel() {
-			}
-		});
-		mConfirmDialog.show();
-	}
-
-	private void startWifiSetting() {
-		Intent intent = new Intent();
-		String packageName = "com.sunteam.settings";
-		String className = "com.sunteam.settings.activity.WifiList";
-		intent.setClassName(packageName, className);
-		String title = getResources().getString(R.string.library_wifi_setting);
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		startActivity(intent);
 	}
 
 }

@@ -11,7 +11,8 @@
     <string name="library_account_login_username_hint">请输入用户名</string>
     <string name="library_account_login_passwd_hint">请输入密码</string>
     <string name="library_account_login">登录</string>
-    <string name="library_account_logout">退出</string>
+    <string name="library_account_confirm">确定</string>
+    <string name="library_account_cancel">退出</string>
     
     <string name="library_account_reader_certificate_no">证件号: </string>
     <string name="library_account_certificate_no_hint">请输入读者证件号，按菜单键选择其它证件类型 </string>
@@ -34,6 +35,8 @@
     <string name="library_account_personal_addr_hint">请输入联系地址</string>
     <string name="library_account_register">注册</string>
     <string name="library_account_certificate_type_select">证件类型选择 </string>
+    <string name="library_account_nextstep">下一步</string>
+    <string name="library_account_passwd_setting">密码设置</string>
     
     <string name="library_wait_reading_data">正在加载数据，请稍等</string>
     <string name="library_reading_data_error">加载数据失败</string>

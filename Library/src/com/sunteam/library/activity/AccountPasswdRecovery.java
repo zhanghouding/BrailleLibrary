@@ -1,11 +1,10 @@
 package com.sunteam.library.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -19,23 +18,22 @@ import android.widget.TextView;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
-import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
-import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
-import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
-public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
+public class AccountPasswdRecovery extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
+	private int resquestCode; // 启动当前Activity时使用的resquestCode值
 	private TextView mTvTitle;
 	private View mLine = null;
-	private EditText mEtUserName; // 用户名编辑控件
-	private EditText mEtPasswd; // 密码编辑控件
-	private Button mBtConfirm; // 登录按钮
-	private Button mBtCancel; // 取消按钮
+	private EditText mEtCertificateNo; // 用户名编辑控件
+	private EditText mEtName; // 姓名编辑控件
+	private Button mBtConfirm; // 密码找回分两步: 先输入证件号和姓名，然后再设置新密码
+	private Button mBtCancel; // 退出密码找回界面
 	
 	private int fontColor, backgroundColor, hightColor;
+	private int certificateType = 0; // 0默认为读者证件号;1二代残疾人证件号
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,70 +41,90 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		initView();
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (Activity.RESULT_OK != resultCode) {
+			return;
+		}
+		switch (requestCode) {
+		case 0: // 证件类型选择
+			certificateType = data.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
+			updateCertificateHint(); // 刷新证件号输入框中的提示信息
+			break;
+		case 1: //
+			break;
+		default:
+			break;
+		}
+	}
+
 	private void getIntentPara() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-
+		resquestCode = intent.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
 		if (null == mTitle) {
 			finish();
 			return;
 		}
 	}
 
+	// 在页码输入中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩
 	private void initView() {
-		Tools mTools = new Tools(AccountLogin.this);
+		Tools mTools = new Tools(AccountPasswdRecovery.this);
 		fontColor = mTools.getFontColor();
 		backgroundColor = mTools.getBackgroundColor();
 		hightColor = mTools.getHighlightColor();
 		this.getWindow().setBackgroundDrawable(new ColorDrawable(mTools.getBackgroundColor()));
-		setContentView(R.layout.library_account_login);
+		setContentView(R.layout.library_account_passwd_recovery);
 
-		mTvTitle = (TextView) findViewById(R.id.library_account_login_title);
+		mTvTitle = (TextView) findViewById(R.id.library_account_passwd_recovery_title);
 		mTvTitle.setText(mTitle);
 		mTvTitle.setTextColor(fontColor); // 设置title的文字颜色
 
-		mLine = (View) findViewById(R.id.library_account_login_line);
+		mLine = (View) findViewById(R.id.library_account_passwd_recovery_line);
 		mLine.setBackgroundColor(fontColor); // 设置分割线的背景色
 
-		// 用户名
-		TextView mTvUsernameHint = (TextView) findViewById(R.id.library_account_login_username_hint);
+		// 证件号
+		TextView mTvUsernameHint = (TextView) findViewById(R.id.library_account_passwd_recovery_certificate_no_hint);
 		mTvUsernameHint.setTextColor(fontColor);
-		mEtUserName = (EditText) findViewById(R.id.library_account_login_username_input);
-		mEtUserName.setTextColor(fontColor);
+		mEtCertificateNo = (EditText) findViewById(R.id.library_account_passwd_recovery_certificate_no_input);
+		mEtCertificateNo.setTextColor(fontColor);
 
-		// 密码
-		TextView mTvPasswdHint = (TextView) findViewById(R.id.library_account_login_passwd_hint);
-		mTvPasswdHint.setTextColor(fontColor);
-		mEtPasswd = (EditText) findViewById(R.id.library_account_login_passwd_input);
-		mEtPasswd.setTextColor(fontColor);
+		// 姓名
+		TextView mTvNameHint = (TextView) findViewById(R.id.library_account_passwd_recovery_name_hint);
+		mTvNameHint.setTextColor(fontColor);
+		mEtName = (EditText) findViewById(R.id.library_account_passwd_recovery_name_input);
+		mEtName.setTextColor(fontColor);
 
 		// Button
-		mBtConfirm = (Button) findViewById(R.id.library_account_login_confirm);
+		mBtConfirm = (Button) findViewById(R.id.library_account_passwd_recovery_confirm);
 		mBtConfirm.setTextColor(fontColor);
 		mBtConfirm.setBackgroundColor(mTools.getBackgroundColor());
-		mBtCancel = (Button) findViewById(R.id.library_account_login_cancel);
+		mBtCancel = (Button) findViewById(R.id.library_account_passwd_recovery_cancel);
 		mBtCancel.setTextColor(fontColor);
 		mBtCancel.setBackgroundColor(mTools.getBackgroundColor());
 
 		// 设置编辑框按键监听
-		mEtUserName.setOnKeyListener(this);
-		mEtPasswd.setOnKeyListener(this);
+		mEtCertificateNo.setOnKeyListener(this);
+		mEtName.setOnKeyListener(this);
 
 		// 添加编辑框文本变化监听
-		mEtUserName.addTextChangedListener(this);
-		mEtPasswd.addTextChangedListener(this);
+		mEtCertificateNo.addTextChangedListener(this);
+		mEtName.addTextChangedListener(this);
 
 		// 设置焦点监听
-		mEtUserName.setOnFocusChangeListener(this);
-		mEtPasswd.setOnFocusChangeListener(this);
+		mEtCertificateNo.setOnFocusChangeListener(this);
+		mEtName.setOnFocusChangeListener(this);
 		mBtConfirm.setOnFocusChangeListener(this);
 		mBtCancel.setOnFocusChangeListener(this);
 
 		// 设置测试账号
-		mEtUserName.setText("test1");
-		mEtPasswd.setText("123");
+		mEtCertificateNo.setText("test1");
+		mEtName.setText("123");
 		
-		mEtUserName.requestFocus();
+		mEtCertificateNo.requestFocus();
 		
 		TtsUtils.getInstance().speak(mTitle + "," + getFocusString());
 	}
@@ -117,6 +135,9 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_STAR: // 屏蔽星号键功能
 		case KeyEvent.KEYCODE_POUND: // 屏蔽井号键功能
+			break;
+		case KeyEvent.KEYCODE_MENU: // 菜单键选择证件类型
+			selectCertificateType();
 			break;
 		default:
 			ret = false;
@@ -145,11 +166,13 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		return ret;
 	}
 
+	// 下一步
 	public void onClickForConfirm(View v) {
-		TtsUtils.getInstance().speak(mBtConfirm.getText().toString());
-		String account = mEtUserName.getText().toString();
-		String passwd = mEtPasswd.getText().toString();
-		new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, account, passwd);
+		// TODO 启动密码找回异步任务
+//		Intent intent = new Intent();
+//		intent.setClass(this, AccountPasswdSetting.class);
+//		startActivityForResult(intent, resquestCode); // 密码找回
+//		finish(); // 销毁当前Activity
 	}
 
 	public void onClickForCancel(View v) {
@@ -158,15 +181,15 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 
 	private String getFocusString() {
 		String s = "";
-		if (mEtUserName.isFocused()) {
-			s = mEtUserName.getText().toString();
+		if (mEtCertificateNo.isFocused()) {
+			s = mEtCertificateNo.getText().toString();
 			if (s.isEmpty()) {
-				s = mEtUserName.getHint().toString();
+				s = mEtCertificateNo.getHint().toString();
 			}
-		} else if (mEtPasswd.isFocused()) {
-			s = mEtPasswd.getText().toString();
+		} else if (mEtName.isFocused()) {
+			s = mEtName.getText().toString();
 			if (s.isEmpty()) {
-				s = mEtPasswd.getHint().toString();
+				s = mEtName.getHint().toString();
 			}
 		} else if (mBtConfirm.isFocused()) {
 			s = mBtConfirm.getText().toString();
@@ -179,10 +202,10 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 
 	private String getFocusHint() {
 		String s = "";
-		if (mEtUserName.isFocused()) {
-			s = mEtUserName.getHint().toString();
-		} else if (mEtPasswd.isFocused()) {
-			s = mEtPasswd.getHint().toString();
+		if (mEtCertificateNo.isFocused()) {
+			s = mEtCertificateNo.getHint().toString();
+		} else if (mEtName.isFocused()) {
+			s = mEtName.getHint().toString();
 		}
 
 		return s;
@@ -204,10 +227,10 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 	// 处理【退出】键: 焦点在编辑控件上则删除尾部字符；否则退出当前界面
 	private boolean processKeyBack() {
 		boolean ret = true;
-		if (mEtUserName.isFocused()) {
-			delTailCh(mEtUserName);
-		} else if (mEtPasswd.isFocused()) {
-			delTailCh(mEtPasswd);
+		if (mEtCertificateNo.isFocused()) {
+			delTailCh(mEtCertificateNo);
+		} else if (mEtName.isFocused()) {
+			delTailCh(mEtName);
 		} else {
 			ret = false;
 		}
@@ -225,7 +248,7 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		}
 
 		// Button需要设置背景和焦点色
-		if(v.getId() == R.id.library_account_login_confirm || v.getId() == R.id.library_account_login_cancel){
+		if(v.getId() == R.id.library_account_passwd_recovery_confirm || v.getId() == R.id.library_account_passwd_recovery_cancel){
 			if(hasFocus){
 				v.setBackgroundColor(hightColor);
 				toggleInputmethodWindow(this);
@@ -250,6 +273,28 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 
 		// 把其它键都传给下一个控件
 		return false;
+	}
+
+	// 选择证件类型：启动一个菜单
+	private void selectCertificateType() {
+		String title = getResources().getString(R.string.library_account_certificate_type_select);
+		String[] list = getResources().getStringArray(R.array.library_certificate_type_menu_list);
+		Intent intent = new Intent();
+		intent.setClass(this, AccountRegisterFunctionMenu.class);
+		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+		startActivityForResult(intent, 0);
+	}
+
+	// 刷新证件号输入框中的提示信息
+	private void updateCertificateHint() {
+		String s = getResources().getString(R.string.library_account_certificate_no_hint);
+		if (1 == certificateType) {
+			s = getResources().getString(R.string.library_account_disabled_id_number_hint);
+		}
+		mEtCertificateNo.setText("");
+		mEtCertificateNo.setHint(s);
+		speak(s);
 	}
 
 	@Override
@@ -289,36 +334,14 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private void startWifi() {
-		String s = getResources().getString(R.string.library_startwifi);
-		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
-		mConfirmDialog.setConfirmListener(new ConfirmListener() {
-
-			@Override
-			public void doConfirm() {
-				new Handler().postDelayed(new Runnable() {
-					public void run() {
-						startWifiSetting();
-					}
-				}, 10);
-			}
-
-			@Override
-			public void doCancel() {
-			}
-		});
-		mConfirmDialog.show();
+	private void speak(String s) {
+		speak(s, TtsUtils.TTS_QUEUE_FLUSH);
 	}
 
-	private void startWifiSetting() {
-		Intent intent = new Intent();
-		String packageName = "com.sunteam.settings";
-		String className = "com.sunteam.settings.activity.WifiList";
-		intent.setClassName(packageName, className);
-		String title = getResources().getString(R.string.library_wifi_setting);
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		startActivity(intent);
+	private void speak(String s, int type) {
+		if (null != TtsUtils.getInstance()) {
+			TtsUtils.getInstance().speak(s);
+		}
 	}
 
 }

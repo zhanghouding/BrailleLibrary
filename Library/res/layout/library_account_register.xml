@@ -276,7 +276,7 @@
                     android:paddingLeft="@dimen/dialog_left_padding"
                     android:paddingRight="@dimen/dialog_right_padding"
                     android:paddingTop="@dimen/dialog_top_padding"
-                    android:text="@string/library_account_logout"
+                    android:text="@string/library_account_cancel"
                     android:textSize="@dimen/text_middle_size" />
             </LinearLayout>
         </LinearLayout>

@@ -45,12 +45,14 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Boolean>
 	protected void onPreExecute() 
 	{	
 		super.onPreExecute();
+		PublicUtils.showProgress(mContext, this);
 	}
 	
 	@Override
 	protected void onPostExecute(Boolean result) 
 	{	
 		super.onPostExecute(result);
+		PublicUtils.cancelProgress();
 		
 		if( result )
 		{

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/library_account_login_title"
+            android:id="@+id/library_account_passwd_recovery_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -20,7 +20,7 @@
             android:textSize="@dimen/text_big_size" />
 
         <View
-            android:id="@+id/library_account_login_line"
+            android:id="@+id/library_account_passwd_recovery_line"
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_gravity="bottom"
@@ -32,42 +32,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_login_username_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_username"
-                android:textSize="@dimen/text_big_size" />
-
-            <EditText
-                android:id="@+id/library_account_login_username_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_login_username_hint"
-                android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_login_passwd_input"
-                android:nextFocusLeft="@+id/library_account_login_cancel"
-                android:nextFocusRight="@+id/library_account_login_passwd_input"
-                android:nextFocusUp="@+id/library_account_login_cancel"
-                android:singleLine="true"
-                android:textSize="@dimen/text_big_size" />
-        </LinearLayout>
+        <!-- 证件号：按菜单键选择读者证件号、二代残疾人证号 -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,35 +41,72 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/library_account_login_passwd_hint"
+                android:id="@+id/library_account_passwd_recovery_certificate_no_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="left|center_vertical"
                 android:includeFontPadding="true"
-                android:text="@string/library_account_passwd"
+                android:text="@string/library_account_reader_certificate_no"
                 android:textSize="@dimen/text_big_size" />
 
             <EditText
-                android:id="@+id/library_account_login_passwd_input"
+                android:id="@+id/library_account_passwd_recovery_certificate_no_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
                 android:background="@null"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="left|center_vertical"
-                android:hint="@string/library_account_login_passwd_hint"
+                android:hint="@string/library_account_certificate_no_hint"
                 android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_login_confirm"
-                android:nextFocusLeft="@+id/library_account_login_username_input"
-                android:nextFocusRight="@+id/library_account_login_confirm"
-                android:nextFocusUp="@+id/library_account_login_username_input"
+                android:nextFocusDown="@+id/library_account_passwd_recovery_name_input"
+                android:nextFocusLeft="@+id/library_account_passwd_recovery_cancel"
+                android:nextFocusRight="@+id/library_account_passwd_recovery_name_input"
+                android:nextFocusUp="@+id/library_account_passwd_recovery_cancel"
                 android:singleLine="true"
                 android:textSize="@dimen/text_big_size" />
         </LinearLayout>
+
+        <!-- 姓名 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/library_account_passwd_recovery_name_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="left|center_vertical"
+                android:includeFontPadding="true"
+                android:text="@string/library_account_name"
+                android:textSize="@dimen/text_big_size" />
+
+            <EditText
+                android:id="@+id/library_account_passwd_recovery_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="left|center_vertical"
+                android:hint="@string/library_account_name_hint"
+                android:includeFontPadding="false"
+                android:nextFocusDown="@+id/library_account_passwd_recovery_username_input"
+                android:nextFocusLeft="@+id/library_account_passwd_recovery_certificate_no_input"
+                android:nextFocusRight="@+id/library_account_passwd_recovery_username_input"
+                android:nextFocusUp="@+id/library_account_passwd_recovery_certificate_no_input"
+                android:singleLine="true"
+                android:textSize="@dimen/text_big_size" />
+        </LinearLayout>
+
+        
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,23 +123,23 @@
                 tools:ignore="NestedWeights" >
 
                 <Button
-                    android:id="@+id/library_account_login_confirm"
+                    android:id="@+id/library_account_passwd_recovery_confirm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:includeFontPadding="false"
-                    android:nextFocusDown="@+id/library_account_login_cancel"
-                    android:nextFocusLeft="@+id/library_account_login_passwd_input"
-                    android:nextFocusRight="@+id/library_account_login_cancel"
-                    android:nextFocusUp="@+id/library_account_login_passwd_input"
+                    android:nextFocusDown="@+id/library_account_passwd_recovery_cancel"
+                    android:nextFocusLeft="@+id/library_account_passwd_recovery_name_input"
+                    android:nextFocusRight="@+id/library_account_passwd_recovery_cancel"
+                    android:nextFocusUp="@+id/library_account_passwd_recovery_name_input"
                     android:onClick="onClickForConfirm"
                     android:paddingBottom="@dimen/dialog_bottom_padding"
                     android:paddingLeft="@dimen/dialog_left_padding"
                     android:paddingRight="@dimen/dialog_right_padding"
                     android:paddingTop="@dimen/dialog_top_padding"
-                    android:text="@string/library_account_login"
+                    android:text="@string/library_account_nextstep"
                     android:textSize="@dimen/text_big_size" />
             </LinearLayout>
 
@@ -148,7 +150,7 @@
                 android:gravity="center" >
 
                 <Button
-                    android:id="@+id/library_account_login_cancel"
+                    android:id="@+id/library_account_passwd_recovery_cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -156,10 +158,10 @@
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:includeFontPadding="false"
-                    android:nextFocusDown="@+id/library_account_login_username_input"
-                    android:nextFocusLeft="@+id/library_account_login_confirm"
-                    android:nextFocusRight="@+id/library_account_login_username_input"
-                    android:nextFocusUp="@+id/library_account_login_confirm"
+                    android:nextFocusDown="@+id/library_account_passwd_recovery_certificate_no_input"
+                    android:nextFocusLeft="@+id/library_account_passwd_recovery_confirm"
+                    android:nextFocusRight="@+id/library_account_passwd_recovery_certificate_no_input"
+                    android:nextFocusUp="@+id/library_account_passwd_recovery_confirm"
                     android:onClick="onClickForCancel"
                     android:paddingBottom="@dimen/dialog_bottom_padding"
                     android:paddingLeft="@dimen/dialog_left_padding"

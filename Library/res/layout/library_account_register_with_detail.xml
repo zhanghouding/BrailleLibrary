@@ -27,486 +27,488 @@
             android:background="@android:color/white" />
     </FrameLayout>
 
-    <ScrollView 
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <!-- 证件号：按菜单键选择读者证件号、二代残疾人证号 -->
+        android:layout_height="match_parent" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/library_account_register_certificate_no_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_reader_certificate_no"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_certificate_no_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_certificate_no_hint"
-                android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_register_name_input"
-                android:nextFocusLeft="@+id/library_account_register_cancel"
-                android:nextFocusRight="@+id/library_account_register_name_input"
-                android:nextFocusUp="@+id/library_account_register_cancel"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 姓名 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_name_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_name"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_name_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_name_hint"
-                android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_register_username_input"
-                android:nextFocusLeft="@+id/library_account_register_certificate_no_input"
-                android:nextFocusRight="@+id/library_account_register_username_input"
-                android:nextFocusUp="@+id/library_account_register_certificate_no_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 用户名 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_username_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_username"
-                android:textSize="@dimen/text_middle_size" />
-            <!-- android:layout_marginLeft="20dp" -->
-
-            <EditText
-                android:id="@+id/library_account_register_username_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_login_username_hint"
-                android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_register_passwd_input"
-                android:nextFocusLeft="@+id/library_account_register_name_input"
-                android:nextFocusRight="@+id/library_account_register_passwd_input"
-                android:nextFocusUp="@+id/library_account_register_name_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 密码 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_passwd_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_passwd"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_passwd_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_login_passwd_hint"
-                android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_register_passwd_confirm_input"
-                android:nextFocusLeft="@+id/library_account_register_username_input"
-                android:nextFocusRight="@+id/library_account_register_passwd_confirm_input"
-                android:nextFocusUp="@+id/library_account_register_username_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 确认密码 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_passwd_confirm_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_passwd_confirm"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_passwd_confirm_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_passwd_confirm_hint"
-                android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_register_confirm"
-                android:nextFocusLeft="@+id/library_account_register_passwd_input"
-                android:nextFocusRight="@+id/library_account_register_confirm"
-                android:nextFocusUp="@+id/library_account_register_passwd_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 个人详细信息（选填）: 在S918P中无法查看个人信息，因此，也就不 提供详细信息 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/library_account_register_person_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center"
-                android:includeFontPadding="true"
-                android:nextFocusDown="@+id/library_account_register_phone_input"
-                android:nextFocusLeft="@+id/library_account_register_passwd_confirm_input"
-                android:nextFocusRight="@+id/library_account_register_phone_input"
-                android:nextFocusUp="@+id/library_account_register_passwd_confirm_input"
-                android:onClick="onClickForDetail"
-                android:text="@string/library_account_personal_detail_expansion"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 联系电话 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_phone_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_personal_phone"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_phone_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_personal_phone_hint"
-                android:includeFontPadding="false"
-                android:inputType="phone"
-                android:nextFocusDown="@+id/library_account_register_email_input"
-                android:nextFocusLeft="@+id/library_account_register_person_detail"
-                android:nextFocusRight="@+id/library_account_register_email_input"
-                android:nextFocusUp="@+id/library_account_register_person_detail"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- E-mail -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_email_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_personal_email"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_email_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_personal_email_hint"
-                android:includeFontPadding="false"
-                android:inputType="textWebEmailAddress"
-                android:nextFocusDown="@+id/library_account_register_company_input"
-                android:nextFocusLeft="@+id/library_account_register_phone_input"
-                android:nextFocusRight="@+id/library_account_register_company_input"
-                android:nextFocusUp="@+id/library_account_register_phone_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 单位名称 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_company_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_personal_company"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_company_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_personal_company_hint"
-                android:includeFontPadding="false"
-                android:inputType="textWebEmailAddress"
-                android:nextFocusDown="@+id/library_account_register_zip_input"
-                android:nextFocusLeft="@+id/library_account_register_email_input"
-                android:nextFocusRight="@+id/library_account_register_zip_input"
-                android:nextFocusUp="@+id/library_account_register_email_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 邮政编码 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_zip_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_personal_zip"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_zip_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_personal_zip_hint"
-                android:includeFontPadding="false"
-                android:inputType="number"
-                android:nextFocusDown="@+id/library_account_register_addr_input"
-                android:nextFocusLeft="@+id/library_account_register_company_input"
-                android:nextFocusRight="@+id/library_account_register_addr_input"
-                android:nextFocusUp="@+id/library_account_register_company_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <!-- 联系地址 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/library_account_register_addr_hint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
-                android:text="@string/library_account_personal_addr"
-                android:textSize="@dimen/text_middle_size" />
-
-            <EditText
-                android:id="@+id/library_account_register_addr_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="20dp"
-                android:background="@null"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="left|center_vertical"
-                android:hint="@string/library_account_personal_addr_hint"
-                android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_register_confirm"
-                android:nextFocusLeft="@+id/library_account_register_zip_input"
-                android:nextFocusRight="@+id/library_account_register_confirm"
-                android:nextFocusUp="@+id/library_account_register_zip_input"
-                android:singleLine="true"
-                android:textSize="@dimen/text_middle_size" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            tools:ignore="DisableBaselineAlignment" >
+            <!-- 证件号：按菜单键选择读者证件号、二代残疾人证号 -->
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                tools:ignore="NestedWeights" >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
-                <Button
-                    android:id="@+id/library_account_register_confirm"
+                <TextView
+                    android:id="@+id/library_account_register_certificate_no_hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_reader_certificate_no"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_certificate_no_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_certificate_no_hint"
                     android:includeFontPadding="false"
-                    android:nextFocusDown="@+id/library_account_register_cancel"
-                    android:nextFocusLeft="@+id/library_account_register_passwd_confirm_hint"
-                    android:nextFocusRight="@+id/library_account_register_cancel"
-                    android:nextFocusUp="@+id/library_account_register_passwd_confirm_hint"
-                    android:onClick="onClickForConfirm"
-                    android:paddingBottom="@dimen/dialog_bottom_padding"
-                    android:paddingLeft="@dimen/dialog_left_padding"
-                    android:paddingRight="@dimen/dialog_right_padding"
-                    android:paddingTop="@dimen/dialog_top_padding"
-                    android:text="@string/library_account_register"
+                    android:nextFocusDown="@+id/library_account_register_name_input"
+                    android:nextFocusLeft="@+id/library_account_register_cancel"
+                    android:nextFocusRight="@+id/library_account_register_name_input"
+                    android:nextFocusUp="@+id/library_account_register_cancel"
+                    android:singleLine="true"
                     android:textSize="@dimen/text_middle_size" />
             </LinearLayout>
 
+            <!-- 姓名 -->
+
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center" >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_name_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_name"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_name_hint"
+                    android:includeFontPadding="false"
+                    android:nextFocusDown="@+id/library_account_register_username_input"
+                    android:nextFocusLeft="@+id/library_account_register_certificate_no_input"
+                    android:nextFocusRight="@+id/library_account_register_username_input"
+                    android:nextFocusUp="@+id/library_account_register_certificate_no_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- 用户名 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_username_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_username"
+                    android:textSize="@dimen/text_middle_size" />
+                <!-- android:layout_marginLeft="20dp" -->
+
+                <EditText
+                    android:id="@+id/library_account_register_username_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_login_username_hint"
+                    android:includeFontPadding="false"
+                    android:nextFocusDown="@+id/library_account_register_passwd_input"
+                    android:nextFocusLeft="@+id/library_account_register_name_input"
+                    android:nextFocusRight="@+id/library_account_register_passwd_input"
+                    android:nextFocusUp="@+id/library_account_register_name_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- 密码 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_passwd_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_passwd"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_passwd_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_login_passwd_hint"
+                    android:includeFontPadding="false"
+                    android:nextFocusDown="@+id/library_account_register_passwd_confirm_input"
+                    android:nextFocusLeft="@+id/library_account_register_username_input"
+                    android:nextFocusRight="@+id/library_account_register_passwd_confirm_input"
+                    android:nextFocusUp="@+id/library_account_register_username_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- 确认密码 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_passwd_confirm_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_passwd_confirm"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_passwd_confirm_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_passwd_confirm_hint"
+                    android:includeFontPadding="false"
+                    android:nextFocusDown="@+id/library_account_register_confirm"
+                    android:nextFocusLeft="@+id/library_account_register_passwd_input"
+                    android:nextFocusRight="@+id/library_account_register_confirm"
+                    android:nextFocusUp="@+id/library_account_register_passwd_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- 个人详细信息（选填）: 在S918P中无法查看个人信息，因此，也就不 提供详细信息 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/library_account_register_cancel"
+                    android:id="@+id/library_account_register_person_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
-                    android:includeFontPadding="false"
-                    android:nextFocusDown="@+id/library_account_register_username_input"
-                    android:nextFocusLeft="@+id/library_account_register_confirm"
-                    android:nextFocusRight="@+id/library_account_register_username_input"
-                    android:nextFocusUp="@+id/library_account_register_confirm"
-                    android:onClick="onClickForCancel"
-                    android:paddingBottom="@dimen/dialog_bottom_padding"
-                    android:paddingLeft="@dimen/dialog_left_padding"
-                    android:paddingRight="@dimen/dialog_right_padding"
-                    android:paddingTop="@dimen/dialog_top_padding"
-                    android:text="@string/library_account_logout"
+                    android:includeFontPadding="true"
+                    android:nextFocusDown="@+id/library_account_register_phone_input"
+                    android:nextFocusLeft="@+id/library_account_register_passwd_confirm_input"
+                    android:nextFocusRight="@+id/library_account_register_phone_input"
+                    android:nextFocusUp="@+id/library_account_register_passwd_confirm_input"
+                    android:onClick="onClickForDetail"
+                    android:text="@string/library_account_personal_detail_expansion"
                     android:textSize="@dimen/text_middle_size" />
             </LinearLayout>
+
+            <!-- 联系电话 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_phone_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_personal_phone"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_phone_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_personal_phone_hint"
+                    android:includeFontPadding="false"
+                    android:inputType="phone"
+                    android:nextFocusDown="@+id/library_account_register_email_input"
+                    android:nextFocusLeft="@+id/library_account_register_person_detail"
+                    android:nextFocusRight="@+id/library_account_register_email_input"
+                    android:nextFocusUp="@+id/library_account_register_person_detail"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- E-mail -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_email_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_personal_email"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_email_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_personal_email_hint"
+                    android:includeFontPadding="false"
+                    android:inputType="textWebEmailAddress"
+                    android:nextFocusDown="@+id/library_account_register_company_input"
+                    android:nextFocusLeft="@+id/library_account_register_phone_input"
+                    android:nextFocusRight="@+id/library_account_register_company_input"
+                    android:nextFocusUp="@+id/library_account_register_phone_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- 单位名称 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_company_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_personal_company"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_company_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_personal_company_hint"
+                    android:includeFontPadding="false"
+                    android:inputType="textWebEmailAddress"
+                    android:nextFocusDown="@+id/library_account_register_zip_input"
+                    android:nextFocusLeft="@+id/library_account_register_email_input"
+                    android:nextFocusRight="@+id/library_account_register_zip_input"
+                    android:nextFocusUp="@+id/library_account_register_email_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- 邮政编码 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_zip_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_personal_zip"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_zip_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_personal_zip_hint"
+                    android:includeFontPadding="false"
+                    android:inputType="number"
+                    android:nextFocusDown="@+id/library_account_register_addr_input"
+                    android:nextFocusLeft="@+id/library_account_register_company_input"
+                    android:nextFocusRight="@+id/library_account_register_addr_input"
+                    android:nextFocusUp="@+id/library_account_register_company_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <!-- 联系地址 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/library_account_register_addr_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="left|center_vertical"
+                    android:includeFontPadding="true"
+                    android:text="@string/library_account_personal_addr"
+                    android:textSize="@dimen/text_middle_size" />
+
+                <EditText
+                    android:id="@+id/library_account_register_addr_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="left|center_vertical"
+                    android:hint="@string/library_account_personal_addr_hint"
+                    android:includeFontPadding="false"
+                    android:nextFocusDown="@+id/library_account_register_confirm"
+                    android:nextFocusLeft="@+id/library_account_register_zip_input"
+                    android:nextFocusRight="@+id/library_account_register_confirm"
+                    android:nextFocusUp="@+id/library_account_register_zip_input"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_middle_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:ignore="DisableBaselineAlignment" >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    tools:ignore="NestedWeights" >
+
+                    <Button
+                        android:id="@+id/library_account_register_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:includeFontPadding="false"
+                        android:nextFocusDown="@+id/library_account_register_cancel"
+                        android:nextFocusLeft="@+id/library_account_register_passwd_confirm_hint"
+                        android:nextFocusRight="@+id/library_account_register_cancel"
+                        android:nextFocusUp="@+id/library_account_register_passwd_confirm_hint"
+                        android:onClick="onClickForConfirm"
+                        android:paddingBottom="@dimen/dialog_bottom_padding"
+                        android:paddingLeft="@dimen/dialog_left_padding"
+                        android:paddingRight="@dimen/dialog_right_padding"
+                        android:paddingTop="@dimen/dialog_top_padding"
+                        android:text="@string/library_account_register"
+                        android:textSize="@dimen/text_middle_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" >
+
+                    <Button
+                        android:id="@+id/library_account_register_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:nextFocusDown="@+id/library_account_register_username_input"
+                        android:nextFocusLeft="@+id/library_account_register_confirm"
+                        android:nextFocusRight="@+id/library_account_register_username_input"
+                        android:nextFocusUp="@+id/library_account_register_confirm"
+                        android:onClick="onClickForCancel"
+                        android:paddingBottom="@dimen/dialog_bottom_padding"
+                        android:paddingLeft="@dimen/dialog_left_padding"
+                        android:paddingRight="@dimen/dialog_right_padding"
+                        android:paddingTop="@dimen/dialog_top_padding"
+                        android:text="@string/library_account_cancel"
+                        android:textSize="@dimen/text_middle_size" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
 </LinearLayout>

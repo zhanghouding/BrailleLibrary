@@ -28,7 +28,7 @@ public class MylibraryActivity extends MenuActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) {
 			return;
 		}
 	}
