@@ -75,6 +75,19 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.HISTORY_PERCENT + " varchar(16)," +
 			DatabaseConstants.HISTORY_CFULLNAME + " varchar(1024)," +			
 			DatabaseConstants.HISTORY_CATEGORYCODE + " varchar(128))";
+
+	public static final String CREATE_BOOKMARK_TABLE =	//创建书签表
+			"create table if not exists " + DatabaseConstants.BOOKMARK_TABLE_NAME +
+			" (_id integer PRIMARY KEY AUTOINCREMENT," +
+			DatabaseConstants.BOOKMARK_ID + " integer," +
+			DatabaseConstants.BOOKMARK_BEGIN + " integer," +
+			DatabaseConstants.BOOKMARK_CHAPTER_INDEX + " integer," +
+			DatabaseConstants.BOOKMARK_USERNAME + " varchar(64)," +
+			DatabaseConstants.BOOKMARK_BOOKID + " varchar(128)," +
+			DatabaseConstants.BOOKMARK_ADDEDTIME + " varchar(128)," +
+			DatabaseConstants.BOOKMARK_CHAPTER_TITLE + " varchar(1024)," +
+			DatabaseConstants.BOOKMARK_MARKNAME + " varchar(1024)," +
+			DatabaseConstants.BOOKMARK_PERCENT + " varchar(64))";
 	
 	public static final String CREATE_COLLECT_CATEGORY_TABLE =	//创建收藏分类表
 			"create table if not exists " + DatabaseConstants.COLLECT_CATEGORY_TABLE_NAME +
@@ -113,6 +126,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 		db.execSQL(CREATE_CHAPTER_TABLE);	//创建章节表
 		db.execSQL(CREATE_INFO_TABLE);		//创建资讯表
 		db.execSQL(CREATE_HISTORY_TABLE);	//创建历史表
+		db.execSQL(CREATE_BOOKMARK_TABLE);	//创建书签表
 		db.execSQL(CREATE_COLLECT_CATEGORY_TABLE);	//创建收藏分类表
 		db.execSQL(CREATE_COLLECT_RESOURCE_TABLE);	//创建收藏资源表
 	}

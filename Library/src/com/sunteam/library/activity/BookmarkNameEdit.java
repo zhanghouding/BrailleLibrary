@@ -81,7 +81,7 @@ public class BookmarkNameEdit extends BaseActivity {
 			break;
 		case KeyEvent.KEYCODE_DPAD_CENTER: // 确定
 		case KeyEvent.KEYCODE_ENTER:
-			new AddBookMarkAsyncTask(this, mBookmarkEntity).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new AddBookMarkAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);

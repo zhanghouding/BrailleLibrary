@@ -71,7 +71,18 @@ public class DatabaseConstants
     public static final String HISTORY_PERCENT = "percent";				//电子书阅读进度，格式"0.00%"
     public static final String HISTORY_CFULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
     public static final String HISTORY_CATEGORYCODE = "categoryCode";	//分类编码
-    
+
+    //书签表字段
+  	public static final String BOOKMARK_ID = "id";						//记录id
+  	public static final String BOOKMARK_USERNAME = "userName";			//用户名
+  	public static final String BOOKMARK_BOOKID = "bookId";				//书目ID
+  	public static final String BOOKMARK_ADDEDTIME = "addedTime";		//创建时间
+  	public static final String BOOKMARK_BEGIN = "begin";				//字节流位置
+  	public static final String BOOKMARK_CHAPTER_INDEX = "chapterIndex";	//章节号
+  	public static final String BOOKMARK_CHAPTER_TITLE = "chapterTitle";	//章节名称
+  	public static final String BOOKMARK_MARKNAME = "markName";			//书签名
+  	public static final String BOOKMARK_PERCENT = "percent";			//进度
+  	
     //收藏分类表字段
   	public static final String COLLECT_CATEGORY_ID = "id";				//记录id
   	public static final String COLLECT_CATEGORY_USERNAME = "userName";	//用户名

@@ -701,8 +701,13 @@ public class HttpDao
 	 * @author wzp
 	 * @Created 2017/02/05
 	 */
-	public static Integer addBookMark( BookmarkEntity entity ) 
+	public static BookmarkEntity addBookMark( BookmarkEntity entity ) 
 	{
+		if( null == entity )
+		{
+			return	null;
+		}
+		
 		String json = 
 				"{"
 				+ "\"UserName\":\""+entity.userName+"\","
@@ -722,13 +727,13 @@ public class HttpDao
 		{
 			e.printStackTrace();
 			
-			return	LibraryConstant.RESULT_EXCEPTION;
+			return	entity;
 		}
 		Map<String, String> requestParams = new HashMap<String, String>();
 		requestParams.put("requestType", "AddBookmark");
 		requestParams.put("jsonObj", encodeJson);
 		
-		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new AddBookMarkParseResponse() );
+		return (BookmarkEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new AddBookMarkParseResponse() );
 	}	
 	
 	/**

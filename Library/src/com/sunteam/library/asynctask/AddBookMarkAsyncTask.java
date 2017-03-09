@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.db.BookMarkDBDao;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
@@ -17,28 +18,35 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/05
  */
-public class AddBookMarkAsyncTask extends AsyncTask<String, Void, Integer>
+public class AddBookMarkAsyncTask extends AsyncTask<BookmarkEntity, Void, Integer>
 {
 	private Context mContext;
-	private BookmarkEntity mBookmarkEntity;
 	
-	public AddBookMarkAsyncTask(Context context, BookmarkEntity entity) 
+	public AddBookMarkAsyncTask(Context context) 
 	{
 		mContext = context;
-		mBookmarkEntity = entity;
 	}
 
 	@Override
-	protected Integer doInBackground(String... params) 
+	protected Integer doInBackground(BookmarkEntity... params) 
 	{
-		Integer result = HttpDao.addBookMark(mBookmarkEntity);
-		
-		if( null == result )
+		BookmarkEntity be = params[0];
+		BookmarkEntity entity = HttpDao.addBookMark( be );
+
+		BookMarkDBDao dao = new BookMarkDBDao( mContext );
+		if( null == entity )	//如果添加书签失败了，则保存原始数据
 		{
-			return	LibraryConstant.RESULT_EXCEPTION;
+			dao.delete( be );
+			dao.insert( be );
 		}
+		else
+		{
+			dao.delete( entity );
+			dao.insert( entity );
+		}
+		dao.closeDb();			//关闭数据库
 		
-		return	result;
+		return	LibraryConstant.RESULT_SUCCESS;
 	}
 	
 	@Override
