@@ -10,6 +10,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.ResourceListForRecommend;
+import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.net.HttpDao;
@@ -33,8 +34,6 @@ public class GetRecommendAsyncTask extends AsyncTask<Integer, Void, Boolean>
 	
 	public GetRecommendAsyncTask(Context context, String fatherPath, String title) 
 	{
-		PublicUtils.createCacheDir(fatherPath, title);	//创建缓存目录
-		
 		mContext = context;
 		mFatherPath = fatherPath+title+"/";
 		mTitle = title;
@@ -49,19 +48,6 @@ public class GetRecommendAsyncTask extends AsyncTask<Integer, Void, Boolean>
 	
 		if( ( null == entity ) || ( ( null == entity.list ) || ( 0 == entity.list.size() ) ) )
 		{
-			/*
-			ResourceDBDao dao = new ResourceDBDao( mContext );
-			ArrayList<EbookNodeEntity> list = dao.findAll(categoryCode, dataType);
-			dao.closeDb();			//关闭数据库
-			
-			if( ( list != null ) && ( list.size() > 0 ) )
-			{
-				bookCount = list.size();
-				mEbookNodeEntityList.addAll(list);
-				
-				return	true;
-			}
-			*/
 			return	false;
 		}
 		
@@ -70,12 +56,29 @@ public class GetRecommendAsyncTask extends AsyncTask<Integer, Void, Boolean>
 		if( ( entity.list != null ) && ( entity.list.size() > 0 ) )
 		{
 			mEbookNodeEntityList.addAll(entity.list);
-			/*
-			ResourceDBDao dao = new ResourceDBDao( mContext );
-			dao.deleteAll(categoryCode, dataType);			//先删除缓存的此类型所有数据
-			dao.insert(entity.list, categoryCode, dataType);	//再缓存新的数据
-			dao.closeDb();			//关闭数据库
-			*/
+			
+			int size1 = entity.list.size();
+			for( int i = 0; i < size1; i++ )
+			{
+				String type = entity.list.get(i).dbCode.toLowerCase();
+				int resType = LibraryConstant.LIBRARY_DATATYPE_EBOOK;
+				if(type.contains(LibraryConstant.LIBRARY_DBCODE_EBOOK))
+				{
+					resType = LibraryConstant.LIBRARY_DATATYPE_EBOOK;
+				} 
+				else if(type.contains(LibraryConstant.LIBRARY_DBCODE_AUDIO))
+				{
+					resType = LibraryConstant.LIBRARY_DATATYPE_AUDIO;
+				} 
+				else if(type.contains(LibraryConstant.LIBRARY_DBCODE_VIDEO))
+				{
+					resType = LibraryConstant.LIBRARY_DATATYPE_VIDEO;
+				}
+				
+				entity.list.get(i).resType = resType;
+				entity.list.get(i).categoryName = HttpDao.getCategoryName( resType, entity.list.get(i).categoryCode );
+				entity.list.get(i).categoryFullName = PublicUtils.getCategoryName(mContext, resType) + "-" + entity.list.get(i).categoryName + "-" + entity.list.get(i).title;
+			}
 		}
 		
 		return	true;

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.text.TextUtils;
+
 import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
@@ -26,6 +28,7 @@ import com.sunteam.library.parse.DelCollectResourceParseResponse;
 import com.sunteam.library.parse.DelHistoryParseResponse;
 import com.sunteam.library.parse.GetAudioChapterParseResponse;
 import com.sunteam.library.parse.GetBookMarkParseResponse;
+import com.sunteam.library.parse.GetCategoryNameParseResponse;
 import com.sunteam.library.parse.GetCategoryParseResponse;
 import com.sunteam.library.parse.GetCollectCategoryParseResponse;
 import com.sunteam.library.parse.GetCollectResourceParseResponse;
@@ -237,6 +240,50 @@ public class HttpDao
 		requestParams.put("UserInfo", encodeJson);
 		
 		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new RegisterParseResponse() );
+	}
+		
+	/**
+	 * 得到分类名称
+	 * 
+	 * @param categoryType
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/24
+	 */
+	@SuppressWarnings("unchecked")
+	public static String getCategoryName( int categoryType, String categoryCode ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		if( categoryCode.contains(";") )
+		{
+			String[] code = categoryCode.split(";");
+			for( int i = code.length-1; i >= 0; i-- )
+			{
+				if( !TextUtils.isEmpty(code[i]) )
+				{
+					requestParams.put("categoryCode", code[i]);
+					break;
+				}
+			}
+		}
+		else
+		{
+			requestParams.put("categoryCode", "categoryCode");
+		}
+		switch( categoryType )
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书
+				requestParams.put("requestType", "GetEbookCategoryName");
+				return (String) HttpRequest.get(LibraryConstant.URL_INTERFACE_EBOOK, requestParams, new GetCategoryNameParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//有声读物
+				requestParams.put("requestType", "GetAudioCategoryName");
+				return (String) HttpRequest.get(LibraryConstant.URL_INTERFACE_AUDIO, requestParams, new GetCategoryNameParseResponse() );
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//口述影像
+				requestParams.put("requestType", "GetVideoCategoryName");
+				return (String) HttpRequest.get(LibraryConstant.URL_INTERFACE_VIDEO, requestParams, new GetCategoryNameParseResponse() );
+			default:
+				return	null;
+		}
 	}
 		
 	/**

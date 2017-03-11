@@ -26,6 +26,7 @@ import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
 import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.entity.EbookNodeEntity;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 资源列表；个性推荐、最新更新、精品专区共用一个界面
@@ -35,15 +36,15 @@ import com.sunteam.library.utils.LibraryConstant;
  */
 public class ResourceListForRecommend extends MenuActivity implements OnMenuKeyListener, ShowView {
 	private int bookCount = 0; // 当前类资源总数，在分页加载时，需要使用该值
-	private String fatherPath;	//父目录路径
 	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
-
+	private Context mContext;
 	private Tools mTools;
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
 		super.onCreate(savedInstanceState);
 		mMenuView.setShowView(this);
+		mContext = this;
 	}
 
 	@Override
@@ -84,19 +85,33 @@ public class ResourceListForRecommend extends MenuActivity implements OnMenuKeyL
 
 	@SuppressLint("DefaultLocale") @Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		String dbCode = mEbookNodeEntityList.get(selectItem).dbCode;
-		String sysId = mEbookNodeEntityList.get(selectItem).sysId;
-		String identifier = mEbookNodeEntityList.get(selectItem).identifier;
-		String categoryCode = mEbookNodeEntityList.get(selectItem).categoryCode;
+		EbookNodeEntity entity = mEbookNodeEntityList.get(selectItem);
+		String dbCode = entity.dbCode;
+		String sysId = entity.sysId;
+		String identifier = entity.identifier;
+		String categoryCode = entity.categoryCode;
+		String categoryName = entity.categoryName;
+		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH;
+		String title = entity.title;
 		
-		String type = dbCode.toLowerCase();
-		if(type.contains(LibraryConstant.LIBRARY_DBCODE_EBOOK)){
-			new GetEbookChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
-		} else if(type.contains(LibraryConstant.LIBRARY_DBCODE_AUDIO)){
-			new GetAudioChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
-		} else if(type.contains(LibraryConstant.LIBRARY_DBCODE_VIDEO)){
-			new GetVideoChapterAsyncTask(this, fatherPath, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, mTitle, identifier, categoryCode);
+		switch( entity.resType )
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetEbookChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetAudioChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetVideoChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			default:
+				break;
 		}
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -107,7 +122,6 @@ public class ResourceListForRecommend extends MenuActivity implements OnMenuKeyL
 		mMenuList = getListFromEbookNodeEntity(mEbookNodeEntityList);
 		bookCount = mMenuList.size();
 		bookCount = intent.getIntExtra(LibraryConstant.INTENT_KEY_BOOKCOUNT, bookCount);
-		fatherPath = intent.getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		
 		mTools = new Tools(this);
 	}
