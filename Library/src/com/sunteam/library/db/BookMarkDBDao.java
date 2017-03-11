@@ -192,6 +192,43 @@ public class BookMarkDBDao
 	}
 	
 	//查找所有数据
+	public ArrayList<BookmarkEntity> findAll( String userName, String bookId ) 
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.BOOKMARK_TABLE_NAME + " where " + DatabaseConstants.BOOKMARK_USERNAME + " = ? and " + DatabaseConstants.BOOKMARK_BOOKID + " = ?", new String[]{userName, bookId});
+		if( null == cursor )
+		{
+			db.close();
+			return	null;
+		}
+		
+		ArrayList<BookmarkEntity> list = new ArrayList<BookmarkEntity>();
+		while(cursor.moveToNext())
+		{
+			BookmarkEntity entity = new BookmarkEntity();
+			entity.id = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ID));
+			entity.begin = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BEGIN));
+			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_TITLE));
+			entity.userName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_USERNAME));		
+			entity.bookId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BOOKID));
+			entity.addedTime = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ADDEDTIME));
+			entity.chapterTitle = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_TITLE));
+			entity.markName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_MARKNAME));
+			entity.percent = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_PERCENT));
+			
+		    list.add(0,entity);	//逆序插入
+		}
+		
+		if (!cursor.isClosed()) 
+		{
+			cursor.close();
+		}
+		db.close();
+		
+		return	list;
+	}
+	
+	//查找所有数据
 	public ArrayList<BookmarkEntity> findAll( String userName ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
