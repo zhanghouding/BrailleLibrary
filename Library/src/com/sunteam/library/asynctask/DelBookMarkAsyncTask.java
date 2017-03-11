@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.db.BookMarkDBDao;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -16,7 +18,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/18
  */
-public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
+public class DelBookMarkAsyncTask extends AsyncTask<BookmarkEntity, Void, Integer>
 {
 	private Context mContext;
 	private Handler mHandler;
@@ -28,17 +30,31 @@ public class DelBookMarkAsyncTask extends AsyncTask<Integer, Void, Integer>
 	}
 
 	@Override
-	protected Integer doInBackground(Integer... params) 
+	protected Integer doInBackground(BookmarkEntity... params) 
 	{
-		int id = params[0];
-		Integer result = HttpDao.delBookMark(PublicUtils.getUserName(mContext), id+"");
+		BookmarkEntity entity = (BookmarkEntity)params[0];
+		String userName = entity.userName;
+		String bookId = entity.bookId;
+		int begin = entity.begin;
+		BookMarkDBDao dao = new BookMarkDBDao( mContext );
+		dao.delete(userName, bookId, begin);
+		dao.closeDb();
 		
-		if( null == result )
+		if( 0 == entity.id )	//本地历史记录
 		{
-			return	LibraryConstant.RESULT_EXCEPTION;
+			return	LibraryConstant.RESULT_SUCCESS;
 		}
-		
-		return	result;
+		else					//网络历史记录
+		{
+			Integer result = HttpDao.delBookMark(userName, entity.id+"");
+			
+			if( null == result )
+			{
+				return	LibraryConstant.RESULT_EXCEPTION;
+			}
+			
+			return	result;
+		}
 	}
 	
 	@Override

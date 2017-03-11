@@ -81,7 +81,7 @@ public class BookmarViewkList extends MenuActivity {
 			setResult(Activity.RESULT_OK, intent);
 			finish();
 		} else { // 删除指定书签
-			confirmDeleteBookmark(this, mBookmarkEntity.id);
+			confirmDeleteBookmark(this, mBookmarkEntity);
 		}
 	}
 
@@ -104,14 +104,14 @@ public class BookmarViewkList extends MenuActivity {
 		return list;
 	}
 
-	private void confirmDeleteBookmark(final Context context, final int id) {
+	private void confirmDeleteBookmark(final Context context, final BookmarkEntity entity) {
 		String s = getResources().getString(R.string.library_dialog_delete);
 		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
 		mConfirmDialog.setConfirmListener(new ConfirmListener() {
 
 			@Override
 			public void doConfirm() {
-				new DelBookMarkAsyncTask(context, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id);
+				new DelBookMarkAsyncTask(context, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entity);
 			}
 
 			@Override
