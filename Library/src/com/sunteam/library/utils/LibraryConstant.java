@@ -10,6 +10,7 @@ public class LibraryConstant {
 	public static final String LIBRARY_ROOT_PATH = Environment.getExternalStorageDirectory()+"/s918p/library/"; // 数字图书馆要保存的数据Home目录
 
 	// 云端访问URL
+	public static final String API_URL = "http://www.blc.org.cn/API/";
 	public static final String URL_INTERFACE_USER = "UserInterface.ashx"; // 用户相关接口
 	public static final String URL_INTERFACE_EBOOK = "EbookInterface.ashx"; // 图书相关接口
 	public static final String URL_INTERFACE_AUDIO = "AudioInterface.ashx"; // 音频相关接口

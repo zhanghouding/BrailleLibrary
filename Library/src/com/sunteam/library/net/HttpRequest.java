@@ -13,6 +13,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 
 import com.sunteam.library.parse.IParseResponse;
+import com.sunteam.library.utils.LibraryConstant;
 
 /**
  * 使用Http方式请求云端API
@@ -22,8 +23,6 @@ import com.sunteam.library.parse.IParseResponse;
  */
 public class HttpRequest
 {
-	private static final String API_URL = "http://www.blc.org.cn/API/";
-
 	private static final int CONNECTIONTIMEOUT = 80000;
 	private static final int SOTIMEOUT = 80000;
 
@@ -42,7 +41,8 @@ public class HttpRequest
 		String parameter = initParamters(params); // 获取参数
 		try 
 		{
-			HttpGet httpGet = new HttpGet(API_URL + uri + parameter);
+			String url = LibraryConstant.API_URL + uri + parameter;
+			HttpGet httpGet = new HttpGet(url);
 			BasicHttpParams httpParams = new BasicHttpParams();
 			HttpConnectionParams.setConnectionTimeout(httpParams, CONNECTIONTIMEOUT);
 			HttpConnectionParams.setSoTimeout(httpParams, SOTIMEOUT);
