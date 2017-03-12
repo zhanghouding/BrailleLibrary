@@ -18,6 +18,8 @@ public class DatabaseConstants
 	public static final String BOOKMARK_TABLE_NAME = "bookmarks";	//书签表名称
 	public static final String COLLECT_CATEGORY_TABLE_NAME = "collect_categorys";	//收藏分类表名称
 	public static final String COLLECT_RESOURCE_TABLE_NAME = "collect_resources";	//收藏资源表名称
+	public static final String DOWNLOAD_RESOURCE_TABLE_NAME = "download_resources";	//下载资源表名称
+	public static final String DOWNLOAD_CHAPTER_TABLE_NAME = "download_chapters";	//下载章节表名称
 	
 	public static final String RESOURCE_TYPE = "resource_type";		//资源类型
 	//分类表字段
@@ -101,4 +103,23 @@ public class DatabaseConstants
   	public static final String COLLECT_RESOURCE_FULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
   	public static final String COLLECT_RESOURCE_COVERURL = "coverUrl";		//封面地址
   	public static final String COLLECT_RESOURCE_CREATETIME = "createTime";	//创建时间
+  	
+  	//下载资源表字段
+  	public static final String DOWNLOAD_RESOURCE_USERNAME = "userName";			//用户名
+  	public static final String DOWNLOAD_RESOURCE_RESTYPE = "resType";			//分类类型
+  	public static final String DOWNLOAD_RESOURCE_FULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
+  	public static final String DOWNLOAD_RESOURCE_TITLE =  "title";				//书名
+  	public static final String DOWNLOAD_RESOURCE_DBCODE = "dbCode";				//数据编码
+  	public static final String DOWNLOAD_RESOURCE_SYSID = "sysId";				//系统id
+  	public static final String DOWNLOAD_RESOURCE_IDENTIFIER = "identifier";		//电子书ID
+  	public static final String DOWNLOAD_RESOURCE_CHAPTER_COUNT = "chapterCount";//章节总数
+  	public static final String DOWNLOAD_RESOURCE_STATUS = "status";				//整本书的下载状态
+  	
+  	//下载章节表字段
+  	public static final String DOWNLOAD_CHAPTER_RECORDID = "recorcdId";			//对应的下载资源记录ID
+  	public static final String DOWNLOAD_CHAPTER_NAME = "chapterName";			//章节名称
+  	public static final String DOWNLOAD_CHAPTER_INDEX = "chapterIndex";			//章节序号
+  	public static final String DOWNLOAD_CHAPTER_STATUS = "chapterStatus";		//章节下载状态
+  	public static final String DOWNLOAD_CHAPTER_PATH = "chapterPath";			//章节下载路径
+  	public static final String DOWNLOAD_CHAPTER_URL = "chapterUrl";				//章节下载URL
 }

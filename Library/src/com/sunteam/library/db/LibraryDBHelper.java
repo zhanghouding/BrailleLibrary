@@ -112,6 +112,29 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.COLLECT_RESOURCE_COVERURL + " varchar(1024)," +
 			DatabaseConstants.COLLECT_RESOURCE_CREATETIME + " varchar(64))";
 	
+	public static final String CREATE_DOWNLOAD_RESOURCE_TABLE =	//创建下载资源表
+			"create table if not exists " + DatabaseConstants.DOWNLOAD_RESOURCE_TABLE_NAME +
+			" (_id integer PRIMARY KEY AUTOINCREMENT," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_CHAPTER_COUNT + " integer," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_RESTYPE + " integer," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_STATUS + " integer," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_USERNAME + " varchar(64)," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_TITLE + " varchar(128)," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE + " varchar(128)," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_SYSID + " varchar(128)," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER + " varchar(128)," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + " varchar(1024))";
+	
+	public static final String CREATE_DOWNLOAD_CHAPTER_TABLE =	//创建下载章节表
+			"create table if not exists " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME +
+			" (_id integer PRIMARY KEY AUTOINCREMENT," +
+			DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID + " integer," +
+			DatabaseConstants.DOWNLOAD_CHAPTER_INDEX + " integer," +
+			DatabaseConstants.DOWNLOAD_CHAPTER_STATUS + " integer," +
+			DatabaseConstants.DOWNLOAD_CHAPTER_NAME + " varchar(128)," +
+			DatabaseConstants.DOWNLOAD_CHAPTER_PATH + " varchar(1024)," +
+			DatabaseConstants.DOWNLOAD_CHAPTER_URL + " varchar(1024))";
+	
 	public LibraryDBHelper( Context context, String name, CursorFactory factory, int version ) 
 	{
 		super(context, name, factory, version);
@@ -129,6 +152,8 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 		db.execSQL(CREATE_BOOKMARK_TABLE);	//创建书签表
 		db.execSQL(CREATE_COLLECT_CATEGORY_TABLE);	//创建收藏分类表
 		db.execSQL(CREATE_COLLECT_RESOURCE_TABLE);	//创建收藏资源表
+		db.execSQL(CREATE_DOWNLOAD_RESOURCE_TABLE);	//创建下载资源表
+		db.execSQL(CREATE_DOWNLOAD_CHAPTER_TABLE);	//创建下载章节表
 	}
 
 	@Override
