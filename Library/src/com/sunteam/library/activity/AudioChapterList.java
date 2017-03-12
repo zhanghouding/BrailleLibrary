@@ -178,6 +178,8 @@ public class AudioChapterList extends MenuActivity implements OnMenuKeyListener 
 		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, mTitle);
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
+		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mAudioChapterInfoEntityList);
 		
 		intent.setClass(this, ChapterFunctionMenu.class);
 

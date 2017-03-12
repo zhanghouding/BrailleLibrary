@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,12 +13,20 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.ConfirmDialog;
+import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.AddCollectResourceAsyncTask;
+import com.sunteam.library.db.DownloadChapterDBDao;
+import com.sunteam.library.db.DownloadResourceDBDao;
 import com.sunteam.library.download.DownloadEbook;
+import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CollectResourceEntity;
+import com.sunteam.library.entity.DownloadChapterEntity;
+import com.sunteam.library.entity.DownloadResourceEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
+import com.sunteam.library.entity.VideoChapterInfoEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
@@ -28,6 +37,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @Note
  */
 public class ChapterFunctionMenu extends MenuActivity {
+	private Context mContext;
 	private String dbCode;			//数据库编码
 	private String sysId;			//系统id
 	private String categoryName;	//分类名称
@@ -35,12 +45,15 @@ public class ChapterFunctionMenu extends MenuActivity {
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
 	private String identifier;	//电子书identifier
 	private ArrayList<EbookChapterInfoEntity> mEbookChapterInfoEntityList;	//电子书章节信息
+	private ArrayList<AudioChapterInfoEntity> mAudioChapterInfoEntityList;	//有声书章节信息
+	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityList;	//视频章节信息
 	private String fatherPath;	//父目录路径
 	private DownloadEbook mDownloadEbook;	//电子图书下载线程
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
 		super.onCreate(savedInstanceState);
+		mContext = this;
 	}
 
 	@Override
@@ -79,6 +92,84 @@ public class ChapterFunctionMenu extends MenuActivity {
 
 	}
 
+	//开始下载
+	private void startDownload( DownloadResourceEntity entity )
+	{
+		DownloadResourceDBDao dao = new DownloadResourceDBDao(this);
+		dao.insert(entity);
+		dao.closeDb();
+		
+		DownloadChapterDBDao dcDao = new DownloadChapterDBDao( mContext);
+		switch( dataType )
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
+				for( int i = 0; i < mEbookChapterInfoEntityList.size(); i++ )
+				{
+					DownloadChapterEntity dce = new DownloadChapterEntity();
+					dce.recorcdId = entity._id;			//对应的下载资源记录ID
+				  	dce.chapterName = mEbookChapterInfoEntityList.get(i).chapterName;		//章节名称
+				  	dce.chapterIndex = i;				//章节序号
+				  	dce.chapterStatus = 0;				//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+				  	dce.chapterPath = fatherPath;		//章节下载路径
+				  	dce.chapterUrl = null;				//章节下载URL
+				  	
+				  	dcDao.insert(dce);
+				}
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//音频
+				for( int i = 0; i < mAudioChapterInfoEntityList.size(); i++ )
+				{
+					DownloadChapterEntity dce = new DownloadChapterEntity();
+					dce.recorcdId = entity._id;			//对应的下载资源记录ID
+				  	dce.chapterName = mAudioChapterInfoEntityList.get(i).title;		//章节名称
+				  	dce.chapterIndex = i;				//章节序号
+				  	dce.chapterStatus = 0;				//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+				  	dce.chapterPath = fatherPath;		//章节下载路径
+				  	dce.chapterUrl = mAudioChapterInfoEntityList.get(i).audioUrl;	//章节下载URL
+				  	
+				  	dcDao.insert(dce);
+				}
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//视频
+				for( int i = 0; i < mVideoChapterInfoEntityList.size(); i++ )
+				{
+					DownloadChapterEntity dce = new DownloadChapterEntity();
+					dce.recorcdId = entity._id;			//对应的下载资源记录ID
+				  	dce.chapterName = mVideoChapterInfoEntityList.get(i).title;		//章节名称
+				  	dce.chapterIndex = i;				//章节序号
+				  	dce.chapterStatus = 0;				//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+				  	dce.chapterPath = fatherPath;		//章节下载路径
+				  	dce.chapterUrl = mVideoChapterInfoEntityList.get(i).videoUrl;	//章节下载URL
+				  	
+				  	dcDao.insert(dce);
+				}
+				break;
+			default:
+				break;
+		}
+		
+		dcDao.closeDb();
+		
+		/*
+		{	
+			mDownloadEbook = new DownloadEbook(fatherPath, identifier, mEbookChapterInfoEntityList);
+			mDownloadEbook.start();
+			String tips = this.getString(R.string.library_downloading);
+			PublicUtils.showToast(this, tips, new PromptListener() {
+				@Override
+				public void onComplete() 
+				{
+					// TODO Auto-generated method stub
+					{
+						finish();
+					}
+				}
+			});
+			//此次还应该跳转到下载管理界面，或者弹出一个Toast.(先弹出一个Toast吧)
+		}
+		*/
+	}
+	
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		switch(selectItem){
@@ -100,34 +191,66 @@ public class ChapterFunctionMenu extends MenuActivity {
 			}
 			break;
 		case 1: // 下载当前资源
+			String userName = PublicUtils.getUserName(this);
+			DownloadResourceEntity entity = new DownloadResourceEntity();
+			entity.userName = userName;			//用户名
+			entity.resType = dataType;			//资源类型 1:有声读物 2:电子图书  3:视频影像
+			entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName + "-" + resourceName;	//完整的分类名，格式"电子图书-古典文学"
+			entity.title = resourceName;		//资源名称
+			entity.dbCode = dbCode;				//数据库编码
+			entity.sysId = sysId;				//系统id
+			entity.identifier = identifier;		//电子书ID
+			entity.status = 0;					//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+			
 			switch( dataType )
 			{
-				case LibraryConstant.LIBRARY_DATATYPE_EBOOK:	//电子图书if( null == mDownloadEbook )
-					{
-						mDownloadEbook = new DownloadEbook(fatherPath, identifier, mEbookChapterInfoEntityList);
-						mDownloadEbook.start();
-						String tips = this.getString(R.string.library_downloading);
-						PublicUtils.showToast(this, tips, new PromptListener() {
-							@Override
-							public void onComplete() 
-							{
-								// TODO Auto-generated method stub
-								{
-									finish();
-								}
-							}
-						});
-						//此次还应该跳转到下载管理界面，或者弹出一个Toast.(先弹出一个Toast吧)
-					}
+				case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
+					entity.chapterCount = mEbookChapterInfoEntityList.size();		//章节总数
 					break;
 				case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//音频
+					entity.chapterCount = mAudioChapterInfoEntityList.size();		//章节总数
 					break;
 				case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//视频
+					entity.chapterCount = mVideoChapterInfoEntityList.size();		//章节总数
 					break;
 				default:
 					break;
-			}
+			}			
 			
+			DownloadResourceDBDao dao = new DownloadResourceDBDao(this);
+			final DownloadResourceEntity dre = dao.find(userName, entity);	//查找下载资源任务是否已经存在
+			dao.closeDb();
+			
+			if( dre != null )
+			{
+				//此任务已经存在，则提示是否重新下载
+				String s = getResources().getString(R.string.library_downloading_tips);
+				ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
+				mConfirmDialog.setConfirmListener(new ConfirmListener() {
+					@Override
+					public void doConfirm() 
+					{
+						DownloadResourceDBDao DrDao = new DownloadResourceDBDao(mContext);
+						DrDao.delete(dre);
+						DrDao.closeDb();
+						
+						DownloadChapterDBDao dcDao = new DownloadChapterDBDao( mContext);
+						dcDao.deleteAll(dre._id);
+						dcDao.closeDb();
+						
+						startDownload(dre);
+					}
+					@Override
+					public void doCancel() 
+					{
+					}
+				});
+				mConfirmDialog.show();
+			}
+			else
+			{
+				startDownload(entity);
+			}
 			break;
 		case 2: // 删除当前资源
 			{
@@ -154,7 +277,21 @@ public class ChapterFunctionMenu extends MenuActivity {
 		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
 		identifier = intent.getStringExtra(LibraryConstant.INTENT_KEY_IDENTIFIER);
-		mEbookChapterInfoEntityList = (ArrayList<EbookChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		
+		switch( dataType )
+		{
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
+				mEbookChapterInfoEntityList = (ArrayList<EbookChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//音频
+				mAudioChapterInfoEntityList = (ArrayList<AudioChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//视频
+				mVideoChapterInfoEntityList = (ArrayList<VideoChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+				break;
+			default:
+				break;
+		}
 		
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_chapter_function_menu_list));

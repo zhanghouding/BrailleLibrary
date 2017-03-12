@@ -178,6 +178,54 @@ public class DownloadResourceDBDao
 		while(cursor.moveToNext())
 		{	
 			entity = new DownloadResourceEntity();
+			entity._id = cursor.getInt(cursor.getColumnIndex("_id"));
+			entity.chapterCount = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CHAPTER_COUNT));
+			entity.resType = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_RESTYPE));
+			entity.status = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_STATUS));
+			entity.userName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_USERNAME));		
+			entity.title = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_TITLE));
+			entity.dbCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE));
+			entity.sysId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_SYSID));
+			entity.identifier = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER));
+			entity.categoryFullName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME));
+			
+			break;
+		}
+		
+		if (!cursor.isClosed()) 
+		{
+			cursor.close();
+		}
+		db.close();
+		
+		return	entity;
+	}
+
+	//查找数据
+	public DownloadResourceEntity find( String userName, DownloadResourceEntity dre ) 
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
+		Cursor cursor = null;
+		if( LibraryConstant.LIBRARY_DATATYPE_EBOOK == dre.resType )
+		{
+			cursor = db.rawQuery("select * from " + DatabaseConstants.DOWNLOAD_RESOURCE_TABLE_NAME + " where " + DatabaseConstants.DOWNLOAD_RESOURCE_USERNAME + " = ? and " + DatabaseConstants.DOWNLOAD_RESOURCE_RESTYPE + " = ? and " + DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER + " = ?", new String[]{userName, dre.resType+"", dre.identifier});
+		}
+		else
+		{
+			cursor = db.rawQuery("select * from " + DatabaseConstants.DOWNLOAD_RESOURCE_TABLE_NAME + " where " + DatabaseConstants.DOWNLOAD_RESOURCE_USERNAME + " = ? and " + DatabaseConstants.DOWNLOAD_RESOURCE_RESTYPE + " = ? and " + DatabaseConstants.DOWNLOAD_RESOURCE_SYSID + " = ?", new String[]{userName, dre.resType+"", dre.sysId});
+		}
+		if( null == cursor )
+		{
+			db.close();
+			return	null;
+		}
+		
+		DownloadResourceEntity entity = null;
+		
+		while(cursor.moveToNext())
+		{	
+			entity = new DownloadResourceEntity();
+			entity._id = cursor.getInt(cursor.getColumnIndex("_id"));
 			entity.chapterCount = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CHAPTER_COUNT));
 			entity.resType = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_RESTYPE));
 			entity.status = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_STATUS));
@@ -215,6 +263,7 @@ public class DownloadResourceDBDao
 		while(cursor.moveToNext())
 		{
 			DownloadResourceEntity entity = new DownloadResourceEntity();
+			entity._id = cursor.getInt(cursor.getColumnIndex("_id"));
 			entity.chapterCount = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CHAPTER_COUNT));
 			entity.resType = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_RESTYPE));
 			entity.status = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_STATUS));
@@ -252,6 +301,7 @@ public class DownloadResourceDBDao
 		while(cursor.moveToNext())
 		{
 			DownloadResourceEntity entity = new DownloadResourceEntity();
+			entity._id = cursor.getInt(cursor.getColumnIndex("_id"));
 			entity.chapterCount = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CHAPTER_COUNT));
 			entity.resType = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_RESTYPE));
 			entity.status = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_STATUS));

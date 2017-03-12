@@ -15,6 +15,7 @@ public class DownloadResourceEntity implements Serializable
 	 */
 	private static final long serialVersionUID = -6364243932866381577L;
 	
+	public int _id;					//数据库自动生成的id
 	public String userName;			//用户名
 	public int resType;				//资源类型 1:有声读物 2:电子图书  3:视频影像
 	public String categoryFullName;	//完整的分类名，格式"电子图书-古典文学"

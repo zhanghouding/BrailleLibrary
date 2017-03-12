@@ -22,7 +22,7 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	private String identifier;	//书本id
 	private String categoryName;//分类名称
 	private String categoryCode;
-	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityListt;
+	private ArrayList<VideoChapterInfoEntity> mVideoChapterInfoEntityList;
 	private BookmarkEntity mBookmarkEntity;
 	private boolean isHistory = false;	//是否是从历史记录进入
 	private int lastChapterIndex = 0;
@@ -111,9 +111,9 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		intent.putExtra("categoryCode", categoryCode);
 		intent.putExtra("chapterName", menuItem); // 章节名
 		intent.putExtra("curChapter", selectItem); // 当前章节序号
-		intent.putExtra("totalChapter", mVideoChapterInfoEntityListt.size()); // 总章节数
+		intent.putExtra("totalChapter", mVideoChapterInfoEntityList.size()); // 总章节数
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath+menuItem+"/");		//父目录
-		intent.putExtra(LibraryConstant.INTENT_KEY_URL, mVideoChapterInfoEntityListt.get(selectItem).videoUrl);	//资源路径
+		intent.putExtra(LibraryConstant.INTENT_KEY_URL, mVideoChapterInfoEntityList.get(selectItem).videoUrl);	//资源路径
 		if( mBookmarkEntity != null )
 		{
 			intent.putExtra("book_mark", mBookmarkEntity);	//书签
@@ -135,8 +135,8 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-		mVideoChapterInfoEntityListt = (ArrayList<VideoChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
-		mMenuList = getListFromChapterInfoEntity(mVideoChapterInfoEntityListt);
+		mVideoChapterInfoEntityList = (ArrayList<VideoChapterInfoEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		mMenuList = getListFromChapterInfoEntity(mVideoChapterInfoEntityList);
 		fatherPath = this.getIntent().getStringExtra(LibraryConstant.INTENT_KEY_FATHER_PATH);
 		dbCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_DBCODE);
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
@@ -172,6 +172,8 @@ public class VideoChapterList extends MenuActivity implements OnMenuKeyListener 
 		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, mTitle);
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, sysId);	//系统id
+		intent.putExtra(LibraryConstant.INTENT_KEY_IDENTIFIER, identifier);
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mVideoChapterInfoEntityList);
 		
 		intent.setClass(this, ChapterFunctionMenu.class);
 

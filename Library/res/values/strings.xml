@@ -59,6 +59,7 @@
 	<string name="library_input_percent_max">超出有效范围，自动纠正为最大值</string>
 	<string name="library_input_percent_error">请输入数字</string>
 	<string name="library_downloading">正在下载当前资源！</string>
+	<string name="library_downloading_tips">当前资源已在在下载列表中，是否重新下载？</string>
 	<string name="library_net_error">网络未连接！</string>
 	<string name="library_del_bookmark">正在删除书签</string>
 	<string name="library_del_bookmark_success">删除书签成功！</string>
