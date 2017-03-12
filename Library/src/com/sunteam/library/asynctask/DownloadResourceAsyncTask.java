@@ -117,7 +117,7 @@ public class DownloadResourceAsyncTask extends AsyncTask<DownloadResourceEntity,
 			    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
 			    		{
 			    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
-			    			FileDownloader.createAndStart(url, dce.chapterPath, PublicUtils.format(dce.chapterName)+LibraryConstant.CACHE_FILE_SUFFIX);
+			    			FileDownloader.createAndStart(url, dce.chapterPath, fileName);
 			    		}
 			    		
 			    		@Override
@@ -153,7 +153,7 @@ public class DownloadResourceAsyncTask extends AsyncTask<DownloadResourceEntity,
 			    		public void onDetectNewDownloadFile(String url, String fileName, String saveDir, long fileSize) 
 			    		{
 			    			// 如果有必要，可以改变文件名称fileName和下载保存的目录saveDir
-			    			FileDownloader.createAndStart(url, dce.chapterPath, PublicUtils.format(dce.chapterName)+LibraryConstant.CACHE_FILE_SUFFIX);
+			    			FileDownloader.createAndStart(url, dce.chapterPath, fileName);
 			    		}
 			    		
 			    		@Override
