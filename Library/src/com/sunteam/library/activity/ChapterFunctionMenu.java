@@ -99,7 +99,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 		dao.insert(entity);
 		dao.closeDb();
 		
-		DownloadChapterDBDao dcDao = new DownloadChapterDBDao( mContext);
+		DownloadChapterDBDao dcDao = new DownloadChapterDBDao( mContext );
 		switch( dataType )
 		{
 			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
@@ -109,12 +109,16 @@ public class ChapterFunctionMenu extends MenuActivity {
 					dce.recorcdId = entity._id;			//对应的下载资源记录ID
 				  	dce.chapterName = mEbookChapterInfoEntityList.get(i).chapterName;		//章节名称
 				  	dce.chapterIndex = i;				//章节序号
-				  	dce.chapterStatus = 0;				//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+				  	dce.chapterStatus = LibraryConstant.DOWNLOAD_STATUS_WAIT;				//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
 				  	dce.chapterPath = fatherPath;		//章节下载路径
 				  	dce.chapterUrl = null;				//章节下载URL
 				  	
 				  	dcDao.insert(dce);
 				}
+				dcDao.closeDb();
+				
+				mDownloadEbook = new DownloadEbook(mContext, entity);
+				mDownloadEbook.start();
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:	//音频
 				for( int i = 0; i < mAudioChapterInfoEntityList.size(); i++ )
@@ -123,12 +127,13 @@ public class ChapterFunctionMenu extends MenuActivity {
 					dce.recorcdId = entity._id;			//对应的下载资源记录ID
 				  	dce.chapterName = mAudioChapterInfoEntityList.get(i).title;		//章节名称
 				  	dce.chapterIndex = i;				//章节序号
-				  	dce.chapterStatus = 0;				//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+				  	dce.chapterStatus = LibraryConstant.DOWNLOAD_STATUS_WAIT;		//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
 				  	dce.chapterPath = fatherPath;		//章节下载路径
 				  	dce.chapterUrl = mAudioChapterInfoEntityList.get(i).audioUrl;	//章节下载URL
 				  	
 				  	dcDao.insert(dce);
 				}
+				dcDao.closeDb();
 				break;
 			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:	//视频
 				for( int i = 0; i < mVideoChapterInfoEntityList.size(); i++ )
@@ -137,37 +142,29 @@ public class ChapterFunctionMenu extends MenuActivity {
 					dce.recorcdId = entity._id;			//对应的下载资源记录ID
 				  	dce.chapterName = mVideoChapterInfoEntityList.get(i).title;		//章节名称
 				  	dce.chapterIndex = i;				//章节序号
-				  	dce.chapterStatus = 0;				//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+				  	dce.chapterStatus = LibraryConstant.DOWNLOAD_STATUS_WAIT;		//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
 				  	dce.chapterPath = fatherPath;		//章节下载路径
 				  	dce.chapterUrl = mVideoChapterInfoEntityList.get(i).videoUrl;	//章节下载URL
 				  	
 				  	dcDao.insert(dce);
 				}
+				dcDao.closeDb();
 				break;
 			default:
 				break;
 		}
 		
-		dcDao.closeDb();
-		
-		/*
-		{	
-			mDownloadEbook = new DownloadEbook(fatherPath, identifier, mEbookChapterInfoEntityList);
-			mDownloadEbook.start();
-			String tips = this.getString(R.string.library_downloading);
-			PublicUtils.showToast(this, tips, new PromptListener() {
-				@Override
-				public void onComplete() 
+		String tips = this.getString(R.string.library_downloading);
+		PublicUtils.showToast(this, tips, new PromptListener() {
+			@Override
+			public void onComplete() 
+			{
+				// TODO Auto-generated method stub
 				{
-					// TODO Auto-generated method stub
-					{
-						finish();
-					}
+					finish();
 				}
-			});
-			//此次还应该跳转到下载管理界面，或者弹出一个Toast.(先弹出一个Toast吧)
-		}
-		*/
+			}
+		});
 	}
 	
 	@Override
@@ -200,7 +197,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 			entity.dbCode = dbCode;				//数据库编码
 			entity.sysId = sysId;				//系统id
 			entity.identifier = identifier;		//电子书ID
-			entity.status = 0;					//章节下载状态 (0：等待下载 1：正在下载 2：下载完成)
+			entity.status = LibraryConstant.DOWNLOAD_STATUS_WAIT;					//下载状态 (0：等待下载 1：正在下载 2：下载完成)
 			
 			switch( dataType )
 			{

@@ -144,11 +144,45 @@ public class DownloadChapterDBDao
 		return count;
 	}
 
-	//查找所有数据
-	public ArrayList<DownloadChapterEntity> findAll( int recorcdId, int chapterIndex ) 
+	//查找数据
+	public DownloadChapterEntity find( int recorcdId, int chapterIndex ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME + " where " + DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID + " = ? and " + DatabaseConstants.DOWNLOAD_CHAPTER_INDEX + " = ?", new String[]{recorcdId+"", chapterIndex+""});
+		if( null == cursor )
+		{
+			db.close();
+			return	null;
+		}
+		
+		DownloadChapterEntity entity = null;
+		while(cursor.moveToNext())
+		{
+			entity = new DownloadChapterEntity();
+			entity.recorcdId = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID));
+			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_INDEX));
+			entity.chapterStatus = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_STATUS));
+			entity.chapterName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_NAME));		
+			entity.chapterPath = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_PATH));
+			entity.chapterUrl = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_URL));
+			
+		    break;
+		}
+		
+		if (!cursor.isClosed()) 
+		{
+			cursor.close();
+		}
+		db.close();
+		
+		return	entity;
+	}
+
+	//查找所有数据
+	public ArrayList<DownloadChapterEntity> findAll( int recorcdId ) 
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME + " where " + DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID + " = ?", new String[]{recorcdId+""});
 		if( null == cursor )
 		{
 			db.close();

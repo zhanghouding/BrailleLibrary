@@ -20,6 +20,7 @@ import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCategoryAsyncTask;
 import com.sunteam.library.asynctask.GetRecommendAsyncTask;
+import com.sunteam.library.service.DownloadManagerService;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
@@ -44,6 +45,9 @@ public class MainActivity extends MenuActivity {
 		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
 		
 		startAccountManage(); // 如果已经登录，就不必进入账号管理界面
+		
+		Intent intent = new Intent(this, DownloadManagerService.class);
+		startService(intent);
 	}
 
 	@Override
@@ -115,6 +119,9 @@ public class MainActivity extends MenuActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		
+		Intent intent = new Intent(this, DownloadManagerService.class);
+		stopService(intent);
 		
 		TTSUtils.getInstance().destroy();
 		MediaPlayerUtils.getInstance().destroy();

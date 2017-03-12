@@ -286,6 +286,14 @@
             android:screenOrientation="landscape" 
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
+        <service
+		    android:name=".service.DownloadManagerService"
+    		android:exported="false"
+		    >
+		    <intent-filter>
+		        <action android:name="com.sunteam.library.service.DownloadManagerService" />
+		    </intent-filter>
+		</service>
     </application>
 
 </manifest>

@@ -109,4 +109,7 @@ public class LibraryConstant {
 	public static final String USER_NAME = "user_name";
 	public static final String USER_PASSWORD = "user_password";
 
+	public static final int DOWNLOAD_STATUS_WAIT = 0;	//等待下载
+	public static final int DOWNLOAD_STATUS_GOING = 1;	//下载中
+	public static final int DOWNLOAD_STATUS_FINISH = 2;	//已完成
 }
