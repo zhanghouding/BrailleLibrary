@@ -37,6 +37,11 @@
     <string name="library_account_certificate_type_select">证件类型选择 </string>
     <string name="library_account_nextstep">下一步</string>
     <string name="library_account_passwd_setting">密码设置</string>
+    <string name="library_account_certificateno_empty">证件号不能为空</string>
+    <string name="library_account_name_empty">姓名不能为空</string>
+    <string name="library_account_username_empty">用户名不能为空</string>
+    <string name="library_account_passwd_empty">密码不能为空</string>
+    <string name="library_account_passwd_nosame">密码不一致</string>
     
     <string name="library_wait_reading_data">正在加载数据，请稍等</string>
     <string name="library_reading_data_error">加载数据失败</string>

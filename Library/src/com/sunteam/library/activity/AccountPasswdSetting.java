@@ -3,6 +3,7 @@ package com.sunteam.library.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,9 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sunteam.common.menu.BaseActivity;
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.RegisterAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
 public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
@@ -30,9 +33,13 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 	private Button mBtCancel; // 退出按钮
 
 	private int fontColor, backgroundColor, hightColor;
+	private String realName = ""; // 真实姓名
+	private String certificateType; // 证件类型
+	private String cardNo = ""; // 证件号
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getIntentPara();
 		initView();
 	}
 
@@ -51,6 +58,13 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		default:
 			break;
 		}
+	}
+
+	private void getIntentPara() {
+		Intent intent = getIntent();
+		realName = intent.getStringExtra("name");
+		certificateType = intent.getStringExtra("type");
+		cardNo = intent.getStringExtra("card_no");
 	}
 
 	private void initView() {
@@ -109,6 +123,10 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		mBtConfirm.setOnFocusChangeListener(this);
 		mBtCancel.setOnFocusChangeListener(this);
 
+		// 设置测试账号
+		mEtPasswd.setText("123");
+		mEtPasswd.setText("mEtPasswd");
+
 		mEtPasswd.requestFocus();
 
 		speak(mTitle + "," + getFocusString());
@@ -150,7 +168,19 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 
 	// 确定
 	public void onClickForConfirm(View v) {
-		// TODO 启动密码找回异步任务
+		// TODO UpdatePasswordAsyncTask
+		String userName = mTvUserName.getText().toString();
+		String passwd = mEtPasswd.getText().toString();
+		if (checkInfoValid()) {
+			TtsUtils.getInstance().speak(((Button) v).getText().toString());
+//			new UpdatePasswordAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "" + certificateType, userName, realName, cardNo, passwd);
+		}
+		
+		// 验证成功后重新设置密码
+//		Intent intent = new Intent();
+//		intent.setClass(this, AccountPasswdSetting.class);
+//		startActivityForResult(intent, resquestCode); // 密码找回
+//		finish(); // 销毁当前Activity
 //		TtsUtils.getInstance().speak(((Button) v).getText().toString());
 //		finish();
 	}
@@ -297,6 +327,28 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 			s1 = getFocusHint();
 			speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}
+	}
+
+	private boolean checkInfoValid() {
+		boolean ret = false;
+		String passwd = mEtPasswd.getText().toString();
+		String passwd2 = mEtPasswdConfirm.getText().toString();
+		int id = 0;
+		if (passwd.isEmpty()) {
+			id = R.string.library_account_passwd_empty;
+		} else if (passwd2.isEmpty()) {
+			id = R.string.library_account_passwd_empty;
+		} else if (!passwd.equals(passwd2)) {
+			id = R.string.library_account_passwd_nosame;
+		} else {
+			ret = true;
+		}
+
+		if (0 != id) {
+			PublicUtils.showToast(this, getResources().getString(id));
+		}
+
+		return ret;
 	}
 
 	private void speak(String s) {

@@ -10,7 +10,7 @@ import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 
 /**
- * @Destryption 账号管理：登录、注销、注册、密码找回
+ * @Destryption 账号管理：登录、注册、密码找回; 注销功能只有在登录后才起作用。进入数字图书馆后，若尚未登录则进入账号管理界面。
  * @Author Jerry
  * @Date 2017-3-1 上午9:51:33
  * @Note 进入数字图书馆后自动用上次用户账号和密码登录。
@@ -29,11 +29,10 @@ public class AccountManager extends MenuActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode) {
-			return;
+		if (Activity.RESULT_OK == resultCode) {
+			setResult(Activity.RESULT_OK);
+			finish();
 		}
-		setResult(Activity.RESULT_OK);
-		finish();
 	}
 
 	@Override

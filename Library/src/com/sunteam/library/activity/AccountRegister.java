@@ -3,6 +3,7 @@ package com.sunteam.library.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.RegisterAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
 public class AccountRegister extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
@@ -29,18 +31,18 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	private EditText mEtUserName; // 用户名
 	private EditText mEtPasswd; // 密码
 	private EditText mEtPasswdConfirm; // 确认密码
-//	private Button mBtDetail; // 个人详细信息
-//	private EditText mEtPhone; // 联系电话
-//	private EditText mEtEmail; // E-mail
-//	private EditText mEtCompany; // 单位名称
-//	private EditText mEtZip; // 邮政编码
-//	private EditText mEtAddr; // 联系地址
+	// private Button mBtDetail; // 个人详细信息
+	// private EditText mEtPhone; // 联系电话
+	// private EditText mEtEmail; // E-mail
+	// private EditText mEtCompany; // 单位名称
+	// private EditText mEtZip; // 邮政编码
+	// private EditText mEtAddr; // 联系地址
 	private Button mBtConfirm; // 登录按钮
 	private Button mBtCancel; // 取消按钮
 
 	private int fontColor, backgroundColor, hightColor;
 	private int certificateType = 0; // 0默认为读者证件号;1二代残疾人证件号
-//	private boolean detailExpansion = false;
+	// private boolean detailExpansion = false;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -123,39 +125,50 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		mEtPasswdConfirm = (EditText) findViewById(R.id.library_account_register_passwd_confirm_input);
 		mEtPasswdConfirm.setTextColor(fontColor);
 
-//		// 个人详细信息
-//		mBtDetail = (Button) findViewById(R.id.library_account_register_person_detail);
-//		mBtDetail.setTextColor(fontColor);
-//
-//		// 联系电话
-//		mTvHint = (TextView) findViewById(R.id.library_account_register_phone_hint);
-//		mTvHint.setTextColor(fontColor);
-//		mEtPhone = (EditText) findViewById(R.id.library_account_register_phone_input);
-//		mEtPhone.setTextColor(fontColor);
-//
-//		// E-mail
-//		mTvHint = (TextView) findViewById(R.id.library_account_register_email_hint);
-//		mTvHint.setTextColor(fontColor);
-//		mEtEmail = (EditText) findViewById(R.id.library_account_register_email_input);
-//		mEtEmail.setTextColor(fontColor);
-//
-//		// 单位名称
-//		mTvHint = (TextView) findViewById(R.id.library_account_register_company_hint);
-//		mTvHint.setTextColor(fontColor);
-//		mEtCompany = (EditText) findViewById(R.id.library_account_register_company_input);
-//		mEtCompany.setTextColor(fontColor);
-//
-//		// 邮政编码
-//		mTvHint = (TextView) findViewById(R.id.library_account_register_zip_hint);
-//		mTvHint.setTextColor(fontColor);
-//		mEtZip = (EditText) findViewById(R.id.library_account_register_zip_input);
-//		mEtZip.setTextColor(fontColor);
-//
-//		// 联系地址
-//		mTvHint = (TextView) findViewById(R.id.library_account_register_addr_hint);
-//		mTvHint.setTextColor(fontColor);
-//		mEtAddr = (EditText) findViewById(R.id.library_account_register_addr_input);
-//		mEtAddr.setTextColor(fontColor);
+		// // 个人详细信息
+		// mBtDetail = (Button)
+		// findViewById(R.id.library_account_register_person_detail);
+		// mBtDetail.setTextColor(fontColor);
+		//
+		// // 联系电话
+		// mTvHint = (TextView)
+		// findViewById(R.id.library_account_register_phone_hint);
+		// mTvHint.setTextColor(fontColor);
+		// mEtPhone = (EditText)
+		// findViewById(R.id.library_account_register_phone_input);
+		// mEtPhone.setTextColor(fontColor);
+		//
+		// // E-mail
+		// mTvHint = (TextView)
+		// findViewById(R.id.library_account_register_email_hint);
+		// mTvHint.setTextColor(fontColor);
+		// mEtEmail = (EditText)
+		// findViewById(R.id.library_account_register_email_input);
+		// mEtEmail.setTextColor(fontColor);
+		//
+		// // 单位名称
+		// mTvHint = (TextView)
+		// findViewById(R.id.library_account_register_company_hint);
+		// mTvHint.setTextColor(fontColor);
+		// mEtCompany = (EditText)
+		// findViewById(R.id.library_account_register_company_input);
+		// mEtCompany.setTextColor(fontColor);
+		//
+		// // 邮政编码
+		// mTvHint = (TextView)
+		// findViewById(R.id.library_account_register_zip_hint);
+		// mTvHint.setTextColor(fontColor);
+		// mEtZip = (EditText)
+		// findViewById(R.id.library_account_register_zip_input);
+		// mEtZip.setTextColor(fontColor);
+		//
+		// // 联系地址
+		// mTvHint = (TextView)
+		// findViewById(R.id.library_account_register_addr_hint);
+		// mTvHint.setTextColor(fontColor);
+		// mEtAddr = (EditText)
+		// findViewById(R.id.library_account_register_addr_input);
+		// mEtAddr.setTextColor(fontColor);
 
 		// Button
 		mBtConfirm = (Button) findViewById(R.id.library_account_register_confirm);
@@ -231,15 +244,21 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	}
 
 	// 展开或收起
-//	public void onClickForDetail(View v) {
-//		detailExpansion = !detailExpansion;
-//		setDetailInfoState();
-//	}
+	// public void onClickForDetail(View v) {
+	// detailExpansion = !detailExpansion;
+	// setDetailInfoState();
+	// }
 
 	// 注册
 	public void onClickForConfirm(View v) {
-		TtsUtils.getInstance().speak(((Button) v).getText().toString());
-		finish();
+		String account = mEtUserName.getText().toString();
+		String name = mEtName.getText().toString();
+		String cardNo = mEtCertificateNo.getText().toString();
+		String passwd = mEtPasswd.getText().toString();
+		if (checkInfoValid()) {
+			TtsUtils.getInstance().speak(((Button) v).getText().toString());
+			new RegisterAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "" + certificateType, account, name, cardNo, passwd);
+		}
 	}
 
 	// 退出
@@ -251,33 +270,33 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	private String getFocusString() {
 		View rootview = this.getWindow().getDecorView();
 		View v = rootview.findFocus();
-		String s= "";
-		
+		String s = "";
+
 		int id = v.getId();
-		switch(id){
+		switch (id) {
 		case R.id.library_account_register_certificate_no_input:
 		case R.id.library_account_register_name_input:
 		case R.id.library_account_register_username_input:
 		case R.id.library_account_register_passwd_input:
 		case R.id.library_account_register_passwd_confirm_input:
-//		case R.id.library_account_register_phone_input:
-//		case R.id.library_account_register_email_input:
-//		case R.id.library_account_register_company_input:
-//		case R.id.library_account_register_zip_input:
-//		case R.id.library_account_register_addr_input:
-			s = ((EditText)v).getText().toString();
-			if(s.isEmpty()){
-				s = ((EditText)v).getHint().toString();
+			// case R.id.library_account_register_phone_input:
+			// case R.id.library_account_register_email_input:
+			// case R.id.library_account_register_company_input:
+			// case R.id.library_account_register_zip_input:
+			// case R.id.library_account_register_addr_input:
+			s = ((EditText) v).getText().toString();
+			if (s.isEmpty()) {
+				s = ((EditText) v).getHint().toString();
 			}
 			break;
-//		case R.id.library_account_register_person_detail:
+		// case R.id.library_account_register_person_detail:
 		case R.id.library_account_register_confirm:
 		case R.id.library_account_register_cancel:
-			s = ((Button)v).getText().toString();
+			s = ((Button) v).getText().toString();
 			break;
 		default:
 			break;
-		}				
+		}
 
 		return s;
 	}
@@ -286,24 +305,24 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	private String getFocusHint() {
 		View rootview = this.getWindow().getDecorView();
 		View v = rootview.findFocus();
-		String s= "";
-		
-		switch(v.getId()){
+		String s = "";
+
+		switch (v.getId()) {
 		case R.id.library_account_register_certificate_no_input:
 		case R.id.library_account_register_name_input:
 		case R.id.library_account_register_username_input:
 		case R.id.library_account_register_passwd_input:
 		case R.id.library_account_register_passwd_confirm_input:
-//		case R.id.library_account_register_phone_input:
-//		case R.id.library_account_register_email_input:
-//		case R.id.library_account_register_company_input:
-//		case R.id.library_account_register_zip_input:
-//		case R.id.library_account_register_addr_input:
-			s = ((EditText)v).getHint().toString();
+			// case R.id.library_account_register_phone_input:
+			// case R.id.library_account_register_email_input:
+			// case R.id.library_account_register_company_input:
+			// case R.id.library_account_register_zip_input:
+			// case R.id.library_account_register_addr_input:
+			s = ((EditText) v).getHint().toString();
 			break;
 		default:
 			break;
-		}				
+		}
 
 		return s;
 	}
@@ -326,20 +345,20 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		boolean ret = true;
 		View rootview = this.getWindow().getDecorView();
 		View v = rootview.findFocus();
-		
-		switch(v.getId()){
+
+		switch (v.getId()) {
 		case R.id.library_account_register_certificate_no_input:
 		case R.id.library_account_register_name_input:
 		case R.id.library_account_register_username_input:
 		case R.id.library_account_register_passwd_input:
 		case R.id.library_account_register_passwd_confirm_input:
-//			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			// CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 			delTailCh((EditText) v);
 			break;
 		default:
 			ret = false;
 			break;
-		}	
+		}
 
 		return ret;
 	}
@@ -380,25 +399,25 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	}
 
 	// 根据展开和收起状态，设置详细信息控件可见还是隐藏
-//	private void setDetailInfoState() {
-//		int id = R.string.library_account_personal_detail_expansion;
-//		// 修改mTvDetail上的提示文字；展开时，设置详细信息对应的控件为可见; 收起时，设置详细信息对应的控件为隐藏
-//		if (detailExpansion) {
-//			id = R.string.library_account_personal_detail_contraction;
-//			mEtPhone.setVisibility(View.VISIBLE);
-//			mEtEmail.setVisibility(View.VISIBLE);
-//			mEtCompany.setVisibility(View.VISIBLE);
-//			mEtZip.setVisibility(View.VISIBLE);
-//			mEtAddr.setVisibility(View.VISIBLE);
-//		} else {
-//			mEtPhone.setVisibility(View.GONE);
-//			mEtEmail.setVisibility(View.GONE);
-//			mEtCompany.setVisibility(View.GONE);
-//			mEtZip.setVisibility(View.GONE);
-//			mEtAddr.setVisibility(View.GONE);
-//		}
-//		mBtDetail.setText(getResources().getString(id));
-//	}
+	// private void setDetailInfoState() {
+	// int id = R.string.library_account_personal_detail_expansion;
+	// // 修改mTvDetail上的提示文字；展开时，设置详细信息对应的控件为可见; 收起时，设置详细信息对应的控件为隐藏
+	// if (detailExpansion) {
+	// id = R.string.library_account_personal_detail_contraction;
+	// mEtPhone.setVisibility(View.VISIBLE);
+	// mEtEmail.setVisibility(View.VISIBLE);
+	// mEtCompany.setVisibility(View.VISIBLE);
+	// mEtZip.setVisibility(View.VISIBLE);
+	// mEtAddr.setVisibility(View.VISIBLE);
+	// } else {
+	// mEtPhone.setVisibility(View.GONE);
+	// mEtEmail.setVisibility(View.GONE);
+	// mEtCompany.setVisibility(View.GONE);
+	// mEtZip.setVisibility(View.GONE);
+	// mEtAddr.setVisibility(View.GONE);
+	// }
+	// mBtDetail.setText(getResources().getString(id));
+	// }
 
 	// 选择证件类型：启动一个菜单
 	private void selectCertificateType() {
@@ -448,6 +467,37 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			s1 = getFocusHint();
 			speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}
+	}
+
+	private boolean checkInfoValid() {
+		boolean ret = false;
+		String cardNo = mEtCertificateNo.getText().toString();
+		String name = mEtName.getText().toString();
+		String account = mEtUserName.getText().toString();
+		String passwd = mEtPasswd.getText().toString();
+		String passwd2 = mEtPasswdConfirm.getText().toString();
+		int id = 0;
+		if (cardNo.isEmpty()) {
+			id = R.string.library_account_certificateno_empty;
+		} else if (name.isEmpty()) {
+			id = R.string.library_account_name_empty;
+		} else if (account.isEmpty()) {
+			id = R.string.library_account_username_empty;
+		} else if (passwd.isEmpty()) {
+			id = R.string.library_account_passwd_empty;
+		} else if (passwd2.isEmpty()) {
+			id = R.string.library_account_passwd_empty;
+		} else if (!passwd.equals(passwd2)) {
+			id = R.string.library_account_passwd_nosame;
+		} else {
+			ret = true;
+		}
+
+		if (0 != id) {
+			PublicUtils.showToast(this, getResources().getString(id));
+		}
+
+		return ret;
 	}
 
 	private void speak(String s) {

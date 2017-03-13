@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +21,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.RegisterAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
 public class AccountPasswdRecovery extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
@@ -64,10 +66,6 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		resquestCode = intent.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
-		if (null == mTitle) {
-			finish();
-			return;
-		}
 	}
 
 	// 在页码输入中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩
@@ -121,8 +119,8 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		mBtCancel.setOnFocusChangeListener(this);
 
 		// 设置测试账号
-		mEtCertificateNo.setText("test1");
-		mEtName.setText("123");
+		mEtCertificateNo.setText("130182198609215753120");
+		mEtName.setText("测试");
 		
 		mEtCertificateNo.requestFocus();
 		
@@ -168,8 +166,19 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 
 	// 下一步
 	public void onClickForConfirm(View v) {
-		// TODO 启动密码找回异步任务
+		// TODO GetPasswordAsyncTask
+		String cardNo = mEtCertificateNo.getText().toString();
+		String name = mEtName.getText().toString();
+		if (checkInfoValid()) {
+			TtsUtils.getInstance().speak(((Button) v).getText().toString());
+//			new GetPasswordAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "" + certificateType, cardNo, name);
+		}
+		
+		// 验证成功后重新设置密码
 //		Intent intent = new Intent();
+//		intent.putExtra("type", certificateType);
+//		intent.putExtra("name", name);
+//		intent.putExtra("card_no", cardNo);
 //		intent.setClass(this, AccountPasswdSetting.class);
 //		startActivityForResult(intent, resquestCode); // 密码找回
 //		finish(); // 销毁当前Activity
@@ -323,6 +332,26 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 			s1 = getFocusHint();
 			TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}
+	}
+
+	private boolean checkInfoValid() {
+		boolean ret = false;
+		String cardNo = mEtCertificateNo.getText().toString();
+		String name = mEtName.getText().toString();
+		int id = 0;
+		if (cardNo.isEmpty()) {
+			id = R.string.library_account_certificateno_empty;
+		} else if (name.isEmpty()) {
+			id = R.string.library_account_name_empty;
+		} else {
+			ret = true;
+		}
+
+		if (0 != id) {
+			PublicUtils.showToast(this, getResources().getString(id));
+		}
+
+		return ret;
 	}
 
 	// 显示、隐藏切换

@@ -136,8 +136,10 @@ public class CommonFunctionMenu extends MenuActivity {
 		case LibraryConstant.MYLIBRARY_READING_HISTORY:
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
+			// TODO
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
+			// TODO
 			break;
 		default:
 			return;

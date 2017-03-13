@@ -6,6 +6,7 @@ import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -18,6 +19,8 @@ import android.os.AsyncTask;
 public class RegisterAsyncTask extends AsyncTask<String, Void, Integer>
 {
 	private Context mContext;
+	private String userName;
+	private String password;
 	
 	public RegisterAsyncTask( Context context )
 	{
@@ -40,10 +43,10 @@ public class RegisterAsyncTask extends AsyncTask<String, Void, Integer>
 	protected Integer doInBackground(String... params) 
 	{
 		int authenticType = Integer.parseInt(params[0]);
-		String userName = params[1];
+		userName = params[1];
 		String realName = params[2];
 		String cardNo = params[3];
-		String password = params[4];
+		password = params[4];
 		
 		return	HttpDao.register( authenticType, userName, realName, cardNo, password );
 	}
@@ -73,11 +76,13 @@ public class RegisterAsyncTask extends AsyncTask<String, Void, Integer>
 				});
 				break;
 			case LibraryConstant.RESULT_SUCCESS:	//成功
+				PublicUtils.saveUserInfo(mContext, userName, password);	// 保存用户信息
 				PublicUtils.showToast(mContext, mContext.getString(R.string.library_register_success), new PromptListener() {
 					
 					@Override
 					public void onComplete() {
-						
+						((Activity) mContext).setResult(Activity.RESULT_OK);
+						((Activity) mContext).finish();
 					}
 				});
 				break;
