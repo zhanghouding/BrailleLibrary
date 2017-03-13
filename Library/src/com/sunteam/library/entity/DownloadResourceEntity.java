@@ -25,4 +25,6 @@ public class DownloadResourceEntity implements Serializable
 	public String identifier;		//电子书ID
 	public int chapterCount;		//章节总数
 	public int status;				//下载状态 (0：等待下载 1：正在下载 2：下载完成)
+	
+	public int curDownloadChapterIndex;	//当前正在下载的章节序号，只有status==1才有用。
 }
