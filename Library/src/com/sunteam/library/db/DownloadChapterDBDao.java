@@ -263,10 +263,10 @@ public class DownloadChapterDBDao
 	}
 	
 	//更新状态
-	public void update( int status, int recorcdId ) 
+	public void update( String url, int recorcdId, int status ) 
 	{
 		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
-		db.execSQL("update " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME + " set "+ DatabaseConstants.DOWNLOAD_CHAPTER_STATUS + "=? where " + DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID + " = ?", new String[]{status+"", recorcdId+""});
+		db.execSQL("update " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME + " set "+ DatabaseConstants.DOWNLOAD_CHAPTER_STATUS + "=? where " + DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID + " = ? and " + DatabaseConstants.DOWNLOAD_CHAPTER_URL + " = ?", new String[]{status+"", recorcdId+"", url});
 		db.close();
 	}
 	

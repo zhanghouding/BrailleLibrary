@@ -58,6 +58,7 @@ public class DownloadResourceAsyncTask extends AsyncTask<DownloadResourceEntity,
 		
 		DownloadResourceDBDao dao = new DownloadResourceDBDao(mContext);
 		dao.insert(entity);
+		entity = dao.find(entity.userName, entity);	//为了得到记录的_id
 		dao.closeDb();
 		
 		DownloadChapterDBDao dcDao = new DownloadChapterDBDao( mContext );

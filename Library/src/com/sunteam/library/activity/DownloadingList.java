@@ -82,6 +82,10 @@ public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
 				s = downloadState[listSrc.get(i).status];
 			}
 			s = s + " " + listSrc.get(i).categoryFullName;
+			if( LibraryConstant.DOWNLOAD_STATUS_GOING == listSrc.get(i).status )
+			{
+				s += String.format(this.getString(R.string.library_download_chapter_index), listSrc.get(i).curDownloadChapterIndex);
+			}
 			list.add(s);
 		}
 

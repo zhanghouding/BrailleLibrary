@@ -52,7 +52,8 @@
     <string name="library_search_resource_empty">没有检索资源</string>
     <string name="library_account_logout_success">成功退出当前账号</string>
     <string name="library_download_empty">没有下载资源</string>
-   
+
+    <string name="library_download_chapter_index">第%1$s章</string>
 
     <string-array name="library_category_list">
         <item>盲人资讯</item>
@@ -83,8 +84,8 @@
         <item>已下载</item>
     </string-array>
     <string-array name="library_download_state_list">
-        <item>正在下载</item>
         <item>等待下载</item>
+        <item>正在下载</item>
         <item>已下载</item>
     </string-array>
     <string-array name="library_account_manager_list">
