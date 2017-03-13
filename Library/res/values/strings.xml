@@ -76,6 +76,8 @@
 	<string name="library_add_history">正在添加阅读历史</string>
 	<string name="library_add_history_success">添加阅读历史成功！</string>
 	<string name="library_add_history_fail">添加阅读历史失败！</string>
+	<string name="library_register_success">注册成功！</string>
+	<string name="library_register_fail">注册失败！</string>
   	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>
