@@ -178,6 +178,40 @@ public class DownloadChapterDBDao
 		return	entity;
 	}
 
+	//查找数据
+	public DownloadChapterEntity find( String url ) 
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select * from " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME + " where " + DatabaseConstants.DOWNLOAD_CHAPTER_URL + " = ?", new String[]{url});
+		if( null == cursor )
+		{
+			db.close();
+			return	null;
+		}
+		
+		DownloadChapterEntity entity = null;
+		while(cursor.moveToNext())
+		{
+			entity = new DownloadChapterEntity();
+			entity.recorcdId = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID));
+			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_INDEX));
+			entity.chapterStatus = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_STATUS));
+			entity.chapterName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_NAME));		
+			entity.chapterPath = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_PATH));
+			entity.chapterUrl = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_CHAPTER_URL));
+			
+		    break;
+		}
+		
+		if (!cursor.isClosed()) 
+		{
+			cursor.close();
+		}
+		db.close();
+		
+		return	entity;
+	}
+
 	//查找所有数据
 	public ArrayList<DownloadChapterEntity> findAll( int recorcdId ) 
 	{
@@ -227,7 +261,15 @@ public class DownloadChapterDBDao
 		db.execSQL("delete from " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME, null);
 		db.close();
 	}
-
+	
+	//更新状态
+	public void update( int status, int recorcdId ) 
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		db.execSQL("update " + DatabaseConstants.DOWNLOAD_CHAPTER_TABLE_NAME + " set "+ DatabaseConstants.DOWNLOAD_CHAPTER_STATUS + "=? where " + DatabaseConstants.DOWNLOAD_CHAPTER_RECORDID + " = ?", new String[]{status+"", recorcdId+""});
+		db.close();
+	}
+	
 	//关闭数据库
     public void closeDb() 
     {

@@ -377,7 +377,15 @@ public class DownloadResourceDBDao
 		db.execSQL("delete from " + DatabaseConstants.DOWNLOAD_RESOURCE_TABLE_NAME, null);
 		db.close();
 	}
-
+	
+	//更新状态
+	public void update( int status, int recorcdId ) 
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		db.execSQL("update " + DatabaseConstants.DOWNLOAD_RESOURCE_TABLE_NAME + " set "+ DatabaseConstants.DOWNLOAD_RESOURCE_STATUS + "=? where " + "_id" + " = ?", new String[]{status+"", recorcdId+""});
+		db.close();
+	}
+	
 	//关闭数据库
     public void closeDb() 
     {

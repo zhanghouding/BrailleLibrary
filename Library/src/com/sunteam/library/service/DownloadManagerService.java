@@ -1,6 +1,7 @@
 package com.sunteam.library.service;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +9,9 @@ import org.wlf.filedownloader.DownloadFileInfo;
 import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.listener.OnRetryableFileDownloadStatusListener;
 
+import com.sunteam.library.db.DownloadChapterDBDao;
+import com.sunteam.library.db.DownloadResourceDBDao;
+import com.sunteam.library.entity.DownloadChapterEntity;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.LogUtils;
 import com.sunteam.library.utils.PublicUtils;
@@ -88,6 +92,26 @@ public class DownloadManagerService extends Service implements OnRetryableFileDo
     {
     	// 正在下载，downloadSpeed为当前下载速度，单位KB/s，remainingTime为预估的剩余时间，单位秒
     	LogUtils.e( TAG, "eee onFileDownloadStatusDownloading");
+    	
+    	DownloadChapterDBDao dcDao = new DownloadChapterDBDao( this.getBaseContext() );
+    	DownloadChapterEntity entity = dcDao.find(downloadFileInfo.getUrl());	//根据url查找章节下载记录
+    	if( ( entity != null ) && ( entity.chapterStatus != LibraryConstant.DOWNLOAD_STATUS_GOING ) )
+    	{
+    		entity.chapterStatus = LibraryConstant.DOWNLOAD_STATUS_GOING;	//将状态设置为正在下载。
+    		dcDao.update(entity.chapterStatus, entity.recorcdId);			//更新数据库中保存的状态。
+    		dcDao.closeDb();
+    		
+    		DownloadResourceDBDao drDao = new DownloadResourceDBDao( this.getBaseContext() );
+    		drDao.update(entity.chapterStatus, entity.recorcdId);			//更新数据库中保存的状态。	
+    		drDao.closeDb();
+    	}
+    	else
+    	{
+    		dcDao.closeDb();
+    	}
+    	
+    	Intent intent = new Intent(LibraryConstant.ACTION_DOWNLOAD_STATUS);
+		sendBroadcast(intent);			//广播方式发送给客户端
     }
     
     @Override
@@ -102,6 +126,44 @@ public class DownloadManagerService extends Service implements OnRetryableFileDo
     {
     	// 下载完成（整个文件已经全部下载完成）
     	LogUtils.e( TAG, "ggg onFileDownloadStatusCompleted");
+    	
+    	DownloadChapterDBDao dcDao = new DownloadChapterDBDao( this.getBaseContext() );
+    	DownloadChapterEntity entity = dcDao.find(downloadFileInfo.getUrl());	//根据url查找章节下载记录
+    	if( ( entity != null ) && ( entity.chapterStatus != LibraryConstant.DOWNLOAD_STATUS_FINISH ) )
+    	{
+    		entity.chapterStatus = LibraryConstant.DOWNLOAD_STATUS_FINISH;	//将状态设置为下载完成。
+    		dcDao.update(entity.chapterStatus, entity.recorcdId);			//更新数据库中保存的状态。
+    		
+    		boolean isFinish = true;	//是否所有的章节都已经下载完成？
+    		ArrayList<DownloadChapterEntity> list = dcDao.findAll(entity.recorcdId);	//查找这本书所有章节状态。
+    		if( list != null )
+    		{
+    			for( int i = 0; i < list.size(); i++ )
+    			{
+    				if( list.get(i).chapterStatus != LibraryConstant.DOWNLOAD_STATUS_FINISH )
+    				{
+    					isFinish = false;
+    					break;
+    				}
+    			}
+    		}
+    		else
+    		{
+    			isFinish = false;
+    		}
+    		dcDao.closeDb();
+    		
+    		if( isFinish )
+    		{
+	    		DownloadResourceDBDao drDao = new DownloadResourceDBDao( this.getBaseContext() );
+	    		drDao.update(entity.chapterStatus, entity.recorcdId);			//更新数据库中保存的状态。	
+	    		drDao.closeDb();
+    		}
+    	}
+    	else
+    	{
+    		dcDao.closeDb();
+    	}
     	
     	String filename = downloadFileInfo.getFileName();
     	if( filename.contains(LibraryConstant.CACHE_FILE_SUFFIX) )	//电子书
@@ -122,6 +184,9 @@ public class DownloadManagerService extends Service implements OnRetryableFileDo
     			}
     		}
     	}	//因为电子书章节是作为文件下载的，下载下来的数据是json格式，需要从中取出有用的数据。
+    	
+    	Intent intent = new Intent(LibraryConstant.ACTION_DOWNLOAD_STATUS);
+		sendBroadcast(intent);			//广播方式发送给客户端
     	
     	/*
     	LogUtils.e( TAG, "wzp debug 000 getUrl = "+ downloadFileInfo.getUrl() );
