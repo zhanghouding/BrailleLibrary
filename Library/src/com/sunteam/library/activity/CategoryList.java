@@ -50,7 +50,7 @@ public class CategoryList extends MenuActivity implements ShowView/*, OnClickLis
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode || null == data) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) { // 在子菜单中回传的标志
 			return;
 		}
 

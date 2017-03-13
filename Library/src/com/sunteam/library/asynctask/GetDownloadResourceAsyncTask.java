@@ -3,10 +3,14 @@ package com.sunteam.library.asynctask;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.activity.DownloadedList;
+import com.sunteam.library.activity.DownloadingList;
 import com.sunteam.library.db.DownloadChapterDBDao;
 import com.sunteam.library.db.DownloadResourceDBDao;
 import com.sunteam.library.entity.DownloadChapterEntity;
@@ -23,17 +27,20 @@ import com.sunteam.library.utils.PublicUtils;
 public class GetDownloadResourceAsyncTask extends AsyncTask<Integer, Void, Void>
 {
 	private Context mContext;
+	private String mTitle;
+	private int type;
 	private ArrayList<DownloadResourceEntity> mDownloadResourceEntityList;
 	
 	public GetDownloadResourceAsyncTask(Context context, String title) 
 	{
 		mContext = context;
+		mTitle = title;
 	}
 
 	@Override
 	protected Void doInBackground(Integer... params) 
 	{
-		int type = params[0];
+		type = params[0];
 		String username = PublicUtils.getUserName(mContext);
 		
 		DownloadResourceDBDao dao = new DownloadResourceDBDao( mContext );
@@ -100,12 +107,25 @@ public class GetDownloadResourceAsyncTask extends AsyncTask<Integer, Void, Void>
 		
 		if(null != mDownloadResourceEntityList && mDownloadResourceEntityList.size() > 0)
 		{
-			//TODO : 请在这里组织数据并放到listview中显示。
+			startNextActivity();
 		}
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
 			TtsUtils.getInstance().speak(s);
 		}
+	}
+
+	private void startNextActivity() {
+		Intent intent = new Intent();
+		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mDownloadResourceEntityList); // 数据列表
+		if (0 == type) {
+			intent.setClass(mContext, DownloadingList.class);
+		} else {
+			intent.setClass(mContext, DownloadedList.class);
+
+		}
+		mContext.startActivity(intent);
 	}
 }

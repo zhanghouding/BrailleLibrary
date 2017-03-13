@@ -15,6 +15,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.iflytek.cloud.SpeechConstant;
@@ -504,4 +506,14 @@ public class PublicUtils
 		editor.putString( LibraryConstant.USER_PASSWORD, password );
 		editor.commit();
 	}
-}	
+
+	// 隐藏输入法
+	public static void hideMsgIputKeyboard(Activity activity) {
+		if (activity.getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+			if (activity.getCurrentFocus() != null) {
+				InputMethodManager inputKeyBoard = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+				inputKeyBoard.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			}
+		}
+	}
+}

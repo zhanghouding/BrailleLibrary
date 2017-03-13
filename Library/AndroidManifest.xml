@@ -229,7 +229,8 @@
         <activity
             android:name=".activity.SearchActivity"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+		    android:windowSoftInputMode="adjustUnspecified|stateVisible" >
         </activity>
         <activity
             android:name=".activity.VideoChapterList"

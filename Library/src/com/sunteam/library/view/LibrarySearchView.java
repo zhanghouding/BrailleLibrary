@@ -3,6 +3,7 @@ package com.sunteam.library.view;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.PowerManager;
@@ -192,23 +193,29 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_DPAD_CENTER:
 			case KeyEvent.KEYCODE_ENTER:
+				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				mAdapter.enter();
 				break;
 			case KeyEvent.KEYCODE_DPAD_UP:
+				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				mAdapter.up();
 				scrollView();
 				break;
 			case KeyEvent.KEYCODE_DPAD_DOWN:
+				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				mAdapter.down();
 				scrollView();
 				break;
 			case KeyEvent.KEYCODE_DPAD_LEFT:
+				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				scrollPgup();
 				break;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				scrollPgdn();
 				break;
 			case KeyEvent.KEYCODE_BACK:
+				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				ret = processKeyBack();
 				break;
 			default:
@@ -226,6 +233,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 				// 已经在按下事件中处理了
 				break;
 			case KeyEvent.KEYCODE_MENU: // 菜单键只能在抬起事件中处理，以便与长按菜单键区分开来
+				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				startSearch();
 				break;
 			default:

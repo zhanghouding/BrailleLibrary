@@ -116,8 +116,10 @@ public class CommonFunctionMenu extends MenuActivity {
 			new DelHistoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, he);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
+			// TODO 删除当前
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
+			// TODO 删除当前
 			break;
 		default:
 			return;
