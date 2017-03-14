@@ -26,10 +26,15 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	private String mTitle; // 菜单标题
 	private TextView mTvTitle;
 	private View mLine = null;
+	private TextView mTvCertificateNoHint;
 	private EditText mEtCertificateNo; // 证件号
+	private TextView mTvNameHint;
 	private EditText mEtName; // 姓名
+	private TextView mTvUserNameHint;
 	private EditText mEtUserName; // 用户名
+	private TextView mTvPasswdHint;
 	private EditText mEtPasswd; // 密码
+	private TextView mTvPasswdConfirmHint;
 	private EditText mEtPasswdConfirm; // 确认密码
 	// private Button mBtDetail; // 个人详细信息
 	// private EditText mEtPhone; // 联系电话
@@ -96,32 +101,32 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		mLine.setBackgroundColor(fontColor); // 设置分割线的背景色
 
 		// 证件号
-		TextView mTvHint = (TextView) findViewById(R.id.library_account_register_certificate_no_hint);
-		mTvHint.setTextColor(fontColor);
+		mTvCertificateNoHint = (TextView) findViewById(R.id.library_account_register_certificate_no_hint);
+		mTvCertificateNoHint.setTextColor(fontColor);
 		mEtCertificateNo = (EditText) findViewById(R.id.library_account_register_certificate_no_input);
 		mEtCertificateNo.setTextColor(fontColor);
 
 		// 姓名
-		mTvHint = (TextView) findViewById(R.id.library_account_register_name_hint);
-		mTvHint.setTextColor(fontColor);
+		mTvNameHint = (TextView) findViewById(R.id.library_account_register_name_hint);
+		mTvNameHint.setTextColor(fontColor);
 		mEtName = (EditText) findViewById(R.id.library_account_register_name_input);
 		mEtName.setTextColor(fontColor);
 
 		// 用户名
-		mTvHint = (TextView) findViewById(R.id.library_account_register_username_hint);
-		mTvHint.setTextColor(fontColor);
+		mTvUserNameHint = (TextView) findViewById(R.id.library_account_register_username_hint);
+		mTvUserNameHint.setTextColor(fontColor);
 		mEtUserName = (EditText) findViewById(R.id.library_account_register_username_input);
 		mEtUserName.setTextColor(fontColor);
 
 		// 密码
-		mTvHint = (TextView) findViewById(R.id.library_account_register_passwd_hint);
-		mTvHint.setTextColor(fontColor);
+		mTvPasswdHint = (TextView) findViewById(R.id.library_account_register_passwd_hint);
+		mTvPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_register_passwd_input);
 		mEtPasswd.setTextColor(fontColor);
 
 		// 确认密码
-		mTvHint = (TextView) findViewById(R.id.library_account_register_passwd_confirm_hint);
-		mTvHint.setTextColor(fontColor);
+		mTvPasswdConfirmHint = (TextView) findViewById(R.id.library_account_register_passwd_confirm_hint);
+		mTvPasswdConfirmHint.setTextColor(fontColor);
 		mEtPasswdConfirm = (EditText) findViewById(R.id.library_account_register_passwd_confirm_input);
 		mEtPasswdConfirm.setTextColor(fontColor);
 
@@ -275,20 +280,50 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		int id = v.getId();
 		switch (id) {
 		case R.id.library_account_register_certificate_no_input:
+			s = ((EditText) v).getText().toString();
+			if (s.isEmpty()) {
+				s = ((EditText) v).getHint().toString();
+			} else {
+				s = mTvCertificateNoHint.getText().toString() + "," + s;
+			}
+			break;
 		case R.id.library_account_register_name_input:
+			s = ((EditText) v).getText().toString();
+			if (s.isEmpty()) {
+				s = ((EditText) v).getHint().toString();
+			} else {
+				s = mTvNameHint.getText().toString() + "," + s;
+			}
+			break;
 		case R.id.library_account_register_username_input:
+			s = ((EditText) v).getText().toString();
+			if (s.isEmpty()) {
+				s = ((EditText) v).getHint().toString();
+			} else {
+				s = mTvUserNameHint.getText().toString() + "," + s;
+			}
+			break;
 		case R.id.library_account_register_passwd_input:
+			s = ((EditText) v).getText().toString();
+			if (s.isEmpty()) {
+				s = ((EditText) v).getHint().toString();
+			} else {
+				s = mTvPasswdHint.getText().toString() + "," + s;
+			}
+			break;
 		case R.id.library_account_register_passwd_confirm_input:
+			s = ((EditText) v).getText().toString();
+			if (s.isEmpty()) {
+				s = ((EditText) v).getHint().toString();
+			} else {
+				s = mTvPasswdHint.getText().toString() + "," + s;
+			}
+			break;
 			// case R.id.library_account_register_phone_input:
 			// case R.id.library_account_register_email_input:
 			// case R.id.library_account_register_company_input:
 			// case R.id.library_account_register_zip_input:
 			// case R.id.library_account_register_addr_input:
-			s = ((EditText) v).getText().toString();
-			if (s.isEmpty()) {
-				s = ((EditText) v).getHint().toString();
-			}
-			break;
 		// case R.id.library_account_register_person_detail:
 		case R.id.library_account_register_confirm:
 		case R.id.library_account_register_cancel:

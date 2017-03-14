@@ -20,19 +20,24 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.RegisterAsyncTask;
+import com.sunteam.library.asynctask.UserUpdatePasswordAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
 public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
 	private TextView mTvTitle;
 	private View mLine = null;
+	private TextView mTvUserNameHint; // 用户名
 	private TextView mTvUserName; // 用户名
+	private TextView mEtPasswdHint; // 密码
 	private EditText mEtPasswd; // 密码
+	private TextView mEtPasswdConfirmHint; // 确认密码
 	private EditText mEtPasswdConfirm; // 确认密码
 	private Button mBtConfirm; // 确定按钮
 	private Button mBtCancel; // 退出按钮
 
 	private int fontColor, backgroundColor, hightColor;
+	private String userName = ""; // 用户名
 	private String realName = ""; // 真实姓名
 	private String certificateType; // 证件类型
 	private String cardNo = ""; // 证件号
@@ -62,7 +67,8 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 
 	private void getIntentPara() {
 		Intent intent = getIntent();
-		realName = intent.getStringExtra("name");
+		userName = intent.getStringExtra("user_name");
+		realName = intent.getStringExtra("real_name");
 		certificateType = intent.getStringExtra("type");
 		cardNo = intent.getStringExtra("card_no");
 	}
@@ -84,20 +90,21 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		mLine.setBackgroundColor(fontColor); // 设置分割线的背景色
 
 		// 用户名
-		TextView mTvHint = (TextView) findViewById(R.id.library_account_passwd_setting_username_hint);
-		mTvHint.setTextColor(fontColor);
+		mTvUserNameHint = (TextView) findViewById(R.id.library_account_passwd_setting_username_hint);
+		mTvUserNameHint.setTextColor(fontColor);
 		mTvUserName = (TextView) findViewById(R.id.library_account_passwd_setting_username_input);
 		mTvUserName.setTextColor(fontColor);
+		mTvUserName.setText(userName);
 
 		// 密码
-		mTvHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_hint);
-		mTvHint.setTextColor(fontColor);
+		mEtPasswdHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_hint);
+		mEtPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_input);
 		mEtPasswd.setTextColor(fontColor);
 
 		// 确认密码
-		mTvHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_confirm_hint);
-		mTvHint.setTextColor(fontColor);
+		mEtPasswdConfirmHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_confirm_hint);
+		mEtPasswdConfirmHint.setTextColor(fontColor);
 		mEtPasswdConfirm = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_confirm_input);
 		mEtPasswdConfirm.setTextColor(fontColor);
 
@@ -123,13 +130,13 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		mBtConfirm.setOnFocusChangeListener(this);
 		mBtCancel.setOnFocusChangeListener(this);
 
-		// 设置测试账号
+		// TODO 设置测试账号
 		mEtPasswd.setText("123");
-		mEtPasswd.setText("mEtPasswd");
+		mEtPasswdConfirm.setText("123");
 
 		mEtPasswd.requestFocus();
 
-		speak(mTitle + "," + getFocusString());
+		speak(mTitle + "," + mTvUserNameHint.getText().toString() + userName + "," + getFocusString());
 	}
 
 	@Override
@@ -168,21 +175,12 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 
 	// 确定
 	public void onClickForConfirm(View v) {
-		// TODO UpdatePasswordAsyncTask
 		String userName = mTvUserName.getText().toString();
 		String passwd = mEtPasswd.getText().toString();
 		if (checkInfoValid()) {
 			TtsUtils.getInstance().speak(((Button) v).getText().toString());
-//			new UpdatePasswordAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "" + certificateType, userName, realName, cardNo, passwd);
+			new UserUpdatePasswordAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "" + certificateType, userName, realName, cardNo, passwd);
 		}
-		
-		// 验证成功后重新设置密码
-//		Intent intent = new Intent();
-//		intent.setClass(this, AccountPasswdSetting.class);
-//		startActivityForResult(intent, resquestCode); // 密码找回
-//		finish(); // 销毁当前Activity
-//		TtsUtils.getInstance().speak(((Button) v).getText().toString());
-//		finish();
 	}
 
 	// 退出
@@ -199,10 +197,19 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		int id = v.getId();
 		switch(id){
 		case R.id.library_account_passwd_setting_passwd_input:
+			s = ((EditText)v).getText().toString();
+			if(s.isEmpty()){
+				s = ((EditText)v).getHint().toString();
+			} else {
+				s = mEtPasswdHint.getText().toString() + "," + s;
+			}
+			break;
 		case R.id.library_account_passwd_setting_passwd_confirm_input:
 			s = ((EditText)v).getText().toString();
 			if(s.isEmpty()){
 				s = ((EditText)v).getHint().toString();
+			} else {
+				s = mEtPasswdConfirmHint.getText().toString() + "," + s;
 			}
 			break;
 		case R.id.library_account_passwd_setting_confirm:
@@ -275,7 +282,7 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		}
 
 		// Button需要设置背景和焦点色
-		if (v.getId() == mBtConfirm.getId() || v.getId() == mBtCancel.getId()) {
+		if (v.getId() == mTvUserName.getId() || v.getId() == mBtConfirm.getId() || v.getId() == mBtCancel.getId()) {
 			if (hasFocus) {
 				v.setBackgroundColor(hightColor);
 			} else {

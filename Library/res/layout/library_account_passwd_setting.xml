@@ -94,9 +94,9 @@
                 android:hint="@string/library_account_login_passwd_hint"
                 android:includeFontPadding="false"
                 android:nextFocusDown="@+id/library_account_passwd_setting_passwd_confirm_input"
-                android:nextFocusLeft="@+id/library_account_passwd_setting_username_input"
+                android:nextFocusLeft="@+id/library_account_passwd_setting_cancel"
                 android:nextFocusRight="@+id/library_account_passwd_setting_passwd_confirm_input"
-                android:nextFocusUp="@+id/library_account_passwd_setting_username_input"
+                android:nextFocusUp="@+id/library_account_passwd_setting_cancel"
                 android:singleLine="true"
                 android:textSize="@dimen/text_big_size" />
         </LinearLayout>

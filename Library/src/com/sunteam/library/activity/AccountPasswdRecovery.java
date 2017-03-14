@@ -22,6 +22,7 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.RegisterAsyncTask;
+import com.sunteam.library.asynctask.UserGetPasswordAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
 public class AccountPasswdRecovery extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
@@ -29,13 +30,15 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 	private int resquestCode; // 启动当前Activity时使用的resquestCode值
 	private TextView mTvTitle;
 	private View mLine = null;
+	private TextView mTvCertificateNoHint; // 用户名
 	private EditText mEtCertificateNo; // 用户名编辑控件
+	private TextView mTvNameHint; // 姓名
 	private EditText mEtName; // 姓名编辑控件
 	private Button mBtConfirm; // 密码找回分两步: 先输入证件号和姓名，然后再设置新密码
 	private Button mBtCancel; // 退出密码找回界面
 	
 	private int fontColor, backgroundColor, hightColor;
-	private int certificateType = 0; // 0默认为读者证件号;1二代残疾人证件号
+	private int certificateType = 1; // 1默认为读者证件号;2二代残疾人证件号
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,13 +88,13 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		mLine.setBackgroundColor(fontColor); // 设置分割线的背景色
 
 		// 证件号
-		TextView mTvUsernameHint = (TextView) findViewById(R.id.library_account_passwd_recovery_certificate_no_hint);
-		mTvUsernameHint.setTextColor(fontColor);
+		mTvCertificateNoHint = (TextView) findViewById(R.id.library_account_passwd_recovery_certificate_no_hint);
+		mTvCertificateNoHint.setTextColor(fontColor);
 		mEtCertificateNo = (EditText) findViewById(R.id.library_account_passwd_recovery_certificate_no_input);
 		mEtCertificateNo.setTextColor(fontColor);
 
 		// 姓名
-		TextView mTvNameHint = (TextView) findViewById(R.id.library_account_passwd_recovery_name_hint);
+		mTvNameHint = (TextView) findViewById(R.id.library_account_passwd_recovery_name_hint);
 		mTvNameHint.setTextColor(fontColor);
 		mEtName = (EditText) findViewById(R.id.library_account_passwd_recovery_name_input);
 		mEtName.setTextColor(fontColor);
@@ -118,7 +121,8 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		mBtConfirm.setOnFocusChangeListener(this);
 		mBtCancel.setOnFocusChangeListener(this);
 
-		// 设置测试账号
+		// TODO 设置测试账号
+		certificateType = 2; // 二代残疾人证号
 		mEtCertificateNo.setText("130182198609215753120");
 		mEtName.setText("测试");
 		
@@ -166,22 +170,12 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 
 	// 下一步
 	public void onClickForConfirm(View v) {
-		// TODO GetPasswordAsyncTask
 		String cardNo = mEtCertificateNo.getText().toString();
-		String name = mEtName.getText().toString();
+		String realName = mEtName.getText().toString();
 		if (checkInfoValid()) {
 			TtsUtils.getInstance().speak(((Button) v).getText().toString());
-//			new GetPasswordAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "" + certificateType, cardNo, name);
+			new UserGetPasswordAsyncTask(this, resquestCode).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "" + certificateType, realName, cardNo);
 		}
-		
-		// 验证成功后重新设置密码
-//		Intent intent = new Intent();
-//		intent.putExtra("type", certificateType);
-//		intent.putExtra("name", name);
-//		intent.putExtra("card_no", cardNo);
-//		intent.setClass(this, AccountPasswdSetting.class);
-//		startActivityForResult(intent, resquestCode); // 密码找回
-//		finish(); // 销毁当前Activity
 	}
 
 	public void onClickForCancel(View v) {
@@ -194,11 +188,15 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 			s = mEtCertificateNo.getText().toString();
 			if (s.isEmpty()) {
 				s = mEtCertificateNo.getHint().toString();
+			} else {
+				s = mTvCertificateNoHint.getText().toString() + "," + s;
 			}
 		} else if (mEtName.isFocused()) {
 			s = mEtName.getText().toString();
 			if (s.isEmpty()) {
 				s = mEtName.getHint().toString();
+			} else {
+				s = mTvNameHint.getText().toString() + "," + s;
 			}
 		} else if (mBtConfirm.isFocused()) {
 			s = mBtConfirm.getText().toString();

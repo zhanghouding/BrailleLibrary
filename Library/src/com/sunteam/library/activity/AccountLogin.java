@@ -30,7 +30,9 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 	private String mTitle; // 菜单标题
 	private TextView mTvTitle;
 	private View mLine = null;
+	private TextView mTvUserNameHint; // 用户名
 	private EditText mEtUserName; // 用户名编辑控件
+	private TextView mTvPasswdHint; // 密码
 	private EditText mEtPasswd; // 密码编辑控件
 	private Button mBtConfirm; // 登录按钮
 	private Button mBtCancel; // 取消按钮
@@ -69,13 +71,13 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		mLine.setBackgroundColor(fontColor); // 设置分割线的背景色
 
 		// 用户名
-		TextView mTvUsernameHint = (TextView) findViewById(R.id.library_account_login_username_hint);
-		mTvUsernameHint.setTextColor(fontColor);
+		mTvUserNameHint = (TextView) findViewById(R.id.library_account_login_username_hint);
+		mTvUserNameHint.setTextColor(fontColor);
 		mEtUserName = (EditText) findViewById(R.id.library_account_login_username_input);
 		mEtUserName.setTextColor(fontColor);
 
 		// 密码
-		TextView mTvPasswdHint = (TextView) findViewById(R.id.library_account_login_passwd_hint);
+		mTvPasswdHint = (TextView) findViewById(R.id.library_account_login_passwd_hint);
 		mTvPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_login_passwd_input);
 		mEtPasswd.setTextColor(fontColor);
@@ -162,11 +164,15 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 			s = mEtUserName.getText().toString();
 			if (s.isEmpty()) {
 				s = mEtUserName.getHint().toString();
+			} else {
+				s = mTvUserNameHint.getText().toString() + "," + s;
 			}
 		} else if (mEtPasswd.isFocused()) {
 			s = mEtPasswd.getText().toString();
 			if (s.isEmpty()) {
 				s = mEtPasswd.getHint().toString();
+			} else {
+				s = mTvPasswdHint.getText().toString() + "," + s;
 			}
 		} else if (mBtConfirm.isFocused()) {
 			s = mBtConfirm.getText().toString();

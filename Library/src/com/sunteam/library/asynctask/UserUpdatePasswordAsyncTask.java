@@ -68,7 +68,7 @@ public class UserUpdatePasswordAsyncTask extends AsyncTask<String, Void, Integer
 					
 					@Override
 					public void onComplete() {
-						
+						((Activity) mContext).finish();
 					}
 				});
 				break;
@@ -87,7 +87,7 @@ public class UserUpdatePasswordAsyncTask extends AsyncTask<String, Void, Integer
 					
 					@Override
 					public void onComplete() {
-						
+						((Activity) mContext).finish();
 					}
 				});
 				break;

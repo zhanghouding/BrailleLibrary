@@ -65,7 +65,7 @@
                 android:nextFocusLeft="@+id/library_account_passwd_recovery_cancel"
                 android:nextFocusRight="@+id/library_account_passwd_recovery_name_input"
                 android:nextFocusUp="@+id/library_account_passwd_recovery_cancel"
-                android:singleLine="true"
+                android:singleLine="false"
                 android:textSize="@dimen/text_big_size" />
         </LinearLayout>
 
@@ -98,9 +98,9 @@
                 android:gravity="left|center_vertical"
                 android:hint="@string/library_account_name_hint"
                 android:includeFontPadding="false"
-                android:nextFocusDown="@+id/library_account_passwd_recovery_username_input"
+                android:nextFocusDown="@+id/library_account_passwd_recovery_confirm"
                 android:nextFocusLeft="@+id/library_account_passwd_recovery_certificate_no_input"
-                android:nextFocusRight="@+id/library_account_passwd_recovery_username_input"
+                android:nextFocusRight="@+id/library_account_passwd_recovery_confirm"
                 android:nextFocusUp="@+id/library_account_passwd_recovery_certificate_no_input"
                 android:singleLine="true"
                 android:textSize="@dimen/text_big_size" />
