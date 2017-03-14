@@ -180,7 +180,12 @@ public class HttpDao
 		requestParams.put("AuthenticType", authenticType+"");
 		requestParams.put("UserInfo", encodeJson);
 		
-		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new UserGetPasswordParseResponse() );
+		if( HttpRequest.get(LibraryConstant.URL_INTERFACE_USER, requestParams, new UserGetPasswordParseResponse() ) == null )
+		{
+			return	LibraryConstant.RESULT_FAIL;	
+		}
+		
+		return	LibraryConstant.RESULT_SUCCESS;
 	}
 	
 	/**
