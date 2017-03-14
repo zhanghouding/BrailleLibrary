@@ -19,8 +19,10 @@ import com.sunteam.library.asynctask.DelCollectResourceAsyncTask;
 import com.sunteam.library.asynctask.DelHistoryAsyncTask;
 import com.sunteam.library.entity.CollectCategoryEntity;
 import com.sunteam.library.entity.CollectResourceEntity;
+import com.sunteam.library.entity.DownloadResourceEntity;
 import com.sunteam.library.entity.HistoryEntity;
 import com.sunteam.library.utils.LibraryConstant;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 公用的功能菜单：删除、清空; 我收藏的资源、我收藏的分类、我的阅读历史、已下载、正在下载这5个界面下的功能菜单统一处理
@@ -102,7 +104,7 @@ public class CommonFunctionMenu extends MenuActivity {
 
 	// 删除当前记录
 	private void deleteRecord() {
-		switch(mType){
+		switch (mType) {
 		case LibraryConstant.MYLIBRARY_FAVARITE_CATEGORY:
 			CollectCategoryEntity ce = (CollectCategoryEntity) mEntity;
 			new DelCollectCategoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ce);
@@ -116,10 +118,11 @@ public class CommonFunctionMenu extends MenuActivity {
 			new DelHistoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, he);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
-			// TODO 删除当前
-			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
-			// TODO 删除当前
+			PublicUtils.showToast(this, getResources().getString(R.string.library_del_downloadtast));
+			PublicUtils.deleteDownloadTask(this, (DownloadResourceEntity) mEntity);
+			PublicUtils.showToast(this, getResources().getString(R.string.library_del_success));
+			mHandler.sendEmptyMessage(0);
 			break;
 		default:
 			return;
@@ -128,7 +131,7 @@ public class CommonFunctionMenu extends MenuActivity {
 
 	// 删除所有记录
 	private void deleteAllRecords() {
-		switch(mType){
+		switch (mType) {
 		case LibraryConstant.MYLIBRARY_FAVARITE_CATEGORY:
 			break;
 		case LibraryConstant.MYLIBRARY_FAVARITE_RESOURCE:
@@ -136,10 +139,16 @@ public class CommonFunctionMenu extends MenuActivity {
 		case LibraryConstant.MYLIBRARY_READING_HISTORY:
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
-			// TODO
+			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtast));
+			PublicUtils.clearDownloadTask(this, false);
+			PublicUtils.showToast(this, getResources().getString(R.string.library_dialog_clear_su));
+			mHandler.sendEmptyMessage(0);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
-			// TODO
+			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtast));
+			PublicUtils.clearDownloadTask(this, true);
+			PublicUtils.showToast(this, getResources().getString(R.string.library_dialog_clear_su));
+			mHandler.sendEmptyMessage(0);
 			break;
 		default:
 			return;

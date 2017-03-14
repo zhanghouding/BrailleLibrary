@@ -22,13 +22,14 @@ import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
 /**
- * @Destryption 正在下载列表
+ * @Destryption 正在下载和已下载列表公用界面；
  * @Author Jerry
- * @Date 2017-2-21 上午10:23:06
+ * @Date 2017-3-14 下午3:43:46
  * @Note
  */
-public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
+public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 	private ArrayList<DownloadResourceEntity> mDownloadResourceEntityList;
+	private int type = 0; // 0下载任务列表；1已下载列表
 	private DownloadReceiver mDownloadReceiver;
 
 	@Override
@@ -60,7 +61,6 @@ public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
 		if (Activity.RESULT_OK != resultCode) {
 			return;
 		}
-
 	}
 
 	@Override
@@ -75,7 +75,8 @@ public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
 		String[] list = getResources().getStringArray(R.array.library_favorite_function_menu_list);
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
-		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.MYLIBRARY_DOWNLOADING); // 数据类型
+		int mType = LibraryConstant.MYLIBRARY_DOWNLOADING + type;
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, mType); // 数据类型
 		intent.setClass(this, CommonFunctionMenu.class);
 		startActivityForResult(intent, selectItem);
 	}
@@ -84,6 +85,7 @@ public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		type = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
 		mDownloadResourceEntityList = (ArrayList<DownloadResourceEntity>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
 		mMenuList = getListFromDownloadResourceEntity(mDownloadResourceEntityList);
 	}
@@ -110,6 +112,7 @@ public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
 		return list;
 	}
 
+	// 必须在主线程中执行
 	private void updateMenuList() {
 		selectItem = getSelectItem();
 		mMenuList = getListFromDownloadResourceEntity(mDownloadResourceEntityList);
@@ -127,38 +130,43 @@ public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
 		mMenuView.setSelectItem(selectItem, true);
 	}
 
-	private void getDownloadResourceEntity() {
-		String username = PublicUtils.getUserName(DownloadingList.this);
-		DownloadResourceDBDao dao = new DownloadResourceDBDao(DownloadingList.this);
-		mDownloadResourceEntityList = dao.findAllUnCompleted(username);
+	// 在子线程中执行
+	private void getDownloadResourceEntity(Context mContext) {
+		String username = PublicUtils.getUserName(DownloadList.this);
+		DownloadResourceDBDao dao = new DownloadResourceDBDao(mContext);
+		if (0 == type) {
+			mDownloadResourceEntityList = dao.findAllUnCompleted(username);
+		} else {
+			mDownloadResourceEntityList = dao.findAllCompleted(username);
+		}
 		dao.closeDb();
 
 		// 无下载任务
 		if (null == mDownloadResourceEntityList) {
-			return;
-		}
-
-		DownloadChapterDBDao dcDao = new DownloadChapterDBDao(DownloadingList.this);
-		int size = mDownloadResourceEntityList.size();
-		for (int i = 0; i < size; i++) {
-			// 如果当前这本书正在下载
-			if (LibraryConstant.DOWNLOAD_STATUS_GOING == mDownloadResourceEntityList.get(i).status) {
-				// 得到所有的章节信息
-				ArrayList<DownloadChapterEntity> list = dcDao.findAll(mDownloadResourceEntityList.get(i)._id);
-				if (list != null) {
-					int count = list.size();
-					for (int j = 0; j < count; j++) {
-						// 正在下载
-						if (list.get(j).chapterStatus == LibraryConstant.DOWNLOAD_STATUS_GOING) {
-							// 保存当前正在下载的章节序号
-							mDownloadResourceEntityList.get(i).curDownloadChapterIndex = j;
-							break;
+			mDownloadResourceEntityList = new ArrayList<DownloadResourceEntity>();
+		} else if (0 == type) {
+			DownloadChapterDBDao dcDao = new DownloadChapterDBDao(mContext);
+			int size = mDownloadResourceEntityList.size();
+			for (int i = 0; i < size; i++) {
+				// 如果当前这本书正在下载
+				if (LibraryConstant.DOWNLOAD_STATUS_GOING == mDownloadResourceEntityList.get(i).status) {
+					// 得到所有的章节信息
+					ArrayList<DownloadChapterEntity> list = dcDao.findAll(mDownloadResourceEntityList.get(i)._id);
+					if (list != null) {
+						int count = list.size();
+						for (int j = 0; j < count; j++) {
+							// 正在下载
+							if (list.get(j).chapterStatus == LibraryConstant.DOWNLOAD_STATUS_GOING) {
+								// 保存当前正在下载的章节序号
+								mDownloadResourceEntityList.get(i).curDownloadChapterIndex = j;
+								break;
+							}
 						}
 					}
 				}
 			}
+			dcDao.closeDb();
 		}
-		dcDao.closeDb();
 	}
 
 	// 在子线程中更新数据
@@ -167,7 +175,7 @@ public class DownloadingList extends MenuActivity implements OnMenuKeyListener {
 
 			@Override
 			public void run() {
-				getDownloadResourceEntity();
+				getDownloadResourceEntity(DownloadList.this);
 
 				// 在主线程中刷新UI
 				runOnUiThread(new Runnable() {

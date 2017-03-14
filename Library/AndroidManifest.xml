@@ -117,12 +117,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
-            android:name=".activity.DownloadedList"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
-        </activity>
-        <activity
-            android:name=".activity.DownloadingList"
+            android:name=".activity.DownloadList"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>

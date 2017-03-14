@@ -81,6 +81,8 @@
 	<string name="library_get_password_fail">密码找回失败！</string>
   	<string name="library_update_password_success">密码更新成功！</string>
 	<string name="library_update_password_fail">密码更新失败！</string>
+	<string name="library_del_downloadtast">正在删除下载任务</string>
+	<string name="library_clear_downloadtast">正在清空下载任务</string>
 	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>
