@@ -4,6 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.wlf.filedownloader.DownloadFileInfo;
+import org.wlf.filedownloader.FileDownloader;
+import org.wlf.filedownloader.listener.OnDeleteDownloadFilesListener;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -19,12 +25,15 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.iflytek.cloud.SpeechConstant;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.dict.utils.DBUtil;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.WordSearchResultActivity;
+import com.sunteam.library.db.DownloadChapterDBDao;
+import com.sunteam.library.db.DownloadResourceDBDao;
+import com.sunteam.library.entity.DownloadChapterEntity;
+import com.sunteam.library.entity.DownloadResourceEntity;
 
 /**
  * 可重用的方法工具类。
@@ -514,6 +523,174 @@ public class PublicUtils
 				InputMethodManager inputKeyBoard = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 				inputKeyBoard.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			}
+		}
+	}
+	
+	//删除下载任务
+	public static void deleteDownloadTask( final Context context, final DownloadResourceEntity entity )
+	{
+		DownloadChapterDBDao dcDao = new DownloadChapterDBDao( context );
+		ArrayList<DownloadChapterEntity> list = dcDao.findAll(entity._id);	//得到所有的章节信息
+		dcDao.closeDb();
+		
+		if( list != null )
+		{
+			ArrayList<String> urls = new ArrayList<String>();
+			int size = list.size();
+			for( int i = 0; i < size; i++ )
+			{
+				urls.add(list.get(i).chapterUrl);
+			}
+			
+			if( urls.size() > 0 )
+			{
+				//删除所有的章节任务，不论下载状态
+				FileDownloader.delete(urls, false, new OnDeleteDownloadFilesListener() {
+
+					@Override
+					public void onDeleteDownloadFilesCompleted( List<DownloadFileInfo> arg0, List<DownloadFileInfo> arg1) 
+					{
+						// TODO Auto-generated method stub
+						DownloadChapterDBDao dcDao = new DownloadChapterDBDao( context );
+						dcDao.deleteAll(entity._id);
+						dcDao.closeDb();
+						
+						DownloadResourceDBDao drDao = new DownloadResourceDBDao( context );
+						drDao.delete(entity);
+						drDao.closeDb();
+					}
+
+					@Override
+					public void onDeleteDownloadFilesPrepared( List<DownloadFileInfo> arg0) 
+					{
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void onDeletingDownloadFiles( List<DownloadFileInfo> arg0, List<DownloadFileInfo> arg1, List<DownloadFileInfo> arg2, DownloadFileInfo arg3) 
+					{
+						// TODO Auto-generated method stub
+						
+					}
+				});
+			}
+			else
+			{
+				DownloadResourceDBDao drDao = new DownloadResourceDBDao( context );
+				drDao.delete(entity);
+				drDao.closeDb();
+			}
+		}
+		else
+		{
+			DownloadResourceDBDao drDao = new DownloadResourceDBDao( context );
+			drDao.delete(entity);
+			drDao.closeDb();
+		}
+	}
+	
+	//清空下载任务 
+	public static void clearDownloadTask( final Context context, final boolean isFinished )
+	{
+		final String userName = PublicUtils.getUserName(context);
+		DownloadResourceDBDao drDao = new DownloadResourceDBDao( context );
+		ArrayList<DownloadResourceEntity> allResourceList = null;
+		
+		if( isFinished )	//删除已完成任务
+		{
+			allResourceList = drDao.findAllCompleted(userName);
+		}
+		else				//删除未完成任务
+		{
+			allResourceList = drDao.findAllUnCompleted(userName);
+		}	//得到所有的资源信息
+		
+		drDao.closeDb();
+		
+		if( ( null == allResourceList ) || ( 0 == allResourceList.size() ) )
+		{
+			return;
+		}
+		
+		DownloadChapterDBDao dcDao = new DownloadChapterDBDao( context );		
+		final ArrayList<DownloadChapterEntity> allChapterList = new ArrayList<DownloadChapterEntity>();	//所有章节信息
+		
+		int size = allResourceList.size();
+		for( int i = 0; i < size; i++ )
+		{
+			ArrayList<DownloadChapterEntity> chapterList = dcDao.findAll(allResourceList.get(i)._id);	//得到所有的章节信息
+			if( ( chapterList != null ) && ( chapterList.size() > 0 ) )
+			{
+				allChapterList.addAll(chapterList);
+			}
+		}
+		
+		dcDao.closeDb();
+				
+		ArrayList<String> urls = new ArrayList<String>();
+		size = allChapterList.size();
+		for( int i = 0; i < size; i++ )
+		{
+			urls.add(allChapterList.get(i).chapterUrl);
+		}
+			
+		if( urls.size() > 0 )
+		{
+			//删除所有的章节任务，不论下载状态
+			FileDownloader.delete(urls, false, new OnDeleteDownloadFilesListener() {
+
+				@Override
+				public void onDeleteDownloadFilesCompleted( List<DownloadFileInfo> arg0, List<DownloadFileInfo> arg1) 
+				{
+					// TODO Auto-generated method stub
+					DownloadChapterDBDao dcDao = new DownloadChapterDBDao( context );
+					int size = allChapterList.size();
+					for( int i = 0; i < size; i++ )
+					{
+						dcDao.deleteAll(allChapterList.get(i).recorcdId);
+					}
+					dcDao.closeDb();
+						
+					DownloadResourceDBDao drDao = new DownloadResourceDBDao( context );
+					if( isFinished )	//删除已完成任务
+					{
+						drDao.deleteAllCompleted(userName);
+					}
+					else				//删除未完成任务
+					{
+						drDao.deleteAllUnCompleted(userName);
+					}	//得到所有的资源信息
+					drDao.closeDb();
+				}
+
+				@Override
+				public void onDeleteDownloadFilesPrepared( List<DownloadFileInfo> arg0) 
+				{
+					// TODO Auto-generated method stub
+						
+				}
+
+				@Override
+				public void onDeletingDownloadFiles( List<DownloadFileInfo> arg0, List<DownloadFileInfo> arg1, List<DownloadFileInfo> arg2, DownloadFileInfo arg3) 
+				{
+					// TODO Auto-generated method stub
+						
+				}
+			});
+		}
+		else
+		{
+			drDao = new DownloadResourceDBDao( context );
+			if( isFinished )	//删除已完成任务
+			{
+				drDao.deleteAllCompleted(userName);
+			}
+			else				//删除未完成任务
+			{
+				drDao.deleteAllUnCompleted(userName);
+			}	//得到所有的资源信息
+			drDao.closeDb();
 		}
 	}
 }
