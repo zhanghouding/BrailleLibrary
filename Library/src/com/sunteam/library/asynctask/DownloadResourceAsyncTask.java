@@ -4,17 +4,13 @@ import java.util.ArrayList;
 
 import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
-import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener.DetectBigUrlFileFailReason;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.sunteam.common.utils.ConfirmDialog;
-import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
-import com.sunteam.library.db.CollectResourceDBDao;
 import com.sunteam.library.db.DownloadChapterDBDao;
 import com.sunteam.library.db.DownloadResourceDBDao;
 import com.sunteam.library.entity.AudioChapterInfoEntity;
@@ -22,7 +18,6 @@ import com.sunteam.library.entity.DownloadChapterEntity;
 import com.sunteam.library.entity.DownloadResourceEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;
-import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
@@ -202,11 +197,8 @@ public class DownloadResourceAsyncTask extends AsyncTask<DownloadResourceEntity,
 			@Override
 			public void onComplete() 
 			{
-				// TODO Auto-generated method stub
-				{
-					Activity activity = (Activity)mContext;
-					activity.finish();
-				}
+				Activity activity = (Activity)mContext;
+				activity.finish();
 			}
 		});
 	}

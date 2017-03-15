@@ -71,10 +71,8 @@ public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 	@Override
 	public void onMenuKeyCompleted(int selectItem, String menuItem) {
 		Intent intent = new Intent();
-		String title = getResources().getString(R.string.common_functionmenu); // 功能菜单
-		String[] list = getResources().getStringArray(R.array.library_favorite_function_menu_list);
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mDownloadResourceEntityList); // 菜单列表
+		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem); // 当前菜单项
 		int mType = LibraryConstant.MYLIBRARY_DOWNLOADING + type;
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, mType); // 数据类型
 		intent.setClass(this, CommonFunctionMenu.class);

@@ -140,7 +140,7 @@ public class ResourceListForRecommend extends MenuActivity implements OnMenuKeyL
 		// TODO 可以只收藏当前资源，暂时不提供菜单功能
 	}
 
-	@Override
+	@SuppressLint("InflateParams") @Override
 	public View getView(Context context, final int position, View convertView, ViewGroup parent) {
 		ViewHolder vh = null;
 

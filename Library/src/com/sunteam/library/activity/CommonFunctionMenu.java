@@ -1,5 +1,7 @@
 package com.sunteam.library.activity;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -11,9 +13,13 @@ import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.ClearCollectCategoryAsyncTask;
+import com.sunteam.library.asynctask.ClearCollectResourceAsyncTask;
+import com.sunteam.library.asynctask.ClearHistoryAsyncTask;
 import com.sunteam.library.asynctask.DelCollectCategoryAsyncTask;
 import com.sunteam.library.asynctask.DelCollectResourceAsyncTask;
 import com.sunteam.library.asynctask.DelHistoryAsyncTask;
@@ -31,8 +37,9 @@ import com.sunteam.library.utils.PublicUtils;
  * @Note
  */
 public class CommonFunctionMenu extends MenuActivity {
-	private Object mEntity;
 	private int mType; // 0 我收藏的资源 1 我收藏的分类 2 我的阅读历史 3 已下载 4 正在下载
+	private ArrayList<Object> mList;
+	private int index; // 要删除的项目序号
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -55,10 +62,15 @@ public class CommonFunctionMenu extends MenuActivity {
 		showConfirmDialogue(this, id, selectItem);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initView() {
+		mTitle = getResources().getString(R.string.common_functionmenu); // 功能菜单
+		String[] list = getResources().getStringArray(R.array.library_common_function_menu_list);
+		mMenuList = ArrayUtils.strArray2List(list);
 		Intent intent = getIntent();
-		mEntity = intent.getSerializableExtra("entity");
 		mType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
+		mList = (ArrayList<Object>) intent.getSerializableExtra(MenuConstant.INTENT_KEY_LIST);
+		index = intent.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
 	}
 
 	@SuppressLint("HandlerLeak")
@@ -106,21 +118,21 @@ public class CommonFunctionMenu extends MenuActivity {
 	private void deleteRecord() {
 		switch (mType) {
 		case LibraryConstant.MYLIBRARY_FAVARITE_CATEGORY:
-			CollectCategoryEntity ce = (CollectCategoryEntity) mEntity;
+			CollectCategoryEntity ce = (CollectCategoryEntity) mList.get(index);
 			new DelCollectCategoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ce);
 			break;
 		case LibraryConstant.MYLIBRARY_FAVARITE_RESOURCE:
-			CollectResourceEntity re = (CollectResourceEntity) mEntity;
+			CollectResourceEntity re = (CollectResourceEntity) mList.get(index);
 			new DelCollectResourceAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, re);
 			break;
 		case LibraryConstant.MYLIBRARY_READING_HISTORY:
-			HistoryEntity he = (HistoryEntity) mEntity;
+			HistoryEntity he = (HistoryEntity) mList.get(index);
 			new DelHistoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, he);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
 			PublicUtils.showToast(this, getResources().getString(R.string.library_del_downloadtast));
-			PublicUtils.deleteDownloadTask(this, (DownloadResourceEntity) mEntity);
+			PublicUtils.deleteDownloadTask(this, (DownloadResourceEntity) mList.get(index));
 			PublicUtils.showToast(this, getResources().getString(R.string.library_del_success));
 			mHandler.sendEmptyMessage(0);
 			break;
@@ -130,13 +142,20 @@ public class CommonFunctionMenu extends MenuActivity {
 	}
 
 	// 删除所有记录
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void deleteAllRecords() {
 		switch (mType) {
 		case LibraryConstant.MYLIBRARY_FAVARITE_CATEGORY:
+			ArrayList<CollectCategoryEntity> list1 = (ArrayList)mList;
+			new ClearCollectCategoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, list1);
 			break;
 		case LibraryConstant.MYLIBRARY_FAVARITE_RESOURCE:
+			ArrayList<CollectResourceEntity> list2 = (ArrayList)mList;
+			new ClearCollectResourceAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, list2);
 			break;
 		case LibraryConstant.MYLIBRARY_READING_HISTORY:
+			ArrayList<HistoryEntity> list3 = (ArrayList)mList;
+			new ClearHistoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, list3);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
 			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtast));

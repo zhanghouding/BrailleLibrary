@@ -9,8 +9,7 @@ import android.os.AsyncTask;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
-import com.sunteam.library.activity.DownloadedList;
-import com.sunteam.library.activity.DownloadingList;
+import com.sunteam.library.activity.DownloadList;
 import com.sunteam.library.db.DownloadChapterDBDao;
 import com.sunteam.library.db.DownloadResourceDBDao;
 import com.sunteam.library.entity.DownloadChapterEntity;
@@ -120,12 +119,7 @@ public class GetDownloadResourceAsyncTask extends AsyncTask<Integer, Void, Void>
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mDownloadResourceEntityList); // 数据列表
-		if (0 == type) {
-			intent.setClass(mContext, DownloadingList.class);
-		} else {
-			intent.setClass(mContext, DownloadedList.class);
-
-		}
+		intent.setClass(mContext, DownloadList.class);
 		mContext.startActivity(intent);
 	}
 }

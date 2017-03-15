@@ -15,11 +15,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.sunteam.common.menu.BaseActivity;
-import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
-import com.sunteam.library.asynctask.RegisterAsyncTask;
 import com.sunteam.library.asynctask.UserUpdatePasswordAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 

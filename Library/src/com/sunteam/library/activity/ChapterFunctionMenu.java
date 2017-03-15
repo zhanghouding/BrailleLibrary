@@ -3,9 +3,6 @@ package com.sunteam.library.activity;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.wlf.filedownloader.FileDownloader;
-import org.wlf.filedownloader.listener.OnDetectBigUrlFileListener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +15,6 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
-import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.AddCollectResourceAsyncTask;
 import com.sunteam.library.asynctask.DownloadResourceAsyncTask;
@@ -26,7 +22,6 @@ import com.sunteam.library.db.DownloadChapterDBDao;
 import com.sunteam.library.db.DownloadResourceDBDao;
 import com.sunteam.library.entity.AudioChapterInfoEntity;
 import com.sunteam.library.entity.CollectResourceEntity;
-import com.sunteam.library.entity.DownloadChapterEntity;
 import com.sunteam.library.entity.DownloadResourceEntity;
 import com.sunteam.library.entity.EbookChapterInfoEntity;
 import com.sunteam.library.entity.VideoChapterInfoEntity;

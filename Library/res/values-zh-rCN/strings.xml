@@ -130,7 +130,7 @@
         <item>删除书签</item>
         <item>清空书签</item>
     </string-array>
-    <string-array name="library_favorite_function_menu_list">
+    <string-array name="library_common_function_menu_list">
         <item>删除</item>
         <item>清空</item>
     </string-array>

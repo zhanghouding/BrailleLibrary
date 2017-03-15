@@ -21,7 +21,6 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
-import com.sunteam.library.asynctask.RegisterAsyncTask;
 import com.sunteam.library.asynctask.UserGetPasswordAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
 
