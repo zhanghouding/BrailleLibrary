@@ -1084,5 +1084,83 @@ public class HttpDao
 		requestParams.put("jsonObj", encodeJson);
 		
 		return (CollectCategoryEntity) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new AddCollectCategoryParseResponse() );
+	}
+	
+	/**
+	 * 清空历史
+	 * 
+	 * @param username
+	 * @param dbCode
+	 * @param sysId
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/15
+	 */
+	public static Integer clearHistory( String username, String recordIds ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteHistoryByIds");
+		requestParams.put("UserName", username);
+		requestParams.put("RecordIds", recordIds);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_HISTORY, requestParams, new DelHistoryParseResponse() );
+	}
+	
+	/**
+	 * 清空收藏分类
+	 * 
+	 * @param username
+	 * @param categoryCode
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/15
+	 */
+	public static Integer clearCollectCategory( String username, String recordIds ) 
+	{	
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteCollectByIds");
+		requestParams.put("UserName", username);
+		requestParams.put("RecordIds", recordIds);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new DelCollectCategoryParseResponse() );
+	}
+	
+	/**
+	 * 清空收藏资源
+	 * 
+	 * @param username
+	 * @param dbCode
+	 * @param sysId
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/15
+	 */
+	public static Integer clearCollectResource( String username, String recordIds ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteCollectByIds");
+		requestParams.put("UserName", username);
+		requestParams.put("RecordIds", recordIds);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_COLLECT, requestParams, new DelCollectResourceParseResponse() );
+	}
+	
+	/**
+	 * 清空书签
+	 * 
+	 * @param username
+	 * @param id
+	 * @return
+	 * @author wzp
+	 * @Created 2017/03/15
+	 */
+	public static Integer clearBookMark( String username, String recordIds ) 
+	{
+		Map<String, String> requestParams = new HashMap<String, String>();
+		requestParams.put("requestType", "DeleteBookmarkByIds");
+		requestParams.put("UserName", username);
+		requestParams.put("RecordIds", recordIds);
+		
+		return (Integer) HttpRequest.get(LibraryConstant.URL_INTERFACE_BOOKMARK, requestParams, new DelBookMarkParseResponse() );
 	}	
 }

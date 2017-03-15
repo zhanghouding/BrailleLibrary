@@ -84,6 +84,13 @@
 	<string name="library_del_downloadtast">正在删除下载任务</string>
 	<string name="library_clear_downloadtast">正在清空下载任务</string>
 	
+	<string name="library_clear_history">正在清空阅读历史</string>
+	<string name="library_clear_bookmark">正在清空书签</string>
+	<string name="library_clear_collect_category">正在清空收藏分类</string>
+	<string name="library_clear_collect_resource">正在清空收藏资源</string>
+	<string name="library_clear_success">清空成功！</string>
+	<string name="library_clear_fail">清空失败！</string>
+	
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>
         <item>国语女声</item>
