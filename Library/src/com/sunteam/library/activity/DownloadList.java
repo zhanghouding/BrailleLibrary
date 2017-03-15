@@ -7,13 +7,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.menu.MenuGlobal;
 import com.sunteam.common.menu.menuview.OnMenuKeyListener;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
+import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
+import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.db.DownloadChapterDBDao;
 import com.sunteam.library.db.DownloadResourceDBDao;
 import com.sunteam.library.entity.DownloadChapterEntity;
@@ -31,12 +36,14 @@ public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 	private ArrayList<DownloadResourceEntity> mDownloadResourceEntityList;
 	private int type = 0; // 0下载任务列表；1已下载列表
 	private DownloadReceiver mDownloadReceiver;
+	private Context mContext;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		initView();
 		super.onCreate(savedInstanceState);
 		registerMyReceiver();
+		mContext = this;
 	}
 
 	@Override
@@ -61,11 +68,74 @@ public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 		if (Activity.RESULT_OK != resultCode) {
 			return;
 		}
+
+		// 从功能菜单返回，需要判断是删除还是清空
+		int index = data.getIntExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, 0);
+		if (1 == index) { // 清空成功
+			setResult(Activity.RESULT_OK);
+			finish();
+			return;
+		}
+
+		// 删除成功
+		selectItem = getSelectItem();
+		if (selectItem < mMenuList.size()) {
+			mDownloadResourceEntityList.remove(selectItem);
+			mMenuList.remove(selectItem);
+		}
+		if (0 == mMenuList.size()) {
+			String tips = mContext.getResources().getString(R.string.library_downloading_empty);
+			if (0 != type) {
+				tips = mContext.getResources().getString(R.string.library_downloaded_empty);
+			}
+			PublicUtils.showToast(this, tips, new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					setResult(Activity.RESULT_OK);
+					finish();
+				}
+			});
+		} else {
+			if (selectItem >= mMenuList.size()) {
+				selectItem = mMenuList.size() - 1;
+			}
+			setListData(mMenuList);
+			mMenuView.setSelectItem(selectItem, true);
+		}
 	}
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-		// TODO 暂停下载、正在下载
+		if(1 != type){
+			return;
+		}
+
+		DownloadResourceEntity entity = mDownloadResourceEntityList.get(selectItem);
+		String dbCode = entity.dbCode;
+		String sysId = entity.sysId;
+		String identifier = entity.identifier;
+		String categoryCode = ""; // entity.categoryCode;
+		String categoryName = entity.categoryFullName;
+		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH;
+		String title = entity.title;
+		
+		switch (entity.resType) {
+			case LibraryConstant.LIBRARY_DATATYPE_EBOOK:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetEbookChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_AUDIO:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetAudioChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			case LibraryConstant.LIBRARY_DATATYPE_VIDEO:
+				fatherPath += (PublicUtils.getCategoryName(mContext, entity.resType)+"/"+categoryName+"/");
+				new GetVideoChapterAsyncTask(mContext, fatherPath, title).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dbCode, sysId, categoryName, identifier, categoryCode);
+				break;
+			default:
+				break;
+		}
 	}
 
 	@Override
@@ -116,7 +186,10 @@ public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 		mMenuList = getListFromDownloadResourceEntity(mDownloadResourceEntityList);
 
 		if (null == mMenuList || mMenuList.isEmpty()) {
-			String s = getResources().getString(R.string.library_download_empty);
+			String s = getResources().getString(R.string.library_downloading_empty);
+			if (0 != type) {
+				s = getResources().getString(R.string.library_downloaded_empty);
+			}
 			PublicUtils.showToast(this, s, true);
 			return;
 		}

@@ -131,7 +131,7 @@ public class CommonFunctionMenu extends MenuActivity {
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
-			PublicUtils.showToast(this, getResources().getString(R.string.library_del_downloadtast));
+			PublicUtils.showToast(this, getResources().getString(R.string.library_del_downloadtask));
 			PublicUtils.deleteDownloadTask(this, (DownloadResourceEntity) mList.get(index));
 			PublicUtils.showToast(this, getResources().getString(R.string.library_del_success));
 			mHandler.sendEmptyMessage(0);
@@ -158,13 +158,13 @@ public class CommonFunctionMenu extends MenuActivity {
 			new ClearHistoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, list3);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
-			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtast));
+			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtask));
 			PublicUtils.clearDownloadTask(this, false);
 			PublicUtils.showToast(this, getResources().getString(R.string.library_dialog_clear_su));
 			mHandler.sendEmptyMessage(0);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
-			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtast));
+			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtask));
 			PublicUtils.clearDownloadTask(this, true);
 			PublicUtils.showToast(this, getResources().getString(R.string.library_dialog_clear_su));
 			mHandler.sendEmptyMessage(0);

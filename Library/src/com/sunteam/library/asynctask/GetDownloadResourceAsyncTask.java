@@ -110,8 +110,11 @@ public class GetDownloadResourceAsyncTask extends AsyncTask<Integer, Void, Void>
 		}
 		else
 		{
-			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			TtsUtils.getInstance().speak(s);
+			String s = mContext.getResources().getString(R.string.library_downloading_empty);
+			if (0 != type) {
+				s = mContext.getResources().getString(R.string.library_downloaded_empty);
+			}
+			TtsUtils.getInstance().speak(s, TtsUtils.TTS_QUEUE_ADD);
 		}
 	}
 
