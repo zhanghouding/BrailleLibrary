@@ -123,6 +123,7 @@ public class LibraryDBHelper extends SQLiteOpenHelper
 			DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE + " varchar(128)," +
 			DatabaseConstants.DOWNLOAD_RESOURCE_SYSID + " varchar(128)," +
 			DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER + " varchar(128)," +
+			DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE + " varchar(128)," +
 			DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + " varchar(1024))";
 	
 	public static final String CREATE_DOWNLOAD_CHAPTER_TABLE =	//创建下载章节表

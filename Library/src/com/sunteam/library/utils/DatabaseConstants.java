@@ -107,6 +107,7 @@ public class DatabaseConstants
   	//下载资源表字段
   	public static final String DOWNLOAD_RESOURCE_USERNAME = "userName";			//用户名
   	public static final String DOWNLOAD_RESOURCE_RESTYPE = "resType";			//分类类型
+  	public static final String DOWNLOAD_RESOURCE_CATEGORYCODE = "categoryCode";	//分类编码
   	public static final String DOWNLOAD_RESOURCE_FULLNAME = "categoryFullName";	//完整的分类名，格式"有声读物-刘兰芳-古今荣耻谈"
   	public static final String DOWNLOAD_RESOURCE_TITLE =  "title";				//书名
   	public static final String DOWNLOAD_RESOURCE_DBCODE = "dbCode";				//数据编码

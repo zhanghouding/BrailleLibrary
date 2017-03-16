@@ -174,6 +174,7 @@ public class AudioChapterList extends MenuActivity implements OnMenuKeyListener 
 		Intent intent = new Intent();
 		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, LibraryConstant.LIBRARY_DATATYPE_AUDIO); // 数据类别：电子书、有声书、口述影像
 		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, categoryCode); // 分类编码
 		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME, categoryName); // 分类名称
 		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, mTitle);
 		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, dbCode);	//数据编码

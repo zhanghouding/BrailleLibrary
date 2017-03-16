@@ -49,8 +49,9 @@ public class DownloadResourceDBDao
 				DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE + "," +
 				DatabaseConstants.DOWNLOAD_RESOURCE_SYSID + "," +
 				DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER + "," +
-				DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + ") values (?,?,?,?,?,?,?,?,?)";
-		db.execSQL( sql, new Object[]{entity.chapterCount,entity.resType,entity.status,entity.userName,entity.title,entity.dbCode,entity.sysId,entity.identifier,entity.categoryFullName});
+				DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE + "," +
+				DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + ") values (?,?,?,?,?,?,?,?,?,?)";
+		db.execSQL( sql, new Object[]{entity.chapterCount,entity.resType,entity.status,entity.userName,entity.title,entity.dbCode,entity.sysId,entity.identifier,entity.categoryCode,entity.categoryFullName});
 		db.close();
 	}
 
@@ -79,8 +80,9 @@ public class DownloadResourceDBDao
 					DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE + "," +
 					DatabaseConstants.DOWNLOAD_RESOURCE_SYSID + "," +
 					DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER + "," +
-					DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + ") values (?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{entity.chapterCount,entity.resType,entity.status,entity.userName,entity.title,entity.dbCode,entity.sysId,entity.identifier,entity.categoryFullName});
+					DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE + "," +
+					DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + ") values (?,?,?,?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{entity.chapterCount,entity.resType,entity.status,entity.userName,entity.title,entity.dbCode,entity.sysId,entity.identifier,entity.categoryCode,entity.categoryFullName});
 		}
 		db.close();
 	}
@@ -110,8 +112,9 @@ public class DownloadResourceDBDao
 					DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE + "," +
 					DatabaseConstants.DOWNLOAD_RESOURCE_SYSID + "," +
 					DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER + "," +
-					DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + ") values (?,?,?,?,?,?,?,?,?)";
-			db.execSQL( sql, new Object[]{entity.chapterCount,entity.resType,entity.status,entity.userName,entity.title,entity.dbCode,entity.sysId,entity.identifier,entity.categoryFullName});
+					DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE + "," +
+					DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME + ") values (?,?,?,?,?,?,?,?,?,?)";
+			db.execSQL( sql, new Object[]{entity.chapterCount,entity.resType,entity.status,entity.userName,entity.title,entity.dbCode,entity.sysId,entity.identifier,entity.categoryCode,entity.categoryFullName});
 		}
 		db.close();
 	}
@@ -187,6 +190,7 @@ public class DownloadResourceDBDao
 			entity.dbCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE));
 			entity.sysId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_SYSID));
 			entity.identifier = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER));
+			entity.categoryCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE));
 			entity.categoryFullName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME));
 			
 			break;
@@ -234,6 +238,7 @@ public class DownloadResourceDBDao
 			entity.dbCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE));
 			entity.sysId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_SYSID));
 			entity.identifier = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER));
+			entity.categoryCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE));
 			entity.categoryFullName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME));
 			
 			break;
@@ -272,6 +277,7 @@ public class DownloadResourceDBDao
 			entity.dbCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE));
 			entity.sysId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_SYSID));
 			entity.identifier = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER));
+			entity.categoryCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE));
 			entity.categoryFullName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME));
 			
 		    list.add(0,entity);	//逆序插入
@@ -310,6 +316,7 @@ public class DownloadResourceDBDao
 			entity.dbCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_DBCODE));
 			entity.sysId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_SYSID));
 			entity.identifier = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_IDENTIFIER));
+			entity.categoryCode = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_CATEGORYCODE));
 			entity.categoryFullName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.DOWNLOAD_RESOURCE_FULLNAME));
 			
 		    list.add(entity);

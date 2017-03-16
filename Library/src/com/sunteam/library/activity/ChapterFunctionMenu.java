@@ -38,6 +38,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 	private Context mContext;
 	private String dbCode;			//数据库编码
 	private String sysId;			//系统id
+	private String categoryCode;	//分类编码
 	private String categoryName;	//分类名称
 	private String resourceName;	//资源名称
 	private int dataType = 0; // 数据类别：电子书、有声书、口述影像
@@ -115,6 +116,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 				DownloadResourceEntity entity = new DownloadResourceEntity();
 				entity.userName = userName;			//用户名
 				entity.resType = dataType;			//资源类型 1:有声读物 2:电子图书  3:视频影像
+				entity.categoryCode = categoryCode;
 				entity.categoryFullName = PublicUtils.getCategoryName(this, dataType) + "-" + categoryName + "-" + resourceName;	//完整的分类名，格式"电子图书-古典文学"
 				entity.title = resourceName;		//资源名称
 				entity.dbCode = dbCode;				//数据库编码
@@ -190,6 +192,7 @@ public class ChapterFunctionMenu extends MenuActivity {
 	@SuppressWarnings("unchecked")
 	private void initView() {
 		Intent intent = getIntent();
+		categoryCode = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE);
 		categoryName = intent.getStringExtra(LibraryConstant.INTENT_KEY_CATEGORY_NAME);
 		resourceName = intent.getStringExtra(LibraryConstant.INTENT_KEY_RESOURCE);
 		dataType = intent.getIntExtra(LibraryConstant.INTENT_KEY_TYPE, 0);
