@@ -188,6 +188,7 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 			if (s.isEmpty()) {
 				s = mEtCertificateNo.getHint().toString();
 			} else {
+				mEtCertificateNo.setSelection(s.length());
 				s = mTvCertificateNoHint.getText().toString() + "," + s;
 			}
 		} else if (mEtName.isFocused()) {
@@ -195,6 +196,7 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 			if (s.isEmpty()) {
 				s = mEtName.getHint().toString();
 			} else {
+				mEtName.setSelection(s.length());
 				s = mTvNameHint.getText().toString() + "," + s;
 			}
 		} else if (mBtConfirm.isFocused()) {
@@ -267,12 +269,25 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 	// 在编辑控件中截获按键
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		if (KeyEvent.KEYCODE_DPAD_CENTER == keyCode || KeyEvent.KEYCODE_ENTER == keyCode) {
-			// 截获OK键, 定位到下一个控件
-			if (event.getAction() == KeyEvent.ACTION_DOWN) {
-				onKeyDown(keyCode, event);
-			} else {
-				onKeyUp(keyCode, event);
+		View v1;
+		if (KeyEvent.KEYCODE_DPAD_LEFT == keyCode) {
+			// 截获左方向键, 定位到上一个控件；不要用ACTION_UP，因为系统用ACTION_DOWN切换焦点，如果从其它控件切换过来，此时会收到抬起事件，焦点就切走了
+			if (KeyEvent.ACTION_DOWN == event.getAction()) {
+				v1 = v.focusSearch(View.FOCUS_UP);
+				if (null != v1) {
+					v1.requestFocus();
+				}
+			}
+			return true;
+		}
+
+		if (KeyEvent.KEYCODE_DPAD_RIGHT == keyCode || KeyEvent.KEYCODE_DPAD_CENTER == keyCode || KeyEvent.KEYCODE_ENTER == keyCode) {
+			// 截获右方向键, 定位到下一个控件；不要用ACTION_UP，因为系统用ACTION_DOWN切换焦点，如果从其它控件切换过来，此时会收到抬起事件，焦点就切走了
+			if (KeyEvent.ACTION_DOWN == event.getAction()) {
+				v1 = v.focusSearch(View.FOCUS_DOWN);
+				if (null != v1) {
+					v1.requestFocus();
+				}
 			}
 			return true;
 		}
@@ -314,18 +329,19 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		if (count <= 0) {
-			return;
-		}
-		String s1 = s.toString().substring(start, start + count);
-
-		TtsUtils.getInstance().speak(s1);
+		// 朗读新增数据；暂不朗读，因为afterTextChanged()中朗读完整字符串
+		// if (count <= 0) {
+		// return;
+		// }
+		// String s1 = s.toString().substring(start, start + count);
+		// TtsUtils.getInstance().speak(s1);
 	}
 
 	@Override
 	public void afterTextChanged(Editable s) {
+		// 朗读完整字符串
 		String s1 = s.toString();
-		if (null == s1 || 0 == s1.length()) {
+		if (null == s1 || s1.isEmpty()) {
 			s1 = getFocusHint();
 			TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}

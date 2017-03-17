@@ -284,6 +284,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			if (s.isEmpty()) {
 				s = ((EditText) v).getHint().toString();
 			} else {
+				((EditText)v).setSelection(s.length());
 				s = mTvCertificateNoHint.getText().toString() + "," + s;
 			}
 			break;
@@ -292,6 +293,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			if (s.isEmpty()) {
 				s = ((EditText) v).getHint().toString();
 			} else {
+				((EditText)v).setSelection(s.length());
 				s = mTvNameHint.getText().toString() + "," + s;
 			}
 			break;
@@ -300,6 +302,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			if (s.isEmpty()) {
 				s = ((EditText) v).getHint().toString();
 			} else {
+				((EditText)v).setSelection(s.length());
 				s = mTvUserNameHint.getText().toString() + "," + s;
 			}
 			break;
@@ -308,6 +311,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			if (s.isEmpty()) {
 				s = ((EditText) v).getHint().toString();
 			} else {
+				((EditText)v).setSelection(s.length());
 				s = mTvPasswdHint.getText().toString() + "," + s;
 			}
 			break;
@@ -316,6 +320,7 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			if (s.isEmpty()) {
 				s = ((EditText) v).getHint().toString();
 			} else {
+				((EditText)v).setSelection(s.length());
 				s = mTvPasswdHint.getText().toString() + "," + s;
 			}
 			break;
@@ -419,12 +424,25 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 	// 在编辑控件中截获按键
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		if (KeyEvent.KEYCODE_DPAD_CENTER == keyCode || KeyEvent.KEYCODE_ENTER == keyCode) {
-			// 截获OK键, 定位到下一个控件
-			if (event.getAction() == KeyEvent.ACTION_DOWN) {
-				onKeyDown(keyCode, event);
-			} else {
-				onKeyUp(keyCode, event);
+		View v1;
+		if (KeyEvent.KEYCODE_DPAD_LEFT == keyCode) {
+			// 截获左方向键, 定位到上一个控件；不要用ACTION_UP，因为系统用ACTION_DOWN切换焦点，如果从其它控件切换过来，此时会收到抬起事件，焦点就切走了
+			if (KeyEvent.ACTION_DOWN == event.getAction()) {
+				v1 = v.focusSearch(View.FOCUS_UP);
+				if (null != v1) {
+					v1.requestFocus();
+				}
+			}
+			return true;
+		}
+
+		if (KeyEvent.KEYCODE_DPAD_RIGHT == keyCode || KeyEvent.KEYCODE_DPAD_CENTER == keyCode || KeyEvent.KEYCODE_ENTER == keyCode) {
+			// 截获右方向键, 定位到下一个控件；不要用ACTION_UP，因为系统用ACTION_DOWN切换焦点，如果从其它控件切换过来，此时会收到抬起事件，焦点就切走了
+			if (KeyEvent.ACTION_DOWN == event.getAction()) {
+				v1 = v.focusSearch(View.FOCUS_DOWN);
+				if (null != v1) {
+					v1.requestFocus();
+				}
 			}
 			return true;
 		}

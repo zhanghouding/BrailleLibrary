@@ -51,7 +51,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 	private View mLine = null;
 	private EditText mEditText;
 	private ListView listView = null;
-//	private TextView mTvEmpty = null;
+//	private TextView mTvEmpty = null; // 列表为空时的提示信息
 	private MenuListAdapter mAdapter = null;
 	private ArrayList<String> mMenuList = new ArrayList<String>();
 
@@ -113,7 +113,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		mEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEditText.setHeight(mTools.convertSpToPixel(fontSize));
 		mEditText.setOnKeyListener(mOnKeyListener);
-		mEditText.setText("三国"); // 测试时避免输入
+//		mEditText.setText("三国"); // 测试时避免输入
 
 		mAdapter = new MenuListAdapter(mContext, mMenuList, LibrarySearchView.this);
 		mAdapter.setOnEnterListener(this);
@@ -393,11 +393,11 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 				}
 				return true;
 			} else if (KeyEvent.KEYCODE_STAR == keyCode) { // 在设置了输入法后，键盘上的数字键、星号键和井号键已经被输入法所消费!
-				if (event.getAction() == KeyEvent.ACTION_UP) {
-					keyUpFlag = true;
-					CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
-				}
-				return true;
+			// if (event.getAction() == KeyEvent.ACTION_UP) {
+			// keyUpFlag = true;
+			// CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			// }
+			// return true;
 			}
 
 			// 把其它键都传给下一个控件
@@ -409,46 +409,29 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 		if (0 == after && count > 0) {
 			String s1 = s.toString().substring(start, start + count);
-			s1 = mContext.getResources().getString(R.string.common_delete) + " " + s1;
+			s1 = mContext.getResources().getString(R.string.common_delete) + " " + s1 + ",";
 			TtsUtils.getInstance().speak(s1);
 		}
 	}
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-//		if (count <= 0) {
-//			return;
-//		}
-//		String s1 = "";
-//
-//		if (start + count > wordMaxLen) {
-//			s = s.toString().substring(0, wordMaxLen);
-//			mEditText.setText(s);
-//			mEditText.requestFocus();
-//			mEditText.setSelection(wordMaxLen);
-//			s1 = mContext.getResources().getString(R.string.input_overflow);
-//		} else if (1 == count) {
-//			s1 = s.toString().substring(start, start + count);
-//		}
-//		TtsUtils.getInstance().speak(s1);
+		// 朗读新增数据；暂不朗读，因为afterTextChanged()中朗读完整字符串
+		// if (count <= 0) {
+		// return;
+		// }
+		// String s1 = s.toString().substring(start, start + count);
+		// TtsUtils.getInstance().speak(s1);
 	}
 
 	@Override
 	public void afterTextChanged(Editable s) {
-//		if ("".equals(s.toString().trim())) {
-//			wordList = dbUtil.selectWord_index(Constant.WORD_LIST_COUNT, 1);
-//		} else {
-//			wordList = dbUtil.selectSearchWord(Constant.WORD_LIST_COUNT, s.toString());
-//		}
-//
-//		if (wordList.size() != 0) {
-//			isResumeList = true;
-//			setStrArrayList();
-//			mAdapter.setSelectItem(0, false); // 避免朗读列表菜单项，因为此时要朗读编辑框内容
-//			// mAdapter.notifyDataSetChanged(); // setSelectItem()中已有调用
-//			listView.setSelection(0);
-//			firstItemId = wordList.get(0).getWord_id();
-//		}
+		// 朗读完整字符串
+		String s1 = s.toString();
+		if(s1.isEmpty()){
+			s1 = mEditText.getHint().toString();
+		}
+		TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 	}
 
 	// 进入章节列表界面
