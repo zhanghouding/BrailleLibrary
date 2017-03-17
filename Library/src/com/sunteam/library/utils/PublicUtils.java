@@ -444,7 +444,7 @@ public class PublicUtils
 		{
 			return;
 		}
-		if( file.isFile() ) 
+		if( file.isFile() && !file.getName().contains(".temp") ) 
 		{  
 			file.delete();  
 			return;  
@@ -454,7 +454,7 @@ public class PublicUtils
 			File[] childFiles = file.listFiles();  
 			if( childFiles == null || childFiles.length == 0 ) 
 			{  
-				file.delete();  
+				//file.delete();  //不删除目录了
 				return;  
 			}  
 
@@ -462,7 +462,7 @@ public class PublicUtils
 			{  
 				deleteFiles(childFiles[i]);  
 			}  
-			file.delete();  
+			//file.delete();	//不删除目录了  
 		}  
 	}
 	
