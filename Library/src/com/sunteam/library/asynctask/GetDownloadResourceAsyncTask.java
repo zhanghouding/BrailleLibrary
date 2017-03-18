@@ -122,6 +122,7 @@ public class GetDownloadResourceAsyncTask extends AsyncTask<Integer, Void, Void>
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 菜单名称
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mDownloadResourceEntityList); // 数据列表
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, type); // 0 下载中，1已下载
 		intent.setClass(mContext, DownloadList.class);
 		mContext.startActivity(intent);
 	}

@@ -37,23 +37,12 @@ public class DownloadManager extends MenuActivity {
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
 		switch(selectItem){
 		case 0: // 正在下载
-//			startNextActivity(DownloadingList.class, selectItem, menuItem);
-			new GetDownloadResourceAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0);
-			break;
 		case 1: // 已下载
-//			startNextActivity(DownloadedList.class, selectItem, menuItem);
-			new GetDownloadResourceAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1);
+			new GetDownloadResourceAsyncTask(this, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, selectItem);
 			break;
 		default:
 			break;
 		}
 	}
-
-	/*private void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
-		Intent intent = new Intent();
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
-		intent.setClass(this, cls);
-		startActivityForResult(intent, selectItem);
-	}*/
 
 }

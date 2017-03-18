@@ -115,7 +115,7 @@ public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 		String dbCode = entity.dbCode;
 		String sysId = entity.sysId;
 		String identifier = entity.identifier;
-		String categoryCode = ""; // entity.categoryCode;
+		String categoryCode = entity.categoryCode;
 		String categoryName = entity.categoryFullName;
 		String fatherPath = LibraryConstant.LIBRARY_ROOT_PATH;
 		String title = entity.title;
