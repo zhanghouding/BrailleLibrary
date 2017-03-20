@@ -9,6 +9,7 @@ import org.wlf.filedownloader.DownloadFileInfo;
 import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.listener.OnRetryableFileDownloadStatusListener;
 
+import com.sunteam.jni.SunteamJni;
 import com.sunteam.library.db.DownloadChapterDBDao;
 import com.sunteam.library.db.DownloadResourceDBDao;
 import com.sunteam.library.entity.DownloadChapterEntity;
@@ -167,11 +168,11 @@ public class DownloadManagerService extends Service implements OnRetryableFileDo
     		dcDao.closeDb();
     	}
     	
-    	String filename = downloadFileInfo.getFileName();
+    	String filedir = downloadFileInfo.getFileDir()+"/";			//文件路径
+    	String filename = downloadFileInfo.getFileName();			//文件名
     	if( filename.contains(LibraryConstant.CACHE_FILE_SUFFIX) )	//电子书
     	{
-    		String filedir = downloadFileInfo.getFileDir()+"/";
-    		String content = PublicUtils.readContent( filedir, filename );
+    		String content = PublicUtils.readDownloadContent( filedir, filename );
     		if( !TextUtils.isEmpty(content) )
     		{
     			content = parseEbookContent( content );
@@ -186,6 +187,10 @@ public class DownloadManagerService extends Service implements OnRetryableFileDo
     			}
     		}
     	}	//因为电子书章节是作为文件下载的，下载下来的数据是json格式，需要从中取出有用的数据。
+    	else
+    	{
+    		PublicUtils.encryptFile(filedir+filename);	//加密文件
+    	}
     	
     	Intent intent = new Intent(LibraryConstant.ACTION_DOWNLOAD_STATUS);
 		sendBroadcast(intent);			//广播方式发送给客户端

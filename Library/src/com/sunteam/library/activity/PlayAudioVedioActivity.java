@@ -23,6 +23,7 @@ import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
+import com.sunteam.jni.SunteamJni;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.AddHistoryAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
@@ -145,6 +146,9 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	    	File file = new File(fullpath);
 	    	if( file.exists() )
 	    	{
+	    		SunteamJni mSunteamJni = new SunteamJni();
+	    		mSunteamJni.decryptFile(fullpath);	//解密文件
+	    		
 	    		MediaPlayerUtils.getInstance().play(fullpath, false);	//播放音频
 	    		if( mBookmarkEntity != null )
 		    	{

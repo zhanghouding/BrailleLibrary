@@ -115,4 +115,6 @@ public class LibraryConstant {
 	public static final int DOWNLOAD_STATUS_FINISH = 2;	//已完成
 	
 	public static final String ACTION_DOWNLOAD_STATUS = "android.intent.action.ACTION_DOWNLOAD_STATUS_CHANGE";
+	
+	public static final int ENCRYPT_FLAGS_LENGTH = 16;	//加密标记长度。
 }

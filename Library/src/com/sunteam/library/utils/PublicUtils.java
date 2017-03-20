@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.dict.utils.DBUtil;
+import com.sunteam.jni.SunteamJni;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.WordSearchResultActivity;
 import com.sunteam.library.db.DownloadChapterDBDao;
@@ -334,6 +336,41 @@ public class PublicUtils
 	}
     
 	/**
+	 * 方法(加载下载Content)
+	 * 
+	 * @param filepath
+	 * 			文件路径
+	 * @param filaname
+	 * 			文件名
+	 * @return
+	 * @author wzp
+	 * @Created 2017/01/31
+	 */
+	public static String readDownloadContent( String filepath, String filename )
+	{
+		try
+		{
+			File file = new File(filepath+filename);
+			if( file.exists() )
+			{
+				int len = (int) file.length();
+				byte[] buffer = new byte[len];
+				FileInputStream inStream = new FileInputStream(file);
+				inStream.read(buffer);
+				inStream.close();
+				
+				return	new String(buffer);
+			}
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+		
+		return	"";
+	}
+     
+	/**
 	 * 方法(加载Content)
 	 * 
 	 * @param filepath
@@ -351,8 +388,11 @@ public class PublicUtils
 			File file = new File(filepath+filename);
 			if( file.exists() )
 			{
+				SunteamJni mSunteamJni = new SunteamJni();
+				mSunteamJni.decryptFile(filepath+filename);	//解密文件
+				
 				int len = (int) file.length();
-				byte[] buffer = new byte[len];
+				byte[] buffer = new byte[len-LibraryConstant.ENCRYPT_FLAGS_LENGTH];
 				FileInputStream inStream = new FileInputStream(file);
 				inStream.read(buffer);
 				inStream.close();
@@ -395,15 +435,49 @@ public class PublicUtils
 				File file = new File(filepath+filename);
 				if( !file.exists() )
 				{
+					byte[] flags = new byte[LibraryConstant.ENCRYPT_FLAGS_LENGTH]; 
 					FileOutputStream outStream = new FileOutputStream(file);
 					outStream.write(content.getBytes());
+					outStream.write(flags);	//加密标记
 					outStream.close();
+					
+					SunteamJni mSunteamJni = new SunteamJni();
+					mSunteamJni.encryptFile(filepath+filename);	//加密文件 
 				}
 			}
 			catch( Exception e )
 			{
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	//加密文件
+	public static void encryptFile( String fullpath )
+	{
+		try
+		{
+			File file = new File(fullpath);
+			if( !file.exists() )
+			{
+				byte[] flags = new byte[LibraryConstant.ENCRYPT_FLAGS_LENGTH];
+				
+				// 打开一个随机访问文件流，按读写方式  
+	            RandomAccessFile randomFile = new RandomAccessFile(fullpath, "rw");  
+	            // 文件长度，字节数  
+	            long fileLength = randomFile.length();  
+	            // 将写文件指针移到文件尾。  
+	            randomFile.seek(fileLength);  
+	            randomFile.write(flags);		//加密标记
+	            randomFile.close();  
+	            
+				SunteamJni mSunteamJni = new SunteamJni();
+				mSunteamJni.encryptFile(fullpath);	//加密文件 
+			}
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
 		}
 	}
 	
