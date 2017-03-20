@@ -66,6 +66,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	private String categoryName;
 	private String categoryCode;
 	private BookmarkEntity mBookmarkEntity;
+	private String fullpath = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +143,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
     	{
 	    	MediaPlayerUtils.getInstance().OnMediaPlayerListener(this);
 	    	
-	    	final String fullpath = fatherPath + getFilename(resourceUrl);
+	    	fullpath = fatherPath + getFilename(resourceUrl);
 	    	File file = new File(fullpath);
 	    	if( file.exists() )
 	    	{
@@ -184,6 +185,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		    	});
 		    	*/	//不在后台自动缓存文件了。
 	    		
+	    		fullpath = null;
 		    	MediaPlayerUtils.getInstance().play(resourceUrl, false);	//播放音视频
 		    	if( mBookmarkEntity != null )
 		    	{
@@ -349,6 +351,11 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	{
 		super.onDestroy();
 		MediaPlayerUtils.getInstance().OnMediaPlayerListener(null);
+		if( fullpath != null )
+		{
+			SunteamJni mSunteamJni = new SunteamJni();
+			mSunteamJni.encryptFile(fullpath);	//加密文件。
+		}
 	}
 
 	//退出此界面
