@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -16,7 +17,11 @@ import android.widget.TextView;
 
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.CommonUtils;
+import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
+import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.UserUpdatePasswordAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
@@ -63,6 +68,11 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		returnConfirm();
+	}
+
 	private void getIntentPara() {
 		Intent intent = getIntent();
 		userName = intent.getStringExtra("user_name");
@@ -82,6 +92,8 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		mTvTitle = (TextView) findViewById(R.id.library_account_passwd_setting_title);
 		mTitle = getResources().getString(R.string.library_account_passwd_setting);
 		mTvTitle.setText(mTitle);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(mTools.getFontSize()));
 		mTvTitle.setTextColor(fontColor); // 设置title的文字颜色
 
 		mLine = (View) findViewById(R.id.library_account_passwd_setting_line);
@@ -129,8 +141,8 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		mBtCancel.setOnFocusChangeListener(this);
 
 		// TODO 设置测试账号
-		mEtPasswd.setText("123");
-		mEtPasswdConfirm.setText("123");
+		// mEtPasswd.setText("123");
+		// mEtPasswdConfirm.setText("123");
 
 		mEtPasswd.requestFocus();
 
@@ -183,7 +195,9 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 
 	// 退出
 	public void onClickForCancel(View v) {
-		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+//		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+		// 在按返回时，要确认是否退出
+		returnConfirm();
 	}
 
 	// 获取焦点控件上的朗读字符串
@@ -247,9 +261,15 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		if (s.isEmpty()) {
 			s = et.getHint().toString();
 		} else {
-			et.setText(s.substring(0, s.length() - 1));
-			et.setSelection(s.length() - 1);
-			s = getResources().getString(R.string.common_delete) + ", " + s.substring(s.length() - 1);
+			int newLen = s.length() - 1; 
+			et.setText(s.substring(0, newLen));
+			et.setSelection(newLen);
+			s = getResources().getString(R.string.common_delete) + ", " + s.substring(newLen);
+			if (0 == newLen) { // 朗读提示信息
+				s = s + ", " + et.getHint().toString();
+			} else { // 朗读剩余字符串
+				s = s + ", " + et.getText().toString();
+			}
 		}
 		speak(s);
 	}
@@ -263,7 +283,8 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		switch(v.getId()){
 		case R.id.library_account_passwd_setting_passwd_input:
 		case R.id.library_account_passwd_setting_passwd_confirm_input:
-			delTailCh((EditText) v);
+//			delTailCh((EditText) v);
+			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 			break;
 		default:
 			ret = false;
@@ -333,11 +354,11 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// 朗读新增数据；暂不朗读，因为afterTextChanged()中朗读完整字符串
-		// if (count <= 0) {
-		// return;
-		// }
-		// String s1 = s.toString().substring(start, start + count);
-		// TtsUtils.getInstance().speak(s1);
+		if (count <= 0) {
+			return;
+		}
+		String s1 = s.toString().substring(start, start + count);
+		TtsUtils.getInstance().speak(s1);
 	}
 
 	@Override
@@ -346,8 +367,8 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		String s1 = s.toString();
 		if (null == s1 || s1.isEmpty()) {
 			s1 = getFocusHint();
-			TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}
+		TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 	}
 
 	private boolean checkInfoValid() {
@@ -355,18 +376,28 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		String passwd = mEtPasswd.getText().toString();
 		String passwd2 = mEtPasswdConfirm.getText().toString();
 		int id = 0;
+		EditText mEditText = null; // 用于设置焦点
 		if (passwd.isEmpty()) {
 			id = R.string.library_account_passwd_empty;
-		} else if (passwd2.isEmpty()) {
-			id = R.string.library_account_passwd_empty;
+			mEditText = mEtPasswd;
 		} else if (!passwd.equals(passwd2)) {
 			id = R.string.library_account_passwd_nosame;
+			mEditText = mEtPasswdConfirm;
 		} else {
 			ret = true;
 		}
 
 		if (0 != id) {
-			PublicUtils.showToast(this, getResources().getString(id));
+			final EditText curEditText = mEditText;
+			PublicUtils.showToast(this, getResources().getString(id), new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					if (null != curEditText) {
+						curEditText.requestFocus();
+					}
+				}
+			});
 		}
 
 		return ret;
@@ -380,6 +411,25 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		if (null != TtsUtils.getInstance()) {
 			TtsUtils.getInstance().speak(s);
 		}
+	}
+	
+	// 退出时要用户确认
+	private void returnConfirm() {
+		String title = getResources().getString(R.string.common_dialog_confirm_return_title);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title);
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+			
+			@Override
+			public void doConfirm() {
+				finish();
+			}
+			
+			@Override
+			public void doCancel() {
+				
+			}
+		});
+		mConfirmDialog.show();
 	}
 
 }

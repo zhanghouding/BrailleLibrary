@@ -417,11 +417,11 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// 朗读新增数据；暂不朗读，因为afterTextChanged()中朗读完整字符串
-		// if (count <= 0) {
-		// return;
-		// }
-		// String s1 = s.toString().substring(start, start + count);
-		// TtsUtils.getInstance().speak(s1);
+		if (count <= 0) {
+			return;
+		}
+		String s1 = s.toString().substring(start, start + count);
+		TtsUtils.getInstance().speak(s1);
 	}
 
 	@Override

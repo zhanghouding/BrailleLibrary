@@ -8,6 +8,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.utils.WifiUtils;
 
 /**
  * @Destryption 账号管理：登录、注册、密码找回; 注销功能只有在登录后才起作用。进入数字图书馆后，若尚未登录则进入账号管理界面。
@@ -23,6 +24,12 @@ public class AccountManager extends MenuActivity {
 		String[] list = getResources().getStringArray(R.array.library_account_manager_list);
 		mMenuList = ArrayUtils.strArray2List(list);
 		super.onCreate(savedInstanceState);
+		WifiUtils mWifiUtils = new WifiUtils();
+		if(!mWifiUtils.checkWifiState(this)){
+			String confirmTitle = getResources().getString(R.string.library_startwifi);
+			String wifiSettingTitle = getResources().getString(R.string.library_wifi_setting);
+			mWifiUtils.startWifiConfirm(this, confirmTitle, wifiSettingTitle);
+		}
 	}
 
 	@Override

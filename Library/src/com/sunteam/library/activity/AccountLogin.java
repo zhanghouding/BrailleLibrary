@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -19,12 +19,12 @@ import android.widget.TextView;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.CommonUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.LoginAsyncTask;
-import com.sunteam.library.utils.PublicUtils;
 
 public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
@@ -43,6 +43,11 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		super.onCreate(savedInstanceState);
 		getIntentPara();
 		initView();
+	}
+
+	@Override
+	public void onBackPressed() {
+		returnConfirm();
 	}
 
 	private void getIntentPara() {
@@ -65,6 +70,8 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 
 		mTvTitle = (TextView) findViewById(R.id.library_account_login_title);
 		mTvTitle.setText(mTitle);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(mTools.getFontSize()));
 		mTvTitle.setTextColor(fontColor); // 设置title的文字颜色
 
 		mLine = (View) findViewById(R.id.library_account_login_line);
@@ -105,8 +112,8 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		mBtCancel.setOnFocusChangeListener(this);
 
 		// 设置测试账号
-		mEtUserName.setText("test1");
-		mEtPasswd.setText("123");
+//		mEtUserName.setText("test1");
+//		mEtPasswd.setText("123");
 		
 		mEtUserName.requestFocus();
 		
@@ -155,7 +162,9 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 	}
 
 	public void onClickForCancel(View v) {
-		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+//		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+		// 在按返回时，要确认是否退出
+		returnConfirm();
 	}
 
 	private String getFocusString() {
@@ -202,9 +211,15 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		if (s.isEmpty()) {
 			s = et.getHint().toString();
 		} else {
-			et.setText(s.substring(0, s.length() - 1));
-			et.setSelection(s.length() - 1);
-			s = getResources().getString(R.string.common_delete) + ", " + s.substring(s.length() - 1);
+			int newLen = s.length() - 1; 
+			et.setText(s.substring(0, newLen));
+			et.setSelection(newLen);
+			s = getResources().getString(R.string.common_delete) + ", " + s.substring(newLen);
+			if (0 == newLen) { // 朗读提示信息
+				s = s + ", " + et.getHint().toString();
+			} else { // 朗读剩余字符串
+				s = s + ", " + et.getText().toString();
+			}
 		}
 		TtsUtils.getInstance().speak(s);
 	}
@@ -213,13 +228,14 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 	private boolean processKeyBack() {
 		boolean ret = true;
 		if (mEtUserName.isFocused()) {
-			delTailCh(mEtUserName);
+//			delTailCh(mEtUserName);
+			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 		} else if (mEtPasswd.isFocused()) {
-			delTailCh(mEtPasswd);
+//			delTailCh(mEtPasswd);
+			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 		} else {
 			ret = false;
 		}
-//		CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 
 		return ret;
 	}
@@ -285,11 +301,11 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// 朗读新增数据；暂不朗读，因为afterTextChanged()中朗读完整字符串
-		// if (count <= 0) {
-		// return;
-		// }
-		// String s1 = s.toString().substring(start, start + count);
-		// TtsUtils.getInstance().speak(s1);
+		if (count <= 0) {
+			return;
+		}
+		String s1 = s.toString().substring(start, start + count);
+		TtsUtils.getInstance().speak(s1);
 	}
 
 	@Override
@@ -298,8 +314,8 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		String s1 = s.toString();
 		if (null == s1 || s1.isEmpty()) {
 			s1 = getFocusHint();
-			TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
-		}
+		} 
+		TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 	}
 
 	// 显示、隐藏切换
@@ -310,37 +326,24 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 			imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);
 		}
 	}
-
-	@SuppressWarnings("unused")
-	private void startWifi() {
-		String s = getResources().getString(R.string.library_startwifi);
-		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
+	
+	// 退出时要用户确认
+	private void returnConfirm() {
+		String title = getResources().getString(R.string.common_dialog_confirm_return_title);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title);
 		mConfirmDialog.setConfirmListener(new ConfirmListener() {
-
+			
 			@Override
 			public void doConfirm() {
-				new Handler().postDelayed(new Runnable() {
-					public void run() {
-						startWifiSetting();
-					}
-				}, 10);
+				finish();
 			}
-
+			
 			@Override
 			public void doCancel() {
+				
 			}
 		});
 		mConfirmDialog.show();
-	}
-
-	private void startWifiSetting() {
-		Intent intent = new Intent();
-		String packageName = "com.sunteam.settings";
-		String className = "com.sunteam.settings.activity.WifiList";
-		intent.setClassName(packageName, className);
-		String title = getResources().getString(R.string.library_wifi_setting);
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		startActivity(intent);
 	}
 
 }

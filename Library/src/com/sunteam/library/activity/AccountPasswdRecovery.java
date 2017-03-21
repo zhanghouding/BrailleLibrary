@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -19,7 +20,11 @@ import android.widget.TextView;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.CommonUtils;
+import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
+import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.UserGetPasswordAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
@@ -64,6 +69,11 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		returnConfirm();
+	}
+
 	private void getIntentPara() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
@@ -81,6 +91,8 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 
 		mTvTitle = (TextView) findViewById(R.id.library_account_passwd_recovery_title);
 		mTvTitle.setText(mTitle);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(mTools.getFontSize()));
 		mTvTitle.setTextColor(fontColor); // 设置title的文字颜色
 
 		mLine = (View) findViewById(R.id.library_account_passwd_recovery_line);
@@ -121,9 +133,9 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		mBtCancel.setOnFocusChangeListener(this);
 
 		// TODO 设置测试账号
-		certificateType = 2; // 二代残疾人证号
-		mEtCertificateNo.setText("130182198609215753120");
-		mEtName.setText("测试");
+		// certificateType = 2; // 二代残疾人证号
+		// mEtCertificateNo.setText("130182198609215753120");
+		// mEtName.setText("测试");
 		
 		mEtCertificateNo.requestFocus();
 		
@@ -178,7 +190,9 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 	}
 
 	public void onClickForCancel(View v) {
-		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+//		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+		// 在按返回时，要确认是否退出
+		returnConfirm();
 	}
 
 	private String getFocusString() {
@@ -225,9 +239,15 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		if (s.isEmpty()) {
 			s = et.getHint().toString();
 		} else {
-			et.setText(s.substring(0, s.length() - 1));
-			et.setSelection(s.length() - 1);
-			s = getResources().getString(R.string.common_delete) + ", " + s.substring(s.length() - 1);
+			int newLen = s.length() - 1; 
+			et.setText(s.substring(0, newLen));
+			et.setSelection(newLen);
+			s = getResources().getString(R.string.common_delete) + ", " + s.substring(newLen);
+			if (0 == newLen) { // 朗读提示信息
+				s = s + ", " + et.getHint().toString();
+			} else { // 朗读剩余字符串
+				s = s + ", " + et.getText().toString();
+			}
 		}
 		TtsUtils.getInstance().speak(s);
 	}
@@ -236,13 +256,14 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 	private boolean processKeyBack() {
 		boolean ret = true;
 		if (mEtCertificateNo.isFocused()) {
-			delTailCh(mEtCertificateNo);
+//			delTailCh(mEtCertificateNo);
+			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 		} else if (mEtName.isFocused()) {
-			delTailCh(mEtName);
+//			delTailCh(mEtName);
+			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 		} else {
 			ret = false;
 		}
-//		CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 
 		return ret;
 	}
@@ -330,11 +351,11 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// 朗读新增数据；暂不朗读，因为afterTextChanged()中朗读完整字符串
-		// if (count <= 0) {
-		// return;
-		// }
-		// String s1 = s.toString().substring(start, start + count);
-		// TtsUtils.getInstance().speak(s1);
+		if (count <= 0) {
+			return;
+		}
+		String s1 = s.toString().substring(start, start + count);
+		TtsUtils.getInstance().speak(s1);
 	}
 
 	@Override
@@ -343,25 +364,37 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		String s1 = s.toString();
 		if (null == s1 || s1.isEmpty()) {
 			s1 = getFocusHint();
-			TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}
+		TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
 	}
 
 	private boolean checkInfoValid() {
 		boolean ret = false;
 		String cardNo = mEtCertificateNo.getText().toString();
 		String name = mEtName.getText().toString();
+		EditText mEditText = null; // 用于设置焦点
 		int id = 0;
 		if (cardNo.isEmpty()) {
 			id = R.string.library_account_certificateno_empty;
+			mEditText = mEtCertificateNo;
 		} else if (name.isEmpty()) {
 			id = R.string.library_account_name_empty;
+			mEditText = mEtName;
 		} else {
 			ret = true;
 		}
 
 		if (0 != id) {
-			PublicUtils.showToast(this, getResources().getString(id));
+			final EditText curEditText = mEditText;
+			PublicUtils.showToast(this, getResources().getString(id), new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					if (null != curEditText) {
+						curEditText.requestFocus();
+					}
+				}
+			});
 		}
 
 		return ret;
@@ -384,6 +417,25 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		if (null != TtsUtils.getInstance()) {
 			TtsUtils.getInstance().speak(s);
 		}
+	}
+	
+	// 退出时要用户确认
+	private void returnConfirm() {
+		String title = getResources().getString(R.string.common_dialog_confirm_return_title);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title);
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+			
+			@Override
+			public void doConfirm() {
+				finish();
+			}
+			
+			@Override
+			public void doCancel() {
+				
+			}
+		});
+		mConfirmDialog.show();
 	}
 
 }

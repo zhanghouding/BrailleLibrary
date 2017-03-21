@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -17,7 +18,11 @@ import android.widget.TextView;
 import com.sunteam.common.menu.BaseActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.CommonUtils;
+import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
+import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.RegisterAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
@@ -74,6 +79,11 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		returnConfirm();
+	}
+
 	private void getIntentPara() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
@@ -95,6 +105,8 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 
 		mTvTitle = (TextView) findViewById(R.id.library_account_register_title);
 		mTvTitle.setText(mTitle);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
+		mTvTitle.setHeight(mTools.convertSpToPixel(mTools.getFontSize()));
 		mTvTitle.setTextColor(fontColor); // 设置title的文字颜色
 
 		mLine = (View) findViewById(R.id.library_account_register_line);
@@ -268,7 +280,9 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 
 	// 退出
 	public void onClickForCancel(View v) {
-		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+//		PublicUtils.showToast(this, mBtCancel.getText().toString(), true);
+		// 在按返回时，要确认是否退出
+		returnConfirm();
 	}
 
 	// 获取焦点控件上的朗读字符串
@@ -373,9 +387,15 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		if (s.isEmpty()) {
 			s = et.getHint().toString();
 		} else {
-			et.setText(s.substring(0, s.length() - 1));
-			et.setSelection(s.length() - 1);
-			s = getResources().getString(R.string.common_delete) + ", " + s.substring(s.length() - 1);
+			int newLen = s.length() - 1; 
+			et.setText(s.substring(0, newLen));
+			et.setSelection(newLen);
+			s = getResources().getString(R.string.common_delete) + ", " + s.substring(newLen);
+			if (0 == newLen) { // 朗读提示信息
+				s = s + ", " + et.getHint().toString();
+			} else { // 朗读剩余字符串
+				s = s + ", " + et.getText().toString();
+			}
 		}
 		speak(s);
 	}
@@ -392,8 +412,8 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		case R.id.library_account_register_username_input:
 		case R.id.library_account_register_passwd_input:
 		case R.id.library_account_register_passwd_confirm_input:
-			// CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
-			delTailCh((EditText) v);
+//			delTailCh((EditText) v);
+			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
 			break;
 		default:
 			ret = false;
@@ -509,7 +529,6 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			return;
 		}
 		String s1 = s.toString().substring(start, start + count);
-
 		speak(s1);
 	}
 
@@ -518,8 +537,8 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		String s1 = s.toString();
 		if (null == s1 || 0 == s1.length()) {
 			s1 = getFocusHint();
-			speak(s1, TtsUtils.TTS_QUEUE_ADD);
 		}
+		speak(s1, TtsUtils.TTS_QUEUE_ADD);
 	}
 
 	private boolean checkInfoValid() {
@@ -529,25 +548,38 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		String account = mEtUserName.getText().toString();
 		String passwd = mEtPasswd.getText().toString();
 		String passwd2 = mEtPasswdConfirm.getText().toString();
+		EditText mEditText = null; // 用于设置焦点
 		int id = 0;
 		if (cardNo.isEmpty()) {
 			id = R.string.library_account_certificateno_empty;
+			mEditText = mEtCertificateNo;
 		} else if (name.isEmpty()) {
 			id = R.string.library_account_name_empty;
+			mEditText = mEtName;
 		} else if (account.isEmpty()) {
 			id = R.string.library_account_username_empty;
+			mEditText = mEtUserName;
 		} else if (passwd.isEmpty()) {
 			id = R.string.library_account_passwd_empty;
-		} else if (passwd2.isEmpty()) {
-			id = R.string.library_account_passwd_empty;
+			mEditText = mEtPasswd;
 		} else if (!passwd.equals(passwd2)) {
 			id = R.string.library_account_passwd_nosame;
+			mEditText = mEtPasswdConfirm;
 		} else {
 			ret = true;
 		}
 
 		if (0 != id) {
-			PublicUtils.showToast(this, getResources().getString(id));
+			final EditText curEditText = mEditText;
+			PublicUtils.showToast(this, getResources().getString(id), new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					if (null != curEditText) {
+						curEditText.requestFocus();
+					}
+				}
+			});
 		}
 
 		return ret;
@@ -561,6 +593,25 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		if (null != TtsUtils.getInstance()) {
 			TtsUtils.getInstance().speak(s);
 		}
+	}
+	
+	// 退出时要用户确认
+	private void returnConfirm() {
+		String title = getResources().getString(R.string.common_dialog_confirm_return_title);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title);
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+			
+			@Override
+			public void doConfirm() {
+				finish();
+			}
+			
+			@Override
+			public void doCancel() {
+				
+			}
+		});
+		mConfirmDialog.show();
 	}
 
 }

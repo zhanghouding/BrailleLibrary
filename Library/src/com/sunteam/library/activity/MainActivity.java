@@ -44,6 +44,7 @@ public class MainActivity extends MenuActivity {
 		TTSUtils.getInstance().init(this);
 		MediaPlayerUtils.getInstance().init();	//初始化MediaPlayer
 		
+		new WifiUtils().openWifi(this); // 先打开Wifi功能
 		startAccountManage(); // 如果已经登录，就不必进入账号管理界面
 		
 		Intent intent = new Intent(this, DownloadManagerService.class);
@@ -96,9 +97,6 @@ public class MainActivity extends MenuActivity {
 	@SuppressLint("DefaultLocale") @Override
 	protected void onResume() {
 		super.onResume();
-		if (!WifiUtils.checkWifiState(this)) {
-			WifiUtils.openWifi(this);
-		} 
 
 		acquireWakeLock(this);
 //		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
@@ -128,7 +126,7 @@ public class MainActivity extends MenuActivity {
 		if (null != TtsUtils.getInstance()) {
 			TtsUtils.getInstance().destroy();
 		}
-		WifiUtils.closeWifi(this);
+		new WifiUtils().closeWifi(this);
 		releaseWakeLock();
 		/*
 		android.os.Process.killProcess(android.os.Process.myPid());
@@ -205,7 +203,7 @@ public class MainActivity extends MenuActivity {
 			switch (msg.what) {
 			case LibraryConstant.MSG_CONFIRMDIALOG_RETURN:
 				if (0 == msg.arg1) { // 表示确认
-					WifiUtils.startWifiSetting(MainActivity.this);
+//					new WifiUtils().startWifiSetting(MainActivity.this);
 				}
 				break;
 			case LibraryConstant.MSG_HTTP_USER_AUTH:
@@ -227,6 +225,13 @@ public class MainActivity extends MenuActivity {
 		if ((null == username) || (TextUtils.isEmpty(username))) {
 			Intent intent = new Intent(this, AccountManager.class);
 			startActivityForResult(intent, mMenuList.size());
+		} else {
+			WifiUtils mWifiUtils = new WifiUtils();
+			if (!mWifiUtils.checkWifiState(this)) {
+				String confirmTitle = getResources().getString(R.string.library_startwifi);
+				String wifiSettingTitle = getResources().getString(R.string.library_wifi_setting);
+				mWifiUtils.startWifiConfirm(this, confirmTitle, wifiSettingTitle);
+			}
 		}
 	}
 
@@ -248,52 +253,5 @@ public class MainActivity extends MenuActivity {
 			mWakeLock = null;
 		}
 	}
-
-//	private void testCreateFile() {
-//		boolean ret = new LibraryOfflineFile().createLibraryDir(this, 0, "课外读物/少儿");
-//		MenuGlobal.debug("[Library-MainActivity][testCreateFile] ret = " + ret);
-//		
-//	}
-
-//	private void testLogin(String userName) {
-//		String url = "http://www.blc.org.cn/API/UserInterface.ashx";
-//		HttpGetUtils mHttpGetUtils = new HttpGetUtils();
-//		mHttpGetUtils.addGetParameter("requestType", "UserAuthentication");
-//		mHttpGetUtils.addGetParameter("timeStr", "2016-01-04$10:54:00");
-//		mHttpGetUtils.addGetParameter("AuthenticationStr", "MWPlatformAuthentication");
-//		mHttpGetUtils.addGetParameter("SystemCode", "MWAPP");
-//		mHttpGetUtils.addGetParameter("userName", userName);
-//		mHttpGetUtils.addGetParameter("EncryptedStr", "6fb7e13bb86e5bddd89f3ef2ba2cb28f");
-//		mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_USER_AUTH);
-//	}
-
-//	@SuppressWarnings("deprecation")
-//	private void parseUserInfo(String mJson) {
-//		MenuGlobal.debug("[Library-MainActivity][parseUserInfo] mJson = " + mJson);
-//		if (null == mJson || 0 == mJson.length()) {
-//			return;
-//		}
-//
-//		int checkState = JsonUtils.getInt(mJson, "CheckState");
-//		if (1 == checkState) {
-//			SharedPrefUtils.setSharedPrefString(MainActivity.this, LibraryConstant.LIBRARY_CONFIG_FILE, Context.MODE_WORLD_READABLE,
-//					LibraryConstant.LIBRARY_LOGIN_STATE, "1");
-//		}
-//	}
-//
-//	private void testEbook() {
-//		MenuGlobal.debug("[Library-MainActivity][testEbook]");
-//		String url = "http://www.blc.org.cn/API/EbookInterface.ashx?requestType=GetEbookCategory";
-//		HttpGetUtils mHttpGetUtils = new HttpGetUtils();
-//		mHttpGetUtils.sendGet(url, mHandler, LibraryConstant.MSG_HTTP_EBOOK_CATEGORY_LIST);
-//	}
-//
-//	private void parseEbookCategoryList(String mJson) {
-//		MenuGlobal.debug("[Library-MainActivity][parseEbookCategoryList] mJson = " + mJson);
-//		if (null == mJson || 0 == mJson.length()) {
-//			return;
-//		}
-//
-//	}
 
 }

@@ -18,7 +18,7 @@
     <string name="library_account_certificate_no_hint">请输入读者证件号，按菜单键选择其它证件类型 </string>
     <string name="library_account_disabled_id_number_hint">请输入二代残疾人证号，按菜单键可选择其它证件类型  </string>
     <string name="library_account_name">姓名: </string>
-    <string name="library_account_name_hint">请输入中文姓名</string>
+    <string name="library_account_name_hint">请输入姓名</string>
     <string name="library_account_passwd_confirm">确认密码: </string>
     <string name="library_account_passwd_confirm_hint">请再次输入密码</string>
     <string name="library_account_personal_detail_expansion">个人详细信息(选填) 展开</string>
