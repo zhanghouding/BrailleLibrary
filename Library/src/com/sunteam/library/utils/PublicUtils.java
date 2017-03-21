@@ -767,4 +767,45 @@ public class PublicUtils
 			drDao.closeDb();
 		}
 	}
+	
+	//检测下载文件是否加密，没有加密的需要先加密
+	public static void checkEncryptFile( File file )
+	{
+		if( file.exists() == false )
+		{
+			return;
+		}
+		
+		if( file.isFile() )
+		{
+			if( file.getName().contains(".temp") )	//如果是临时下载文件
+			{
+				return;
+			}
+			
+			String fullpath = file.getPath();
+			
+			//需要判断此文件是否加密，如果没有加密，这需要加密
+			SunteamJni mSunteamJni = new SunteamJni();
+			int state = mSunteamJni.getFileEncryptedState(fullpath); //0 原始数据；1加密数据；2数据损坏，表示状态无法确定
+			if( state != 1 )
+			{
+				mSunteamJni.encryptFile(fullpath);
+			}
+		}
+		
+		if( file.isDirectory() )
+		{  
+			File[] childFiles = file.listFiles();  
+			if( childFiles == null || childFiles.length == 0 ) 
+			{  
+				return;  
+			}  
+
+			for( int i = 0; i < childFiles.length; i++ ) 
+			{  
+				checkEncryptFile(childFiles[i]);  
+			}  
+		}	
+	}
 }
