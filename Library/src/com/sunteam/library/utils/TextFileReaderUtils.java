@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
+import com.sunteam.jni.SunteamJni;
 import com.sunteam.library.entity.SplitInfo;
 
 import android.os.Environment;
@@ -66,6 +67,9 @@ public class TextFileReaderUtils
 	//初始化
 	public void init( final String fullpath ) throws Exception
 	{
+		SunteamJni mSunteamJni = new SunteamJni();
+		mSunteamJni.decryptFile(fullpath);	//解密文件
+		
 		String insideSDPath = Environment.getExternalStorageDirectory().getPath();	//得到内置SD卡路径
 		if( ( fullpath != null ) && ( insideSDPath != null ) && ( fullpath.indexOf(insideSDPath) == 0 ) )
 		{
@@ -77,12 +81,12 @@ public class TextFileReaderUtils
 		}
 		destroy();	//先清除上次保存的信息
 		
-		IdentifyEncoding ie = new IdentifyEncoding();
-		mStrCharsetName = ie.GetEncodingName( fullpath );	//得到文本编码
+		//IdentifyEncoding ie = new IdentifyEncoding();
+		//mStrCharsetName = ie.GetEncodingName( fullpath );	//得到文本编码
 		
 		mBookFile = new File(fullpath);
 		mRandomAccessFile = new RandomAccessFile( mBookFile, "r");
-		long lLen = mBookFile.length();
+		long lLen = mBookFile.length()-LibraryConstant.ENCRYPT_FLAGS_LENGTH;
 		mMbBufLen = (int)lLen;
 		int begin = 0;
 		
@@ -90,6 +94,8 @@ public class TextFileReaderUtils
 		{
 			begin = paragraph( begin );
 		}	//得到分段信息
+		
+		mSunteamJni.encryptFile(fullpath);	//加密文件 
 	}
 	
 	/**

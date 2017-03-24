@@ -437,7 +437,7 @@ public class PublicUtils
 				{
 					byte[] flags = new byte[LibraryConstant.ENCRYPT_FLAGS_LENGTH]; 
 					FileOutputStream outStream = new FileOutputStream(file);
-					outStream.write(content.getBytes());
+					outStream.write(content.getBytes("GB18030"));
 					outStream.write(flags);	//加密标记
 					outStream.close();
 					
@@ -458,7 +458,7 @@ public class PublicUtils
 		try
 		{
 			File file = new File(fullpath);
-			if( !file.exists() )
+			if( file.exists() )
 			{
 				byte[] flags = new byte[LibraryConstant.ENCRYPT_FLAGS_LENGTH];
 				
