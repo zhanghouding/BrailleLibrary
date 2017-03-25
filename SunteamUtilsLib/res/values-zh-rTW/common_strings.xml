@@ -7,6 +7,7 @@
     <string name="common_dialog_confirm_cancel">取消</string>
     <string name="common_dialog_confirm_yes">是</string>
     <string name="common_dialog_confirm_no">否</string>
+    <string name="common_dialog_confirm_return_title">確認退出</string>
     <string name="common_tts_command_speak">請說話</string>
 
     <string-array name="commoncmd_list">
