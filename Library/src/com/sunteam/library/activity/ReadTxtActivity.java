@@ -455,6 +455,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	{
 		super.onDestroy();
 		MediaPlayerUtils.getInstance().stop();
+		TextFileReaderUtils.getInstance().destroy();
 	}
 	
 	@Override

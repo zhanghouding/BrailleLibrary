@@ -24,6 +24,7 @@ public class TextFileReaderUtils
 	private int mMbBufLen = 0; 						//图书总长度
 	private ArrayList<SplitInfo> mSplitInfoList  = null;	//分段信息
 	private boolean isInsideSDPath = true;				//是否内部SD卡路径
+	private String txtPath = null;
 	
 	public static TextFileReaderUtils getInstance()
 	{
@@ -62,6 +63,13 @@ public class TextFileReaderUtils
 		{
 			e.printStackTrace();
 		}
+		
+		if( txtPath != null )
+		{
+			SunteamJni mSunteamJni = new SunteamJni();
+			mSunteamJni.encryptFile(txtPath);	//加密文件
+			txtPath = null;
+		}
 	}
 	
 	//初始化
@@ -81,6 +89,7 @@ public class TextFileReaderUtils
 		}
 		destroy();	//先清除上次保存的信息
 		
+		txtPath = fullpath;
 		//IdentifyEncoding ie = new IdentifyEncoding();
 		//mStrCharsetName = ie.GetEncodingName( fullpath );	//得到文本编码
 		
@@ -93,9 +102,7 @@ public class TextFileReaderUtils
 		while( begin >= 0 )
 		{
 			begin = paragraph( begin );
-		}	//得到分段信息
-		
-		mSunteamJni.encryptFile(fullpath);	//加密文件 
+		}	//得到分段信息		
 	}
 	
 	/**
