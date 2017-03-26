@@ -29,9 +29,7 @@ import com.sunteam.library.asynctask.GetAudioChapterAsyncTask;
 import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
 import com.sunteam.library.asynctask.GetSearchResultAsyncTask;
 import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
-import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.EbookNodeEntity;
-import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.LogUtils;
 import com.sunteam.library.utils.PublicUtils;
@@ -57,8 +55,8 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 
 	private boolean isScanning = true;
 	
-	 // true 按下键时读列表第一条记录; 因为在重新检索后会朗读第一行，其实可以不使用该属性；之前是想通过该属性区分当前焦点在编辑框还是列表栏;
-	private boolean isResumeList = true;
+	// true 按下键时读列表第一条记录; 因为在重新检索后会朗读第一行，其实可以不使用该属性；之前是想通过该属性区分当前焦点在编辑框还是列表栏;
+	// private boolean isResumeList = true;
 
 	private long firstTime = 0;
 	private long lastTime = 0; // 按键时间，处理长按键：按住不放时，每间隔1秒处理一次按键

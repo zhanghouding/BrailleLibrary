@@ -226,12 +226,13 @@ public class MainActivity extends MenuActivity {
 			Intent intent = new Intent(this, AccountManager.class);
 			startActivityForResult(intent, mMenuList.size());
 		} else {
-			WifiUtils mWifiUtils = new WifiUtils();
-			if (!mWifiUtils.checkWifiState(this)) {
-				String confirmTitle = getResources().getString(R.string.library_startwifi);
-				String wifiSettingTitle = getResources().getString(R.string.library_wifi_setting);
-				mWifiUtils.startWifiConfirm(this, confirmTitle, wifiSettingTitle);
-			}
+			// 不显示提示框，而且也不进入Wifi设置界面
+			// WifiUtils mWifiUtils = new WifiUtils();
+			// if (!mWifiUtils.checkWifiState(this)) {
+			// String confirmTitle = getResources().getString(R.string.library_startwifi);
+			// String wifiSettingTitle = getResources().getString(R.string.library_wifi_setting);
+			// mWifiUtils.startWifiConfirm(this, confirmTitle, wifiSettingTitle);
+			// }
 		}
 	}
 

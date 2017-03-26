@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
+    <string name="library_app_name">数字图书馆</string>
+    <string name="library_main_title">数字图书馆</string>
+    <string name="library_startwifi">无线网络未连接，现在连接</string>
+    <string name="library_wifi_setting">无线网络设置</string>
+    <string name="library_account_manage">账号管理</string>
+    <string name="library_account_username">用户名: </string>
+    <string name="library_account_passwd">密码: </string>
+    <string name="library_account_login_username_hint">请输入用户名</string>
+    <string name="library_account_login_passwd_hint">请输入密码</string>
+    <string name="library_account_login">登录</string>
+    <string name="library_account_confirm">确定</string>
+    <string name="library_account_cancel">退出</string>
+    
+    <string name="library_account_reader_certificate_no">证件号: </string>
+    <string name="library_account_certificate_no_hint">请输入读者证件号，按菜单键选择其它证件类型 </string>
+    <string name="library_account_disabled_id_number_hint">请输入二代残疾人证号，按菜单键可选择其它证件类型  </string>
+    <string name="library_account_name">姓名: </string>
+    <string name="library_account_name_hint">请输入姓名</string>
+    <string name="library_account_passwd_confirm">确认密码: </string>
+    <string name="library_account_passwd_confirm_hint">请再次输入密码</string>
+    <string name="library_account_personal_detail_expansion">个人详细信息(选填) 展开</string>
+    <string name="library_account_personal_detail_contraction">个人详细信息(选填) 收取</string>
+    <string name="library_account_personal_phone">联系电话</string>
+    <string name="library_account_personal_phone_hint">请输入联系电话</string>
+    <string name="library_account_personal_email">E-mail</string>
+    <string name="library_account_personal_email_hint">请输入Email</string>
+    <string name="library_account_personal_company">单位名称</string>
+    <string name="library_account_personal_company_hint">请输入单位名称</string>
+    <string name="library_account_personal_zip">邮编</string>
+    <string name="library_account_personal_zip_hint">请输入邮政编码</string>
+    <string name="library_account_personal_addr">联系地址</string>
+    <string name="library_account_personal_addr_hint">请输入联系地址</string>
+    <string name="library_account_register">注册</string>
+    <string name="library_account_certificate_type_select">证件类型选择 </string>
+    <string name="library_account_nextstep">下一步</string>
+    <string name="library_account_passwd_setting">密码设置</string>
+    <string name="library_account_certificateno_empty">证件号不能为空</string>
+    <string name="library_account_name_empty">姓名不能为空</string>
+    <string name="library_account_username_empty">用户名不能为空</string>
+    <string name="library_account_passwd_empty">密码不能为空</string>
+    <string name="library_account_passwd_nosame">密码不一致</string>
+    
+    <string name="library_wait_reading_data">正在加载数据，请稍等</string>
+    <string name="library_reading_data_error">加载数据失败</string>
+    <string name="library_category_ebook">电子图书</string>
+    <string name="library_category_audio">有声读物</string>
+    <string name="library_category_video">视频课程</string>
+    <string name="library_search_edit_hint">请输入检索字符串，按菜单键开始检索</string>
+    <string name="library_search_resource_empty">没有检索资源</string>
+    <string name="library_account_logout_success">成功退出当前账号</string>
+    <string name="library_downloading_empty">无下载任务</string>
+    <string name="library_downloaded_empty">无文件</string>
 
+    <string name="library_download_chapter_index">第%1$s章</string>
+    
     <string name="library_login_success">登录成功</string>
     <string name="library_login_fail">登录失败，账号或密码不正确</string>
     <string name="library_account_bind_account_text">图书馆账号</string>
@@ -91,6 +145,97 @@
 	<string name="library_clear_success">清空成功！</string>
 	<string name="library_clear_fail">清空失败！</string>
 	
+	<string-array name="library_category_list">
+        <item>盲人资讯</item>
+        <item>有声读物</item>
+        <item>电子图书</item>
+        <item>视频课程</item>
+    </string-array>
+    <string-array name="library_main_list">
+        <item>我的图书馆</item>
+        <item>资源检索</item>
+        <item>电子图书</item>
+        <item>有声读物</item>
+        <item>视频课程</item>
+        <item>盲人资讯</item>
+        <item>个性推荐</item>
+        <item>最新更新</item>
+        <item>精品专区</item>
+    </string-array>
+    <string-array name="library_mylibrary_list">
+        <item>我收藏的资源</item>
+        <item>我收藏的分类</item>
+        <item>我的阅读历史</item>
+        <item>下载管理</item>
+        <item>退出当前账号</item>
+    </string-array>
+    <string-array name="library_download_manager_list">
+        <item>下载中</item>
+        <item>已下载</item>
+    </string-array>
+    <string-array name="library_download_state_list">
+        <item>等待下载</item>
+        <item>正在下载</item>
+        <item>已下载</item>
+    </string-array>
+    <string-array name="library_account_manager_list">
+        <item>登录</item>
+        <item>注册</item>
+        <item>密码找回</item>
+        <item>使用默认账号登录</item>
+    </string-array>
+    <string-array name="library_favorite_list">
+        <item>新闻</item>
+        <item>电子图书</item>
+        <item>有声读物</item>
+        <item>视频课程</item>
+    </string-array>
+    <string-array name="library_info_list">
+        <item>新闻公告</item>
+        <item>服务资讯</item>
+        <item>文化活动</item>
+    </string-array>
+    <string-array name="library_resource_function_menu_list">
+        <item>收藏分类</item>
+        <item>收藏当前资源</item>
+        <item>删除本地当前资源</item>
+        <item>清空本地分类资源</item>
+    </string-array>
+    <string-array name="library_chapter_function_menu_list">
+        <item>收藏当前资源</item>
+        <item>下载当前资源</item>
+        <item>删除本地当前资源</item>
+    </string-array>
+    <string-array name="library_ebook_function_menu_list">
+        <item>书签管理</item>
+        <item>上一章</item>
+        <item>下一章</item>
+        <item>跳至本章开头</item>
+        <item>跳至本章页码</item>
+        <item>朗读语音</item>
+        <item>背景音乐</item>
+    </string-array>
+    <string-array name="library_bookmark_manager_list">
+        <item>增加书签</item>
+        <item>查看书签</item>
+        <item>删除书签</item>
+        <item>清空书签</item>
+    </string-array>
+    <string-array name="library_common_function_menu_list">
+        <item>删除</item>
+        <item>清空</item>
+    </string-array>
+    <string-array name="library_audio_function_menu_list">
+        <item>书签管理</item>
+        <item>上一章</item>
+        <item>下一章</item>
+        <item>跳至本章开头</item>
+        <item>跳至本章百分比</item>
+    </string-array>
+    <string-array name="library_certificate_type_menu_list">
+        <item>读者证件号</item>
+        <item>二代残疾人证号</item>
+    </string-array>
     <string-array name="library_array_menu_voice_china">
         <item>国语男声</item>
         <item>国语女声</item>

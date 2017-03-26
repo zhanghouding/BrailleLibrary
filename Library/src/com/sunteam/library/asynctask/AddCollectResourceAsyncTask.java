@@ -1,8 +1,10 @@
 package com.sunteam.library.asynctask;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.db.CollectResourceDBDao;
 import com.sunteam.library.entity.CollectResourceEntity;
@@ -58,17 +60,23 @@ public class AddCollectResourceAsyncTask extends AsyncTask<CollectResourceEntity
 	{	
 		super.onPreExecute();
 		
-		String s = mContext.getResources().getString(R.string.library_add_collect_resource);
-		PublicUtils.showProgress(mContext, s, this);
-		//TtsUtils.getInstance().speak(s);
+		// 有人建议不显示进度框，因为时间很短！
+		// String s = mContext.getResources().getString(R.string.library_add_collect_resource);
+		// PublicUtils.showProgress(mContext, s, this);
 	}
 	
 	@Override
 	protected void onPostExecute(CollectResourceEntity result) 
 	{	
 		super.onPostExecute(result);
-		PublicUtils.cancelProgress();
+		// PublicUtils.cancelProgress();
 		
-		PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_success), null);
+		PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_success), new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				((Activity) mContext).finish();
+			}
+		});
 	}
 }

@@ -8,7 +8,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
-import com.sunteam.library.utils.WifiUtils;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 账号管理：登录、注册、密码找回; 注销功能只有在登录后才起作用。进入数字图书馆后，若尚未登录则进入账号管理界面。
@@ -24,12 +24,13 @@ public class AccountManager extends MenuActivity {
 		String[] list = getResources().getStringArray(R.array.library_account_manager_list);
 		mMenuList = ArrayUtils.strArray2List(list);
 		super.onCreate(savedInstanceState);
-		WifiUtils mWifiUtils = new WifiUtils();
-		if(!mWifiUtils.checkWifiState(this)){
-			String confirmTitle = getResources().getString(R.string.library_startwifi);
-			String wifiSettingTitle = getResources().getString(R.string.library_wifi_setting);
-			mWifiUtils.startWifiConfirm(this, confirmTitle, wifiSettingTitle);
-		}
+		// 不显示提示框，而且也不进入Wifi设置界面
+		// WifiUtils mWifiUtils = new WifiUtils();
+		// if(!mWifiUtils.checkWifiState(this)){
+		// String confirmTitle = getResources().getString(R.string.library_startwifi);
+		// String wifiSettingTitle = getResources().getString(R.string.library_wifi_setting);
+		// mWifiUtils.startWifiConfirm(this, confirmTitle, wifiSettingTitle);
+		// }
 	}
 
 	@Override
@@ -53,6 +54,18 @@ public class AccountManager extends MenuActivity {
 			break;
 		case 2: // 密码找回
 			startNextActivity(AccountPasswdRecovery.class, selectItem, menuItem);
+			break;
+		case 3: // 使用默认账号登录
+			String username = android.provider.Settings.Secure.getString(getContentResolver(), "accessibility_deviceid");
+			if (null == username || username.length() <= 6) {
+				PublicUtils.showToast(this, getResources().getString(R.string.library_login_fail));
+			} else {
+				String password = "S918P" + username.substring(username.length() - 6);
+				PublicUtils.saveUserInfo(this, username, password); // 保存用户信息
+				PublicUtils.showToast(this, getResources().getString(R.string.library_login_success));
+				setResult(Activity.RESULT_OK);
+				finish();
+			}
 			break;
 		default:
 			break;

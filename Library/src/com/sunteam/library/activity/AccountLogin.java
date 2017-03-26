@@ -112,8 +112,8 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		mBtCancel.setOnFocusChangeListener(this);
 
 		// 设置测试账号
-//		mEtUserName.setText("test1");
-//		mEtPasswd.setText("123");
+		mEtUserName.setText("test1");
+		mEtPasswd.setText("123");
 		
 		mEtUserName.requestFocus();
 		
@@ -206,6 +206,7 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 	}
 
 	// 处理【退出】键:1.焦点不在编辑框时，直接返回；2.焦点在编辑框且编辑框内容为空时直接返回；3.焦点在编辑框且编辑框内容不为空则删除编辑框尾部字符
+	@SuppressWarnings("unused")
 	private void delTailCh(EditText et) {
 		String s = et.getText().toString();
 		if (s.isEmpty()) {

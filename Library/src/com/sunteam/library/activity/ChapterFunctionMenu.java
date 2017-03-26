@@ -175,14 +175,24 @@ public class ChapterFunctionMenu extends MenuActivity {
 			}
 			break;
 		case 2: // 删除当前资源
-			{
-				String path = fatherPath;
-				File file = new File( path );
-				PublicUtils.deleteFiles(file);
-				PublicUtils.createCacheDir(fatherPath, "");	//创建缓存目录(因为用deleteFiles会连fatherPath也给删除了，所以必须重建)
-				String tips = menuItem+this.getString(R.string.library_success);
-				PublicUtils.showToast(this, tips, null);
-			}
+			String s = getResources().getString(R.string.library_dialog_delete);
+			ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
+			mConfirmDialog.setConfirmListener(new ConfirmListener() {
+				@Override
+				public void doConfirm() {
+					String path = fatherPath;
+					File file = new File(path);
+					PublicUtils.deleteFiles(file);
+					PublicUtils.createCacheDir(fatherPath, ""); // 创建缓存目录(因为用deleteFiles会连fatherPath也给删除了，所以必须重建)
+					String tips = ChapterFunctionMenu.this.getResources().getString(R.string.library_success);
+					PublicUtils.showToast(ChapterFunctionMenu.this, tips, null);
+				}
+
+				@Override
+				public void doCancel() {
+				}
+			});
+			mConfirmDialog.show();
 			break;
 		default:
 			break;
