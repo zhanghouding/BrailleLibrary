@@ -16,6 +16,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.ClearCollectCategoryAsyncTask;
 import com.sunteam.library.asynctask.ClearCollectResourceAsyncTask;
@@ -131,10 +132,9 @@ public class CommonFunctionMenu extends MenuActivity {
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
-			PublicUtils.showToast(this, getResources().getString(R.string.library_del_downloadtask));
+			// PublicUtils.showToast(this, getResources().getString(R.string.library_del_downloadtask));
 			PublicUtils.deleteDownloadTask(this, (DownloadResourceEntity) mList.get(index));
-			PublicUtils.showToast(this, getResources().getString(R.string.library_del_success));
-			mHandler.sendEmptyMessage(0);
+			promptSuccessForDeleting(R.string.library_del_success);
 			break;
 		default:
 			return;
@@ -158,20 +158,29 @@ public class CommonFunctionMenu extends MenuActivity {
 			new ClearHistoryAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, list3);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADING:
-			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtask));
+			// PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtask));
 			PublicUtils.clearDownloadTask(this, false);
-			PublicUtils.showToast(this, getResources().getString(R.string.library_dialog_clear_su));
-			mHandler.sendEmptyMessage(0);
+			promptSuccessForDeleting(R.string.library_dialog_clear_su);
 			break;
 		case LibraryConstant.MYLIBRARY_DOWNLOADED:
-			PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtask));
+			// PublicUtils.showToast(this, getResources().getString(R.string.library_clear_downloadtask));
 			PublicUtils.clearDownloadTask(this, true);
-			PublicUtils.showToast(this, getResources().getString(R.string.library_dialog_clear_su));
-			mHandler.sendEmptyMessage(0);
+			promptSuccessForDeleting(R.string.library_dialog_clear_su);
 			break;
 		default:
 			return;
 		}
+	}
+	
+	private void promptSuccessForDeleting(int id) {
+		String s = getResources().getString(id);
+		PublicUtils.showToast(this, s, new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				mHandler.sendEmptyMessage(0);
+			}
+		});
 	}
 
 }

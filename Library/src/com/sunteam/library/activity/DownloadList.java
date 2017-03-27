@@ -183,6 +183,8 @@ public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 	// 必须在主线程中执行
 	private void updateMenuList() {
 		selectItem = getSelectItem();
+		int count = mMenuList.size();
+		String curSelectItem = (String) mMenuList.get(selectItem);
 		mMenuList = getListFromDownloadResourceEntity(mDownloadResourceEntityList);
 
 		if (null == mMenuList || mMenuList.isEmpty()) {
@@ -198,7 +200,10 @@ public class DownloadList extends MenuActivity implements OnMenuKeyListener {
 		if (selectItem >= mMenuList.size()) {
 			selectItem = mMenuList.size() - 1;
 		}
-		mMenuView.setSelectItem(selectItem, true);
+		String newSelectItem = (String) mMenuList.get(selectItem);
+		if (count != mMenuList.size() || !curSelectItem.equals(newSelectItem)) {
+			mMenuView.setSelectItem(selectItem, true);
+		}
 	}
 
 	// 在子线程中执行
