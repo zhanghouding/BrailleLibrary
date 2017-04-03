@@ -555,6 +555,14 @@ public class PublicUtils
 		return	list[type];
 	}
 	
+	//得到子分类名称
+	public static String getSubCategoryName( String categoryFullName )
+	{
+		String[] str = categoryFullName.split("-");
+		
+		return	str[1];
+	}
+	
 	//得到网络是否连接
 	public static boolean isNetworkConnect()
 	{
