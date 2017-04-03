@@ -30,6 +30,7 @@ import com.sunteam.library.asynctask.GetEbookChapterAsyncTask;
 import com.sunteam.library.asynctask.GetSearchResultAsyncTask;
 import com.sunteam.library.asynctask.GetVideoChapterAsyncTask;
 import com.sunteam.library.entity.EbookNodeEntity;
+import com.sunteam.library.listener.LibraryResultListener;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.LogUtils;
 import com.sunteam.library.utils.PublicUtils;
@@ -41,7 +42,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @Note
  */
 @SuppressLint({ "NewApi", "InflateParams", "DefaultLocale" })
-public class LibrarySearchView extends View implements TextWatcher, OnEnterListener {
+public class LibrarySearchView extends View implements TextWatcher, OnEnterListener, LibraryResultListener {
 	private Context mContext = null;
 	private View mView = null;
 	private String mTitle;
@@ -52,6 +53,8 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 //	private TextView mTvEmpty = null; // 列表为空时的提示信息
 	private MenuListAdapter mAdapter = null;
 	private ArrayList<String> mMenuList = new ArrayList<String>();
+	private ArrayList<EbookNodeEntity> mEbookNodeEntityList;
+	private int focusPos = 0; // 焦点位置:0默认在编辑框,1列表框;当按【OK】键时根据焦点位置做不同处理;删除或输入时置0，按方向键时置1;其它键不变
 
 	private boolean isScanning = true;
 	
@@ -62,9 +65,9 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 	private long lastTime = 0; // 按键时间，处理长按键：按住不放时，每间隔1秒处理一次按键
 	private boolean keyUpFlag = false;
 	private int longKeyCode = 0; // 长按键值，0 表示没有按键; 只处理上键和下键
-	private int itemHeight;
-	private int dividerHeight;
-	private int visibleItemCount;
+//	private int itemHeight;
+//	private int dividerHeight;
+//	private int visibleItemCount;
 
 	public View getView() {
 		return mView;
@@ -111,9 +114,9 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		mEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEditText.setHeight(mTools.convertSpToPixel(fontSize));
 		mEditText.setOnKeyListener(mOnKeyListener);
-//		mEditText.setText("三国"); // 测试时避免输入
+		mEditText.setText("三国"); // 测试时避免输入
 
-		mAdapter = new MenuListAdapter(mContext, mMenuList, LibrarySearchView.this);
+		mAdapter = new MenuListAdapter(mContext, listView, mMenuList, LibrarySearchView.this);
 		mAdapter.setOnEnterListener(this);
 		listView.setAdapter(mAdapter);
 		listView.setFocusable(false); // 不获取焦点
@@ -192,28 +195,33 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 			case KeyEvent.KEYCODE_DPAD_CENTER:
 			case KeyEvent.KEYCODE_ENTER:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				mAdapter.enter();
+				if (0 == focusPos) {
+					startSearch();
+				} else {
+					mAdapter.enter();
+				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_UP:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				mAdapter.up();
-				scrollView();
+//				scrollView();
 				break;
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
 				mAdapter.down();
-				scrollView();
+//				scrollView();
 				break;
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				scrollPgup();
+				mAdapter.left(); //scrollPgup();
 				break;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				scrollPgdn();
+				mAdapter.right(); //scrollPgdn();
 				break;
 			case KeyEvent.KEYCODE_BACK:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
+				focusPos = 0;
 				ret = processKeyBack();
 				break;
 			default:
@@ -224,15 +232,18 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 			switch (keyCode) {
 			case KeyEvent.KEYCODE_DPAD_CENTER:
 			case KeyEvent.KEYCODE_ENTER:
+				// 已经在按下事件中处理了
+				break;
 			case KeyEvent.KEYCODE_DPAD_UP:
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 			case KeyEvent.KEYCODE_DPAD_LEFT: 
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
 				// 已经在按下事件中处理了
+				focusPos = 1;
 				break;
 			case KeyEvent.KEYCODE_MENU: // 菜单键只能在抬起事件中处理，以便与长按菜单键区分开来
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				startSearch();
+//				startSearch();
 				break;
 			default:
 				ret = false;
@@ -252,7 +263,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		}
 	}
 
-	private void scrollView() {
+	/*private void scrollView() {
 		if (mMenuList == null || 0 == mMenuList.size()) {
 			return;
 		}
@@ -345,27 +356,6 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		}
 	}
 
-	public void processLongKey() {
-		if (!keyUpFlag) { // 如果没有抬起，则不作为长按键处理
-			releaseWakeLock();
-			return;
-		}
-		if (KeyEvent.KEYCODE_DPAD_UP == longKeyCode) {
-			acquireWakeLock(mContext);
-			mAdapter.up();
-			scrollView();
-		} else if (KeyEvent.KEYCODE_DPAD_DOWN == longKeyCode) {
-			acquireWakeLock(mContext);
-			mAdapter.down();
-			scrollView();
-		} else {
-			releaseWakeLock();
-			setScanning(false);
-			longKeyCode = 0;
-		}
-
-	}
-
 	private void calcItemCount() {
 		int listHeight = listView.getHeight(); // listView.getMeasuredHeight();
 		itemHeight = ((View) listView.getChildAt(0)).getHeight();
@@ -374,6 +364,27 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 
 		LogUtils.d("[calcItemCount]itemHeight=" + itemHeight + ", listHeight=" + listHeight + ", divideHeight=" + divideHeight + ", visibleItemCount="
 				+ visibleItemCount);
+	}*/
+
+	public void processLongKey() {
+		if (!keyUpFlag) { // 如果没有抬起，则不作为长按键处理
+			releaseWakeLock();
+			return;
+		}
+		if (KeyEvent.KEYCODE_DPAD_UP == longKeyCode) {
+			acquireWakeLock(mContext);
+			mAdapter.up();
+//			scrollView();
+		} else if (KeyEvent.KEYCODE_DPAD_DOWN == longKeyCode) {
+			acquireWakeLock(mContext);
+			mAdapter.down();
+//			scrollView();
+		} else {
+			releaseWakeLock();
+			setScanning(false);
+			longKeyCode = 0;
+		}
+
 	}
 
 	// 在编辑控件中截获按键
@@ -430,11 +441,12 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 			s1 = mEditText.getHint().toString();
 		}
 		TtsUtils.getInstance().speak(s1, TtsUtils.TTS_QUEUE_ADD);
+		focusPos = 0;
 	}
 
 	// 进入章节列表界面
 	public void onEnterCompleted(int selectItem, String itemStr) {
-		EbookNodeEntity entity = GetSearchResultAsyncTask.mEbookNodeEntityList.get(selectItem);
+		EbookNodeEntity entity = mEbookNodeEntityList.get(selectItem);
 		String dbCode = entity.dbCode;
 		String sysId = entity.sysId;
 		String identifier = entity.identifier;
@@ -468,7 +480,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		if (!inputStr.isEmpty()) {
 			String pageIndex = "1";
 			String pageSize = LibraryConstant.LIBRARY_RESOURCE_PAGESIZE+"";
-			new GetSearchResultAsyncTask(mContext, mAdapter, mMenuList).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, inputStr);
+			new GetSearchResultAsyncTask(mContext, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, inputStr);
 		} else {
 			inputStr = mEditText.getHint().toString();
 			TtsUtils.getInstance().speak(inputStr);
@@ -490,5 +502,25 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 			mWakeLock.release();
 			mWakeLock = null;
 		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void onResult(ArrayList<Object> list) {
+		focusPos = 1;
+		mEbookNodeEntityList = (ArrayList)list;
+		mMenuList.clear();
+		for (int i = 0; i < mEbookNodeEntityList.size(); i++) {
+			mMenuList.add(mEbookNodeEntityList.get(i).categoryFullName);
+		}
+		mAdapter.setListData(mMenuList);
+		mAdapter.setSelectItem(0);
+	}
+
+	@Override
+	public void onFail(String error) {
+		String s = mContext.getResources().getString(R.string.library_search_resource_empty);
+		PublicUtils.showToast(mContext, s);
+		focusPos = 0;
 	}
 }

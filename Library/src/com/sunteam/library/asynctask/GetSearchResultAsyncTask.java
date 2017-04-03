@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.sunteam.common.menu.MenuListAdapter;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.entity.CategoryInfoNodeEntity;
 import com.sunteam.library.entity.EbookInfoEntity;
 import com.sunteam.library.entity.EbookNodeEntity;
+import com.sunteam.library.listener.LibraryResultListener;
 import com.sunteam.library.net.HttpDao;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
@@ -24,15 +24,13 @@ import com.sunteam.library.utils.PublicUtils;
 public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 {
 	private Context mContext;
-	private MenuListAdapter mAdapter = null;
-	private ArrayList<String> mMenuList = new ArrayList<String>();
-	public static ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
+	private ArrayList<EbookNodeEntity> mEbookNodeEntityList = new ArrayList<EbookNodeEntity>();
+	private LibraryResultListener mListener;
 	
-	public GetSearchResultAsyncTask(Context context, MenuListAdapter adapter, ArrayList<String> list ) 
+	public GetSearchResultAsyncTask(Context context, LibraryResultListener listener ) 
 	{
 		mContext = context;
-		mAdapter = adapter;
-		mMenuList = list;
+		mListener = listener;
 	}
 
 	private void search( String pageIndex, String pageSize, String searchWord, int resType )
@@ -89,6 +87,7 @@ public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 		mEbookNodeEntityList.clear();
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void onPostExecute(Boolean result) 
 	{	
@@ -97,26 +96,16 @@ public class GetSearchResultAsyncTask extends AsyncTask<String, Void, Boolean>
 		
 		if(null != mEbookNodeEntityList && mEbookNodeEntityList.size() > 0)
 		{
-			updateResourceList();
+			if(null != mListener){
+				mListener.onResult((ArrayList)mEbookNodeEntityList);
+			}
 		}
 		else
 		{
-			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			TtsUtils.getInstance().speak(s);
+			if(null != mListener){
+				mListener.onFail(null);
+			}
 		}
 	}
 
-
-	// 刷新列表
-	private void updateResourceList() 
-	{
-		mMenuList.clear();
-		for (int i = 0; i < mEbookNodeEntityList.size(); i++) 
-		{
-			mMenuList.add(mEbookNodeEntityList.get(i).categoryFullName);
-		}
-		mAdapter.setListData(mMenuList);
-		mAdapter.setSelectItem(0);
-//		listView.setVisibility(View.VISIBLE);
-	}
 }

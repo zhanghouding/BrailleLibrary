@@ -48,7 +48,7 @@
     <string name="library_category_audio">有声读物</string>
     <string name="library_category_video">视频课程</string>
     <string name="library_search_edit_hint">请输入检索字符串，按菜单键开始检索</string>
-    <string name="library_search_resource_empty">没有检索资源</string>
+    <string name="library_search_resource_empty">无检索结果</string>
     <string name="library_account_logout_success">成功退出当前账号</string>
     <string name="library_downloading_empty">无下载任务</string>
     <string name="library_downloaded_empty">无文件</string>
