@@ -1,5 +1,7 @@
 package com.sunteam.library.activity;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -23,8 +25,12 @@ import com.sunteam.common.utils.CommonUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.LoginAsyncTask;
+import com.sunteam.library.asynctask.RegisterAsyncTask;
+import com.sunteam.library.listener.LibraryResultListener;
+import com.sunteam.library.utils.PublicUtils;
 
 public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
@@ -81,12 +87,14 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		mTvUserNameHint = (TextView) findViewById(R.id.library_account_login_username_hint);
 		mTvUserNameHint.setTextColor(fontColor);
 		mEtUserName = (EditText) findViewById(R.id.library_account_login_username_input);
+		mEtUserName.setHintTextColor(fontColor);
 		mEtUserName.setTextColor(fontColor);
 
 		// 密码
 		mTvPasswdHint = (TextView) findViewById(R.id.library_account_login_passwd_hint);
 		mTvPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_login_passwd_input);
+		mEtPasswd.setHintTextColor(fontColor);
 		mEtPasswd.setTextColor(fontColor);
 
 		// Button
@@ -158,7 +166,9 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		TtsUtils.getInstance().speak(mBtConfirm.getText().toString());
 		String account = mEtUserName.getText().toString();
 		String passwd = mEtPasswd.getText().toString();
-		new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, account, passwd);
+		if (checkInfoValid()) {
+			new LoginAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, account, passwd);
+		}
 	}
 
 	public void onClickForCancel(View v) {
@@ -345,6 +355,38 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 			}
 		});
 		mConfirmDialog.show();
+	}
+
+	private boolean checkInfoValid() {
+		boolean ret = false;
+		String account = mEtUserName.getText().toString();
+		String passwd = mEtPasswd.getText().toString();
+		EditText mEditText = null; // 用于设置焦点
+		int id = 0;
+		if (account.isEmpty()) {
+			id = R.string.library_account_username_empty;
+			mEditText = mEtUserName;
+		} else if (passwd.isEmpty()) {
+			id = R.string.library_account_passwd_empty;
+			mEditText = mEtPasswd;
+		} else {
+			ret = true;
+		}
+
+		if (0 != id) {
+			final EditText curEditText = mEditText;
+			PublicUtils.showToast(this, getResources().getString(id), new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					if (null != curEditText) {
+						curEditText.requestFocus();
+					}
+				}
+			});
+		}
+
+		return ret;
 	}
 
 }

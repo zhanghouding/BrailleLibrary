@@ -110,12 +110,14 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 		mEtPasswdHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_hint);
 		mEtPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_input);
+		mEtPasswd.setHintTextColor(fontColor);
 		mEtPasswd.setTextColor(fontColor);
 
 		// 确认密码
 		mEtPasswdConfirmHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_confirm_hint);
 		mEtPasswdConfirmHint.setTextColor(fontColor);
 		mEtPasswdConfirm = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_confirm_input);
+		mEtPasswdConfirm.setHintTextColor(fontColor);
 		mEtPasswdConfirm.setTextColor(fontColor);
 
 		// Button

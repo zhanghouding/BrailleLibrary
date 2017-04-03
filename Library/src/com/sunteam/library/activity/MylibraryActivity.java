@@ -52,9 +52,7 @@ public class MylibraryActivity extends MenuActivity {
 			startNextActivity(DownloadManager.class, selectItem, menuItem, list);
 			break;
 		case 4: // 退出当前账号
-			PublicUtils.saveUserInfo(this, "", "");	// 保存用户信息
-			setResult(Activity.RESULT_OK);
-			PublicUtils.showToast(this, getResources().getString(R.string.library_account_logout_success), true);
+			logout();
 			break;
 		default:
 			break;
@@ -105,6 +103,27 @@ public class MylibraryActivity extends MenuActivity {
 		String title = getResources().getString(R.string.library_wifi_setting);
 		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
 		startActivity(intent);
+	}
+
+	// 退出当前账号
+	private void logout() {
+		PublicUtils.saveUserInfo(this, "", ""); // 保存用户信息
+		String title = getResources().getString(R.string.library_account_logout_confirm);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title);
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+
+			@Override
+			public void doConfirm() {
+				setResult(Activity.RESULT_OK);
+				finish();
+			}
+
+			@Override
+			public void doCancel() {
+
+			}
+		});
+		mConfirmDialog.show();
 	}
 
 }

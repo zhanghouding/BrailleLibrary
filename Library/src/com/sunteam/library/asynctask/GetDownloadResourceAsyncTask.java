@@ -114,7 +114,8 @@ public class GetDownloadResourceAsyncTask extends AsyncTask<Integer, Void, Void>
 			if (0 != type) {
 				s = mContext.getResources().getString(R.string.library_downloaded_empty);
 			}
-			TtsUtils.getInstance().speak(s, TtsUtils.TTS_QUEUE_ADD);
+			PublicUtils.showToast(mContext, s);
+			// TtsUtils.getInstance().speak(s, TtsUtils.TTS_QUEUE_ADD);
 		}
 	}
 

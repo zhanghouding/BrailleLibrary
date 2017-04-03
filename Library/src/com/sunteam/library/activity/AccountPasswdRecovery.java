@@ -102,12 +102,14 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		mTvCertificateNoHint = (TextView) findViewById(R.id.library_account_passwd_recovery_certificate_no_hint);
 		mTvCertificateNoHint.setTextColor(fontColor);
 		mEtCertificateNo = (EditText) findViewById(R.id.library_account_passwd_recovery_certificate_no_input);
+		mEtCertificateNo.setHintTextColor(fontColor);
 		mEtCertificateNo.setTextColor(fontColor);
 
 		// 姓名
 		mTvNameHint = (TextView) findViewById(R.id.library_account_passwd_recovery_name_hint);
 		mTvNameHint.setTextColor(fontColor);
 		mEtName = (EditText) findViewById(R.id.library_account_passwd_recovery_name_input);
+		mEtName.setHintTextColor(fontColor);
 		mEtName.setTextColor(fontColor);
 
 		// Button
@@ -133,9 +135,9 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		mBtCancel.setOnFocusChangeListener(this);
 
 		// TODO 设置测试账号
-		// certificateType = 2; // 二代残疾人证号
-		// mEtCertificateNo.setText("130182198609215753120");
-		// mEtName.setText("测试");
+		certificateType = 2; // 二代残疾人证号
+		mEtCertificateNo.setText("130182198609215753120");
+		mEtName.setText("测试");
 		
 		mEtCertificateNo.requestFocus();
 		

@@ -110,6 +110,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 		mTvTitle.setHeight(mTools.convertSpToPixel(fontSize));
 
 		mEditText.addTextChangedListener(this);
+		mEditText.setHintTextColor(mTools.getFontColor()); // 设置edit hint的前景色
 		mEditText.setTextColor(mTools.getFontColor()); // 设置edit的前景色
 		mEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEditText.setHeight(mTools.convertSpToPixel(fontSize));

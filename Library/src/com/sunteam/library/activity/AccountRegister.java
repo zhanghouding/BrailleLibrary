@@ -116,30 +116,35 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		mTvCertificateNoHint = (TextView) findViewById(R.id.library_account_register_certificate_no_hint);
 		mTvCertificateNoHint.setTextColor(fontColor);
 		mEtCertificateNo = (EditText) findViewById(R.id.library_account_register_certificate_no_input);
+		mEtCertificateNo.setHintTextColor(fontColor);
 		mEtCertificateNo.setTextColor(fontColor);
 
 		// 姓名
 		mTvNameHint = (TextView) findViewById(R.id.library_account_register_name_hint);
 		mTvNameHint.setTextColor(fontColor);
 		mEtName = (EditText) findViewById(R.id.library_account_register_name_input);
+		mEtName.setHintTextColor(fontColor);
 		mEtName.setTextColor(fontColor);
 
 		// 用户名
 		mTvUserNameHint = (TextView) findViewById(R.id.library_account_register_username_hint);
 		mTvUserNameHint.setTextColor(fontColor);
 		mEtUserName = (EditText) findViewById(R.id.library_account_register_username_input);
+		mEtUserName.setHintTextColor(fontColor);
 		mEtUserName.setTextColor(fontColor);
 
 		// 密码
 		mTvPasswdHint = (TextView) findViewById(R.id.library_account_register_passwd_hint);
 		mTvPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_register_passwd_input);
+		mEtPasswd.setHintTextColor(fontColor);
 		mEtPasswd.setTextColor(fontColor);
 
 		// 确认密码
 		mTvPasswdConfirmHint = (TextView) findViewById(R.id.library_account_register_passwd_confirm_hint);
 		mTvPasswdConfirmHint.setTextColor(fontColor);
 		mEtPasswdConfirm = (EditText) findViewById(R.id.library_account_register_passwd_confirm_input);
+		mEtPasswdConfirm.setHintTextColor(fontColor);
 		mEtPasswdConfirm.setTextColor(fontColor);
 
 		// // 个人详细信息

@@ -13,6 +13,7 @@ import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
@@ -110,6 +111,8 @@ public class CommonFunctionMenu extends MenuActivity {
 
 			@Override
 			public void doCancel() {
+				String s = mTitle + "," + getSelectItemContent();
+				TtsUtils.getInstance().speak(s);
 			}
 		});
 		mConfirmDialog.show();

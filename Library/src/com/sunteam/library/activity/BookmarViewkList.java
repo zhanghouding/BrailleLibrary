@@ -13,12 +13,14 @@ import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.DelBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.TTSUtils;
 
 /**
  * @Destryption 查看书签
@@ -27,10 +29,8 @@ import com.sunteam.library.utils.EbookConstants;
  * @Note 理论上，一本书的书签可以是无穷多个，但实际上我们可以限制在Intent传输的数据量大小之内！
  */
 public class BookmarViewkList extends MenuActivity {
-	private int type = 1; // 查看书签和删除书签共用一个界面： 1 查看书签，2
-							// 删除书签；该值就是书签管理菜单中查看书签或删除书签的序号
-	private ArrayList<BookmarkEntity> mBookmarkEntityList; // 书签列表：数目ID, 章节号,
-															// 起始位置, 书签名等
+	private int type = 1; // 查看书签和删除书签共用一个界面： 1 查看书签，2删除书签；该值就是书签管理菜单中查看书签或删除书签的序号
+	private ArrayList<BookmarkEntity> mBookmarkEntityList; // 书签列表：数目ID, 章节号,起始位置, 书签名等
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -116,6 +116,8 @@ public class BookmarViewkList extends MenuActivity {
 
 			@Override
 			public void doCancel() {
+				String s = mTitle + "," + getSelectItemContent();
+				TtsUtils.getInstance().speak(s);
 			}
 		});
 		mConfirmDialog.show();
