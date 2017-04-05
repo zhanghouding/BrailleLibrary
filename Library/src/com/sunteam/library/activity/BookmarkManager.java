@@ -1,14 +1,18 @@
 package com.sunteam.library.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
+import com.sunteam.library.asynctask.ClearBookMarkAsyncTask;
 import com.sunteam.library.asynctask.GetBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
 
@@ -30,27 +34,9 @@ public class BookmarkManager extends MenuActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode) {
-			return;
-		}
-
-		switch(requestCode){
-		case 0: // 增加书签
+		if (Activity.RESULT_OK == resultCode) {
 			setResult(Activity.RESULT_OK, data);
 			finish();
-			break;
-		case 1: // 查看书签
-			setResult(Activity.RESULT_OK, data); // 需要把跳转的书签返回给朗读界面
-			finish();
-			break;
-		case 2: // 删除书签
-			finish();
-			break;
-		case 3: // 清空书签
-			finish();
-			break;
-		default:
-			break;
 		}
 	}
 
@@ -68,6 +54,7 @@ public class BookmarkManager extends MenuActivity {
 			break;
 		case 3: // 清空书签
 			// to houding：后续提供接口，此处代码我来添加。
+			// new ClearBookMarkAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			break;
 		default:
 			break;
@@ -80,6 +67,25 @@ public class BookmarkManager extends MenuActivity {
 		mBookmarkEntity = (BookmarkEntity) intent.getSerializableExtra("book_mark");
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_bookmark_manager_list));
 	}
+
+	@SuppressLint("HandlerLeak")
+	private Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0: // 删除成功
+				Intent intent = new Intent();
+				intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, getSelectItem()); // 用于区分当前选择是删除还是清空
+				setResult(Activity.RESULT_OK, intent);
+				finish();
+				break;
+			case 1: // 网络未连接
+			case 2: // 删除异常
+				break;
+			default:
+				break;
+			}
+		}
+	};
 
 	// 启动添加书签界面
 	private void startAddBookmarkActivity(int selectItem, String menuItem) {

@@ -101,30 +101,38 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 
 		// 用户名
 		mTvUserNameHint = (TextView) findViewById(R.id.library_account_passwd_setting_username_hint);
+		mTvUserNameHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvUserNameHint.setTextColor(fontColor);
 		mTvUserName = (TextView) findViewById(R.id.library_account_passwd_setting_username_input);
+		mTvUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvUserName.setTextColor(fontColor);
 		mTvUserName.setText(userName);
 
 		// 密码
 		mEtPasswdHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_hint);
+		mEtPasswdHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_input);
+		mEtPasswd.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtPasswd.setHintTextColor(fontColor);
 		mEtPasswd.setTextColor(fontColor);
 
 		// 确认密码
 		mEtPasswdConfirmHint = (TextView) findViewById(R.id.library_account_passwd_setting_passwd_confirm_hint);
+		mEtPasswdConfirmHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtPasswdConfirmHint.setTextColor(fontColor);
 		mEtPasswdConfirm = (EditText) findViewById(R.id.library_account_passwd_setting_passwd_confirm_input);
+		mEtPasswdConfirm.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtPasswdConfirm.setHintTextColor(fontColor);
 		mEtPasswdConfirm.setTextColor(fontColor);
 
 		// Button
 		mBtConfirm = (Button) findViewById(R.id.library_account_passwd_setting_confirm);
+		mBtConfirm.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mBtConfirm.setTextColor(fontColor);
 		mBtConfirm.setBackgroundColor(mTools.getBackgroundColor());
 		mBtCancel = (Button) findViewById(R.id.library_account_passwd_setting_cancel);
+		mBtCancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mBtCancel.setTextColor(fontColor);
 		mBtCancel.setBackgroundColor(mTools.getBackgroundColor());
 
@@ -258,6 +266,7 @@ public class AccountPasswdSetting extends BaseActivity implements OnFocusChangeL
 	}
 
 	// 处理【退出】键:1.焦点不在编辑框时，直接返回；2.焦点在编辑框且编辑框内容为空时直接返回；3.焦点在编辑框且编辑框内容不为空则删除编辑框尾部字符
+	@SuppressWarnings("unused")
 	private void delTailCh(EditText et) {
 		String s = et.getText().toString();
 		if (s.isEmpty()) {

@@ -184,8 +184,8 @@ public class ChapterFunctionMenu extends MenuActivity {
 					File file = new File(path);
 					PublicUtils.deleteFiles(file);
 					PublicUtils.createCacheDir(fatherPath, ""); // 创建缓存目录(因为用deleteFiles会连fatherPath也给删除了，所以必须重建)
-					String tips = ChapterFunctionMenu.this.getResources().getString(R.string.library_success);
-					PublicUtils.showToast(ChapterFunctionMenu.this, tips, null);
+					String tips = ChapterFunctionMenu.this.getResources().getString(R.string.library_dialog_delete_su);
+					PublicUtils.showToast(ChapterFunctionMenu.this, tips, true);
 				}
 
 				@Override

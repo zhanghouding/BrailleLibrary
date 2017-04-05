@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ public class PercentEdit extends BaseActivity {
 
 		mTvTitle = (TextView) findViewById(R.id.common_number_edit_title);
 		mTvTitle.setText(mTitle);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
 		mTvTitle.setTextColor(mTools.getFontColor()); // 设置title的文字颜色
 
 		mLine = (View) findViewById(R.id.common_number_edit_line);
@@ -66,6 +68,7 @@ public class PercentEdit extends BaseActivity {
 
 		mTvNumber = (TextView) findViewById(R.id.common_number_edit_digit);
 		mTvNumber.setText(mPercentStr);
+		mTvNumber.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvNumber.setTextColor(mTools.getFontColor()); // 设置文字颜色
 		TtsUtils.getInstance().speak(mTitle + "," + mPercentStr);
 	}
@@ -172,7 +175,7 @@ public class PercentEdit extends BaseActivity {
 	// 设置当前输入的百分比
 	private void setPercent() {
 		mTvNumber.setText(mPercentStr);
-		TtsUtils.getInstance().speak(mPercentStr);
+		TtsUtils.getInstance().speakSymbol(mPercentStr, TtsUtils.TTS_QUEUE_FLUSH);
 	}
 
 	// 数字尾部增减1；state true 增1；false 减1
@@ -180,15 +183,15 @@ public class PercentEdit extends BaseActivity {
 		String format = "###.00"; // 使用"#"号会删除前导0和尾部多余的0;使用"0",则前后补0
 		int index = mPercentStr.indexOf('.'); // 小数点位置
 		float step = 0.0f;
-		if (-1 == index) {
+		if (-1 == index) { // 没有小数点
 			step = 1;
 			format = "###";
-		} else if (2 == mPercentStr.length() - index) {
-			step = 0.1f;
-			format = "##0.0";
-		} else {
+		} else if (mPercentStr.length() - index >= 3) { // 说明有两位小数位
 			step = 0.01f;
 			format = "##0.00";
+		} else { // 没有小数位或只有一位小数位
+			step = 0.1f;
+			format = "##0.0";
 		}
 		mPercentFloat = str2FloatNumber(mPercentStr);
 		if (!state) {
@@ -212,11 +215,12 @@ public class PercentEdit extends BaseActivity {
 
 	// 删除尾部字符，已经删空后提示输入数字
 	private void deleteTailCh() {
-		if (0 == mPercentStr.length()) {
-			readingPromptInfo(R.string.library_input_percent_error);
-		} else {
+		if (0 != mPercentStr.length()) {
 			mPercentStr = mPercentStr.substring(0, mPercentStr.length() - 1);
 			setPercent();
+		}
+		if (0 == mPercentStr.length()) {
+			readingPromptInfo(R.string.library_input_percent_error);
 		}
 	}
 
@@ -238,11 +242,11 @@ public class PercentEdit extends BaseActivity {
 			readingPromptInfo(R.string.library_input_percent_error);
 			return;
 		}
-		if (mPercentStr.equals("100")) {
+		if (mPercentStr.equals("100") || mPercentStr.isEmpty()) {
+			// 认为是数字输入
+			isNumericKey = true;
 			if (isNumericKey) {
 				mPercentStr = "0.";
-			} else {
-				mPercentStr = "0.0";
 			}
 		} else {
 			mPercentStr = mPercentStr + ".";
@@ -278,6 +282,7 @@ public class PercentEdit extends BaseActivity {
 		// 1. 总长度最大为5："xx.xx";2.整数长度最大为3:"100";3.小数有效位最大为2;4.整数长度为3而字符串大于"100"
 		if (mPercentStr.length() > 5 || dotIndex > 3 || mPercentStr.length() - dotIndex - 1 > 2 || (dotIndex == 3 && mPercentStr.compareTo("100") > 0)) {
 			readingOutOfRange(R.string.library_input_percent_max, "100");
+			isNumericKey = false; // 超出最大值后，再次按数字要清空
 		} else{
 			setPercent();
 		}

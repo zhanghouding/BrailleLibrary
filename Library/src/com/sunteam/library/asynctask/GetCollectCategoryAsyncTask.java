@@ -141,7 +141,7 @@ public class GetCollectCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayL
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			TtsUtils.getInstance().speak(s);
+			PublicUtils.showToast(mContext, s);
 		}
 	}
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.PublicUtils;
 
@@ -56,16 +57,7 @@ public class AccountManager extends MenuActivity {
 			startNextActivity(AccountPasswdRecovery.class, selectItem, menuItem);
 			break;
 		case 3: // 使用默认账号登录
-			String username = android.provider.Settings.Secure.getString(getContentResolver(), "accessibility_deviceid");
-			if (null == username || username.length() <= 6) {
-				PublicUtils.showToast(this, getResources().getString(R.string.library_login_fail));
-			} else {
-				String password = "S918P" + username.substring(username.length() - 6);
-				PublicUtils.saveUserInfo(this, username, password); // 保存用户信息
-				PublicUtils.showToast(this, getResources().getString(R.string.library_login_success));
-				setResult(Activity.RESULT_OK);
-				finish();
-			}
+			loginWithDefaultUsername();
 			break;
 		default:
 			break;
@@ -78,6 +70,29 @@ public class AccountManager extends MenuActivity {
 		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem);
 		intent.setClass(this, cls);
 		startActivityForResult(intent, selectItem);
+	}
+
+	// 使用默认账号登录
+	private void loginWithDefaultUsername() {
+		// TODO 使用测试账号
+		String username = "test1";
+		String password = "123";
+
+		/*String username = android.provider.Settings.Secure.getString(getContentResolver(), "accessibility_deviceid");
+		if (null == username || username.length() <= 6) {
+			PublicUtils.showToast(this, getResources().getString(R.string.library_login_fail));
+		} else*/ {
+//			String password = "S918P" + username.substring(username.length() - 6);
+			PublicUtils.saveUserInfo(this, username, password); // 保存用户信息
+			PublicUtils.showToast(this, getResources().getString(R.string.library_login_success), new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					setResult(Activity.RESULT_OK);
+					finish();
+				}
+			});
+		}
 	}
 
 }

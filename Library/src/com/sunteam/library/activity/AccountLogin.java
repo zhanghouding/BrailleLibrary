@@ -1,7 +1,5 @@
 package com.sunteam.library.activity;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -28,8 +26,6 @@ import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.LoginAsyncTask;
-import com.sunteam.library.asynctask.RegisterAsyncTask;
-import com.sunteam.library.listener.LibraryResultListener;
 import com.sunteam.library.utils.PublicUtils;
 
 public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
@@ -85,23 +81,29 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 
 		// 用户名
 		mTvUserNameHint = (TextView) findViewById(R.id.library_account_login_username_hint);
+		mTvUserNameHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvUserNameHint.setTextColor(fontColor);
 		mEtUserName = (EditText) findViewById(R.id.library_account_login_username_input);
+		mEtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtUserName.setHintTextColor(fontColor);
 		mEtUserName.setTextColor(fontColor);
 
 		// 密码
 		mTvPasswdHint = (TextView) findViewById(R.id.library_account_login_passwd_hint);
+		mTvPasswdHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvPasswdHint.setTextColor(fontColor);
 		mEtPasswd = (EditText) findViewById(R.id.library_account_login_passwd_input);
+		mEtPasswd.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtPasswd.setHintTextColor(fontColor);
 		mEtPasswd.setTextColor(fontColor);
 
 		// Button
 		mBtConfirm = (Button) findViewById(R.id.library_account_login_confirm);
+		mBtConfirm.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mBtConfirm.setTextColor(fontColor);
 		mBtConfirm.setBackgroundColor(mTools.getBackgroundColor());
 		mBtCancel = (Button) findViewById(R.id.library_account_login_cancel);
+		mBtCancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mBtCancel.setTextColor(fontColor);
 		mBtCancel.setBackgroundColor(mTools.getBackgroundColor());
 
@@ -119,9 +121,10 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		mBtConfirm.setOnFocusChangeListener(this);
 		mBtCancel.setOnFocusChangeListener(this);
 
+		// TODO 设置测试账号
 		// 设置测试账号
-		mEtUserName.setText("test1");
-		mEtPasswd.setText("123");
+		// mEtUserName.setText("test1");
+		// mEtPasswd.setText("123");
 		
 		mEtUserName.requestFocus();
 		

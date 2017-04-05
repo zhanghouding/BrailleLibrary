@@ -2,6 +2,7 @@ package com.sunteam.library.asynctask;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -116,7 +117,7 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			TtsUtils.getInstance().speak(s);
+			PublicUtils.showToast(mContext, s);
 		}
 	}
 
@@ -135,6 +136,6 @@ public class GetEbookChapterAsyncTask extends AsyncTask<String, Void, ArrayList<
 		intent.putExtra("lastChapterIndex", lastChapterIndex);
 		intent.putExtra("offset", offset);
 		intent.setClass(mContext, EbookChapterList.class);
-		mContext.startActivity(intent);
+		((Activity) mContext).startActivityForResult(intent, 0); // 以便从阅读历史进入后返回到阅读列表时更新阅读历史列表！
 	}
 }

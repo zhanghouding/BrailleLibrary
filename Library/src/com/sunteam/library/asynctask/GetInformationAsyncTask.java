@@ -107,7 +107,7 @@ public class GetInformationAsyncTask extends AsyncTask<Integer, Void, Boolean>
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			TtsUtils.getInstance().speak(s);
+			PublicUtils.showToast(mContext, s);
 		}
 	}
 

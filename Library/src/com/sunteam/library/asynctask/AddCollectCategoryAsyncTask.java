@@ -68,6 +68,6 @@ public class AddCollectCategoryAsyncTask extends AsyncTask<CollectCategoryEntity
 		super.onPostExecute(result);
 		PublicUtils.cancelProgress();
 		
-		PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_success), null);
+		PublicUtils.showToast(mContext, mContext.getString(R.string.library_add_collect_success), true);
 	}
 }

@@ -100,23 +100,29 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 
 		// 证件号
 		mTvCertificateNoHint = (TextView) findViewById(R.id.library_account_passwd_recovery_certificate_no_hint);
+		mTvCertificateNoHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvCertificateNoHint.setTextColor(fontColor);
 		mEtCertificateNo = (EditText) findViewById(R.id.library_account_passwd_recovery_certificate_no_input);
+		mEtCertificateNo.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtCertificateNo.setHintTextColor(fontColor);
 		mEtCertificateNo.setTextColor(fontColor);
 
 		// 姓名
 		mTvNameHint = (TextView) findViewById(R.id.library_account_passwd_recovery_name_hint);
+		mTvNameHint.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvNameHint.setTextColor(fontColor);
 		mEtName = (EditText) findViewById(R.id.library_account_passwd_recovery_name_input);
+		mEtName.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mEtName.setHintTextColor(fontColor);
 		mEtName.setTextColor(fontColor);
 
 		// Button
 		mBtConfirm = (Button) findViewById(R.id.library_account_passwd_recovery_confirm);
+		mBtConfirm.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mBtConfirm.setTextColor(fontColor);
 		mBtConfirm.setBackgroundColor(mTools.getBackgroundColor());
 		mBtCancel = (Button) findViewById(R.id.library_account_passwd_recovery_cancel);
+		mBtCancel.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mBtCancel.setTextColor(fontColor);
 		mBtCancel.setBackgroundColor(mTools.getBackgroundColor());
 
@@ -236,6 +242,7 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 	}
 
 	// 处理【退出】键:1.焦点不在编辑框时，直接返回；2.焦点在编辑框且编辑框内容为空时直接返回；3.焦点在编辑框且编辑框内容不为空则删除编辑框尾部字符
+	@SuppressWarnings("unused")
 	private void delTailCh(EditText et) {
 		String s = et.getText().toString();
 		if (s.isEmpty()) {

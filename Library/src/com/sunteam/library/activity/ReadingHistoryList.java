@@ -27,6 +27,7 @@ import com.sunteam.library.utils.PublicUtils;
  */
 public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListener {
 	private ArrayList<HistoryEntity> mHistoryEntityList = new ArrayList<HistoryEntity>();
+	private int resultType = 0; // 从子界面返回类型：0从播放界面返回；1从功能菜单返回
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -43,7 +44,11 @@ public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListene
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode) { // 在子菜单中回传的标志
+		if (Activity.RESULT_OK != resultCode) {
+			// 凡是从子界面返回时，都不会设置resultCode参数
+			if(0 == resultType) { // 从播放界面返回时，需要立即更新列表,并重新设置焦点行为第一行！
+				freshMenuList();
+			}
 			return;
 		}
 
@@ -82,6 +87,7 @@ public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListene
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
+		resultType = 0;
 		String[] list = null;
 		Class<?> cls = null;
 
@@ -149,6 +155,7 @@ public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListene
 
 	@Override
 	public void onMenuKeyCompleted(int selectItem, String menuItem) {
+		resultType = 1;
 		Intent intent = new Intent();
 		intent.putExtra(MenuConstant.INTENT_KEY_LIST, mHistoryEntityList); // 菜单列表
 		intent.putExtra(MenuConstant.INTENT_KEY_SELECTEDITEM, selectItem); // 当前菜单项
@@ -157,4 +164,16 @@ public class ReadingHistoryList extends MenuActivity implements OnMenuKeyListene
 		startActivityForResult(intent, selectItem);
 	}
 
+	// 从播放界面返回时，要刷新阅读历史列表
+	private void freshMenuList() {
+		int index = getSelectItem();
+		selectItem = 0;
+		HistoryEntity mHistoryEntity = mHistoryEntityList.get(index);
+		mHistoryEntityList.remove(index);
+		mHistoryEntityList.add(selectItem, mHistoryEntity);
+		mMenuList = getListFromHistoryEntity(mHistoryEntityList);
+		setListData(mMenuList);
+		mMenuView.setSelectItem(selectItem);
+	}
+	
 }

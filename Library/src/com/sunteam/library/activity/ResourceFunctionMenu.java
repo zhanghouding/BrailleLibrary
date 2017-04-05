@@ -11,6 +11,8 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.ConfirmDialog;
+import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.AddCollectCategoryAsyncTask;
 import com.sunteam.library.asynctask.AddCollectResourceAsyncTask;
@@ -79,23 +81,11 @@ public class ResourceFunctionMenu extends MenuActivity {
 				new AddCollectResourceAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entity);
 			}
 			break;
-		case 2: // 删除当前资源
-			{
-				String path = fatherPath + resourceName + "/";
-				File file = new File( path );
-				PublicUtils.deleteFiles(file);
-				String tips = menuItem+this.getString(R.string.library_success);
-				PublicUtils.showToast(this, tips, null);
-			}
+		case 2: // 清空分类资源
+			deleteConfirm(0);
 			break;
-		case 3: // 清空分类资源
-			{
-				File file = new File( fatherPath );
-				PublicUtils.deleteFiles(file);
-				PublicUtils.createCacheDir(fatherPath, "");	//创建缓存目录(因为用deleteFiles会连fatherPath也给删除了，所以必须重建)
-				String tips = menuItem+this.getString(R.string.library_success);
-				PublicUtils.showToast(this, tips, null);
-			}
+		case 3: // 删除当前资源
+			deleteConfirm(1);
 			break;
 		default:
 			break;
@@ -113,6 +103,50 @@ public class ResourceFunctionMenu extends MenuActivity {
 		sysId = intent.getStringExtra(LibraryConstant.INTENT_KEY_SYSID);
 		mTitle = getResources().getString(R.string.common_functionmenu);
 		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_resource_function_menu_list));
+	}
+
+	// type:0清空分类资源;1删除当前资源
+	private void deleteConfirm(final int type) {
+		String title = this.getString(R.string.library_dialog_clear);
+		if(0 != type){
+			title = this.getString(R.string.library_dialog_delete);
+		}
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, title);
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+
+			@Override
+			public void doConfirm() {
+				String hint;
+				if(0 == type){
+					clearResources();
+					hint = getString(R.string.library_dialog_clear_su);
+				} else{
+					deleteResource();
+					hint = getString(R.string.library_dialog_delete_su);
+				}
+				PublicUtils.showToast(ResourceFunctionMenu.this, hint, true);
+			}
+
+			@Override
+			public void doCancel() {
+
+			}
+		});
+		mConfirmDialog.show();
+	}
+
+	// 清空本地分类资源
+	private void clearResources() {
+		File file = new File( fatherPath );
+		PublicUtils.deleteFiles(file);
+		PublicUtils.createCacheDir(fatherPath, "");	//创建缓存目录(因为用deleteFiles会连fatherPath也给删除了，所以必须重建)
+	}
+
+	// 删除当前资源
+	private void deleteResource() {
+		String path = fatherPath + resourceName + "/";
+		File file = new File( path );
+		PublicUtils.deleteFiles(file);
 	}
 
 }

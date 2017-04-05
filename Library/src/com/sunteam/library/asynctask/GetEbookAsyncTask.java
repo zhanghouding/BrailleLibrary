@@ -106,7 +106,7 @@ public class GetEbookAsyncTask extends AsyncTask<String, Void, Boolean>
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			TtsUtils.getInstance().speak(s);
+			PublicUtils.showToast(mContext, s);
 		}
 	}
 

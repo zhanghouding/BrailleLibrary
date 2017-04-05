@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -63,6 +64,7 @@ public class VoiceSpeed extends BaseActivity {
 
 		mTvTitle = (TextView) findViewById(R.id.common_number_edit_title);
 		mTvTitle.setText(mTitle);
+		mTvTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel()); // 设置title字号
 		mTvTitle.setTextColor(mTools.getFontColor()); // 设置title的文字颜色
 
 		mLine = (View) findViewById(R.id.common_number_edit_line);
@@ -70,6 +72,7 @@ public class VoiceSpeed extends BaseActivity {
 
 		mTvSpeed = (TextView) findViewById(R.id.common_number_edit_digit);
 		mTvSpeed.setText(String.valueOf(ttsSpeed));
+		mTvSpeed.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTools.getFontPixel());
 		mTvSpeed.setTextColor(mTools.getFontColor()); // 设置文字颜色
 	}
 
