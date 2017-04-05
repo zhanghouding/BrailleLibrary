@@ -521,6 +521,10 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 				}
 			}
 		}
+		else
+		{
+			MediaPlayerUtils.getInstance().resume();
+		}
 	}
 	
 	private void exit()
