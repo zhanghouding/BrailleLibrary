@@ -26,7 +26,10 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.sunteam.common.tts.TtsCompletedListener;
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.PromptDialog;
+import com.sunteam.common.utils.PromptDialogNospeech;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.dict.utils.DBUtil;
 import com.sunteam.jni.SunteamJni;
@@ -236,6 +239,18 @@ public class PublicUtils
 		PromptDialog pd = new PromptDialog(context, tips);
 		pd.setPromptListener( listener );
 		pd.show();
+	}
+
+	// 显示提示信息并朗读(不需要接收TTS结束回调), 以追加方式朗读
+	public static void showToast(Context context, String tips, int mode) {
+		final PromptDialogNospeech pd = new PromptDialogNospeech(context, tips);
+		pd.show();
+		TtsUtils.getInstance().setCompletedListener(new TtsCompletedListener() {
+			public void onCompleted(String error) {
+				pd.dismiss();
+			}
+		});
+		TtsUtils.getInstance().speak(tips, mode);
 	}
 
 	//检查讯飞语音服务是否安装

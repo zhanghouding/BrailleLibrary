@@ -229,7 +229,11 @@ public class PercentEdit extends BaseActivity {
 		if (0 == mPercentStr.length()) {
 			readingPromptInfo(R.string.library_input_percent_error);
 		} else {
-			mPercentStr = mPercentStr + "0";
+			if (mPercentStr.equals("0")) {
+				mPercentStr = mPercentStr.concat(".");
+			}
+			mPercentStr = mPercentStr.concat("0");
+			
 			checkValidValue();
 		}
 	}
@@ -325,7 +329,7 @@ public class PercentEdit extends BaseActivity {
 
 			@Override
 			public void onComplete() {
-				TtsUtils.getInstance().speak(mPercentStr);
+				TtsUtils.getInstance().speakSymbol(mPercentStr, TtsUtils.TTS_QUEUE_FLUSH);
 			}
 		});
 	}

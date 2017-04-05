@@ -37,7 +37,7 @@ public class AudioFunctionMenu extends MenuActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		if (Activity.RESULT_OK != resultCode || null == data) {
+		if (Activity.RESULT_OK != resultCode) {
 			return;
 		}
 		switch(requestCode){

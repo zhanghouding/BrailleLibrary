@@ -98,7 +98,7 @@ public class MainActivity extends MenuActivity {
 	protected void onResume() {
 		super.onResume();
 
-		acquireWakeLock(this);
+		// acquireWakeLock(this); // 允许进入休眠
 //		MenuGlobal.debug("[Library-MainActivity][onResume], this = " + this);
 	}
 
@@ -127,7 +127,7 @@ public class MainActivity extends MenuActivity {
 			TtsUtils.getInstance().destroy();
 		}
 		new WifiUtils().closeWifi(this);
-		releaseWakeLock();
+		// releaseWakeLock(); // 已经允许休眠，就不必调用该方法
 		/*
 		android.os.Process.killProcess(android.os.Process.myPid());
 		System.exit(1);
@@ -239,7 +239,7 @@ public class MainActivity extends MenuActivity {
 	// 电子图书馆界面禁止休眠
 	private WakeLock mWakeLock = null; // 唤醒锁
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unused" })
 	private void acquireWakeLock(Context context) {
 		if (null == mWakeLock) {
 			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
@@ -248,6 +248,7 @@ public class MainActivity extends MenuActivity {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void releaseWakeLock() {
 		if (null != mWakeLock && mWakeLock.isHeld()) {
 			mWakeLock.release();

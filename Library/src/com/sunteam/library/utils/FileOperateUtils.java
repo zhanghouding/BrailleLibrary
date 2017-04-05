@@ -60,7 +60,7 @@ public class FileOperateUtils {
 	}
 
 	public static String getMusicPath() {
-		String musicPath = LibraryConstant.LIBRARY_ROOT_PATH + "背景音乐/";
+		String musicPath = LibraryConstant.BACKGROUND_MUSIC_PATH;
 		return musicPath;
 	}
 

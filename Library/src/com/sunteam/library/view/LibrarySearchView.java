@@ -199,26 +199,36 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 				if (0 == focusPos) {
 					startSearch();
 				} else {
-					mAdapter.enter();
+					if (isValidKey()) {
+						mAdapter.enter();
+					}
 				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_UP:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				mAdapter.up();
+				if (isValidKey()) {
+					mAdapter.up();
+				}
 //				scrollView();
 				break;
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				mAdapter.down();
+				if (isValidKey()) {
+					mAdapter.down();
+				}
 //				scrollView();
 				break;
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				mAdapter.left(); //scrollPgup();
+				if (isValidKey()) {
+					mAdapter.left(); //scrollPgup();
+				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-				mAdapter.right(); //scrollPgdn();
+				if (isValidKey()) {
+					mAdapter.right(); //scrollPgdn();
+				}
 				break;
 			case KeyEvent.KEYCODE_BACK:
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
@@ -244,7 +254,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 				break;
 			case KeyEvent.KEYCODE_MENU: // 菜单键只能在抬起事件中处理，以便与长按菜单键区分开来
 				PublicUtils.hideMsgIputKeyboard((Activity) mContext);
-//				startSearch();
+				isValidKey();
 				break;
 			default:
 				ret = false;
@@ -395,7 +405,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 //			LogUtils.d("[onKey] keyCode=" + keyCode + ", action = " + event.getAction());
 			if (KeyEvent.KEYCODE_DPAD_LEFT == keyCode || KeyEvent.KEYCODE_DPAD_RIGHT == keyCode || KeyEvent.KEYCODE_DPAD_CENTER == keyCode
 					|| KeyEvent.KEYCODE_ENTER == keyCode) {
-				// 截获左右键、OK键, 编辑框不处理这三个键，由词典列表界面处理
+				// 截获左右键、OK键, 编辑框不处理这三个键，由列表界面处理
 				if (event.getAction() == KeyEvent.ACTION_DOWN) {
 					onKeyDown(keyCode, event);
 				} else {
@@ -483,9 +493,24 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 			String pageSize = LibraryConstant.LIBRARY_RESOURCE_PAGESIZE+"";
 			new GetSearchResultAsyncTask(mContext, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pageIndex, pageSize, inputStr);
 		} else {
-			inputStr = mEditText.getHint().toString();
-			TtsUtils.getInstance().speak(inputStr);
+			invalidKey();
 		}
+	}
+
+	// 启动检索
+	private boolean isValidKey() {
+		boolean ret = true;
+		if(mMenuList.isEmpty()){
+			ret = false;
+			invalidKey();
+		}
+		return ret;
+	}
+
+	// 提示非法按键
+	private void invalidKey() {
+		String s = mEditText.getHint().toString();
+		PublicUtils.showToast(mContext, s);
 	}
 
 	private WakeLock mWakeLock = null;

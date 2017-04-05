@@ -140,8 +140,8 @@ public class GetCollectCategoryAsyncTask extends AsyncTask<Integer, Void, ArrayL
 		}
 		else
 		{
-			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			PublicUtils.showToast(mContext, s);
+			String s = mContext.getResources().getString(R.string.library_favorite_category_null);
+			PublicUtils.showToast(mContext, s, TtsUtils.TTS_QUEUE_ADD);
 		}
 	}
 

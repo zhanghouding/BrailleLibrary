@@ -9,6 +9,7 @@ import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.GetCollectCategoryAsyncTask;
 import com.sunteam.library.asynctask.GetCollectResourceAsyncTask;
@@ -114,8 +115,15 @@ public class MylibraryActivity extends MenuActivity {
 
 			@Override
 			public void doConfirm() {
-				setResult(Activity.RESULT_OK);
-				finish();
+				String s = getResources().getString(R.string.library_account_logout_success);
+				PublicUtils.showToast(MylibraryActivity.this, s, new PromptListener() {
+					
+					@Override
+					public void onComplete() {
+						setResult(Activity.RESULT_OK);
+						finish();
+					}
+				});
 			}
 
 			@Override

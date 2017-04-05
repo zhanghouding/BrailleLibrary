@@ -87,8 +87,8 @@ public class BookmarkNameEdit extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void setResultCode() {
+	/*public void setResultCode() {
 		setResult(Activity.RESULT_OK);
 		finish();
-	}
+	}*/
 }

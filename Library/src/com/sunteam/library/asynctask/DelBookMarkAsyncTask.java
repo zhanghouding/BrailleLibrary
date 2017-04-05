@@ -85,7 +85,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<BookmarkEntity, Void, Intege
 				});
 				break;
 			case LibraryConstant.RESULT_SUCCESS:	//成功
-				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_bookmark_success), new PromptListener() {
+				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_success), new PromptListener() {
 					
 					@Override
 					public void onComplete() {

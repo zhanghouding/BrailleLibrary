@@ -137,7 +137,27 @@ public class ResourceListForRecommend extends MenuActivity implements OnMenuKeyL
 
 	@Override
 	public void onMenuKeyCompleted(int selectItem, String menuItem) {
-		// TODO 可以只收藏当前资源，暂时不提供菜单功能
+		EbookNodeEntity mEbookNodeEntity = mEbookNodeEntityList.get(selectItem);
+		// TODO 需要获取数据类型和父目录
+		int dataType = 2; //Integer.parseInt(mEbookNodeEntity.dataType); // "1,2", "1,3", "1,6"
+		String fatherPath = ""; // 父目录
+		Intent intent = new Intent();
+		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, mTitle); // 分类名称
+		intent.putExtra(LibraryConstant.INTENT_KEY_RESOURCE, menuItem);
+		intent.putExtra(LibraryConstant.INTENT_KEY_TYPE, dataType); // 数据类别：电子书、有声书、口述影像
+		intent.putExtra(LibraryConstant.INTENT_KEY_FATHER_PATH, fatherPath); // 父目录
+		intent.putExtra(LibraryConstant.INTENT_KEY_CATEGORY_CODE, mEbookNodeEntity.categoryCode);	//分类编码
+		intent.putExtra(LibraryConstant.INTENT_KEY_DBCODE, mEbookNodeEntityList.get(selectItem).dbCode);	//数据编码
+		switch (dataType) {
+		case LibraryConstant.LIBRARY_DATATYPE_EBOOK: // 电子图书
+			intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, mEbookNodeEntityList.get(selectItem).identifier); // 书本d
+			break;
+		default:
+			intent.putExtra(LibraryConstant.INTENT_KEY_SYSID, mEbookNodeEntityList.get(selectItem).sysId); // 系统id
+			break;
+		}
+//		intent.setClass(this, ResourceFunctionMenuForRecommend.class);
+//		startActivityForResult(intent, selectItem);
 	}
 
 	@SuppressLint("InflateParams") @Override

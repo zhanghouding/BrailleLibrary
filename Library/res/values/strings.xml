@@ -12,6 +12,8 @@
     <string name="library_account_login">登录</string>
     <string name="library_account_confirm">确定</string>
     <string name="library_account_cancel">退出</string>
+    <string name="library_account_logout_confirm">确认退出当前账号</string>
+    <string name="library_account_logout_success">退出成功</string>
     
     <string name="library_account_reader_certificate_no">证件号: </string>
     <string name="library_account_certificate_no_hint">请输入读者证件号，按菜单键选择其它证件类型 </string>
@@ -47,16 +49,15 @@
     <string name="library_category_ebook">电子图书</string>
     <string name="library_category_audio">有声读物</string>
     <string name="library_category_video">视频课程</string>
-    <string name="library_search_edit_hint">请输入检索字符串</string>
+    <string name="library_search_edit_hint">请输入，按确认键搜索</string>
     <string name="library_search_resource_empty">无检索结果</string>
-    <string name="library_account_logout_confirm">确认退出当前账号</string>
     <string name="library_downloading_empty">无下载任务</string>
     <string name="library_downloaded_empty">无文件</string>
 
     <string name="library_download_chapter_index">第%1$s章</string>
     
     <string name="library_login_success">登录成功</string>
-    <string name="library_login_fail">登录失败，账号或密码不正确</string>
+    <string name="library_login_fail">登录失败，网络未连接或者账号错误</string>
     <string name="library_account_bind_account_text">图书馆账号</string>
     <string name="library_account_bind_account_passwd_text">账号密码</string>
     <string name="library_account_bind_account_hint">请输入账号</string>
@@ -117,10 +118,10 @@
 	<string name="library_downloading_tips">当前资源已在在下载列表中，是否重新下载？</string>
 	<string name="library_net_error">网络未连接！</string>
 	<string name="library_del_bookmark">正在删除书签</string>
-	<string name="library_del_bookmark_success">删除书签成功！</string>
+	<!-- <string name="library_del_bookmark_success">删除书签成功！</string> -->
 	<string name="library_del_bookmark_fail">该书签不存在！</string>
-	<string name="library_favorite_category_null">无收藏的分类</string>
-	<string name="library_favorite_resource_null">无收藏的资源</string>
+	<string name="library_favorite_category_null">无收藏</string>
+	<string name="library_favorite_resource_null">无收藏</string>
 	<string name="library_reading_history_null">无阅读历史</string>
 	<string name="library_del_collect_category">正在删除收藏的分类</string>
 	<string name="library_del_collect_resource">正在删除收藏的资源</string>
@@ -203,6 +204,10 @@
         <item>清空本地分类资源</item>
         <item>删除本地当前资源</item>
     </string-array>
+    <!-- <string-array name="library_resource_function_menu_list_for_recommend">
+        <item>收藏当前资源</item>
+        <item>删除本地当前资源</item>
+    </string-array> -->
     <string-array name="library_chapter_function_menu_list">
         <item>收藏当前资源</item>
         <item>下载当前资源</item>
