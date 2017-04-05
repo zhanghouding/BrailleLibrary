@@ -288,7 +288,15 @@ public class BookMarkDBDao
 		db.execSQL("delete from " + DatabaseConstants.BOOKMARK_TABLE_NAME + " where " + DatabaseConstants.BOOKMARK_USERNAME + " = ?", new String[]{username});
 		db.close();
 	}
-		
+	
+	//删除数据
+	public void deleteAll( String userName, String bookId )
+	{
+		SQLiteDatabase db = mLibraryDBHelper.getWritableDatabase();
+		db.execSQL("delete from " + DatabaseConstants.BOOKMARK_TABLE_NAME + " where " + DatabaseConstants.BOOKMARK_USERNAME + " = ? and " + DatabaseConstants.BOOKMARK_BOOKID + " = ?", new String[]{userName, bookId});
+		db.close();
+	}
+			
 	//删除所有的数据
 	public void deleteAll() 
 	{

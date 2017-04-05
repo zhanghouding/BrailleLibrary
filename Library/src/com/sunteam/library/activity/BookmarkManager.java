@@ -53,8 +53,7 @@ public class BookmarkManager extends MenuActivity {
 			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
 			break;
 		case 3: // 清空书签
-			// to houding：后续提供接口，此处代码我来添加。
-			// new ClearBookMarkAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new ClearBookMarkAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
 			break;
 		default:
 			break;

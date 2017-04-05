@@ -20,7 +20,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @author wzp
  * @Created 2017/02/19
  */
-public class ClearBookMarkAsyncTask extends AsyncTask<ArrayList<BookmarkEntity>, Void, Integer>
+public class ClearBookMarkAsyncTask extends AsyncTask<String, Void, Integer>
 {
 	private Context mContext;
 	private Handler mHandler;
@@ -32,17 +32,19 @@ public class ClearBookMarkAsyncTask extends AsyncTask<ArrayList<BookmarkEntity>,
 	}
 
 	@Override
-	protected Integer doInBackground(ArrayList<BookmarkEntity>... params) 
+	protected Integer doInBackground(String... params) 
 	{
-		ArrayList<BookmarkEntity> list = (ArrayList<BookmarkEntity>)params[0];
+		String username = PublicUtils.getUserName(mContext);
+		String bookId = params[0];
+		
+		ArrayList<BookmarkEntity> list = HttpDao.getBookMarkList(username, bookId );	//从云端得到书签记录
 		if( null == list )
 		{
-			return	LibraryConstant.RESULT_EXCEPTION;	
+			return	LibraryConstant.RESULT_EXCEPTION;
 		}
-		String userName = PublicUtils.getUserName(mContext);
 		
 		BookMarkDBDao dao = new BookMarkDBDao( mContext );
-		dao.deleteAll(userName);	//清空此人的所有本地书签记录
+		dao.deleteAll(username, bookId);	//清空此人的所有本地书签记录
 		dao.closeDb();
 		
 		ArrayList<Integer> ids = new ArrayList<Integer>();
@@ -69,7 +71,7 @@ public class ClearBookMarkAsyncTask extends AsyncTask<ArrayList<BookmarkEntity>,
 				recordIds += ids.get(i);
 			}
 			
-			Integer result = HttpDao.clearBookMark(userName, recordIds);
+			Integer result = HttpDao.clearBookMark(username, recordIds);
 			
 			if( null == result )
 			{
