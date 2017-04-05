@@ -145,6 +145,8 @@
 	<string name="library_clear_success">清空成功！</string>
 	<string name="library_clear_fail">清空失败！</string>
 	
+	<string name="library_chapter_start_tips">已经到本章开头</string>
+	
 	<string-array name="library_category_list">
         <item>盲人资讯</item>
         <item>有声读物</item>

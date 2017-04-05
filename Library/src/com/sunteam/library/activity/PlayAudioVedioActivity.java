@@ -313,9 +313,30 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 				toNextChapter();
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_LEFT:	//左(快退)
-				MediaPlayerUtils.getInstance().fastBackward();
-				mHandler.removeMessages(0);
-				mHandler.sendEmptyMessage(0);
+				int pos = MediaPlayerUtils.getInstance().getCurTime();
+				pos -= 3000;
+				if( pos > 0 )
+				{
+					MediaPlayerUtils.getInstance().fastBackward();
+					mHandler.removeMessages(0);
+					mHandler.sendEmptyMessage(0);
+				}
+				else
+				{
+					MediaPlayerUtils.getInstance().pause();
+					PublicUtils.showToast(this, this.getString(R.string.library_chapter_start_tips), new PromptListener() {
+
+						@Override
+						public void onComplete() {
+							// TODO Auto-generated method stub
+							MediaPlayerUtils.getInstance().fastBackward();
+							MediaPlayerUtils.getInstance().resume();
+							mHandler.removeMessages(0);
+							mHandler.sendEmptyMessage(0);
+						}
+					});
+				}
+				
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:	//右(快进)
 				MediaPlayerUtils.getInstance().fastForward();
