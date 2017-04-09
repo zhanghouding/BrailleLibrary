@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:includeFontPadding="true"
+            android:includeFontPadding="false"
             android:singleLine="true"
             android:textSize="@dimen/text_big_size" />
 
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
+                android:includeFontPadding="false"
                 android:text="@string/library_account_username"
                 android:textSize="@dimen/text_big_size" />
 
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
+                android:includeFontPadding="false"
                 android:text="@string/library_account_passwd"
                 android:textSize="@dimen/text_big_size" />
 
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="left|center_vertical"
-                android:includeFontPadding="true"
+                android:includeFontPadding="false"
                 android:text="@string/library_account_passwd_confirm"
                 android:textSize="@dimen/text_big_size" />
 

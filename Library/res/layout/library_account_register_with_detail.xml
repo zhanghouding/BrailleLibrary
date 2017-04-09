@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:includeFontPadding="true"
+            android:includeFontPadding="false"
             android:singleLine="true"
             android:textSize="@dimen/text_middle_size" />
 
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_reader_certificate_no"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_name"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -125,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_username"
                     android:textSize="@dimen/text_middle_size" />
                 <!-- android:layout_marginLeft="20dp" -->
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_passwd"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_passwd_confirm"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -242,7 +242,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:nextFocusDown="@+id/library_account_register_phone_input"
                     android:nextFocusLeft="@+id/library_account_register_passwd_confirm_input"
                     android:nextFocusRight="@+id/library_account_register_phone_input"
@@ -265,7 +265,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_personal_phone"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -304,7 +304,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_personal_email"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -343,7 +343,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_personal_company"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -382,7 +382,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_personal_zip"
                     android:textSize="@dimen/text_middle_size" />
 
@@ -421,7 +421,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="left|center_vertical"
-                    android:includeFontPadding="true"
+                    android:includeFontPadding="false"
                     android:text="@string/library_account_personal_addr"
                     android:textSize="@dimen/text_middle_size" />
 
