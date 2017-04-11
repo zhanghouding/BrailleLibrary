@@ -414,11 +414,13 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	}
 	
 	//播放背景音乐
+	@SuppressWarnings("deprecation")
 	private void playMusic()
 	{
-		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE,Context.MODE_PRIVATE);
-		boolean isMusic = shared.getBoolean(EbookConstants.MUSICE_STATE, false);
-		if(isMusic)
+		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, mode);
+		int isMusic = shared.getInt(EbookConstants.MUSICE_STATE, 0);
+		if(0 == isMusic)
 		{
 			String path = shared.getString(EbookConstants.MUSICE_PATH, null);
 			if(null == path)

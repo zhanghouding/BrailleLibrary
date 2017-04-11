@@ -4,164 +4,68 @@ import java.io.File;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.TextView;
 
-import com.sunteam.common.menu.BaseActivity;
+import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.utils.PromptDialog;
-import com.sunteam.common.utils.Tools;
+import com.sunteam.common.menu.MenuGlobal;
+import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.SharedPrefUtils;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.FileOperateUtils;
 import com.sunteam.library.utils.MediaPlayerUtils;
-import com.sunteam.library.utils.TTSUtils;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
- * @Destryption 音乐强度设置，实际上就是北京音乐音量，目前看来与系统音量一致！
+ * @Destryption 音乐强度设置，已经把背景音STREAM_TYPE由STRAM_MUSIC改为STREAM_ALARM,以便与TTS区分开。
  * @Author Jerry
  * @Date 2017-2-8 上午10:12:27
- * @Note
+ * @Note STREAM_ALARM已经在固件中设置为STRAM_MUSIC的4倍。背景音强度设置为:很强-较强-适中-很弱, 分别是STRAM_MUSIC音的4倍、3倍、2倍和1倍。
  */
-public class MusicVolume extends BaseActivity {
-	private final int MUSIC_VOLUME_MIN = 1; // 背景音强度设置最小值
-	public final int MUSIC_VOLUME_MAX = 10; // 背景音强度设置最大值 
-	private final int MUSIC_VOLUME_STEP = 1; // 背景音强度调整步长
-	public final int SYSTEM_VOLUME_MAX = 15; // 系统音量最大值
-	private final float MUSIC_VOLUME_SCALE = ((float) SYSTEM_VOLUME_MAX / MUSIC_VOLUME_MAX); // 设置值与实际值的映射比例
-
-	private String mTitle; // 菜单标题
-	private TextView mTvTitle;
-	private View mLine = null;
-	private TextView mTvVolume;
-	private int musicVolume = MUSIC_VOLUME_MIN; // 设置范围：[1,10]，实际范围:[1,15]
+public class MusicVolume extends MenuActivity {
 	private SharedPreferences musicShared;
 	private AudioManager mAudioManager;
-	private int currentVolume; // 当前音量
+	private byte[] volumeScale = {1, 2, 3, 4}; // 音量强度
+	private VolumeReceiver mVolumeReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getIntentPara();
 		initView();
+		super.onCreate(savedInstanceState);
+		registerVolumeReceiver();
 	}
 
 	@Override
-	protected void onResume() {
-		String s = mTitle + ", " + musicVolume;
-		TTSUtils.getInstance().speakMenu(s);
-		super.onResume();
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterVolumeReceiver();
 	}
 
-	private void getIntentPara() {
-		Intent intent = getIntent();
-		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
-
-		if (null == mTitle) {
-			finish();
-			return;
-		}
-	}
-
-	// 在语速语调设置中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩
-	private void initView() {
-		Tools mTools = new Tools(MusicVolume.this);
-		this.getWindow().setBackgroundDrawable(new ColorDrawable(mTools.getBackgroundColor()));
-		setContentView(R.layout.common_number_edit);
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
 		
-		musicShared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
-		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		currentVolume = getMusicVlolume();
-		musicVolume = (int) ((currentVolume + MUSIC_VOLUME_SCALE / 2)/ MUSIC_VOLUME_SCALE);
-		playMusic();
-
-		mTvTitle = (TextView) findViewById(R.id.common_number_edit_title);
-		mTvTitle.setText(mTitle);
-		mTvTitle.setTextColor(mTools.getFontColor()); // 设置title的文字颜色
-
-		mLine = (View) findViewById(R.id.common_number_edit_line);
-		mLine.setBackgroundColor(mTools.getFontColor()); // 设置分割线的背景色
-
-		mTvVolume = (TextView) findViewById(R.id.common_number_edit_digit);
-		mTvVolume.setText(String.valueOf(musicVolume));
-		mTvVolume.setTextColor(mTools.getFontColor()); // 设置文字颜色
-	}
-
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_DPAD_UP:
-		case KeyEvent.KEYCODE_DPAD_LEFT:
-			updateMusicVolume(-MUSIC_VOLUME_STEP);
-			break;
-		case KeyEvent.KEYCODE_DPAD_DOWN:
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			updateMusicVolume(MUSIC_VOLUME_STEP);
-			break;
-		case KeyEvent.KEYCODE_DPAD_CENTER:
-		case KeyEvent.KEYCODE_ENTER:
-			showPromptDialog();
-			break;
-		case KeyEvent.KEYCODE_BACK: // 恢复上次设置
-			stopMusic();
-			setMusicVlolume(currentVolume);
-			break;
-		default:
-			break;
-		}
-		return super.onKeyUp(keyCode, event);
-	}
-
-	private void updateMusicVolume(int step) {
-		musicVolume += step;
-		if (musicVolume < MUSIC_VOLUME_MIN) {
-			musicVolume = MUSIC_VOLUME_MAX;
-		} else if (musicVolume > MUSIC_VOLUME_MAX) {
-			musicVolume = MUSIC_VOLUME_MIN;
-		}
-		String s = String.valueOf(musicVolume);
-		mTvVolume.setText(s);
-
-		TTSUtils.getInstance().speakMenu(s); // 不要把该行放到设置音量后面!因为音量变化后在主菜单中会收到广播，也会发音，但若已经在播音就不播音量值了。
-		setMusicVlolume((int) (musicVolume * MUSIC_VOLUME_SCALE));
-	}
-
-	@SuppressLint("HandlerLeak")
-	private Handler mTtsCompletedHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 8:
-				setResult(Activity.RESULT_OK);
-				MediaPlayerUtils.getInstance().stop();
-				finish();
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
-
-	private void showPromptDialog() {
-		stopMusic();
-		setMusicVlolume((int) (musicVolume * MUSIC_VOLUME_SCALE));
-		// 设置成功就有提示对话框
-		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));
-		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
-		mPromptDialog.show();
-	}
+		// 强制停止背景音乐
+		MediaPlayerUtils.getInstance().stop();
+		
+		// 恢复上次音量
+		int index = musicShared.getInt(EbookConstants.MUSIC_INTENSITY, 0);
+		setMusicVlolume(index);
+	}			
 
 	// 保存背景音乐强度设置
-	public void setMusicVlolume(int volume) {
-		mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 1);
+	public void setMusicVlolume(int index) {
+		int volume = getMusicVlolume() * volumeScale[index]; 
+		mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 1);
 	}
 
 	// 获取背景音乐强度设置
@@ -169,14 +73,16 @@ public class MusicVolume extends BaseActivity {
 		return mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 	}
 
+	@SuppressWarnings("deprecation")
 	private void playMusic() {
-		String path = musicShared.getString(EbookConstants.MUSICE_PATH, null);
+		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		String path = SharedPrefUtils.getSharedPrefString(this, EbookConstants.SETTINGS_TABLE, mode, EbookConstants.MUSICE_PATH, null);
 		if (null == path) {
-//			path = FileOperateUtils.getFirstMusicInDir();
+			path = FileOperateUtils.getFirstMusicInDir();
 		} else {
 			File file = new File(path);
 			if (!file.exists()) {
-//				path = FileOperateUtils.getFirstMusicInDir();
+				path = FileOperateUtils.getFirstMusicInDir();
 			}
 		}
 		if (null != path) {
@@ -184,10 +90,97 @@ public class MusicVolume extends BaseActivity {
 		}
 	}
 
-	private void stopMusic() {
+	/*private void stopMusic() {
 		boolean isMusic = musicShared.getBoolean(EbookConstants.MUSICE_STATE, false);
 		if (!isMusic) {
 			MediaPlayerUtils.getInstance().stop();
+		}
+	}*/
+
+	@Override
+	public void setResultCode(int resultCode, int selectItem, String menuItem) {
+		if (selectItem >= mMenuList.size()) {
+			selectItem = 0;
+		}
+		
+		// 保存设置
+		SharedPrefUtils.saveSettings(this, EbookConstants.SETTINGS_TABLE, EbookConstants.MUSIC_INTENSITY, selectItem);
+
+		String tips = getResources().getString(R.string.library_setting_success);
+		PublicUtils.showToast(this, tips, new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				returnFatherActivity();
+			}
+		});
+	}
+
+	// 在语速语调设置中，所有文字字号统一用大字号: 40sp, 已经在布局文件中初始化，不必在此与功能设置中的字号设置挂钩
+	@SuppressLint("WorldReadableFiles") @SuppressWarnings("deprecation")
+	private void initView() {
+		Intent intent = getIntent();
+		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
+		String[] list = getResources().getStringArray(R.array.library_array_menu_music_intensity);
+		mMenuList = ArrayUtils.strArray2List(list);
+		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		musicShared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, mode);
+		selectItem = musicShared.getInt(EbookConstants.MUSIC_INTENSITY, 0);
+		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		setMusicVlolume(selectItem);
+		playMusic();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		boolean ret = super.onKeyDown(keyCode, event);
+
+		if (KeyEvent.KEYCODE_DPAD_UP == keyCode || KeyEvent.KEYCODE_DPAD_DOWN == keyCode || KeyEvent.KEYCODE_DPAD_LEFT == keyCode
+				|| KeyEvent.KEYCODE_DPAD_RIGHT == keyCode) {
+			selectItem = getSelectItem();
+			setMusicVlolume(selectItem);
+		}
+		return ret;
+	}
+
+	// 不能直接返回，需要等发音结束后再返回，否则发音被中断了。
+	private void returnFatherActivity() {
+		selectItem = getSelectItem();
+		String menuItem = getSelectItemContent();
+		MusicVolume.super.setResultCode(Activity.RESULT_OK, selectItem, menuItem);
+	}
+
+	private void registerVolumeReceiver() {
+		if (null == mVolumeReceiver) {
+			mVolumeReceiver = new VolumeReceiver();
+			IntentFilter filter = new IntentFilter();
+			filter.addAction("android.media.VOLUME_CHANGED_ACTION"); // 音量变化
+			registerReceiver(mVolumeReceiver, filter);
+		}
+	}
+
+	private void unregisterVolumeReceiver() {
+		if (null != mVolumeReceiver) {
+			unregisterReceiver(mVolumeReceiver);
+			mVolumeReceiver = null;
+		}
+	}
+
+	private class VolumeReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (!action.equals("android.media.VOLUME_CHANGED_ACTION")) {
+				return;
+			}
+			// AudioManager.EXTRA_PREV_VOLUME_STREAM_VALUE,EXTRA_VOLUME_STREAM_VALUE 是隐藏属性
+			int streamType = intent.getIntExtra("android.media.EXTRA_VOLUME_STREAM_TYPE", 0);
+			int newVolume = intent.getIntExtra("android.media.EXTRA_VOLUME_STREAM_VALUE", 0);
+			int oldVolume = intent.getIntExtra("android.media.EXTRA_PREV_VOLUME_STREAM_VALUE", 0);
+			if (AudioManager.STREAM_MUSIC == streamType) {
+				setMusicVlolume(selectItem);
+				MenuGlobal.debug("[MusicVolume][VolumeReceiver] action = VOLUME_CHANGED_ACTION, streamType = " + streamType + ", newVolume = " + newVolume + ", oldVolume = " + oldVolume);
+			}
 		}
 	}
 

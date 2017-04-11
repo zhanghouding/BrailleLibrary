@@ -8,7 +8,7 @@ public class LibraryConstant {
 	
 	// 数字图书馆本地数据路径名
 	public static final String LIBRARY_ROOT_PATH = Environment.getExternalStorageDirectory()+"/s918p/library/"; // 数字图书馆要保存的数据Home目录
-	public static final String BACKGROUND_MUSIC_PATH = Environment.getExternalStorageDirectory()+"/book/背景音乐/"; // 背景音乐路径，与电子书保持一致
+	public static final String BACKGROUND_MUSIC_PATH = Environment.getExternalStorageDirectory()+"/背景音乐/"; // 背景音乐路径，与电子书保持一致
 
 	// 云端访问URL
 	public static final String API_URL = "http://www.blc.org.cn/API/";

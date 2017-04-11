@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +11,7 @@ import android.os.Message;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.PromptDialog;
+import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
 
@@ -57,16 +56,9 @@ public class MusicSwitch extends MenuActivity {
 	}
 
 	private void saveMusicSwitch(int index) {
-		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
 		Intent intent = new Intent(EbookConstants.MENU_PAGE_EDIT);
-		Editor edit = shared.edit();
 		intent.putExtra("result_flag", 1);
-		if (0 == index) {
-			edit.putBoolean(EbookConstants.MUSICE_STATE, true);
-		} else {
-			edit.putBoolean(EbookConstants.MUSICE_STATE, false);
-		}
-		edit.commit();
+		SharedPrefUtils.saveSettings(this, EbookConstants.SETTINGS_TABLE, EbookConstants.MUSICE_STATE, index);
 		sendBroadcast(intent);
 		
 		// 提示设定成功
@@ -75,10 +67,10 @@ public class MusicSwitch extends MenuActivity {
 		mPromptDialog.show();
 	}
 
+	@SuppressWarnings("deprecation")
 	private int getMusicSwitch() {
-		SharedPreferences musicShared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
-		boolean isMusic = musicShared.getBoolean(EbookConstants.MUSICE_STATE, false);
-		return (isMusic ? 0 : 1);
+		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		return SharedPrefUtils.getSharedPrefInt(this, EbookConstants.SETTINGS_TABLE, mode, EbookConstants.MUSICE_STATE, 0);
 	}
 
 }

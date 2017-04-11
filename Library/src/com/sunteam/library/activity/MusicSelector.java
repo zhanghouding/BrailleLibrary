@@ -3,25 +3,22 @@ package com.sunteam.library.activity;
 import java.io.File;
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.utils.PromptDialog;
+import com.sunteam.common.utils.SharedPrefUtils;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.entity.FileInfo;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.FileOperateUtils;
 import com.sunteam.library.utils.MediaPlayerUtils;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 背景音乐选择
@@ -48,44 +45,29 @@ public class MusicSelector extends MenuActivity {
 		return ret;
 	}
 
-	@SuppressLint("HandlerLeak")
-	private Handler mTtsCompletedHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 8:
-				setResult(Activity.RESULT_OK);
-				MediaPlayerUtils.getInstance().stop();
-				finish();
-				break;
-			default:
-				break;
-			}
-		}
-	};
-
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
-			saveMusicFile(selectItem);
+		saveMusicFile(selectItem);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("deprecation")
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
 		mMenuList = new ArrayList<String>();
 		fileList = new ArrayList<FileInfo>();
-		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
-		String path = shared.getString(EbookConstants.MUSICE_PATH, null);
+		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		String path = SharedPrefUtils.getSharedPrefString(this, EbookConstants.SETTINGS_TABLE, mode, EbookConstants.MUSICE_PATH, null);
 		ArrayList<File> filesList = FileOperateUtils.getMusicInDir();
 		if (null != filesList && 0 < filesList.size()) {
-			for (int i=0; i< filesList.size(); i++) {
+			for (int i = 0; i < filesList.size(); i++) {
 				File f = filesList.get(i);
 				FileInfo info = new FileInfo();
 				info.name = f.getName();
 				info.path = f.getPath();
 				fileList.add(info);
 				mMenuList.add(info.name);
-				if(f.getPath().equals(path)){
+				if (f.getPath().equals(path)) {
 					selectItem = i;
 				}
 			}
@@ -93,16 +75,19 @@ public class MusicSelector extends MenuActivity {
 		MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
 	}
 
-	private void saveMusicFile(int index) {
-		SharedPreferences shared = getSharedPreferences(EbookConstants.SETTINGS_TABLE, Context.MODE_PRIVATE);
-		Editor edit = shared.edit();
-		edit.putString(EbookConstants.MUSICE_PATH, fileList.get(index).path);
-		edit.commit();
+	private void saveMusicFile(final int index) {
+		SharedPrefUtils.saveSettings(this, EbookConstants.SETTINGS_TABLE, EbookConstants.MUSICE_PATH, fileList.get(index).path);
 
 		// 提示设定成功
-		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));
-		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
-		mPromptDialog.show();
+		PublicUtils.showToast(this, getResources().getString(R.string.library_setting_success), new PromptListener() {
+
+			@Override
+			public void onComplete() {
+				MediaPlayerUtils.getInstance().stop();
+				MusicSelector.super.setResultCode(Activity.RESULT_OK, index, "");
+				finish();
+			}
+		});
 	}
 
 }
