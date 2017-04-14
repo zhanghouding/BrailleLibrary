@@ -546,7 +546,7 @@ public class LibrarySearchView extends View implements TextWatcher, OnEnterListe
 	@Override
 	public void onFail(String error) {
 		String s = mContext.getResources().getString(R.string.library_search_resource_empty);
-		PublicUtils.showToast(mContext, s);
+		PublicUtils.showToast(mContext, s, TtsUtils.TTS_QUEUE_ADD);
 		focusPos = 0;
 	}
 }

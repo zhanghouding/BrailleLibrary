@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.db.CollectCategoryDBDao;
@@ -63,9 +64,9 @@ public class DelCollectCategoryAsyncTask extends AsyncTask<CollectCategoryEntity
 	{	
 		super.onPreExecute();
 		
-		String s = mContext.getResources().getString(R.string.library_del_collect_category);
-		PublicUtils.showProgress(mContext, s, this);
-		//TtsUtils.getInstance().speak(s);
+		// 因为删除时间很短，不必提示“正在删除收藏的分类”，否则，会立即被“删除成功”打断！
+//		String s = mContext.getResources().getString(R.string.library_del_collect_category);
+//		PublicUtils.showProgress(mContext, s, this); //TtsUtils.getInstance().speak(s);
 	}
 	
 	@Override
@@ -83,7 +84,7 @@ public class DelCollectCategoryAsyncTask extends AsyncTask<CollectCategoryEntity
 					public void onComplete() {
 						sendEmptyMessage(1);
 					}
-				});
+				}, TtsUtils.TTS_QUEUE_ADD);
 				break;
 			case LibraryConstant.RESULT_SUCCESS:	//成功
 				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_success), new PromptListener() {
@@ -92,7 +93,7 @@ public class DelCollectCategoryAsyncTask extends AsyncTask<CollectCategoryEntity
 					public void onComplete() {
 						sendEmptyMessage(0);
 					}
-				});
+				}, TtsUtils.TTS_QUEUE_ADD);
 				break;
 			case LibraryConstant.RESULT_FAIL:		//失败
 				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_fail), new PromptListener() {
@@ -101,7 +102,7 @@ public class DelCollectCategoryAsyncTask extends AsyncTask<CollectCategoryEntity
 					public void onComplete() {
 						sendEmptyMessage(2);
 					}
-				});
+				}, TtsUtils.TTS_QUEUE_ADD);
 				break;
 			default:
 				break;

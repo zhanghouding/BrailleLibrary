@@ -2,6 +2,7 @@ package com.sunteam.library.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.os.Message;
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
+import com.sunteam.common.utils.ConfirmDialog;
+import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.ClearBookMarkAsyncTask;
 import com.sunteam.library.asynctask.GetBookMarkAsyncTask;
@@ -53,7 +56,7 @@ public class BookmarkManager extends MenuActivity {
 			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
 			break;
 		case 3: // 清空书签
-			new ClearBookMarkAsyncTask(this, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
+			confirmClearBookmark(this);
 			break;
 		default:
 			break;
@@ -106,5 +109,25 @@ public class BookmarkManager extends MenuActivity {
 		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
 		startActivityForResult(intent, selectItem);
 	}
+
+	private void confirmClearBookmark(final Context context) {
+		String s = getResources().getString(R.string.library_dialog_clear);
+		ConfirmDialog mConfirmDialog = new ConfirmDialog(this, s);
+		mConfirmDialog.setConfirmListener(new ConfirmListener() {
+
+			@Override
+			public void doConfirm() {
+				new ClearBookMarkAsyncTask(context, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
+			}
+
+			@Override
+			public void doCancel() {
+				/*String s = mTitle + "," + getSelectItemContent();
+				TtsUtils.getInstance().speak(s);*/
+				BookmarkManager.this.onResume();
+			}
+		});
+		mConfirmDialog.show();
+	}	
 
 }

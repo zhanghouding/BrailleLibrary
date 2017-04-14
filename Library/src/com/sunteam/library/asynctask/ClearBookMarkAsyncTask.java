@@ -89,9 +89,9 @@ public class ClearBookMarkAsyncTask extends AsyncTask<String, Void, Integer>
 	{	
 		super.onPreExecute();
 		
-		String s = mContext.getResources().getString(R.string.library_clear_bookmark);
-		PublicUtils.showProgress(mContext, s, this);
-		//TtsUtils.getInstance().speak(s);
+		// 因为删除时间很短，不必提示“正在清空书签”，否则，会立即被“清空成功”或“清空失败”打断！
+//		String s = mContext.getResources().getString(R.string.library_clear_bookmark);
+//		PublicUtils.showProgress(mContext, s, this); //TtsUtils.getInstance().speak(s);
 	}
 	
 	@Override

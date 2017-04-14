@@ -1,6 +1,5 @@
 package com.sunteam.library.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;

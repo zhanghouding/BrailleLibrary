@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 
+import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.db.BookMarkDBDao;
@@ -61,10 +62,10 @@ public class DelBookMarkAsyncTask extends AsyncTask<BookmarkEntity, Void, Intege
 	protected void onPreExecute() 
 	{	
 		super.onPreExecute();
-		
-		String s = mContext.getResources().getString(R.string.library_del_bookmark);
-		PublicUtils.showProgress(mContext, s, this);
-		//TtsUtils.getInstance().speak(s);
+
+		// 因为删除时间很短，不必提示“正在删除书签”，否则，会立即被“删除成功”打断！
+//		String s = mContext.getResources().getString(R.string.library_del_bookmark);
+//		PublicUtils.showProgress(mContext, s, this); //TtsUtils.getInstance().speak(s);
 	}
 	
 	@Override
@@ -91,7 +92,7 @@ public class DelBookMarkAsyncTask extends AsyncTask<BookmarkEntity, Void, Intege
 					public void onComplete() {
 						sendEmptyMessage(0);
 					}
-				});
+				}, TtsUtils.TTS_QUEUE_ADD);
 				break;
 			case LibraryConstant.RESULT_FAIL:		//失败
 				PublicUtils.showToast(mContext, mContext.getString(R.string.library_del_bookmark_fail), new PromptListener() {

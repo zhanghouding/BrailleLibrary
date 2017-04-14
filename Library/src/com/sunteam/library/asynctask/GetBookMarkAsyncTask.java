@@ -145,7 +145,7 @@ public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<Book
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			TtsUtils.getInstance().speak(s);
+			PublicUtils.showToast(mContext, s, TtsUtils.TTS_QUEUE_ADD); // 有可能没有书签，很快就打断了加载提示信息
 		}
 	}
 

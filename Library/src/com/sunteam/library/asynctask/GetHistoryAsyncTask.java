@@ -141,7 +141,7 @@ public class GetHistoryAsyncTask extends AsyncTask<Integer, Void, ArrayList<Hist
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			PublicUtils.showToast(mContext, s);
+			PublicUtils.showToast(mContext, s, TtsUtils.TTS_QUEUE_ADD);
 		}
 	}
 

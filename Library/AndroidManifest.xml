@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sunteam.library"
-    android:versionCode="10"
-    android:versionName="0.1.0.170114" >
+    android:versionCode="111"
+    android:versionName="1.1.1.17413" >
 
     <uses-sdk
         android:minSdkVersion="19"
@@ -13,8 +13,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 没有系统权限时需要申请该权限 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
-   <!-- 没有系统权限时需要申请该权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -225,7 +225,7 @@
             android:name=".activity.SearchActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-		    android:windowSoftInputMode="adjustUnspecified|stateVisible" >
+            android:windowSoftInputMode="adjustUnspecified|stateVisible" >
         </activity>
         <activity
             android:name=".activity.VideoChapterList"
@@ -266,25 +266,24 @@
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name=".activity.ReadTxtActivity"
-            android:screenOrientation="landscape" 
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".activity.WordSearchResultActivity"
-            android:screenOrientation="landscape" 
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".activity.PlayAudioVedioActivity"
-            android:screenOrientation="landscape" 
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         </activity>
-        <service
-		    android:name=".service.DownloadManagerService">
-		</service>
+
+        <service android:name=".service.DownloadManagerService" >
+        </service>
     </application>
 
 </manifest>

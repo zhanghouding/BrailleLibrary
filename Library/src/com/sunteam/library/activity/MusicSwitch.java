@@ -10,10 +10,12 @@ import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.utils.PromptDialog;
 import com.sunteam.common.utils.SharedPrefUtils;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.MediaPlayerUtils;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 音乐开关设置界面
@@ -60,11 +62,18 @@ public class MusicSwitch extends MenuActivity {
 		intent.putExtra("result_flag", 1);
 		SharedPrefUtils.saveSettings(this, EbookConstants.SETTINGS_TABLE, EbookConstants.MUSICE_STATE, index);
 		sendBroadcast(intent);
-		
+
 		// 提示设定成功
-		PromptDialog mPromptDialog = new PromptDialog(this, getResources().getString(R.string.library_setting_success));
-		mPromptDialog.setHandler(mTtsCompletedHandler, 8);
-		mPromptDialog.show();
+		String tips = getResources().getString(R.string.library_setting_success);
+		PublicUtils.showToast(this, tips, new PromptListener() {
+			
+			@Override
+			public void onComplete() {
+				MediaPlayerUtils.getInstance().stop();
+				setResult(Activity.RESULT_OK);
+				finish();
+			}
+		});
 	}
 
 	@SuppressWarnings("deprecation")

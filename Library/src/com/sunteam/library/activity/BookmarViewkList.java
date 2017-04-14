@@ -13,14 +13,13 @@ import android.os.Message;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
-import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.ConfirmDialog;
 import com.sunteam.common.utils.dialog.ConfirmListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.DelBookMarkAsyncTask;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
-import com.sunteam.library.utils.TTSUtils;
+import com.sunteam.library.utils.PublicUtils;
 
 /**
  * @Destryption 查看书签
@@ -49,7 +48,8 @@ public class BookmarViewkList extends MenuActivity {
 				}
 				if (0 == mMenuList.size()) {
 					setResult(Activity.RESULT_OK);
-					finish();
+					String s = getResources().getString(R.string.library_menu_mark_null);
+					PublicUtils.showToast(BookmarViewkList.this, s, true);
 				} else {
 					if (selectItem >= mMenuList.size()) {
 						selectItem = mMenuList.size() - 1;
@@ -116,8 +116,9 @@ public class BookmarViewkList extends MenuActivity {
 
 			@Override
 			public void doCancel() {
-				String s = mTitle + "," + getSelectItemContent();
-				TtsUtils.getInstance().speak(s);
+				/*String s = mTitle + "," + getSelectItemContent();
+				TtsUtils.getInstance().speak(s);*/
+				BookmarViewkList.this.onResume();
 			}
 		});
 		mConfirmDialog.show();

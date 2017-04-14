@@ -81,11 +81,11 @@ public class ResourceFunctionMenu extends MenuActivity {
 				new AddCollectResourceAsyncTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, entity);
 			}
 			break;
-		case 2: // 清空分类资源
-			deleteConfirm(0);
-			break;
-		case 3: // 删除当前资源
+		case 2: // 删除当前资源
 			deleteConfirm(1);
+			break;
+		case 3: // 清空分类资源
+			deleteConfirm(0);
 			break;
 		default:
 			break;

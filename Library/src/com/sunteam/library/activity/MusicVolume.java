@@ -145,9 +145,9 @@ public class MusicVolume extends MenuActivity {
 
 	// 不能直接返回，需要等发音结束后再返回，否则发音被中断了。
 	private void returnFatherActivity() {
-		selectItem = getSelectItem();
-		String menuItem = getSelectItemContent();
-		MusicVolume.super.setResultCode(Activity.RESULT_OK, selectItem, menuItem);
+		MediaPlayerUtils.getInstance().stop();
+		setResult(Activity.RESULT_OK);
+		finish();
 	}
 
 	private void registerVolumeReceiver() {

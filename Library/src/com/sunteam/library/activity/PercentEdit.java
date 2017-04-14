@@ -101,7 +101,8 @@ public class PercentEdit extends BaseActivity {
 			isNumericKey = false;
 			incDecNumber(true);
 			break;
-		case KeyEvent.KEYCODE_STAR: // 星号键也实现删除功能
+		case KeyEvent.KEYCODE_MENU: // 菜单键无效
+		case KeyEvent.KEYCODE_STAR: // 星号键无效
 			readingPromptInfo(R.string.library_input_percent_error);
 			break;
 		case KeyEvent.KEYCODE_DPAD_LEFT: // 删除尾部数字

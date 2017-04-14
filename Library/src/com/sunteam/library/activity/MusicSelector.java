@@ -36,6 +36,12 @@ public class MusicSelector extends MenuActivity {
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		MediaPlayerUtils.getInstance().stop();
+	}
+
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		boolean ret = super.onKeyDown(keyCode, event);
 
@@ -50,7 +56,7 @@ public class MusicSelector extends MenuActivity {
 		saveMusicFile(selectItem);
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	private void initView() {
 		Intent intent = getIntent();
 		mTitle = intent.getStringExtra(MenuConstant.INTENT_KEY_TITLE);
@@ -84,7 +90,7 @@ public class MusicSelector extends MenuActivity {
 			@Override
 			public void onComplete() {
 				MediaPlayerUtils.getInstance().stop();
-				MusicSelector.super.setResultCode(Activity.RESULT_OK, index, "");
+				setResult(Activity.RESULT_OK);
 				finish();
 			}
 		});
