@@ -6,9 +6,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 
 import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.tts.TtsUtils;
+import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.activity.BookmarViewkList;
 import com.sunteam.library.db.BookMarkDBDao;
@@ -27,13 +29,15 @@ public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<Book
 	private Context mContext;
 	private int mSelectItem;
 	private String mTitle;
+	private Handler mHandler;
 	private ArrayList<BookmarkEntity> mBookmarkEntityList = new ArrayList<BookmarkEntity>();
 	
-	public GetBookMarkAsyncTask(Context context, int select, String title) 
+	public GetBookMarkAsyncTask(Context context, int select, String title, Handler h) 
 	{
 		mContext = context;
 		mSelectItem = select;
 		mTitle = title;
+		mHandler =  h;
 	}
 
 	//云端数据和本地数据融合同步。(list1是云端数据，list2是本地数据)
@@ -145,7 +149,15 @@ public class GetBookMarkAsyncTask extends AsyncTask<String, Void, ArrayList<Book
 		else
 		{
 			String s = mContext.getResources().getString(R.string.library_reading_data_error);
-			PublicUtils.showToast(mContext, s, TtsUtils.TTS_QUEUE_ADD); // 有可能没有书签，很快就打断了加载提示信息
+			PublicUtils.showToast(mContext, s, new PromptListener() {
+				
+				@Override
+				public void onComplete() {
+					if(null != mHandler){
+						mHandler.sendEmptyMessage(2);
+					}
+				}
+			}, TtsUtils.TTS_QUEUE_ADD); // 有可能没有书签，很快就打断了加载提示信息
 		}
 	}
 

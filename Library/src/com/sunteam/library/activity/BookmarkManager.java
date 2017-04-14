@@ -50,10 +50,10 @@ public class BookmarkManager extends MenuActivity {
 			startAddBookmarkActivity(selectItem, menuItem);
 			break;
 		case 1: // 查看书签
-			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
+			new GetBookMarkAsyncTask(this, selectItem, menuItem, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
 			break;
 		case 2: // 删除书签
-			new GetBookMarkAsyncTask(this, selectItem, menuItem).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
+			new GetBookMarkAsyncTask(this, selectItem, menuItem, mHandler).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mBookmarkEntity.bookId);
 			break;
 		case 3: // 清空书签
 			confirmClearBookmark(this);
@@ -81,7 +81,8 @@ public class BookmarkManager extends MenuActivity {
 				finish();
 				break;
 			case 1: // 网络未连接
-			case 2: // 删除异常
+			case 2: // 删除异常,获取书签失败
+				BookmarkManager.this.onResume();
 				break;
 			default:
 				break;
@@ -96,17 +97,6 @@ public class BookmarkManager extends MenuActivity {
 		intent.putExtra("book_mark", mBookmarkEntity);
 		intent.setClass(this, BookmarkNameEdit.class);
 
-		startActivityForResult(intent, selectItem);
-	}
-
-	// 进入查看书签列表界面；如果需要在异步任务中获取云端数据，则需要在成功获取数据后调用该方法
-	public void startNextActivity(Class<?> cls, int selectItem, String menuItem) {
-		Intent intent = new Intent();
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, menuItem);
-		intent.setClass(this, cls);
-
-		// 如果希望启动另一个Activity，并且希望有返回值，则需要使用startActivityForResult这个方法，
-		// 第一个参数是Intent对象，第二个参数是一个requestCode值，如果有多个按钮都要启动Activity，则requestCode标志着每个按钮所启动的Activity
 		startActivityForResult(intent, selectItem);
 	}
 
