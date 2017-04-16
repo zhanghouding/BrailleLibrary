@@ -68,7 +68,10 @@ public class MusicSelector extends MenuActivity implements TtsCompletedListener 
 				}
 			}
 		}
-		MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
+		if( ( selectItem >= 0 ) && ( selectItem < fileList.size() ) )
+		{
+			MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
+		}
 		mTtsCompletedListener = this;
 	}
 
