@@ -128,7 +128,7 @@ public class PublicUtils
 	 * 
 	 * @param context
 	 */
-	public static void showProgress(Context context, String info, final AsyncTask<?, ?, ?> asyncTask) {
+	public static void showProgress(final Context context, String info, final AsyncTask<?, ?, ?> asyncTask) {
 		cancelProgress();
 
 		progress = new ProgressDialog(context, R.style.progress_dialog);
@@ -148,6 +148,7 @@ public class PublicUtils
 			{
 				// TODO Auto-generated method stub
 				asyncTask.cancel(true);
+				PublicUtils.showToast( context, context.getString(R.string.library_cancel_loading) );
 				//执行异步线程取消操作　　
 			}
 		});
@@ -158,7 +159,7 @@ public class PublicUtils
 	 * 
 	 * @param context
 	 */
-	public static void showProgress(Context context, final AsyncTask<?, ?, ?> asyncTask) {
+	public static void showProgress(final Context context, final AsyncTask<?, ?, ?> asyncTask) {
 		cancelProgress();
 
 		progress = new ProgressDialog(context, R.style.progress_dialog);
@@ -174,6 +175,7 @@ public class PublicUtils
 			{
 				// TODO Auto-generated method stub
 				asyncTask.cancel(true);
+				PublicUtils.showToast( context, context.getString(R.string.library_cancel_loading) );
 				//执行异步线程取消操作　　
 			}
 		});

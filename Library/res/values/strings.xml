@@ -155,6 +155,8 @@
 	<string name="library_minute">分</string>
 	<string name="library_second">秒</string>
 	
+	<string name="library_cancel_loading">取消加载</string>
+	
 	<string-array name="library_category_list">
         <item>盲人资讯</item>
         <item>有声读物</item>
