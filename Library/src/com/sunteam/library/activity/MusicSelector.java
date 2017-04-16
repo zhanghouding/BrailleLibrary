@@ -7,10 +7,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
+import com.sunteam.common.tts.TtsCompletedListener;
 import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
@@ -26,7 +26,7 @@ import com.sunteam.library.utils.PublicUtils;
  * @Date 2017-2-8 下午2:09:49
  * @Note
  */
-public class MusicSelector extends MenuActivity {
+public class MusicSelector extends MenuActivity implements TtsCompletedListener {
 	private ArrayList<FileInfo> fileList = null;
 
 	@Override
@@ -39,16 +39,6 @@ public class MusicSelector extends MenuActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		MediaPlayerUtils.getInstance().stop();
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		boolean ret = super.onKeyDown(keyCode, event);
-
-		MediaPlayerUtils.getInstance().stop();
-		MediaPlayerUtils.getInstance().play(fileList.get(getSelectItem()).path, true);
-
-		return ret;
 	}
 
 	@Override
@@ -79,6 +69,7 @@ public class MusicSelector extends MenuActivity {
 			}
 		}
 		MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
+		mTtsCompletedListener = this;
 	}
 
 	private void saveMusicFile(final int index) {
@@ -94,6 +85,16 @@ public class MusicSelector extends MenuActivity {
 				finish();
 			}
 		});
+	}
+
+	@Override
+	public void onCompleted(String error) {
+		int position = getSelectItem();
+		if (selectItem != position) {
+			selectItem = position;
+			MediaPlayerUtils.getInstance().stop();
+			MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
+		}
 	}
 
 }

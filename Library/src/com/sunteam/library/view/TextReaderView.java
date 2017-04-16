@@ -12,6 +12,8 @@ import com.sunteam.library.entity.ReadMode;
 import com.sunteam.library.entity.ReverseInfo;
 import com.sunteam.library.entity.SplitInfo;
 import com.sunteam.library.utils.CodeTableUtils;
+import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.TTSUtils.OnTTSListener;
@@ -19,6 +21,7 @@ import com.sunteam.library.utils.TTSUtils.SpeakStatus;
 import com.sunteam.library.utils.WordExplainUtils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -1668,16 +1671,29 @@ import android.view.View;
 	 //确定
 	 public void enter()
 	 {
+		@SuppressWarnings("deprecation")
+		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		SharedPreferences shared = mContext.getSharedPreferences(EbookConstants.SETTINGS_TABLE, mode);
+		boolean isMusic = shared.getInt(EbookConstants.MUSICE_STATE, 0) == 0 ? true : false;
+
 		 setReadMode(ReadMode.READ_MODE_ALL);
 		 SpeakStatus status = TTSUtils.getInstance().getSpeakStatus();
 		 
 		 if( status == SpeakStatus.SPEAK )
 		 {
 			 TTSUtils.getInstance().pause();
+			 if( isMusic )
+			 {
+				 MediaPlayerUtils.getInstance().pause();
+			 }
 		 }
 		 else if( status == SpeakStatus.PAUSE )
 		 {
 			 TTSUtils.getInstance().resume();
+			 if( isMusic )
+			 {
+				 MediaPlayerUtils.getInstance().resume();
+			 }
 		 }
 		 else if( status == SpeakStatus.STOP )
 		 {

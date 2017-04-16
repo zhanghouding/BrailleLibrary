@@ -11,6 +11,7 @@ import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.library.R;
 import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.utils.EbookConstants;
+import com.sunteam.library.utils.TTSUtils;
 
 /**
  * @Destryption 电子图书播放界面对应的功能菜单
@@ -32,6 +33,12 @@ public class EbookFunctionMenu extends MenuActivity {
 	protected void onResume() {
 		TtsUtils.getInstance().restoreSettingParameters(); // 在菜单界面使用系统设置朗读
 		super.onResume();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		TTSUtils.getInstance().init(this);	//恢复电子书中TTS回调; 因为在公用菜单中设置了自己的TtsListener实例
 	}
 
 	@Override
