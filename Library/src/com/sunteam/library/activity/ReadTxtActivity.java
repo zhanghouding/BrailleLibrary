@@ -66,6 +66,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	private int curChapter;			//当前章节序号，从0开始
 	private int totalChapter;		//总章节数目。
 	private BookmarkEntity mBookmarkEntity;
+	private boolean isEntryMenu = false;	//是否进入了功能菜单。
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +120,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
     	mTextReaderView.setBackgroundColor(tools.getBackgroundColor());
     	//mTextReaderView.setTextSize(tools.getFontSize());
     	   	
+    	playMusic();
     	TTSUtils.getInstance().init(this);	//初始化TTS
     	if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), 0, 0, 0, 0, isAuto, chapterName) == false )
     	{
@@ -165,7 +167,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	    	}
 		}
 	}
-
+	
 	@Override
 	public void onResume()
 	{
@@ -175,8 +177,18 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		{
 			mTextReaderView.readPage();		//朗读页码
 		}
+		if( isEntryMenu )
+		{
+			isEntryMenu = false;		//是否进入了功能菜单。
+			if( isReadPage )
+			{
+				mTextReaderView.enter();	//如果是从功能菜单退出的，则自动全文播放。
+			}
+		}
+		
 		isReadPage = true;
-		playMusic();	//播放背景音乐
+		playMusic();
+		
 	}
 	
 	@Override
@@ -250,6 +262,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			case KeyEvent.KEYCODE_MENU:
 				if( !isNews )
 				{
+					isEntryMenu = true;	//是否进入了功能菜单。
 					MediaPlayerUtils.getInstance().stop();
 					startFunctionMenu();
 				}

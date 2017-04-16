@@ -14,6 +14,7 @@ import com.sunteam.library.entity.SplitInfo;
 import com.sunteam.library.utils.CodeTableUtils;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.MediaPlayerUtils;
+import com.sunteam.library.utils.MediaPlayerUtils.PlayStatus;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
 import com.sunteam.library.utils.TTSUtils.OnTTSListener;
@@ -35,7 +36,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -530,8 +530,9 @@ import android.view.View;
 	 }
 	 
 	 //得到有效的长度，去除结尾的换行或者空格
-	 private int getEffectiveLength( byte[] buf )
+	 private int getEffectiveLength()
 	 {
+		 byte[] buf = mMbBuf;
 		 int len = mMbBuf.length;
 		 for( int i = mMbBuf.length-1; i >= 0; i-- )
 		 {
@@ -565,7 +566,34 @@ import android.view.View;
 		 
 		 return	len;
 	 }
-	 
+		
+	 //判断一个文件是否为纯文本文件
+	 private boolean checkIsTextFile()
+	 {
+		 boolean isTextFile = true;
+	        
+		 try
+		 {
+			 int i = 0;
+			 int length = mMbBufLen;
+			 byte data;
+			 while( ( i >= 0 ) && ( i < length ) && isTextFile )
+			 {
+				 data = (byte)mMbBuf[i];
+				 isTextFile = (data != 0);
+				 i++;
+			 }
+			 
+			 return isTextFile;
+		 }
+		 catch (Exception e)
+		 {
+			 e.printStackTrace();
+	            
+			 return	false;
+		 }
+	 }
+	    
 	 public boolean openBook( String content ) 
 	 {
 		 byte[] buf = null;
@@ -638,7 +666,12 @@ import android.view.View;
 			 e.printStackTrace();
 		 }
 		 
-		 mMbBufLen = getEffectiveLength(mMbBuf);
+		 if( 0x0a == mMbBuf[mOffset] )
+		 {
+			 mOffset++;
+		 }	//去掉一开始的空格。
+		 
+		 mMbBufLen = getEffectiveLength();
 		 if( mMbBufLen-mOffset <= 0 )
 		 {
 			 return	false;
@@ -659,7 +692,7 @@ import android.view.View;
 		 
 		 mSplitInfoList.clear();
 		 
-		 if( !PublicUtils.checkIsTextFile(mMbBuf) )
+		 if( !checkIsTextFile() )
 		 {
 			 mIsTextFile = false;
 			 return	false;
@@ -1704,14 +1737,27 @@ import android.view.View;
 	 //精读
 	 public void intensiveReading()
 	 {
+		 @SuppressWarnings("deprecation")
+		 int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		 SharedPreferences shared = mContext.getSharedPreferences(EbookConstants.SETTINGS_TABLE, mode);
+		 boolean isMusic = shared.getInt(EbookConstants.MUSICE_STATE, 0) == 0 ? true : false;
+		 
 		 SpeakStatus status = TTSUtils.getInstance().getSpeakStatus();	//当前朗读状态
 		 if( SpeakStatus.SPEAK == status )	//如果当前正在朗读
 		 {
 			 TTSUtils.getInstance().pause();
+			 if( isMusic )
+			 {
+				 MediaPlayerUtils.getInstance().pause();
+			 }
 		 }
 		 else if( status == SpeakStatus.PAUSE )
 		 {
 			 TTSUtils.getInstance().resume();
+			 if( isMusic )
+			 {
+				 MediaPlayerUtils.getInstance().resume();
+			 }
 		 }
 		 else if( status == SpeakStatus.STOP )
 		 {
@@ -1942,9 +1988,17 @@ import android.view.View;
 	 {
 		 TTSUtils.getInstance().stop();
 		 
+		 ReadMode rm = getReadMode();	//保存旧的朗读模式
 		 setReadMode(ReadMode.READ_MODE_CHARACTER);
 		 
-		 ReverseInfo ri = getNextReverseCharacterInfo( mReverseInfo.startPos+mReverseInfo.len );
+		 int start = mReverseInfo.startPos;
+		 
+		 if( ReadMode.READ_MODE_CHARACTER == rm )
+		 {
+			 start += mReverseInfo.len;
+		 }	//如果是从其他朗读模式切换到逐字模式，则从句首开始，如果以前的朗读模式就是逐字模式，则从反显结束开始。
+		 
+		 ReverseInfo ri = getNextReverseCharacterInfo( start );
 		 if( null == ri )
 		 {
 			 if( mOnPageFlingListener != null )
@@ -2134,9 +2188,16 @@ import android.view.View;
 	 {
 		 TTSUtils.getInstance().stop();
 		 
+		 ReadMode rm = getReadMode();	//保存旧的朗读模式
 		 setReadMode(ReadMode.READ_MODE_WORD);
 		 
-		 ReverseInfo ri = getNextReverseWordInfo( mReverseInfo.startPos+mReverseInfo.len );
+		 int start = mReverseInfo.startPos;
+		 if( ReadMode.READ_MODE_WORD == rm )
+		 {
+			 start += mReverseInfo.len;
+		 }	//如果是从其他朗读模式切换到逐词模式，则从句首开始，如果以前的朗读模式就是逐词模式，则从反显结束开始。
+		 
+		 ReverseInfo ri = getNextReverseWordInfo( start );
 		 if( null == ri )
 		 {
 			 if( mOnPageFlingListener != null )
@@ -2321,7 +2382,7 @@ import android.view.View;
 						 return;
 					 }	//跳过空行
 					 
-					 mIsPlayParagraph = false;
+					 mIsPlayParagraph = isSpeakPage;
 					 nextSentence( isSpeakPage, false, false );
 					 return;
 				 }
@@ -3522,6 +3583,35 @@ import android.view.View;
 		mPercent = 0;
 		mSpeakText = text;
 		TTSUtils.getInstance().speakContent(text);
+		
+		@SuppressWarnings("deprecation")
+		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
+		SharedPreferences shared = mContext.getSharedPreferences(EbookConstants.SETTINGS_TABLE, mode);
+		boolean isMusic = shared.getInt(EbookConstants.MUSICE_STATE, 0) == 0 ? true : false;
+		
+		if( isMusic )
+		{
+			PlayStatus status = MediaPlayerUtils.getInstance().getPlayStatus();
+			switch( status )
+			{
+				case PLAY:
+					break;
+				case PAUSE:
+					MediaPlayerUtils.getInstance().resume();
+					break;
+				case STOP:
+					{
+						String audioPath = shared.getString(EbookConstants.MUSICE_PATH, null);
+						if( ( audioPath != null ) && !TextUtils.isEmpty(audioPath) )
+						{
+							MediaPlayerUtils.getInstance().play(audioPath, true);
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
     }
 	
 	/**
