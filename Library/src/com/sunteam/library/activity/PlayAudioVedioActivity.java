@@ -340,9 +340,27 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 				
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:	//右(快进)
-				MediaPlayerUtils.getInstance().fastForward();
-				mHandler.removeMessages(0);
-				mHandler.sendEmptyMessage(0);
+				int pos1 = MediaPlayerUtils.getInstance().getCurTime();
+				pos1 += 3000;
+				int total = MediaPlayerUtils.getInstance().getTotalTime();
+				if( pos1 < total )
+				{
+					MediaPlayerUtils.getInstance().fastForward();
+					mHandler.removeMessages(0);
+					mHandler.sendEmptyMessage(0);
+				}
+				else
+				{
+					MediaPlayerUtils.getInstance().pause();
+					PublicUtils.showToast(this, this.getString(R.string.library_chapter_end_tips), new PromptListener() {
+
+						@Override
+						public void onComplete() {
+							// TODO Auto-generated method stub
+							toNextChapter();
+						}
+					});
+				}
 				return	true;
 			case KeyEvent.KEYCODE_DPAD_CENTER:	//确定(暂停、恢复)
 			case KeyEvent.KEYCODE_ENTER:
