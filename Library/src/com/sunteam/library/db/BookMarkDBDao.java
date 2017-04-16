@@ -171,7 +171,7 @@ public class BookMarkDBDao
 			entity = new BookmarkEntity();
 			entity.id = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ID));
 			entity.begin = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BEGIN));
-			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_TITLE));
+			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_INDEX));
 			entity.userName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_USERNAME));		
 			entity.bookId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BOOKID));
 			entity.addedTime = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ADDEDTIME));
@@ -208,7 +208,7 @@ public class BookMarkDBDao
 			BookmarkEntity entity = new BookmarkEntity();
 			entity.id = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ID));
 			entity.begin = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BEGIN));
-			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_TITLE));
+			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_INDEX));
 			entity.userName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_USERNAME));		
 			entity.bookId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BOOKID));
 			entity.addedTime = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ADDEDTIME));
@@ -245,7 +245,7 @@ public class BookMarkDBDao
 			BookmarkEntity entity = new BookmarkEntity();
 			entity.id = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ID));
 			entity.begin = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BEGIN));
-			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_TITLE));
+			entity.chapterIndex = cursor.getInt(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_CHAPTER_INDEX));
 			entity.userName = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_USERNAME));		
 			entity.bookId = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_BOOKID));
 			entity.addedTime = cursor.getString(cursor.getColumnIndex(DatabaseConstants.BOOKMARK_ADDEDTIME));
