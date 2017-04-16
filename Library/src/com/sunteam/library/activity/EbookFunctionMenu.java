@@ -14,7 +14,7 @@ import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.TTSUtils;
 
 /**
- * @Destryption 电子图书播放界面对应的功能菜单
+ * @Destryption 电子图书播放界面对应的功能菜单；盲人资讯中的播放界面的功能菜单。
  * @Author Jerry
  * @Date 2017-2-5 下午6:12:19
  * @Note
@@ -23,6 +23,8 @@ public class EbookFunctionMenu extends MenuActivity {
 	private int pageNo = 1; // 当前页码
 	private int pageCount = 10; // 页码总数
 	private BookmarkEntity mBookmarkEntity;
+	private boolean isNews = false; // 在盲人资讯时，功能菜单项与电子图书不一致；true表示盲人资讯
+
 
 	public void onCreate(Bundle savedInstanceState) {
 		initView();
@@ -75,6 +77,11 @@ public class EbookFunctionMenu extends MenuActivity {
 
 	@Override
 	public void setResultCode(int resultCode, int selectItem, String menuItem) {
+		if(isNews){
+			setResultCodeforNews(resultCode, selectItem, menuItem);
+			return;
+		}
+
 		switch(selectItem){
 		case 0: // 书签管理
 			startBookmarkManager(selectItem, menuItem);
@@ -117,13 +124,56 @@ public class EbookFunctionMenu extends MenuActivity {
 		}
 	}
 
+	private void setResultCodeforNews(int resultCode, int selectItem, String menuItem) {
+		Intent intent;
+		switch (selectItem) {
+		case 0: // 上一条
+			intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_PRE_PART);
+			setResult(RESULT_OK, intent);
+			finish();
+			break;
+		case 1: // 下一条
+			intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+			setResult(RESULT_OK, intent);
+			finish();
+			break;
+		case 2: // 跳至本条开头
+			intent = new Intent();
+			intent.putExtra("action", EbookConstants.TO_PART_START);
+			setResult(RESULT_OK, intent);
+			finish();
+			break;
+		case 3: // 跳至本条页码
+			// 与电子图书保持一致：requestCode = 4
+			startPageNumberEdit(PageNumberEdit.class, selectItem + 1, menuItem, pageNo, pageCount);
+			break;
+		case 4: // 朗读语音
+			// 与电子图书保持一致：requestCode = 5
+			startNextMenu(VoiceSettings.class, selectItem + 1, menuItem, getResources().getStringArray(R.array.library_array_menu_voice));
+			break;
+		case 5: // 背景音乐
+			// 与电子图书保持一致：requestCode = 6
+			startNextMenu(MusicSettings.class, selectItem + 1, menuItem, getResources().getStringArray(R.array.library_array_menu_music));
+			break;
+		default:
+			break;
+		}
+	}
+
 	private void initView() {
 		Intent intent = getIntent();
 		pageNo = intent.getIntExtra("page_cur", 1);
 		pageCount = intent.getIntExtra("page_count", 1);
 		mBookmarkEntity = (BookmarkEntity) intent.getSerializableExtra("book_mark");
+		isNews = intent.getBooleanExtra("isNews", isNews);
 		mTitle = getResources().getString(R.string.common_functionmenu);
-		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(R.array.library_ebook_function_menu_list));
+		int id = R.array.library_ebook_function_menu_list;
+		if(isNews){
+			id = R.array.library_news_function_menu_list;
+		}
+		mMenuList = ArrayUtils.strArray2List(getResources().getStringArray(id));
 	}
 
 	// 启动书签管理界面

@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
@@ -33,6 +35,20 @@ public class MusicSelector extends MenuActivity implements TtsCompletedListener 
 	protected void onCreate(Bundle savedInstanceState) {
 		initView();
 		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(0 == fileList.size()){
+			PublicUtils.showToast(this, getResources().getString(R.string.library_no_file), new PromptListener() {
+
+				@Override
+				public void onComplete() {
+					MusicSelector.this.finish();
+				}
+			});
+		}
 	}
 
 	@Override
