@@ -111,7 +111,7 @@ public class LibraryNewsList extends MenuActivity implements OnMenuKeyListener, 
 			intent.putExtra("chapterName", menuItem);
 			intent.putExtra("curChapter", selectItem); 	// 当前item序号
 			intent.putExtra("totalChapter", mInformationEntityList.size()); // 总item数
-			this.startActivity(intent);
+			this.startActivityForResult(intent,selectItem);
 		} 
 		catch (Exception e) 
 		{
