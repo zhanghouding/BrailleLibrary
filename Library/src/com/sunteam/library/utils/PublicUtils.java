@@ -184,7 +184,7 @@ public class PublicUtils
 	public static void cancelProgress() {
 		if (null != progress) {
 			if (progress.isShowing()) {
-				progress.cancel();
+				progress.dismiss();
 			}
 			progress = null;
 		}
