@@ -260,12 +260,9 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			case KeyEvent.KEYCODE_NUMPAD_0:		//百科查询
 				return	true;
 			case KeyEvent.KEYCODE_MENU:
-				if( !isNews )
-				{
-					isEntryMenu = true;	//是否进入了功能菜单。
-					MediaPlayerUtils.getInstance().stop();
-					startFunctionMenu();
-				}
+				isEntryMenu = true;	//是否进入了功能菜单。
+				MediaPlayerUtils.getInstance().stop();
+				startFunctionMenu();
 				break;
 			case KeyEvent.KEYCODE_STAR:			//反查
 				String content = mTextReaderView.getReverseText();	//得到当前反显内容
@@ -305,7 +302,15 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		if( 0 == curChapter )
 		{
 			isReadPage = false;
-			String tips = this.getString(R.string.library_first_chapter);
+			String tips = null;
+			if( isNews )
+			{
+				tips = this.getString(R.string.library_first_item);
+			}
+			else
+			{
+				tips = this.getString(R.string.library_first_chapter);
+			}
 			PublicUtils.showToast(this, tips, new PromptListener() {
 
 				@Override
@@ -345,7 +350,15 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		else
 		{
 			isReadPage = false;
-			String tips = this.getString(R.string.library_last_chapter);
+			String tips = null;
+			if( isNews )
+			{
+				tips = this.getString(R.string.library_last_item);
+			}
+			else
+			{
+				tips = this.getString(R.string.library_last_chapter);
+			}
 			PublicUtils.showToast(this, tips, new PromptListener() {
 
 				@Override
@@ -356,7 +369,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			});
 		}
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -546,18 +559,21 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 		intent.putExtra("page_count", pageCount);
 		intent.putExtra("page_cur", curPage);
 		intent.putExtra("page_text", reverseText);
+		intent.putExtra("isNews", isNews);
 		
-		BookmarkEntity entity = new BookmarkEntity();
-		entity.userName = PublicUtils.getUserName(this);
-		entity.bookId = identifier;
-		entity.begin = ri.startPos;
-		entity.chapterIndex = curChapter;
-		entity.chapterTitle = chapterName;
-		entity.markName = chapterName + " " + String.format(this.getString(R.string.library_page_read_tips2), curPage) + " " + reverseText;
-		DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
-		entity.percent = decimalFormat.format(percent)+"%";
-		intent.putExtra("book_mark", entity);
-
+		if( !isNews )
+		{
+			BookmarkEntity entity = new BookmarkEntity();
+			entity.userName = PublicUtils.getUserName(this);
+			entity.bookId = identifier;
+			entity.begin = ri.startPos;
+			entity.chapterIndex = curChapter;
+			entity.chapterTitle = chapterName;
+			entity.markName = chapterName + " " + String.format(this.getString(R.string.library_page_read_tips2), curPage) + " " + reverseText;
+			DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+			entity.percent = decimalFormat.format(percent)+"%";
+			intent.putExtra("book_mark", entity);
+		}
 		intent.setClass(this, EbookFunctionMenu.class);
 		startActivityForResult(intent, MENU_CODE);
 	}

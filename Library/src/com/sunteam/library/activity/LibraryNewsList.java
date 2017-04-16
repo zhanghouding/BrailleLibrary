@@ -20,7 +20,9 @@ import com.sunteam.common.menu.menulistadapter.ShowView;
 import com.sunteam.common.menu.menuview.OnMenuKeyListener;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.library.R;
+import com.sunteam.library.entity.BookmarkEntity;
 import com.sunteam.library.entity.InformationEntity;
+import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TextFileReaderUtils;
@@ -79,6 +81,19 @@ public class LibraryNewsList extends MenuActivity implements OnMenuKeyListener, 
 			return;
 		}
 
+		int action = data.getIntExtra("action", EbookConstants.TO_NEXT_PART);
+		switch (action) {
+			case EbookConstants.TO_NEXT_PART:	//上一章
+				mMenuView.down();
+				mMenuView.enter();
+				break;
+			case EbookConstants.TO_PRE_PART:	//下一章
+				mMenuView.up();
+				mMenuView.enter();
+				break;
+			default:
+				break;
+		}
 	}
 
 	@Override
@@ -94,6 +109,8 @@ public class LibraryNewsList extends MenuActivity implements OnMenuKeyListener, 
 			Intent intent = new Intent( this, ReadTxtActivity.class );
 			intent.putExtra("isNews", true);
 			intent.putExtra("chapterName", menuItem);
+			intent.putExtra("curChapter", selectItem); 	// 当前item序号
+			intent.putExtra("totalChapter", mInformationEntityList.size()); // 总item数
 			this.startActivity(intent);
 		} 
 		catch (Exception e) 
