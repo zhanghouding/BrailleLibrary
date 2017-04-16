@@ -331,6 +331,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 							// TODO Auto-generated method stub
 							MediaPlayerUtils.getInstance().fastBackward();
 							MediaPlayerUtils.getInstance().resume();
+							mIbStatus.setBackgroundResource(R.drawable.play);
 							mHandler.removeMessages(0);
 							mHandler.sendEmptyMessage(0);
 						}
@@ -444,6 +445,26 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		// TODO 自动生成的方法存根
 		
 	}
+	
+	private String getCurTime( String time )
+	{
+		String[] split = time.split(":");
+		if( null == split )
+		{
+			return	time;
+		}
+		
+		if( 2 == split.length )
+		{
+			return	split[0]+this.getString(R.string.library_minute)+split[1]+this.getString(R.string.library_second);
+		}
+		else if( 3 == split.length )
+		{
+			return	split[0]+this.getString(R.string.library_hour)+split[1]+this.getString(R.string.library_minute)+split[2]+this.getString(R.string.library_second);
+		}
+		
+		return	time;
+	}
 
 	public void startFunctionMenu()
 	{
@@ -456,7 +477,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		entity.begin = MediaPlayerUtils.getInstance().getCurTime();
 		entity.chapterIndex = curChapter;
 		entity.chapterTitle = chapterName;
-		entity.markName = chapterName + " " + mTvStartTime.getText();
+		entity.markName = chapterName + " " + getCurTime((String) mTvStartTime.getText()) ;
 		float percent = MediaPlayerUtils.getInstance().getPercent();
 		DecimalFormat decimalFormat = new DecimalFormat("0.00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
 		entity.percent = decimalFormat.format(percent)+"%";
@@ -520,10 +541,16 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 						break;
 				}
 			}
+			else
+			{
+				MediaPlayerUtils.getInstance().resume();
+				mIbStatus.setBackgroundResource(R.drawable.play);
+			}
 		}
 		else
 		{
 			MediaPlayerUtils.getInstance().resume();
+			mIbStatus.setBackgroundResource(R.drawable.play);
 		}
 	}
 	

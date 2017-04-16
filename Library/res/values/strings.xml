@@ -148,6 +148,10 @@
 	
 	<string name="library_chapter_start_tips">已经到本章开头</string>
 	
+	<string name="library_hour">时</string>
+	<string name="library_minute">分</string>
+	<string name="library_second">秒</string>
+	
 	<string-array name="library_category_list">
         <item>盲人资讯</item>
         <item>有声读物</item>
