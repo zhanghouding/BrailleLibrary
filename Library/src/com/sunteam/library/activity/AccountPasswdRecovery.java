@@ -28,6 +28,7 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.UserGetPasswordAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
+import com.sunteam.library.utils.TTSUtils;
 
 public class AccountPasswdRecovery extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
@@ -177,6 +178,9 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 		case KeyEvent.KEYCODE_BACK: // 删除尾部字符
 			ret = processKeyBack();
 			break;
+		case KeyEvent.KEYCODE_MENU: // 无效键要提示
+			invalidKey();
+			break;
 		default:
 			ret = false;
 			break;
@@ -264,14 +268,22 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 	// 处理【退出】键: 焦点在编辑控件上则删除尾部字符；否则退出当前界面
 	private boolean processKeyBack() {
 		boolean ret = true;
-		if (mEtCertificateNo.isFocused()) {
-//			delTailCh(mEtCertificateNo);
-			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
-		} else if (mEtName.isFocused()) {
-//			delTailCh(mEtName);
-			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
-		} else {
+		View rootview = this.getWindow().getDecorView();
+		View v = rootview.findFocus();
+
+		switch (v.getId()) {
+		case R.id.library_account_passwd_recovery_certificate_no_input:
+		case R.id.library_account_passwd_recovery_name_input:
+			if (((EditText) v).getText().toString().isEmpty()) {
+				invalidKey((EditText) v);
+			} else {
+//				delTailCh((EditText) v);
+				CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			}
+			break;
+		default:
 			ret = false;
+			break;
 		}
 
 		return ret;
@@ -328,13 +340,15 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 
 	// 选择证件类型：启动一个菜单
 	private void selectCertificateType() {
-		String title = getResources().getString(R.string.library_account_certificate_type_select);
-		String[] list = getResources().getStringArray(R.array.library_certificate_type_menu_list);
-		Intent intent = new Intent();
-		intent.setClass(this, AccountRegisterFunctionMenu.class);
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
-		startActivityForResult(intent, 0);
+		if (mEtCertificateNo.isFocused()) {
+			String title = getResources().getString(R.string.library_account_certificate_type_select);
+			String[] list = getResources().getStringArray(R.array.library_certificate_type_menu_list);
+			Intent intent = new Intent();
+			intent.setClass(this, AccountRegisterFunctionMenu.class);
+			intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
+			intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+			startActivityForResult(intent, 0);
+		}
 	}
 
 	// 刷新证件号输入框中的提示信息
@@ -445,6 +459,41 @@ public class AccountPasswdRecovery extends BaseActivity implements OnFocusChange
 			}
 		});
 		mConfirmDialog.show();
+	}
+
+	// 非法键提示信息:请输入页码，同时，播报当前页码。
+	private void invalidKey(EditText mEditText) {
+		String s;
+		final String etStr;
+		if (null != mEditText) {
+			s = mEditText.getHint().toString();
+			etStr = mEditText.getText().toString();
+		} else {
+			s = getResources().getString(R.string.library_account_invalidkey_hint);
+			etStr = "";
+		}
+		PublicUtils.showToast(this, s, new PromptListener() {
+
+			@Override
+			public void onComplete() {
+				TTSUtils.getInstance().speakMenu(etStr);
+			}
+		});
+	}
+
+	// 非法键提示信息:请输入页码，同时，播报当前页码。
+	private void invalidKey() {
+		View rootview = this.getWindow().getDecorView();
+		View v = rootview.findFocus();
+		
+		switch (v.getId()) {
+		case R.id.library_account_passwd_recovery_certificate_no_input:
+		case R.id.library_account_passwd_recovery_name_input:
+			invalidKey((EditText)v);
+			break;
+		default:
+			break;
+		}
 	}
 
 }

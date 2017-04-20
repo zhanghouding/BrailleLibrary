@@ -149,6 +149,9 @@ public class PageNumberEdit extends BaseActivity {
 		case KeyEvent.KEYCODE_BACK:
 			finish();
 			break;
+		case KeyEvent.KEYCODE_MENU:
+			invalidKey(R.string.library_input_page_num);
+			break;
 		default:
 			break;
 		}
@@ -179,13 +182,7 @@ public class PageNumberEdit extends BaseActivity {
 			pageNo = pageCount;
 			mTvNumber.setText("" + pageNo);
 			isNumericKey = false;
-			PublicUtils.showToast(this, getResources().getString(R.string.library_input_page_max), new PromptListener() {
-
-				@Override
-				public void onComplete() {
-					TTSUtils.getInstance().speakMenu(pageNo + "");
-				}
-			});
+			invalidKey(R.string.library_input_page_max);
 		} else {
 			mTvNumber.setText("" + pageNo);
 			TTSUtils.getInstance().speakMenu(pageNo + "");
@@ -214,6 +211,16 @@ public class PageNumberEdit extends BaseActivity {
 			finish();
 		}
 	}
-	 
+
+	// 非法键提示信息:请输入页码，同时，播报当前页码。
+	private void invalidKey(int id) {
+		PublicUtils.showToast(this, getResources().getString(id), new PromptListener() {
+
+			@Override
+			public void onComplete() {
+				TTSUtils.getInstance().speakMenu(pageNo + "");
+			}
+		});
+	}
 
 }

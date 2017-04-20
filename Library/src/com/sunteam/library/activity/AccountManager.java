@@ -74,25 +74,25 @@ public class AccountManager extends MenuActivity {
 
 	// 使用默认账号登录
 	private void loginWithDefaultUsername() {
-		// TODO 使用测试账号
 		String username = "test1";
 		String password = "123";
 
-		/*String username = android.provider.Settings.Secure.getString(getContentResolver(), "accessibility_deviceid");
+		/*username = android.provider.Settings.Secure.getString(getContentResolver(), "accessibility_deviceid");
 		if (null == username || username.length() <= 6) {
-			PublicUtils.showToast(this, getResources().getString(R.string.library_login_fail));
-		} else*/ {
-//			String password = "S918P" + username.substring(username.length() - 6);
-			PublicUtils.saveUserInfo(this, username, password); // 保存用户信息
-			PublicUtils.showToast(this, getResources().getString(R.string.library_login_success), new PromptListener() {
-				
-				@Override
-				public void onComplete() {
-					setResult(Activity.RESULT_OK);
-					finish();
-				}
-			});
-		}
+			PublicUtils.showToast(this, getResources().getString(R.string.library_account_fail));
+			return;
+		} else {
+			password = "S918P" + username.substring(username.length() - 6);
+		}*/
+		PublicUtils.saveUserInfo(this, username, password); // 保存用户信息
+		PublicUtils.showToast(this, getResources().getString(R.string.library_login_success), new PromptListener() {
+
+			@Override
+			public void onComplete() {
+				setResult(Activity.RESULT_OK);
+				finish();
+			}
+		});
 	}
 
 }

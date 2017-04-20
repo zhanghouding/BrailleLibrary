@@ -27,6 +27,7 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.LoginAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
+import com.sunteam.library.utils.TTSUtils;
 
 public class AccountLogin extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
@@ -155,6 +156,23 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 		case KeyEvent.KEYCODE_BACK: // 删除尾部字符
 			ret = processKeyBack();
 			break;
+		case KeyEvent.KEYCODE_MENU: // 无效键要提示
+			invalidKey();
+			break;
+//		case KeyEvent.KEYCODE_0:
+//		case KeyEvent.KEYCODE_1:
+//		case KeyEvent.KEYCODE_2:
+//		case KeyEvent.KEYCODE_3:
+//		case KeyEvent.KEYCODE_4:
+//		case KeyEvent.KEYCODE_5:
+//		case KeyEvent.KEYCODE_6:
+//		case KeyEvent.KEYCODE_7:
+//		case KeyEvent.KEYCODE_8:
+//		case KeyEvent.KEYCODE_9:
+//		case KeyEvent.KEYCODE_STAR:
+//		case KeyEvent.KEYCODE_POUND:
+//			processInvalid();
+//			break;
 		default:
 			ret = false;
 			break;
@@ -241,14 +259,25 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 	// 处理【退出】键: 焦点在编辑控件上则删除尾部字符；否则退出当前界面
 	private boolean processKeyBack() {
 		boolean ret = true;
+		EditText mEditText = null;
+
 		if (mEtUserName.isFocused()) {
-//			delTailCh(mEtUserName);
-			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			mEditText = mEtUserName;
 		} else if (mEtPasswd.isFocused()) {
-//			delTailCh(mEtPasswd);
-			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
-		} else {
+			mEditText = mEtPasswd;
+		}
+
+		if (null == mEditText) {
 			ret = false;
+		} else {
+			if (mEditText.getText().toString().isEmpty()) {
+				// 已经为空时再按【返回】键，退出当前界面
+				// returnConfirm();
+				invalidKey(mEditText);
+			} else {
+//				delTailCh(mEditText);
+				CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			}
 		}
 
 		return ret;
@@ -391,5 +420,47 @@ public class AccountLogin extends BaseActivity implements OnFocusChangeListener,
 
 		return ret;
 	}
+
+	// 非法键提示信息:请输入页码，同时，播报当前页码。
+	private void invalidKey(EditText mEditText) {
+		String s;
+		final String etStr;
+		if (null != mEditText) {
+			s = mEditText.getHint().toString();
+			etStr = mEditText.getText().toString();
+		} else {
+			s = getResources().getString(R.string.library_account_invalidkey_hint);
+			etStr = "";
+		}
+		PublicUtils.showToast(this, s, new PromptListener() {
+
+			@Override
+			public void onComplete() {
+				TTSUtils.getInstance().speakMenu(etStr);
+			}
+		});
+	}
+
+	// 非法键提示信息:请输入页码，同时，播报当前页码。
+	private void invalidKey() {
+		EditText mEditText = null;
+		if (mEtUserName.isFocused()) {
+			mEditText = mEtUserName;
+		} else if (mEtPasswd.isFocused()) {
+			mEditText = mEtPasswd;
+		} else {
+			return;
+		}
+		invalidKey(mEditText);
+	}
+
+	// 判断是否为无效键，若是则提示“请输入”
+//	private void processInvalid() {
+//		if (mEtUserName.isFocused() || mEtPasswd.isFocused()) {
+//			return;
+//		}
+//		final String s = getResources().getString(R.string.library_account_invalidkey_hint);
+//		PublicUtils.showToast(this, s);
+//	}
 
 }

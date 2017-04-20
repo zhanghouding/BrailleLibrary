@@ -26,6 +26,7 @@ import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
 import com.sunteam.library.asynctask.RegisterAsyncTask;
 import com.sunteam.library.utils.PublicUtils;
+import com.sunteam.library.utils.TTSUtils;
 
 public class AccountRegister extends BaseActivity implements OnFocusChangeListener, View.OnKeyListener, TextWatcher {
 	private String mTitle; // 菜单标题
@@ -267,6 +268,9 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		case KeyEvent.KEYCODE_BACK: // 删除尾部字符
 			ret = processKeyBack();
 			break;
+		case KeyEvent.KEYCODE_MENU: // 无效键要提示
+			invalidKey();
+			break;
 		default:
 			ret = false;
 			break;
@@ -430,8 +434,12 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 		case R.id.library_account_register_username_input:
 		case R.id.library_account_register_passwd_input:
 		case R.id.library_account_register_passwd_confirm_input:
-//			delTailCh((EditText) v);
-			CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			if (((EditText) v).getText().toString().isEmpty()) {
+				invalidKey((EditText) v);
+			} else {
+//				delTailCh((EditText) v);
+				CommonUtils.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+			}
 			break;
 		default:
 			ret = false;
@@ -512,13 +520,15 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 
 	// 选择证件类型：启动一个菜单
 	private void selectCertificateType() {
-		String title = getResources().getString(R.string.library_account_certificate_type_select);
-		String[] list = getResources().getStringArray(R.array.library_certificate_type_menu_list);
-		Intent intent = new Intent();
-		intent.setClass(this, AccountRegisterFunctionMenu.class);
-		intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
-		intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
-		startActivityForResult(intent, 0);
+		if (mEtCertificateNo.isFocused()) {
+			String title = getResources().getString(R.string.library_account_certificate_type_select);
+			String[] list = getResources().getStringArray(R.array.library_certificate_type_menu_list);
+			Intent intent = new Intent();
+			intent.setClass(this, AccountRegisterFunctionMenu.class);
+			intent.putExtra(MenuConstant.INTENT_KEY_TITLE, title); // 菜单名称
+			intent.putExtra(MenuConstant.INTENT_KEY_LIST, list); // 菜单列表
+			startActivityForResult(intent, 0);
+		}
 	}
 
 	// 刷新证件号输入框中的提示信息
@@ -630,6 +640,44 @@ public class AccountRegister extends BaseActivity implements OnFocusChangeListen
 			}
 		});
 		mConfirmDialog.show();
+	}
+
+	// 非法键提示信息:请输入页码，同时，播报当前页码。
+	private void invalidKey(EditText mEditText) {
+		String s;
+		final String etStr;
+		if (null != mEditText) {
+			s = mEditText.getHint().toString();
+			etStr = mEditText.getText().toString();
+		} else {
+			s = getResources().getString(R.string.library_account_invalidkey_hint);
+			etStr = "";
+		}
+		PublicUtils.showToast(this, s, new PromptListener() {
+
+			@Override
+			public void onComplete() {
+				TTSUtils.getInstance().speakMenu(etStr);
+			}
+		});
+	}
+
+	// 非法键提示信息:请输入页码，同时，播报当前页码。
+	private void invalidKey() {
+		View rootview = this.getWindow().getDecorView();
+		View v = rootview.findFocus();
+		
+		switch (v.getId()) {
+		case R.id.library_account_register_certificate_no_input:
+		case R.id.library_account_register_name_input:
+		case R.id.library_account_register_username_input:
+		case R.id.library_account_register_passwd_input:
+		case R.id.library_account_register_passwd_confirm_input:
+			invalidKey((EditText)v);
+			break;
+		default:
+			break;
+		}
 	}
 
 }
