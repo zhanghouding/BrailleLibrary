@@ -67,6 +67,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	private String categoryCode;
 	private BookmarkEntity mBookmarkEntity;
 	private String fullpath = null;
+	private boolean isRunThead = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +197,27 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 		    	mHandler.sendEmptyMessageDelayed(0, 500);
 	    	}
     	}
+    	
+    	new Thread() {
+			@Override
+			public void run() {
+				while( isRunThead )
+				{
+					if( MediaPlayerUtils.getInstance().getPlayStatus() == PlayStatus.PLAY )
+					{
+						PublicUtils.execShellCmd("input tap 0 0");		//不断发送模拟点击消息，不让系统进入休眠状态。
+					}
+					try 
+					{
+						Thread.sleep(5000);
+					} 
+					catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}.start();
 	}
 	
 	//得到文件名
@@ -390,6 +412,7 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 	public void onDestroy()
 	{
 		super.onDestroy();
+		isRunThead = false;
 		MediaPlayerUtils.getInstance().OnMediaPlayerListener(null);
 		if( fullpath != null )
 		{

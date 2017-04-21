@@ -34,6 +34,7 @@ import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.MediaPlayerUtils;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
+import com.sunteam.library.utils.TTSUtils.SpeakStatus;
 import com.sunteam.library.utils.TextFileReaderUtils;
 import com.sunteam.library.view.TextReaderView;
 import com.sunteam.library.view.TextReaderView.OnPageFlingListener;
@@ -67,6 +68,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	private int totalChapter;		//总章节数目。
 	private BookmarkEntity mBookmarkEntity;
 	private boolean isEntryMenu = false;	//是否进入了功能菜单。
+	private boolean isRunThead = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +140,27 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 				}
 			});
     	}
+    	
+    	new Thread() {
+			@Override
+			public void run() {
+				while( isRunThead )
+				{
+					if( TTSUtils.getInstance().getSpeakStatus() == SpeakStatus.SPEAK )
+					{
+						PublicUtils.execShellCmd("input tap 0 0");		//不断发送模拟点击消息，不让系统进入休眠状态。
+					}
+					try 
+					{
+						Thread.sleep(5000);
+					} 
+					catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}.start();
 	}
 
 	@Override
@@ -483,6 +506,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	public void onDestroy()
 	{
 		super.onDestroy();
+		isRunThead = false;
 		MediaPlayerUtils.getInstance().stop();
 		TextFileReaderUtils.getInstance().destroy();
 	}

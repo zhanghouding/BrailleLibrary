@@ -825,4 +825,22 @@ public class PublicUtils
 			}  
 		}	
 	}
+	
+	/** 
+	 * 执行shell命令 
+	 *  
+	 * @param cmd 
+	 */  
+	public static void execShellCmd(String cmd) 
+	{
+		try 
+		{
+			Runtime.getRuntime().exec( cmd );
+		} 
+		catch (Exception e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
+	}	
 }
