@@ -427,6 +427,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 						{
 							if( entity.chapterIndex == curChapter )	//如果在同一章跳转
 							{
+								isReadPage = false;
 								int lineNumber = mTextReaderView.getlineNumber(entity.begin);	//根据书签位置得到行号
 								if( mTextReaderView.openBook(TextFileReaderUtils.getInstance().getParagraphBuffer(0), TextFileReaderUtils.getInstance().getCharsetName(), lineNumber, entity.begin, 0, 0, true, chapterName) == false )
 						    	{
