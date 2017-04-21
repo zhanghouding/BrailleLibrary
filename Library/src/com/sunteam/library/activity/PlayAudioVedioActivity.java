@@ -525,15 +525,17 @@ public class PlayAudioVedioActivity extends Activity implements OnMediaPlayerLis
 					case EbookConstants.TO_BOOK_START:	//到一本书的开头
 						break;
 					case EbookConstants.TO_PART_START:	//到一个部分的开头
-						MediaPlayerUtils.getInstance().seek(0);
 						MediaPlayerUtils.getInstance().resume();
-						mIbStatus.setBackgroundResource(R.drawable.play);
+						MediaPlayerUtils.getInstance().seek(0);
+						mHandler.removeMessages(0);
+						mHandler.sendEmptyMessage(0);
 						break;
 					case EbookConstants.TO_PART_PAGE:	//到一个部分的百分比
+						MediaPlayerUtils.getInstance().resume();
 						float percent = data.getFloatExtra("percent", 0.0f);
 						MediaPlayerUtils.getInstance().seek(percent);
-						MediaPlayerUtils.getInstance().resume();
-						mIbStatus.setBackgroundResource(R.drawable.play);
+						mHandler.removeMessages(0);
+						mHandler.sendEmptyMessage(0);
 						break;
 					case EbookConstants.TO_BOOK_MARK:	//到某个书签位置
 						BookmarkEntity entity = (BookmarkEntity) data.getSerializableExtra("book_mark");
