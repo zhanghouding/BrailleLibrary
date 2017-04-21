@@ -335,14 +335,8 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			{
 				tips = this.getString(R.string.library_first_chapter);
 			}
-			PublicUtils.showToast(this, tips, new PromptListener() {
-
-				@Override
-				public void onComplete() {
-					// TODO Auto-generated method stub
-					
-				}
-			});
+			TTSUtils.getInstance().speakTips(tips);
+			CustomToast.showToast(this, tips, Toast.LENGTH_SHORT);
 		}
 		else
 		{
