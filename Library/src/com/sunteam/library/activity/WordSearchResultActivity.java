@@ -12,10 +12,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.utils.CustomToast;
 import com.sunteam.library.utils.EbookConstants;
 import com.sunteam.library.utils.PublicUtils;
 import com.sunteam.library.utils.TTSUtils;
@@ -38,6 +40,7 @@ public class WordSearchResultActivity extends Activity implements OnPageFlingLis
 	private String explain = null;
 	private boolean isReadPage = false;	//是否朗读页码
 	private boolean isFinish;//是否读完
+	private boolean isEntryMenu = false;	//是否进入了功能菜单。
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,15 @@ public class WordSearchResultActivity extends Activity implements OnPageFlingLis
 		{
 			mTextReaderView.readPage();		//朗读页码
 		}
+		if( isEntryMenu )
+		{
+			isEntryMenu = false;		//是否进入了功能菜单。
+			if( isReadPage )
+			{
+				mTextReaderView.enter();	//如果是从功能菜单退出的，则自动全文播放。
+			}
+		}
+		
 		isReadPage = true;
 	}
 	
@@ -166,6 +178,7 @@ public class WordSearchResultActivity extends Activity implements OnPageFlingLis
 				saveWord();
 				return	true;
 			case KeyEvent.KEYCODE_STAR:			//反查
+				isEntryMenu = true;
 				String content = mTextReaderView.getReverseText();	//得到当前反显内容
 				PublicUtils.jumpFanCha(this, content);
 				break;
@@ -268,8 +281,7 @@ public class WordSearchResultActivity extends Activity implements OnPageFlingLis
 	{
 		// TODO Auto-generated method stub
 		isFinish = true;
-		String tips = this.getString(R.string.library_to_top);
-		PublicUtils.showToast(this, tips);
+		CustomToast.showToast(this, this.getString(R.string.library_to_top), Toast.LENGTH_SHORT);
 	}
 
 	@Override

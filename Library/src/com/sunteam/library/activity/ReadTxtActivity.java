@@ -17,7 +17,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.text.DecimalFormat;
 
-import com.sunteam.common.menu.MenuGlobal;
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
 import com.sunteam.common.utils.Tools;
@@ -141,23 +140,12 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
     	}
 	}
 
-	private boolean isCreated = false;
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) 
 	{
 		// TODO 自动生成的方法存根
 		super.onWindowFocusChanged(hasFocus);
-
-		/*if (mBookmarkEntity != null) {
-			MenuGlobal.debug("[ReadTxtActivity][onWindowFocusChanged] hasFocus = "+ hasFocus +", mBookmarkEntity = " + mBookmarkEntity.toString());
-		} else {
-			MenuGlobal.debug("[ReadTxtActivity][onWindowFocusChanged] hasFocus = "+ hasFocus +", mBookmarkEntity = null");
-		}
-		if(!hasFocus || isCreated){
-			return;
-		}*/
-		isCreated = true;
-
+		
 		if( mBookmarkEntity != null )
 		{
 			int lineNumber = mTextReaderView.getlineNumber(mBookmarkEntity.begin);	//根据书签位置得到行号
@@ -277,6 +265,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 				startFunctionMenu();
 				break;
 			case KeyEvent.KEYCODE_STAR:			//反查
+				isEntryMenu = true;
 				String content = mTextReaderView.getReverseText();	//得到当前反显内容
 				PublicUtils.jumpFanCha(this, content);
 				break;
