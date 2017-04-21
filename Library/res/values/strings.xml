@@ -152,6 +152,7 @@
 	
 	<string name="library_chapter_start_tips">已经到本章开头</string>
 	<string name="library_chapter_end_tips">已经到本章结尾</string>
+	<string name="library_already_read">已经读完</string>
 	
 	<string name="library_hour">时</string>
 	<string name="library_minute">分</string>

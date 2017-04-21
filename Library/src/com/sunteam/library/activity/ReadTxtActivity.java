@@ -352,18 +352,39 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 	}
 	
 	//到下一个章节
-	private void toNextChapter()
+	private void toNextChapter( boolean isAuto )
 	{
 		if( curChapter+1 < totalChapter )	//还有下一章节需要朗读
 		{
-			TTSUtils.getInstance().stop();
-			TTSUtils.getInstance().OnTTSListener(null);
-			RefreshScreenUtils.disableRefreshScreen();
-			TtsUtils.getInstance().setMuteFlag(true);
-			Intent intent = new Intent();
-			intent.putExtra("action", EbookConstants.TO_NEXT_PART);
-			setResult(RESULT_OK, intent);
-			exit();
+			if( isAuto )
+			{
+				PublicUtils.showToast(this, this.getString(R.string.library_already_read), new PromptListener(){
+
+					@Override
+					public void onComplete() {
+						// TODO Auto-generated method stub
+						TTSUtils.getInstance().stop();
+						TTSUtils.getInstance().OnTTSListener(null);
+						RefreshScreenUtils.disableRefreshScreen();
+						TtsUtils.getInstance().setMuteFlag(true);
+						Intent intent = new Intent();
+						intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+						setResult(RESULT_OK, intent);
+						exit();
+					}
+				});
+			}
+			else
+			{
+				TTSUtils.getInstance().stop();
+				TTSUtils.getInstance().OnTTSListener(null);
+				RefreshScreenUtils.disableRefreshScreen();
+				TtsUtils.getInstance().setMuteFlag(true);
+				Intent intent = new Intent();
+				intent.putExtra("action", EbookConstants.TO_NEXT_PART);
+				setResult(RESULT_OK, intent);
+				exit();
+			}
 		}
 		else
 		{
@@ -399,7 +420,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 				switch (action) 
 				{
 					case EbookConstants.TO_NEXT_PART:
-						toNextChapter();	//到下一个章节
+						toNextChapter(false);	//到下一个章节
 						break;
 					case EbookConstants.TO_PRE_PART:
 						toPreChapter();		//到上一个章节
@@ -529,7 +550,7 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			return;
 		}
 		
-		toNextChapter();	//到下一个章节
+		toNextChapter(true);	//到下一个章节
 	}
 
 	@Override
