@@ -25,7 +25,8 @@
 		        android:textSize="@dimen/library_file_text_size"
 		        android:background="@color/transparent"
 		        android:includeFontPadding="false"
-		        android:maxLength="8"
+		        android:ellipsize="end"
+		        android:singleLine="true"
 		        />      
         </RelativeLayout>
         <View
