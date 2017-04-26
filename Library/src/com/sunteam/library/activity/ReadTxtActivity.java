@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 
 import com.sunteam.common.tts.TtsUtils;
 import com.sunteam.common.utils.RefreshScreenUtils;
+import com.sunteam.common.utils.SharedPrefUtils;
 import com.sunteam.common.utils.Tools;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
@@ -504,6 +505,8 @@ public class ReadTxtActivity extends Activity implements OnPageFlingListener
 			if(null != path)
 			{
 				MediaPlayerUtils.getInstance().play(path, true);
+				int index = shared.getInt(EbookConstants.MUSIC_INTENSITY, EbookConstants.DEFAULT_MUSICE_INTENSITY);
+				MediaPlayerUtils.getInstance().setBackgroundVolume(index);
 			}
 		}
 		else

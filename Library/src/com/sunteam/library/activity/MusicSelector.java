@@ -4,11 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 
 import com.sunteam.common.menu.MenuActivity;
 import com.sunteam.common.menu.MenuConstant;
@@ -30,6 +28,7 @@ import com.sunteam.library.utils.PublicUtils;
  */
 public class MusicSelector extends MenuActivity implements TtsCompletedListener {
 	private ArrayList<FileInfo> fileList = null;
+	private int intensity = EbookConstants.DEFAULT_MUSICE_INTENSITY; // 背景音强度
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +69,7 @@ public class MusicSelector extends MenuActivity implements TtsCompletedListener 
 		fileList = new ArrayList<FileInfo>();
 		int mode = Context.MODE_WORLD_READABLE + Context.MODE_MULTI_PROCESS;
 		String path = SharedPrefUtils.getSharedPrefString(this, EbookConstants.SETTINGS_TABLE, mode, EbookConstants.MUSICE_PATH, null);
+		intensity = SharedPrefUtils.getSharedPrefInt(this, EbookConstants.SETTINGS_TABLE, mode, EbookConstants.MUSIC_INTENSITY, intensity);
 		ArrayList<File> filesList = FileOperateUtils.getMusicInDir();
 		if (null != filesList && 0 < filesList.size()) {
 			for (int i = 0; i < filesList.size(); i++) {
@@ -84,9 +84,9 @@ public class MusicSelector extends MenuActivity implements TtsCompletedListener 
 				}
 			}
 		}
-		if( ( selectItem >= 0 ) && ( selectItem < fileList.size() ) )
-		{
+		if ((selectItem >= 0) && (selectItem < fileList.size())) {
 			MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
+			MediaPlayerUtils.getInstance().setBackgroundVolume(intensity);
 		}
 		mTtsCompletedListener = this;
 	}
@@ -113,6 +113,7 @@ public class MusicSelector extends MenuActivity implements TtsCompletedListener 
 			selectItem = position;
 			MediaPlayerUtils.getInstance().stop();
 			MediaPlayerUtils.getInstance().play(fileList.get(selectItem).path, true);
+			MediaPlayerUtils.getInstance().setBackgroundVolume(intensity);
 		}
 	}
 
