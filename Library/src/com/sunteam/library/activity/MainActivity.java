@@ -2,14 +2,11 @@
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.text.TextUtils;
 
 import com.sunteam.common.menu.MenuActivity;
@@ -233,26 +230,6 @@ public class MainActivity extends MenuActivity {
 			// String wifiSettingTitle = getResources().getString(R.string.library_wifi_setting);
 			// mWifiUtils.startWifiConfirm(this, confirmTitle, wifiSettingTitle);
 			// }
-		}
-	}
-
-	// 电子图书馆界面禁止休眠
-	private WakeLock mWakeLock = null; // 唤醒锁
-
-	@SuppressWarnings({ "deprecation", "unused" })
-	private void acquireWakeLock(Context context) {
-		if (null == mWakeLock) {
-			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, context.getClass().getName());
-			mWakeLock.acquire();
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private void releaseWakeLock() {
-		if (null != mWakeLock && mWakeLock.isHeld()) {
-			mWakeLock.release();
-			mWakeLock = null;
 		}
 	}
 

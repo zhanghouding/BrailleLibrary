@@ -9,6 +9,7 @@ import com.sunteam.common.menu.MenuConstant;
 import com.sunteam.common.utils.ArrayUtils;
 import com.sunteam.common.utils.dialog.PromptListener;
 import com.sunteam.library.R;
+import com.sunteam.library.utils.LibraryConstant;
 import com.sunteam.library.utils.PublicUtils;
 
 /**
@@ -74,17 +75,22 @@ public class AccountManager extends MenuActivity {
 
 	// 使用默认账号登录
 	private void loginWithDefaultUsername() {
-		String username = "test1";
-		String password = "123";
+		String userName = ""; // "test1";
+		String password = ""; // "123";
 
-		/*username = android.provider.Settings.Secure.getString(getContentResolver(), "accessibility_deviceid");
-		if (null == username || username.length() <= 6) {
+		String deviceId = android.provider.Settings.Secure.getString(getContentResolver(), LibraryConstant.ACCESSIBILITY_DEVICEID);
+		if (null == deviceId || deviceId.length() <= 6) {
 			PublicUtils.showToast(this, getResources().getString(R.string.library_account_fail));
 			return;
 		} else {
-			password = "S918P" + username.substring(username.length() - 6);
-		}*/
-		PublicUtils.saveUserInfo(this, username, password); // 保存用户信息
+			int index = deviceId.indexOf('\n'); // 账号和密码之间用回车分隔
+			userName = deviceId.substring(0, 17);
+			if(-1 != index){
+				userName = deviceId.substring(0, index);
+				password = deviceId.substring(index + 1);
+			}
+		}
+		PublicUtils.saveUserInfo(this, userName, password); // 保存用户信息
 		PublicUtils.showToast(this, getResources().getString(R.string.library_login_success), new PromptListener() {
 
 			@Override
